@@ -136,8 +136,11 @@
   <link rel="stylesheet" href="css/main.css" />
   <!--[if lte IE 9]><link rel="stylesheet" href="css/ie9.css" /><![endif]-->
   <!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
-  <!-- <body class="landing">
-    <div id="page-wrapper"> -->
+  <body class="landing">
+  <style type="text/css">
+    div#page-wrapper-o { display: none; }
+  </style>
+    <div id="page-wrapper-o">
 
       <!-- Header -->
 <!--         <header id="header">
@@ -312,14 +315,14 @@
             <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
           </ul>
           <a class="navbar-brand" href="https://www.meetup.com/Open-Source-Hollywood/">
-            <img alt="meetup" src="/img/logos/meetup.png" style="position:relative;max-width:150%;max-height:150%;bottom:3px;float:left;"><span class="navbar-brand_span">&nbsp;&nbsp;As seen on Meetup</span>
+            <img alt="meetup" src="/img/logos/meetup.png"><span class="navbar-brand_span">&nbsp;&nbsp;As seen on Meetup</span>
           </a>
           <ul class="copyright">
             <li>2017 &copy; Open Source Hollywood.</li><li>All rights reserved.</li>
           </ul>
         </footer>
 
-    <!-- </div> -->
+    </div>
 
     <!-- Scripts -->
       <script src="js/jquery.scrolly.min.js"></script>
@@ -329,8 +332,15 @@
       <script src="js/util.js"></script>
       <!--[if lte IE 8]><script src="js/ie/respond.min.js"></script><![endif]-->
       <script src="js/main.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function() {
+            setTimeout(function() {
+              $('#page-wrapper-o').fadeIn();
+            }, 800);
+        });
+      </script>
 
-  <!-- </body> -->
+  </body>
 
 
 </template>
