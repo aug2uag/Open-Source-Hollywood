@@ -1,0 +1,183 @@
+<template name="memberHeader">
+    <div class="col-xs-6">
+        <a id="stats" class="header-btn header-member moveupmember">
+            <span class="header-btn-text js-member-name">{{_ 'stats'}}</span>
+        </a>
+        <a id="cal" class="header-btn header-member moveupmember">
+            <span class="header-btn-text js-member-name">{{_ 'calendar'}}</span>
+        </a>
+        <a id="tasks" class="header-btn header-member moveupmember">
+            <span class="header-btn-text js-member-name">{{_ 'tasks'}}</span>
+        </a>
+        <a id="asss" class="header-btn header-member moveupmember">
+            <span class="header-btn-text js-member-name">{{_ 'assets'}}</span>
+        </a>
+        <a id="mine" class="header-btn header-member moveupmember">
+            <span class="header-btn-text js-member-name">{{_ 'mine'}}</span>
+        </a>
+    </div>
+    <div class="header-user">
+        <a class="header-btn header-member js-open-header-member-menu" href="#">
+            {{> userAvatar user=currentUser size="small" }}
+            <span class="header-btn-text js-member-name">{{_ 'settings'}}</span>
+        </a>
+        <a href="{{pathFor 'Projects'}}" class="header-btn header-member">
+            <span class="header-btn-text js-member-name">exit</span>
+        </a>
+    </div>
+</template>
+
+<template name="statsPopup">
+    <canvas id="canvas" width="400" height="400"></canvas>
+</template>
+
+<template name="calPopup">
+    <br><br>
+    <div id="cali"></div>
+    {{calendarOptions}}
+</template>
+
+<template name="tasksPopup">
+    <br><br>
+    <div class="board-member-menu">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Number of tasks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total</td>
+                    <td>{{ tasks.tasksTotal }}</td>
+                </tr>
+                <tr>
+                    <td>Finished</td>
+                    <td>{{ tasks.tasksCompleted }}</td>
+                </tr>
+                <tr>
+                    <td>Remaining</td>
+                    <td>{{ tasks.tasksRemaining }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<template name="asssPopup">
+    <br><br>
+    {{#if noAsss}}
+    <h3>There are no assets</h3>
+    {{else}}
+    <div class="board-member-menu">
+        {{#each asss}}
+            <div class="list-group">
+                <a class="list-group-item list-card-details clearfix show active" href="{{ this.card }}">
+                    View Asset
+                </a>
+              {{#each this.val}}
+                <li class="list-group-item">
+                    <span class="asset_popup_mime label label-default label-pill pull-xs-right">{{this.type}}</span>
+                    {{this.name}}
+              </li>
+              {{/each}}
+            </div>
+        {{/each}}
+    </div>
+    {{/if}}
+</template>
+
+<template name="minePopup">
+    <br/><br/>
+    {{#each mine}}
+        <div class="list-group">
+            <a class="list-group-item list-card-details clearfix show active" href="{{ this.href }}">
+                {{this.title}}
+            </a>
+        </div>
+    {{/each}}
+</template>
+
+<template name="memberMenuPopup">
+    <ul class="pop-over-list checkable">
+        <li><a class="js-language">{{_ 'language'}}</a></li>
+    </ul>
+</template>
+
+<template name="setLanguagePopup">
+    <ul class="pop-over-list">
+        {{#each languages}}
+            <li class="{{# if isCurrentLanguage}}active{{/if}}">
+                <a class="js-set-language">
+                    {{name}}
+                    {{# if isCurrentLanguage}}
+                        <span class="icon-sm fa fa-check"></span>
+                    {{/if}}
+                </a>
+            </li>
+        {{/each}}
+    </ul>
+</template>
+
+<template name="userPopup">
+    <div class="board-member-menu">
+        <div class="mini-profile-info">
+            {{> userAvatar user=user}}
+            <div class="info">
+                <h3 class="bottom" style="margin-right: 40px;">
+                    <a class="js-profile" href="/profile/{{ user.profile.meetupId }}">{{ user.profile.name }}</a>
+                </h3>
+                <p class="quiet bottom">@{{ user.profile.username }}</p>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="memberName">
+    <a class="inline-object js-show-mem-menu" href="/profile/{{ user._id }}">
+        {{ user.services.auth0.name }}
+        (@{{ user.services.auth0.nickname }})
+    </a>
+</template>
+
+<template name="userAvatar">
+    <div class="member {{size}} {{ class }} {{# if draggable }}js-member{{else}}js-member-on-card-menu{{/ if}}"
+         title="{{ name }} ({{ username }})">
+        <div class="avatar avatar-{{size}} avatar-hide-image">
+            <img class="avatar-image" src="{{ thumbnailUrl }}"/>
+        </div>
+    </div>
+</template>
+
+<template name="memberAvatar">
+    <div class="member {{size}} {{ class }} {{# if draggable }}js-member{{else}}js-member-on-card-menu{{/ if}}"
+         title="{{ name }} ({{ username }})">
+        <div class="avatar avatar-{{size}} avatar-hide-image">
+            <img class="avatar-image" src="{{ thumbnailUrl }}"/>
+        </div>
+<!--         <span class="member-status {{# if status}}active{{/if}}"></span> -->
+        <span class="member-type {{ memberType }}"></span>
+    </div>
+</template>
+
+<template name="applicantAvatar">
+    <div class="member {{size}}"
+         title="{{ name }} ({{ username }})">
+        <div class="avatar avatar-{{size}} avatar-hide-image">
+            <img class="avatar-image" src="{{ thumbnailUrl }}" style="max-width:100%;max-height:100%;">
+        </div>
+    </div>
+    <div>
+        <a href="/profile/{{this.user.id}}"><p><u>{{name}}</u></p></a>
+        <p>{{_ 'contribution'}} ${{contribution}}</p>
+    </div>  
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-success accept">{{_ 'accept'}}</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-danger reject">{{_ 'reject'}}</button>
+      </div>
+    </div>
+</template>

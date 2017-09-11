@@ -1,0 +1,83 @@
+<template name="nav">
+
+  <nav class="navbar navbar-fixed-top">
+
+    <div class="container-fluid navfluid">
+
+      {{#if currentUser}}
+        {{> user_options}}
+      {{else}}
+        {{#if finishedLoading}}
+        <button class="login login btn btn-primary pull-right" style="z-index:999">Log In</button>
+        {{/if}}
+      {{/if}}
+
+
+    </div>
+
+  </nav>
+
+
+</template>
+
+<template name="user_options">
+  <style type="text/css">
+  .logo {
+      background-image: url('{{ avatar }}');
+  }
+  </style>
+  <header class="header">
+    <div class="burger">
+      <div class="burger__patty"></div>
+      <div class="burger__patty"></div>
+      <div class="burger__patty"></div>
+    </div>
+
+    <nav class="menu">
+      <div class="menu__brand">
+        <a href=""><div class="logo"></div></a>
+        <br>
+        <h4>{{ who }}</h4>
+        <br>
+        <ul class="list-inline">
+          {{#each specialties}}
+            <li class="specialty_li">{{this}}</li>
+          {{else}}
+            <li class="specialty_li">no specialty listed</li>
+            <li><a class="close_burger" href="/settings">update your profile</a></li>
+          {{/each}}
+        </ul>
+      </div>
+      <ul class="menu__list">
+        <li class="menu__item"><a class="menu__link" id="settings" href="/settings">Edit Profile</a></li>
+        <li class="menu__item"><a class="menu__link" href="/newproject" role="button" aria-haspopup="false" aria-expanded="false">Create Campaign</a></li>
+        <li class="menu__item"><a class="menu__link" href="/dashboard">Dashboard</a></li>
+        <li class="menu__item"><a class="menu__link" href="/projects">Campaigns</a></li>
+        <li class="menu__item"><a class="menu__link" id="signout" href="#">Sign out</a></li>
+      </ul>
+    </nav>
+  </header>
+</template>
+
+
+
+<!-- <a role="presentation" class="pull-right">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list"></i></a>
+      <ul id="profile-dropdown-menu" class="dropdown-menu">
+        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Pages</p>
+        <li><a id="profile" href="/profile/{{currentUser._id}}">Profile</a></li>
+        <li><a id="settings" href="/settings">Edit Profile</a></li>
+        <li><a href="{{pathFor 'Projects'}}">Projects</a></li>
+        <li role="separator" class="divider"></li>
+        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Create Project</p>
+        <li><a href="/newproject" role="button" aria-haspopup="false" aria-expanded="false"><strong>Produce</strong></a></li>
+        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Active Projects</p>
+        <li><a href="/activeprojects" role="button" aria-haspopup="false" aria-expanded="false"><strong>Manage</strong></a></li>
+        <li role="separator" class="divider"></li>
+        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Dashboard</p>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <hr>
+        <li><a id="signout" href="#">Sign out</a></li>
+      </ul>
+    </a>
+    -->

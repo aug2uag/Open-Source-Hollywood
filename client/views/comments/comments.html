@@ -1,0 +1,45 @@
+<template name="commentBox">
+  <br>
+  <div class="col-sm-1" style="padding-left:0px !important">
+    {{#if currentUser}}
+      <img class="user-photo" src="{{avatar}}" style="width:50px">
+    {{/if}}
+  </div>
+  {{#if currentUser}}
+    <div class="col-sm-11" style="padding-right:0px !important">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Write a comment
+          <p class='pull-right'><span class="text-muted">Markdown Supported</span></p>
+        </div>
+      <div class="panel-body">
+    <textarea type="text" id="comment-box" placeholder="What do you think?"></textarea><br>
+    <button id="submit-comment" type="submit" class="btn btn-primary pull-right">Comment</button>
+    </div><!-- /panel-body -->
+    </div><!-- /panel panel-default -->
+    </div>
+  {{/if}}
+</template>
+
+<template name="comment">
+  <div class="animated fadeIn">
+    <div class="col-sm-1" style="padding-left:0px !important">
+      <center>
+        <a href="/profile/{{ownerId}}"><img class="user-photo" src="{{ownerAvatar}}" style="width:50px"></a>
+      </center>
+    </div>
+
+    <div class="col-sm-11" style="padding-right:0px !important" >
+      <div class="panel panel-default">
+        <div class="panel-heading">
+
+          <a href="/profile/{{ownerId}}"><strong>{{ownerName}} </strong></a><span class="text-muted">commented on {{createdAt}}</span>
+
+        </div>
+        <div class="panel-body">
+          {{#markdown}}{{text}}{{/markdown}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

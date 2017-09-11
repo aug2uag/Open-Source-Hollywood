@@ -1,0 +1,39 @@
+# upstart service file at /etc/init/produsus.conf
+description "Meteor.js (NodeJS) application"
+author "Daniel Speichert <daniel@speichert.pro>"
+
+# When to start the service
+start on started mongodb and runlevel [2345]
+
+# When to stop the service
+stop on shutdown
+
+# Automatically restart process if crashed
+respawn
+respawn limit 10 5
+
+script
+    export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    export NODE_PATH=/usr/lib/nodejs:/usr/lib/node_modules:/usr/share/javascript
+    # set to home directory of the user Meteor will be running as
+    export PWD=/home/produsus
+    export HOME=/home/produsus
+    # leave as 127.0.0.1 for security
+    export BIND_IP=127.0.0.1
+    # the port nginx is proxying requests to
+    export PORT=8080
+    # this allows Meteor to figure out correct IP address of visitors
+    export HTTP_FORWARDED_COUNT=1
+    # MongoDB connection string using produsus as database name
+    export MONGO_URL=mongodb://sam:sorrySepulvedahJiveLLC666_2016newDay@ds013192.mlab.com:13192/produsus
+    # The domain name as configured previously as server_name in nginx
+    export ROOT_URL=https://produs.us
+    # optional JSON config - the contents of file specified by passing "--settings" parameter to meteor command in development mode
+    export METEOR_SETTINGS='{
+    "shuffle": "function shuffle(s) {\nvar a = s.split(\"\"),\nn = a.length;\n\nfor(var i = n - 1; i > 0; i--) {\nvar j = 4;\nvar tmp = a[i];\na[i] = a[j];\na[j] = tmp;\n}\nreturn a.reverse().join(\"\");\n}", "private": { "AUTH0_CLIENT_ID": "KC97k4Aq9IbWuNuC8YKzC4IxSPaJWtzB", "AUTH0_DOMAIN": "aug2uag.auth0.com", "testSecretKey": "sk_test_ZINoK7ZfA5Axdr06AewQzZuh", "liveSecretKey": "sk_live_c08HcJICxi7vauQGD2YnLVr5" }, "public": { "stripe": { "testPublishableKey": "pk_test_Dgvlv9PBf6RuZJMPkqCp00wg", "livePublishableKey": "pk_live_6AeMUsosoiFJkhV8LT5vKuiY"}}}'
+    # this is optional: http://docs.meteor.com/#email
+    # commented out will default to no email being sent
+    # you must register with MailGun to have a username and password there
+    export MAIL_URL=smtp://postmaster@produs.us:fca79b9b4b26063efe85b9eccf884b9a@smtp.mailgun.org
+    exec node /home/produsus/bundle/main.js >> /home/produsus.log
+end script

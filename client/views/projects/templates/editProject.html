@@ -1,0 +1,70 @@
+<template name="editProject">
+  {{#if currentUser}}
+  <div class="container animated fadeIn">
+
+    <div class="row">
+      <div class="col-sm-8">
+        <a class="btn btn-default cancel">Cancel</a>
+        <a class="btn btn-primary update">Done</a>
+        <table width="100%">
+          <tr> 
+            <td>
+              <h1 id="title" class="editable" contenteditable="true">{{title}}</h1>
+              <span id="helpBlock" class="help-block"><b>edit title</b></span>
+
+              <h1 id="videoURL" class="editable" contenteditable="true">{{videoURL}}</h1>
+              <span id="helpBlock" class="help-block"><b>project explainer video URL</b></span>
+
+              <small><h1 id="logline" class="editable" contenteditable="true">{{logline}}</h1></small>
+              <span id="helpBlock" class="help-block"><b>edit logline</b></span>
+            </td>
+            <td> 
+              <div class="pull-right non-editable">
+                <center>
+                  <span class="badge" id="badge-lg">{{count}}</span>
+                  <h1><small>votes</small></h1>
+                </center>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <br>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h2>Details</h2>
+            <b><p>Published on {{createdAt}}</p></b>
+            <b><p>Description</p></b>
+            <p id="details" class="editable" contenteditable="true">{{details}}</p>
+            <span id="helpBlock" class="help-block"><b>edit description</b></span>
+            <b><p>Genres</p></b>
+            <p id="genres" class="editable" contenteditable="true">{{genresFormatted}}</p>
+            <span id="helpBlock" class="help-block"><b>edit comma separated genres</b></span>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="col-sm-4">
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h2>Funding</h2>
+            <br>
+            <b>Funding goal</b>
+            <p id="goal" contenteditable="true">{{fundingGoal}}</p>
+            <b>Days remaining</b>
+            <p id="duration" contenteditable="true">{{duration}}</p>
+            <b>Progress</b>
+            <p id="funded">${{funded}}</p>
+            <b>Number Applied</b>
+            <p id="applied">{{applied}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {{/if}}
+
+</template>

@@ -1,0 +1,35 @@
+<template name="receipts">
+  <div class="container">
+    <div class="row">
+      <h3>TRANSACTIONS</h3>
+      {{#if receiptsNil}}
+        <h5>You have no transactions.</h5>
+      {{else}}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+          {{#each receiptsList}}
+            <tr>
+              <td>{{formatDate}}</td>
+              <td>{{formatTitle}}</td>
+              <td>{{formatAmount}}</td>
+              <td>{{formatRefund}}</td>
+            </tr>
+          {{else}}
+            <tr>
+              <td colspan="4">None</td>
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
+    </div>
+  </div>
+</template>

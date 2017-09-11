@@ -1,0 +1,506 @@
+<template name="newProject">
+  <div class="container animated fadeIn">
+    <div class="col-sm-12">
+      <style type="text/css">
+        * {
+        box-sizing: border-box;
+        }
+        .zoot::-webkit-input-placeholder {
+        color: white;
+        }
+        .zoot:-moz-placeholder { /* Firefox 18- */
+        color: white;  
+        }
+        .zoot::-moz-placeholder {  /* Firefox 19+ */
+        color: white;  
+        }
+        .zoot:-ms-input-placeholder {  
+        color: white;  
+        }
+        html {
+        font-family: sans-serif;
+        size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+        }
+        body {
+        margin: 0;
+        color: #525147;
+        background-color: #efefef;
+        }
+        figure {
+        margin: 0;
+        }
+        h3 {
+        margin: 5px 0;
+        font-size: 16px;
+        }
+        .cbp-mc-submit * { width:100%;}
+        .image-list {
+        width: calc(100% - 40px);
+        max-width: 1200px;
+        margin: auto;
+        padding: 10px;
+        background-color: #fff;
+        border-top: 1px solid #efefef;
+        position: relative;
+        }
+        .image-list:first-of-type {
+        border-top: none;
+        }
+        .image-list:before {
+        content: attr(data-progress);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: attr(data-progress);
+        height: 4px;
+        background-color: #2196f3;
+        }
+        .progress {
+        width: 100%;
+        height: 5px;
+        background-color: #efefef;
+        }
+        .progress .progres-fill {
+        display: block;
+        width: 10%;
+        height: 100%;
+        background-color: #2196f3;
+        }
+        .media {
+        display: flex;
+        }
+        .media-figure {
+        width: 100px;
+        }
+        .media-figure img {
+        width: 100%;
+        }
+        .media-body {
+        flex: 1;
+        padding: 0 20px;
+        }
+        .tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        }
+        .tags.focused {
+        border-bottom: 1px solid #2196f3;
+        }
+        .tags > p {
+        margin: 0;
+        align-self: center;
+        }
+        .tags span {
+        padding: 2px 5px;
+        border: 1px solid #2196f3;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        margin: 3px 5px;
+        color: #2196f3;
+        cursor: pointer;
+        }
+        .tags span span {
+        padding: 2px;
+        font-weight: bold;
+        font-family: sans-serif;
+        }
+        .select_tag {
+        max-height: 20px;
+        min-height: 20px;
+        }
+        .select_tag.active {
+        background-color: #2196f3;
+        color: #fff;
+        }
+        .needs_listed {
+        text-align: left;
+        font-size: 2rem;
+        font-weight: 600;
+        text-align: left;
+        }
+        #title {
+        font-weight: 700;
+        }
+        .remove_need {
+        position: relative;
+        float: left;
+        }
+        textarea {
+          min-height:110px;
+        }
+
+        .noresize {
+          resize: none; 
+        }
+
+        .vresize {
+          resize: vertical; 
+        }
+          
+        .hresize {
+          resize: horizontal;  
+          width: 100%;
+        }  
+        .ui-segment{
+          color: rgb(0, 122, 255);
+          border: 1px solid rgb(0, 122, 255);
+          border-radius: 4px;
+          display:inline-block;
+        }
+        .ui-segment span.option.active{
+          background-color: #333;
+          color: white;
+        }
+        .ui-segment span.option{
+          font-size: 14px;
+          padding-left: 23px;
+          padding-right: 23px;
+          height: 27px;
+          text-align:center;
+          display:inline-block;
+          line-height: 25px;
+          margin: 0px;
+          float:left;
+          cursor:pointer;
+          border-right:1px solid rgb(0, 122, 255);
+        }
+        .ui-segment span.option:last-child{
+          border-right: none;
+        }
+        .segment-select{
+          display:none;
+        }
+
+      </style>
+
+      <script type="text/javascript">
+        (function( $ ){
+            $.fn.extend({
+                Segment: function ( ) {
+              $(this).each(function (){
+                var self = $(this);
+                var onchange = self.attr('onchange');
+                var wrapper = $("<div>",{class: "ui-segment"});
+                $(this).find("option").each(function (){
+                  var option = $("<span>",{class: 'option',onclick:onchange,text: $(this).text(),value: $(this).val()});
+                  if ($(this).is(":selected")){
+                    option.addClass("active");
+                  }
+                  wrapper.append(option);
+                });
+                wrapper.find("span.option").click(function (){
+                  wrapper.find("span.option").removeClass("active");
+                  $(this).addClass("active");
+                  self.val($(this).attr('value'));
+                });
+                $(this).after(wrapper);
+                $(this).hide();
+              });
+                }
+            });
+        })(jQuery);
+      </script>
+
+      <form class="cbp-mc-form addProjectForm" id="form">
+        <div class="cbp-mc-submit-wrap animated fadeIn row">
+          <h1>New Campaign</h1>
+          <br>
+          <label>Campaign Type</label>
+          <select id="seg-cat" class="segment-select">
+            <option value="1">Crowdfunded</option>
+            <option value="2">Crowdsourced</option>
+            <option value="3">Both</option>
+          </select>
+          <p class="lead" id="cat-exp"><b>Crowdfunded</b> campaigns are limited to accepting funds without explicit interest to have investors participate in project.</p>
+          <hr>
+          <label>Title</label>
+          <h1><input class="cbp-mc-submit formated" id="title" style="margin-top: 0px; display: inline;margin-top: 0px;display: inline;max-width: 100%;width: 100%;"></h1>
+          <label>Logline</label>
+          <h1><small><input style="margin-top: 0px; display: inline;margin-top: 0px;display: inline;max-width: 100%;width: 100%;" class="cbp-mc-submit formated" id="logline"></small></h1>
+          <label>Video Explainer</label>
+          <input class="" id="video" style="margin-top: 0px; display: inline;margin-top: 0px;display: inline;max-width: 100%;width: 100%;">
+          <span id="helpBlock" class="help-block" rows="6"><b>enter the URL of Youtube video about your campaign proposal</b></span>
+          <hr>
+          <label>Details</label>
+          <textarea class="cbp-mc-submit formated" id="details" rows="6" style="    margin-top: 0px;max-width: 100%;"></textarea>
+          <hr>
+          <label>Location</label>
+          <input class="" placeholder="enter zip code here" id="location" style="margin-top: 0px; display: inline;margin-top: 0px;display: inline;max-width: 100%;width: 100%;">
+          <label>Genres</label>
+          <div class="tags">
+            <span class="select_tag genre_tag" val="0">Image</span> <span class="select_tag genre_tag" val="0">Video</span> <span class="select_tag genre_tag" val="0">Audio</span><span class="select_tag genre_tag" val="0">Text</span> <span class="select_tag genre_tag" val="0">PDF</span> <span class="select_tag genre_tag" val="0">Script</span> <span class="select_tag genre_tag" val="0">Animation</span> <span class="select_tag genre_tag" val="0">Score</span> <span class="select_tag genre_tag" val="0">Headshots</span> <span class="select_tag genre_tag" val="0">Location</span> <span class="select_tag genre_tag" val="0">Acting</span> <span class="select_tag genre_tag" val="0">Writing</span><span class="select_tag genre_tag" val="0">Photography</span> <span class="select_tag genre_tag" val="0">Video</span> <span class="select_tag genre_tag" val="0">Special FX</span> <span class="select_tag genre_tag" val="0">Screenplay</span> <span class="select_tag genre_tag" val="0">Demonstration</span> <span class="select_tag genre_tag" val="0">Dance</span> <span class="select_tag genre_tag" val="0">Acting</span> <span class="select_tag genre_tag" val="0">Performance</span> <span class="select_tag genre_tag" val="0">Audience</span> <span class="select_tag genre_tag" val="0">Location</span> <span class="select_tag genre_tag" val="0">Other</span>
+          </div>
+          <span id="helpBlock" class="help-block"><b>select the applicable genres</b></span>
+          <hr>
+          <label>Campaign Needs</label>
+          <span id="helpBlock" class="help-block"><b>list out your campaign needs, keep each need as a specific need</b></span>
+          <div id="campaign_needs">
+            <input class="" id="needs" style="margin-top: 0px; display: inline;margin-top: 0px;display: inline;max-width: 100%;width: 100%;" placeholder="list your specific need here">
+            <div class="tags">
+              <span class="select_tag tag_need">Production</span> <span class="select_tag tag_need">Resource</span> <span class="select_tag tag_need">Location</span><span class="select_tag tag_need">Finance</span><span class="select_tag tag_need">General Labor</span><span class="select_tag tag_need">Legal</span><span class="select_tag tag_need">Marketing</span><span class="select_tag tag_need">Distribution</span><span class="select_tag tag_need">Other</span> 
+            </div>
+          </div>
+          <span><a id="add_need"><i class="glyphicon glyphicon-plus"></i>&nbsp;ADD NEED</a></span>
+          <hr>
+          {{ #each needs }}
+          <section class="image-list">
+            <div class="media">
+              <div class="media-body make_left">
+                <p class="needs_listed">{{ this.need }}</p>
+                <a class="remove_need" href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                {{ #if this.tags }}
+                <div class="tags">
+                  <p><b>Tags:</b></p>
+                  {{ #each this.tags }}
+                  <span>{{ this }}</span>
+                  {{ /each }}
+                </div>
+                {{ /if }}
+              </div>
+            </div>
+          </section>
+          <hr>
+          {{ /each }}
+          <label>Campaign Gifts (optional)</label>
+          <span id="helpBlock" class="help-block"><b>list out campaign gifts for dollar donation amounts</b></span>
+          <span><a id="add_gift"><i class="glyphicon glyphicon-plus"></i>&nbsp;ADD GIFT</a></span>
+          <hr>
+          {{ #if hasGifts }}
+          <div class="container">
+            <h2>Gifts offered in exchange for support:</h2>
+            <div class="panel-group">
+              {{ #each gifts }}
+              <div class="panel panel-success col-xs-4">
+                <div class="panel-heading">{{ this.title }}</div>
+                <div class="panel-body">
+                  <p class="gifts_listed"><em>{{ this.description }}</em></p>
+                  <p class="gifts_listed">${{ this.value }} amount value</p>
+                  <a class="remove_gift" href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                </div>
+              </div>
+              {{ /each }}
+            </div>
+          </div>
+          <hr>
+          {{ /if }}
+          <label>Campaign Budget</label>
+          <div class="input-group col-xs-12"> <span class="input-group-addon" id="basic-addon1">$</span> <input class="cbp-mc-submit formated form-control" type="number" id="budget" style="margin-top: 0px; display: inline;margin-top: 0px;display: inline;max-width: 100%;width: 100%;"></div>
+          <span id="helpBlock" class="help-block"><b>negotiate with members on a per campaign basis</b></span>
+          <div class="form-group">
+            <label for="sel1">Select purpose:</label>
+            <select class="form-control" id="selector">
+              <option>Motion Pictures/Theatrical</option>
+              <option>Writing/Novel</option>
+              <option>Music/Score/Venue</option>
+            </select>
+          </div>
+          <hr>
+          <label>About the creator(s)</label>
+          <div class="container">
+            <textarea class="form-control hresize" id="creators"></textarea>
+          </div>
+          <br>
+          <label>About the story</label>
+          <div class="container">
+            <textarea class="form-control hresize" id="story"></textarea>
+          </div>
+          <br>
+          <label>Project History</label>
+          <div class="container">
+            <textarea class="form-control hresize" id="history"></textarea>
+          </div>
+          <br>
+          <label>Project Plans</label>
+          <div class="container">
+            <textarea class="form-control hresize" id="plans"></textarea>
+          </div>
+          <br>
+          <label>Explain Your Needs</label>
+          <div class="container">
+            <textarea class="form-control hresize" id="needsExplained"></textarea>
+          </div>
+          <br>
+          <label>Significance</label>
+          <div class="container">
+            <textarea class="form-control hresize" id="significance"></textarea>
+          </div>
+          <hr>
+          <!-- DOS -->
+          <label for="headshots">Upload files:</label>
+          <style type="text/css">
+            * {
+              box-sizing: border-box;
+            }
+
+            .zoot::-webkit-input-placeholder {
+               color: white;
+            }
+
+            .zoot:-moz-placeholder { /* Firefox 18- */
+               color: white;  
+            }
+
+            .zoot::-moz-placeholder {  /* Firefox 19+ */
+               color: white;  
+            }
+
+            .zoot:-ms-input-placeholder {  
+               color: white;  
+            }
+
+            html {
+              font-family: sans-serif;
+              size-adjust: 100%;
+              -webkit-text-size-adjust: 100%;
+            }
+
+            body {
+              margin: 0;
+              color: #525147;
+              background-color: #efefef;
+            }
+
+            figure {
+              margin: 0;
+            }
+
+            h3 {
+              margin: 5px 0;
+              font-size: 16px;
+            }
+
+            .image-list {
+              width: calc(100% - 40px);
+              max-width: 1200px;
+              margin: auto;
+              padding: 10px;
+              background-color: #fff;
+              border-top: 1px solid #efefef;
+              position: relative;
+            }
+            .image-list:first-of-type {
+              border-top: none;
+            }
+            .image-list:before {
+              content: attr(data-progress);
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: attr(data-progress);
+              height: 4px;
+              background-color: #2196f3;
+            }
+
+            .progress {
+              width: 100%;
+              height: 5px;
+              background-color: #efefef;
+            }
+            .progress .progres-fill {
+              display: block;
+              width: 10%;
+              height: 100%;
+              background-color: #2196f3;
+            }
+
+            .media {
+              display: flex;
+            }
+
+            .media-figure {
+              width: 100px;
+            }
+            .media-figure img {
+              width: 100%;
+            }
+
+            .media-body {
+              flex: 1;
+              padding: 0 20px;
+            }
+
+            .tags {
+              margin-top: 10px;
+              display: flex;
+              flex-wrap: wrap;
+            }
+            .tags.focused {
+              border-bottom: 1px solid #2196f3;
+            }
+            .tags > p {
+              margin: 0;
+              align-self: center;
+            }
+            .tags span {
+              padding: 2px 5px;
+              border: 1px solid #2196f3;
+              margin-right: 5px;
+              margin-bottom: 5px;
+              margin: 3px 5px;
+              color: #2196f3;
+              cursor: pointer;
+            }
+            .tags span span {
+              padding: 2px;
+              font-weight: bold;
+              font-family: sans-serif;
+            }
+
+            .select_tag.active {
+              background-color: #2196f3;
+              color: #fff
+            }
+          </style>
+          <label class="cbp-mc-submit-wrap">
+            <div class="cbp-mc-submit-wrap" style="text-align:left">
+              <input id="fileInput" type="file" />
+              <br><br>
+            <input class="cbp-mc-submit formated" type="submit" value="Add file" id="campaign_files" />
+            </div>
+          </label>
+          <!-- tables -->
+          {{ #if hasCampaignFiles }}
+            <br>
+            <h2>Campaign Files</h2>
+            {{ #each projectFiles }}
+              <section class="image-list">
+                <div class="media">
+                  <figure class="media-figure">
+                    <img src="{{ this.data }}">
+                  </figure>
+                  <a class="remove_file" id="{{ this.idx }}" href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                </div>
+              </section>
+            {{ /each }}
+          {{ /if }}
+          <hr>
+        </div>
+        <div class="cbp-mc-submit-wrap" style="text-align:left"><input id="submit" type="submit" value="Create Campaign" class="cbp-mc-submit formated" style="background-color: green;margin-top: 0px;display: inline;max-width: 100%;width: 100%;"></div>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript">
+    jQuery(function ($){
+      $(".segment-select").Segment();
+      var holder = ['<b>Crowdfunded</b> campaigns are limited to accepting funds without explicit interest to have investors participate in project.', '<b>Crowdsourced</b> campaigns are securitized assets that are exchanged in consideration to create and benefit from the project with fellow artists.', 'This campaign is not limited in it\s funding mechanisms.'];
+      $('.ui-segment').on('click', function(e) { 
+        selectedSegment = e.target.innerHTML;
+        switch (selectedSegment) {
+          case 'Crowdfunded':
+            $('#cat-exp').html(holder[0]);
+            break;
+          case 'Crowdsourced':
+            $('#cat-exp').html(holder[1]);
+            break;
+          default:
+            $('#cat-exp').html(holder[2]);
+            break;
+        }
+      });
+      selectedSegment = 'Crowdfunded';
+    });
+
+  </script>
+</template>

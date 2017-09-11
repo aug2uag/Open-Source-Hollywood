@@ -1,0 +1,267 @@
+<template name="dashboard">
+	<div id="userId" val="{{uid}}" style="visibility:none;"></div>
+	<div class="container">
+		<h1 class="page-header"><i class="glyphicon glyphicon-dashboard"></i>&nbsp;DASHBOARD</h1>
+
+
+		<div class="row">
+			<h3 class="page-header">PROJECTS APPLIED</h3>
+			{{#each foo}}
+				{{> applied_to_project}}
+			{{else}}
+				<p class="empty">No content</p>
+			{{/each}}
+		</div>
+
+
+		<div class="row">
+			<h3 class="page-header">PROJECTS ACCEPTED</h3>
+			{{#each bar}}
+				{{ > approved_for_project }}
+			{{else}}
+				<p class="empty">No content</p>
+			{{/each}}
+		</div>
+
+
+		<div class="row">
+	        <h3 class="page-header">PRODUCTIONS</h3>
+	        {{#each baz}}
+	        	{{> collapses}}
+	        {{/each}}
+	    </div>
+
+	    <a href="/receipts" class="btn btn-lg btn-primary col-xs-12">View transactions history</a>
+	</div>
+</template>
+
+<template name="applied_to_project">
+	<div class="panel panel-warning">
+		<a href="/projects/{{this.slug}}"><div class="panel-heading">
+			<h3 class="panel-title">{{this.title}}</h3>
+		</div></a>
+		<div class="panel-body">
+			<h5 class="page-header">LOGLINE</h5>
+			<p>{{this.logline}}</p>
+			<h5 class="page-header">ACTIVITY</h5>
+			<p>Your proposed contribution for this project is ${{bid}}, and under consideration.</p>
+
+		</div>
+		<div class="panel-footer">
+	        <div class="panel-group" id="{{uuid_accordion}}">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                     <h4 class="panel-title">
+	                        <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{uuid}}" class="">
+	                        	{{#if unreadComm}}<i class="glyphicon glyphicon-ok"></i>&nbsp;{{/if}}
+	                         	MESSAGES for {{upTitle}}
+	                         </a>
+	                    </h4>
+	                </div>
+	                <div id="{{uuid}}" class="panel-collapse collapse">
+	                    <div class="panel-body">
+	                    		<div class="row">
+	                    			{{#each comm}}
+						            	{{> comm_text}}
+									{{else}}
+										<p class="empty">No message history</p>
+									{{/each}}
+	                    		</div>
+								<div style="visibility:none;" class="otype" val="applied" proj="{{this.slug}}" id="{{uuid2}}"></div>
+								{{> commBox}}
+							</div>
+	                    </div>
+	            </div>
+	        </div>
+		</div>
+	</div>
+</template>
+
+<template name="approved_for_project">
+	<div class="panel {{#if this.isLive}}panel-success{{else}}panel-info{{/if}}">
+		<a href="/projects/{{this.slug}}"><div class="panel-heading">
+			<h3 class="panel-title">{{this.title}}</h3>
+		</div></a>
+		<div class="panel-body">
+			<blockquote>{{this.logline}}</blockquote>
+			<h5 class="page-header">CONTRIBUTION</h5>
+			<p>{{bid}}</p>
+			<h5 class="page-header">STATUS</h5>
+			{{#if this.isLive}}
+				<p>The project is live.</p>
+			{{else}}
+				<p>This project did not yet start</p>
+			{{/if}}
+		</div>
+		<div class="panel-footer">
+	        <div class="panel-group" id="{{uuid_accordion}}">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                     <h4 class="panel-title">
+	                        <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{uuid}}" class="">
+	                        	{{#if unreadComm}}<i class="glyphicon glyphicon-ok"></i>&nbsp;{{/if}}
+	                         	MESSAGES for {{upTitle}}
+	                         </a>
+	                    </h4>
+	                </div>
+	                <div id="{{uuid}}" class="panel-collapse collapse">
+	                    <div class="panel-body">
+                    		<div class="row">
+                    			{{#each comm}}
+					            	{{> comm_text}}
+								{{else}}
+									<p class="empty">No message history</p>
+								{{/each}}
+                    		</div>
+							<div style="visibility:none;" class="otype" val="approved" proj="{{this.slug}}" id="{{uuid2}}"></div>
+							{{> commBox}}
+						</div>
+	                </div>
+	            </div>
+	        </div>
+		</div>
+	</div>
+</template>
+
+<template name="production_applicant">
+	<div class="panel panel-info">
+		<a href="/profile/{{user._id}}"><div class="panel-body">
+			<div class="col-xs-9">
+	        	<i class="glyphicon glyphicon-user"></i>&nbsp;{{user.services.auth0.name}}
+	        </div>
+	        <div class="col-xs-3">
+	        	<img class="img-responsive" style="max-width:100px;max-height:100px;" src="{{user.services.auth0.picture}}">
+	        </div>
+	        <div class="col-xs-12">
+	        	${{bid}} contribution
+	        </div>
+		</div></a>
+		<div class="panel-footer">
+	        <div class="panel-group" id="{{uuid_accordion}}">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                     <h4 class="panel-title">
+	                        <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{uuid}}" class="">
+	                        	{{#if unreadComm}}<i class="glyphicon glyphicon-ok"></i>&nbsp;{{/if}}
+	                         	MESSAGES for {{upTitle}} from {{user.services.auth0.name}}
+	                         </a>
+	                    </h4>
+	                </div>
+	                <div id="{{uuid}}" class="panel-collapse collapse">
+	                    <div class="panel-body">
+	                    		<div class="row">
+	                    			{{#each comm}}
+						            	{{> comm_text}}
+									{{else}}
+										<p class="empty">No message history</p>
+									{{/each}}
+	                    		</div>
+								<div style="visibility:none;" class="otype" id="{{uuid2}}" val="applied" usr="{{this.id}}" proj="{{this.slug}}"></div>
+								{{> commBox}}
+							</div>
+	                    </div>
+	            </div>
+	        </div>
+		</div>
+	</div>
+</template>
+
+<template name="production_member">
+	<div class="panel panel-info">
+		<a href="/profile/{{user._id}}"><div class="panel-body">
+			<div class="col-xs-9">
+	        	<i class="glyphicon glyphicon-user"></i>&nbsp;{{user.services.auth0.name}}
+	        </div>
+	        <div class="col-xs-3">
+	        	<img class="img-responsive" style="max-width:100px;max-height:100px;" src="{{user.services.auth0.picture}}">
+	        </div>
+	        <div class="col-xs-12">
+	        	${{bid}} contribution
+	        </div>
+		</div></a>
+		<div class="panel-footer">
+	        <div class="panel-group" id="{{uuid_accordion}}">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                     <h4 class="panel-title">
+	                        <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{uuid}}" class="">
+	                        	{{#if unreadComm}}<i class="glyphicon glyphicon-ok"></i>&nbsp;{{/if}}
+	                         	MESSAGES for {{upTitle}} from {{user.services.auth0.name}}
+	                         </a>
+	                    </h4>
+	                </div>
+	                <div id="{{uuid}}" class="panel-collapse collapse">
+	                    <div class="panel-body">
+	                    		<div class="row">
+	                    			{{#each comm}}
+						            	{{> comm_text}}
+									{{else}}
+										<p class="empty">No message history</p>
+									{{/each}}
+	                    		</div>
+								<div style="visibility:none;" class="otype" id="{{uuid2}}" val="approved" usr="{{this.id}}" proj="{{this.slug}}"></div>
+								{{> commBox}}
+							</div>
+	                    </div>
+	            </div>
+	        </div>
+		</div>
+	</div>
+</template>
+
+<template name="collapses">
+    <div class="panel-group" id="{{uuid_accordion}}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{this.slug}}" class="">
+                        {{this.title}}
+                    	<a href="/projects/{{this.slug}}" class="pull-right"><i class="glyphicon glyphicon-eye-open"></i></a>
+                    </a>
+                </h4>
+            </div>
+            <div id="{{this.slug}}" class="panel-collapse collapse">
+                <div class="panel-body">
+                	<div class="row col-xs-12">
+                    	{{#unless this.isLive}}
+	                    	{{#unless emptySetApplied}}
+	                    		<h3 class="page-header">Applied</h3>
+	                    		{{#each projectApplicants}}
+	                    			{{> production_applicant}}
+	                    		{{/each}}
+		                    {{else}}
+		                    	<h3 class="page-header">No Applicants</h3>
+		                    {{/unless}}
+	                    {{/unless}}
+                    </div>
+
+                    <div class="row col-xs-12">
+                    	{{#unless emptySetApproved}}
+                			{{#unless this.isLive}}
+                    			<h3 class="page-header">Approved</h3>
+                    		{{else}}
+                    			<h3 class="page-header">Project Members</h3>
+                    		{{/unless}}
+                    		{{#each projectApprovals}}
+                    			{{> production_member}}
+                    		{{/each}}
+	                    {{else}}
+	                    	{{#unless this.isLive}}
+	                    		<h3 class="page-header">No Approvals</h3>
+	                    	{{/unless}}
+	                    {{/unless}}
+                    </div>
+
+                	<div class="row col-xs-12">
+                		<h3 class="page-header">Status</h3>
+                		{{#if this.isLive}}
+                			<a href="#" class="btn btn-success btn-lg col-xs-12">LIVE</a>
+                		{{else}}
+                			<a href="#" class="btn btn-warning btn-lg col-xs-12">PRE-PRODUCTION</a>
+                		{{/if}}
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
