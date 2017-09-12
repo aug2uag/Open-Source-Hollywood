@@ -1,4 +1,4 @@
-document.title = "O.S.H.";
+document.title = "Open Source Hollywood";
 
 Template.nav.onRendered(function() {
   $('.login').mouseenter();
@@ -21,16 +21,21 @@ Template.nav.events({
     Router.go('search');
   },
   'click #signout': function() {
-    Meteor.logout();
-    Meteor.logoutOtherClients();
-    window.location = '/';
-    document.title = "O.S.H.";
+    setTimeout(function() {
+      Meteor.logout();
+      Meteor.logoutOtherClients();
+      Router.go('Home');
+      setTimeout(function() {
+        window.location.assign('/');
+        document.title = "Open Source Hollywood";
+      }, 300);
+    }, 800);
   },
   'click #profile': function() {
-    document.title = 'Profile';
+    document.title = 'Profile View';
   },
   'click #settings': function() {
-    document.title = 'Settings';
+    document.title = 'Settings Edit';
   },
   'click .login': function() {
     lock.show();
@@ -71,6 +76,7 @@ Template.user_options.onRendered(function() {
     
     var toggleMenu = function() {
       if (!active) {
+        $('#mainnavmenu').css('visibility', 'visible');
         menu.classList.add('menu--active');
         menuList.classList.add('menu__list--active');
         brand.classList.add('menu__brand--active');
@@ -81,6 +87,7 @@ Template.user_options.onRendered(function() {
         
         active = true;
       } else {
+        
         menu.classList.remove('menu--active');
         menuList.classList.remove('menu__list--active');
         brand.classList.remove('menu__brand--active');
@@ -90,6 +97,7 @@ Template.user_options.onRendered(function() {
         }
         
         active = false;
+        $('#mainnavmenu').css('visibility', 'hidden');
       }
     };
     

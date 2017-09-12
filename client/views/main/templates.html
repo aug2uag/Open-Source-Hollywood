@@ -15,6 +15,9 @@
 
 <template name="StaticLayout">
     {{#if currentUser}}
+      <style type="text/css">
+        html { display: none; }
+      </style>
       {{ > nav}}
       {{#unless profileSet}}
         <div class="alert alert-info col-xs-12">
@@ -30,6 +33,13 @@
       <div style="position:relative;top:60px">
         {{ > footer }}
       </div>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          setTimeout(function() {
+            $('html').fadeIn();
+          }, 800);
+        });
+      </script>
     {{else}}
       
     {{/if}}
@@ -131,216 +141,197 @@
 </template>
 
 <template name="splashPage">
-
-  <!--[if lte IE 8]><script src="js/ie/html5shiv.js"></script><![endif]-->
-  <link rel="stylesheet" href="css/main.css" />
-  <!--[if lte IE 9]><link rel="stylesheet" href="css/ie9.css" /><![endif]-->
-  <!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
-  <body class="landing">
   <style type="text/css">
     div#page-wrapper-o { display: none; }
+    html { color: white; }
   </style>
     <div id="page-wrapper-o">
 
-      <!-- Header -->
-<!--         <header id="header">
-          <h1 id="logo"></h1>
-          <nav id="nav">
-            <ul>
-              <li><a href="#" class="button special login">Sign In</a></li>
-            </ul>
-          </nav>
-        </header> -->
-
       <!-- Banner -->
+      <section id="banner">
+        <a href="#" class="button login" style="background-color:aquamarine;position:inherit;top:20px;width:90%;">Sign In</a>
+        <div class="content">
+          <header>
+            <!-- <h2>The future has landed</h2>
+            <p>And there are no hoverboards or flying cars.<br />
+            Just apps. Lots of mother flipping apps.</p> -->
+          </header>
+          <!-- <span class="image"><img src="img/pic01.jpg" alt="" /></span> -->
+        </div>
 
-        <section id="banner">
-          <a href="#" class="button login" style="background-color:aquamarine;position:inherit;top:20px;width:90%;">Sign In</a>
-          <div class="content">
-            <header>
-              <!-- <h2>The future has landed</h2>
-              <p>And there are no hoverboards or flying cars.<br />
-              Just apps. Lots of mother flipping apps.</p> -->
-            </header>
-            <!-- <span class="image"><img src="img/pic01.jpg" alt="" /></span> -->
-          </div>
-
-          <a href="#one" class="goto-next scrolly">Next</a>
-        </section>
+        <a href="#one" class="goto-next scrolly">Next</a>
+      </section>
 
       <!-- One -->
-        <section id="one" class="spotlight style1 bottom">
-          <span class="image fit main"><img src="../../img/pic03.jpg" alt="" /></span>
-          <div class="content">
-            <div class="container">
-              <div class="row">
-                <div class="4u 12u$(medium)">
-                  <header>
-                    <h2>PRODUCTION</h2>
-                    <p>Create campaigns</p>
-                  </header>
-                </div>
-                <div class="8u 24u$(medium)">
-                  <ul style="list-style-type: none">
-                    <li>crowdfund your budget</li>
-                    <hr>
-                    <li>crowdsource cast &amp; crew from top candidates</li>
-                    <hr>
-                    <li>lend production resources to help with projects</li>
-                  </ul>
-                </div>
+      <section id="one" class="spotlight style1 bottom">
+        <span class="image fit main"><img src="../../img/pic03.jpg" alt="" /></span>
+        <div class="content">
+          <div class="container">
+            <div class="row">
+              <div class="4u 12u$(medium)">
+                <header>
+                  <h2>PRODUCTION</h2>
+                  <p>Create campaigns</p>
+                </header>
+              </div>
+              <div class="8u 24u$(medium)">
+                <ul style="list-style-type: none">
+                  <li>crowdfund your budget</li>
+                  <hr>
+                  <li>crowdsource cast &amp; crew from top candidates</li>
+                  <hr>
+                  <li>lend production resources to help with projects</li>
+                </ul>
               </div>
             </div>
           </div>
-          <a href="#two" class="goto-next scrolly">Next</a>
-        </section>
+        </div>
+        <a href="#two" class="goto-next scrolly">Next</a>
+      </section>
 
       <!-- Two -->
-        <section id="two" class="spotlight style2 miniheight right">
-          <span class="image fit main"><img src="../../img/pic02.jpg" alt="" /></span>
-          <div class="content">
-            <header>
-              <h2>EXPLORE</h2>
-              <p>Find exciting opportunities</p>
-            </header>
-            <ul style="list-style-type: none">
-              <li>contribute financing, resources, &amp; expertise</li>
-              <hr>
-              <li>promote yourself, land paid gigs</li>
-              <hr>
-              <li>build your portfolio and jumpstart your career</li>
-            </ul>
-            <!-- <ul class="actions">
-              <li><a href="#" class="button">Learn More</a></li>
-            </ul> -->
-          </div>
-          <a href="#three" class="goto-next scrolly">Next</a>
-        </section>
+      <section id="two" class="spotlight style2 miniheight right">
+        <span class="image fit main"><img src="../../img/pic02.jpg" alt="" /></span>
+        <div class="content">
+          <header>
+            <h2>EXPLORE</h2>
+            <p>Find exciting opportunities</p>
+          </header>
+          <ul style="list-style-type: none">
+            <li>contribute financing, resources, &amp; expertise</li>
+            <hr>
+            <li>promote yourself, land paid gigs</li>
+            <hr>
+            <li>build your portfolio and jumpstart your career</li>
+          </ul>
+          <!-- <ul class="actions">
+            <li><a href="#" class="button">Learn More</a></li>
+          </ul> -->
+        </div>
+        <a href="#three" class="goto-next scrolly">Next</a>
+      </section>
 
       <!-- Three -->
-        <section id="three" class="spotlight style3 left">
-          <span class="image fit main bottom"><img src="../../img/pic04.jpg" alt="" /></span>
-          <div class="content">
-            <header>
-              <h2>COMMUNITY</h2>
-              <p>Creative collaboration</p>
-            </header>
-            <ul style="list-style-type: none">
-              <li>contributors and filmmakers collaborate through backend project management system to manage productions from start to finish</li>
-              <hr>
-              <li>secure file management and communication</li>
-              <hr>
-              <li>access to network of mentors and experts to help along the way; workshops to utilize license-free technologies for your productions</li>
-            </ul>
-            <!-- <ul class="actions">
-              <li><a href="#" class="button">Learn More</a></li>
-            </ul> -->
-          </div>
-          <a href="#four" class="goto-next scrolly">Next</a>
-        </section>
+      <section id="three" class="spotlight style3 left">
+        <span class="image fit main bottom"><img src="../../img/pic04.jpg" alt="" /></span>
+        <div class="content">
+          <header>
+            <h2>COMMUNITY</h2>
+            <p>Creative collaboration</p>
+          </header>
+          <ul style="list-style-type: none">
+            <li>contributors and filmmakers collaborate through backend project management system to manage productions from start to finish</li>
+            <hr>
+            <li>secure file management and communication</li>
+            <hr>
+            <li>access to network of mentors and experts to help along the way; workshops to utilize license-free technologies for your productions</li>
+          </ul>
+          <!-- <ul class="actions">
+            <li><a href="#" class="button">Learn More</a></li>
+          </ul> -->
+        </div>
+        <a href="#four" class="goto-next scrolly">Next</a>
+      </section>
 
       <!-- Four -->
-        <section id="four" class="wrapper style1 special fade-up">
-          <div class="container">
-            <header class="major">
-              <h2>FEATURED PROJECTS</h2>
-              <p>Coming Soon ..</p>
-            </header>
-            <div class="box alt">
-              <div class="row uniform">
-                <!-- <section class="4u 6u(medium) 12u$(xsmall)">
-                  <span class="icon alt major fa-area-chart"></span>
-                  <h3>Ipsum sed commodo</h3>
-                  <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-                </section>
-                <section class="4u 6u$(medium) 12u$(xsmall)">
-                  <span class="icon alt major fa-comment"></span>
-                  <h3>Eleifend lorem ornare</h3>
-                  <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-                </section>
-                <section class="4u$ 6u(medium) 12u$(xsmall)">
-                  <span class="icon alt major fa-flask"></span>
-                  <h3>Cubilia cep lobortis</h3>
-                  <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-                </section>
-                <section class="4u 6u$(medium) 12u$(xsmall)">
-                  <span class="icon alt major fa-paper-plane"></span>
-                  <h3>Non semper interdum</h3>
-                  <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-                </section>
-                <section class="4u 6u(medium) 12u$(xsmall)">
-                  <span class="icon alt major fa-file"></span>
-                  <h3>Odio laoreet accumsan</h3>
-                  <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-                </section>
-                <section class="4u$ 6u$(medium) 12u$(xsmall)">
-                  <span class="icon alt major fa-lock"></span>
-                  <h3>Massa arcu accumsan</h3>
-                  <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-                </section> -->
-              </div>
+      <section id="four" class="wrapper style1 special fade-up">
+        <div class="container">
+          <header class="major">
+            <h2>FEATURED PROJECTS</h2>
+            <p>Coming Soon ..</p>
+          </header>
+          <div class="box alt">
+            <div class="row uniform">
+              <!-- <section class="4u 6u(medium) 12u$(xsmall)">
+                <span class="icon alt major fa-area-chart"></span>
+                <h3>Ipsum sed commodo</h3>
+                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
+              </section>
+              <section class="4u 6u$(medium) 12u$(xsmall)">
+                <span class="icon alt major fa-comment"></span>
+                <h3>Eleifend lorem ornare</h3>
+                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
+              </section>
+              <section class="4u$ 6u(medium) 12u$(xsmall)">
+                <span class="icon alt major fa-flask"></span>
+                <h3>Cubilia cep lobortis</h3>
+                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
+              </section>
+              <section class="4u 6u$(medium) 12u$(xsmall)">
+                <span class="icon alt major fa-paper-plane"></span>
+                <h3>Non semper interdum</h3>
+                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
+              </section>
+              <section class="4u 6u(medium) 12u$(xsmall)">
+                <span class="icon alt major fa-file"></span>
+                <h3>Odio laoreet accumsan</h3>
+                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
+              </section>
+              <section class="4u$ 6u$(medium) 12u$(xsmall)">
+                <span class="icon alt major fa-lock"></span>
+                <h3>Massa arcu accumsan</h3>
+                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
+              </section> -->
             </div>
-            <footer class="major">
-              <ul class="actions">
-                <li><a href="#" class="button login">Register Today!</a></li>
-              </ul>
-            </footer>
           </div>
-        </section>
+          <footer class="major">
+            <ul class="actions">
+              <li><a href="#" class="button login">Register Today!</a></li>
+            </ul>
+          </footer>
+        </div>
+      </section>
 
       <!-- Five -->
-        <section id="five" class="wrapper style2 special fade-up">
-          <div class="container">
-            <header>
-              <h2>Join our email list</h2>
-              <p>Stay up-to-date with news and releases</p>
-            </header>
-            <form method="post" action="#" class="container 50%">
-              <div class="row uniform 50%">
-                <div class="8u 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Your Email Address" /></div>
-                <div class="4u$ 12u$(xsmall)"><input type="submit" value="Get Started" class="fit special" /></div>
-              </div>
-            </form>
-          </div>
-        </section>
+      <section id="five" class="wrapper style2 special fade-up">
+        <div class="container">
+          <header>
+            <h2>Join our email list</h2>
+            <p>Stay up-to-date with news and releases</p>
+          </header>
+          <form class="container 50%">
+            <div class="row uniform 50%">
+              <div class="8u 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Your Email Address" /></div>
+              <div class="4u$ 12u$(xsmall)"><input id="subscribe" type="submit" value="Get Started" class="fit special" /></div>
+            </div>
+          </form>
+        </div>
+      </section>
 
       <!-- Footer -->
-        <footer id="footer">
-          <ul class="icons">
-            <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
-            <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-            <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
-            <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
-            <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
-          </ul>
-          <a class="navbar-brand" href="https://www.meetup.com/Open-Source-Hollywood/">
-            <img alt="meetup" src="/img/logos/meetup.png"><span class="navbar-brand_span">&nbsp;&nbsp;As seen on Meetup</span>
-          </a>
-          <ul class="copyright">
-            <li>2017 &copy; Open Source Hollywood.</li><li>All rights reserved.</li>
-          </ul>
-        </footer>
+      <footer id="footer">
+        <ul class="icons">
+          <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
+          <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
+          <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+          <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
+          <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+          <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
+        </ul>
+        <a class="navbar-brand" href="https://www.meetup.com/Open-Source-Hollywood/">
+          <img alt="meetup" src="/img/logos/meetup.png"><span class="navbar-brand_span">&nbsp;&nbsp;As seen on Meetup</span>
+        </a>
+        <ul class="copyright">
+          <li>2017 &copy; Open Source Hollywood.</li><li>All rights reserved.</li>
+        </ul>
+      </footer>
 
     </div>
 
     <!-- Scripts -->
-      <script src="js/jquery.scrolly.min.js"></script>
-      <script src="js/jquery.dropotron.min.js"></script>
-      <script src="js/jquery.scrollex.min.js"></script>
-      <script src="js/skel.min.js"></script>
-      <script src="js/util.js"></script>
-      <!--[if lte IE 8]><script src="js/ie/respond.min.js"></script><![endif]-->
-      <script src="js/main.js"></script>
-      <script type="text/javascript">
-        $(document).ready(function() {
-            setTimeout(function() {
-              $('#page-wrapper-o').fadeIn();
-            }, 800);
-        });
-      </script>
-
-  </body>
-
+    <script src="js/jquery.scrolly.min.js"></script>
+    <script src="js/jquery.dropotron.min.js"></script>
+    <script src="js/jquery.scrollex.min.js"></script>
+    <script src="js/sweetalert.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+          setTimeout(function() {
+            $('#page-wrapper-o').fadeIn();
+          }, 800);
+      });
+    </script>
 
 </template>

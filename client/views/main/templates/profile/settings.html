@@ -1,160 +1,9 @@
 <template name="settings">
 	{{#if currentUser}}
-	<style type="text/css">
-		h1, h2, h3, p {
-		  margin: 0;
-		  font-weight: 400;
-		}
-
-		main {
-		  height: 100vh;
-		  display: flex;
-		  flex-flow: column wrap;
-		  justify-content: center;
-		  padding: 8vw;
-		}
-
-		.support {
-		  position: fixed;
-		  bottom: 24px;
-		  color: rgba(0, 0, 0, 0.6);
-		}
-
-		.cbp-mc-form {
-		  position: relative;
-		}
-
-		/* Clearfix hack by Nicolas Gallagher: http://nicolasgallagher.com/micro-clearfix-hack/ */
-		.cbp-mc-form:before, 
-		.cbp-mc-form:after { 
-		  content: " "; display: table; 
-		}
-
-		.cbp-mc-form:after { 
-		  clear: both; 
-		}
-
-		.cbp-mc-column {
-		  width: 33%;
-		  padding: 10px 30px;
-		  float: left;
-		}
-
-		.cbp-mc-form label {
-		  display: block;
-		  padding: 40px 5px 5px 2px;
-		  font-size: 1.1em;
-		  text-transform: uppercase;
-		  letter-spacing: 1px;
-		  cursor: pointer;
-		}
-
-		.cbp-mc-form input,
-		.cbp-mc-form textarea,
-		.cbp-mc-form select {
-		  font-family: 'Lato', Calibri, Arial, sans-serif;
-		  line-height: 1.5;
-		  font-size: 1.4em;
-		  padding: 5px 10px;
-		  color: #333;
-		  display: block;
-		  width: 100%;
-		  background: transparent;
-		}
-
-		.cbp-mc-form input,
-		.cbp-mc-form textarea {
-		  border: 3px solid #333;
-		}
-
-		.cbp-mc-form textarea {
-		  min-height: 200px;
-		}
-
-		.cbp-mc-form input:focus,
-		.cbp-mc-form textarea:focus,
-		.cbp-mc-form label:active + input,
-		.cbp-mc-form label:active + textarea {
-		  outline: none;
-		  border: 3px solid #10689a;
-		}
-
-		.cbp-mc-form select:focus {
-		  outline: none;
-		}
-
-		.cbp-mc-submit-wrap {
-		  text-align: center;
-		  padding-top: 40px;
-		  clear: both;
-		}
-
-		.cbp-mc-form input.cbp-mc-submit {
-		  background: #10689a;
-		  border: none;
-		  color: #fff;
-		  width: auto;
-		  cursor: pointer;
-		  text-transform: uppercase;
-		  display: inline-block;
-		  padding: 15px 30px;
-		  font-size: 1.1em;
-		  border-radius: 2px;
-		  letter-spacing: 1px;
-		}
-
-		.cbp-mc-form input.cbp-mc-submit:hover {
-		  background: #1478b1;
-		}
-
-		.cbp-mc-submit.formated {
-		  margin-top: -2cm;
-		}
-
-		.tbspace {
-		  margin-top: 1cm;
-		}
-
-		@media screen and (max-width: 70em) {
-		  .cbp-mc-column {
-		    width: 50%;
-		  }
-		  .cbp-mc-column:nth-child(3) {
-		    width: 100%;
-		  }
-		}
-
-		@media screen and (max-width: 48em) {
-		  .cbp-mc-column {
-		    width: 100%;
-		    padding: 10px;
-		  }
-		}
-
-		.avatar {
-		  position: relative;
-		  overflow: hidden;
-		  width: 180px;
-		  height: 180px;
-		  margin: auto;
-		  background: #ddd;
-		  -webkit-border-radius: 50%;
-		  border-radius: 50%
-		}
-
-		.logo {
-		  background-image: url('{{ avatar }}');
-		}
-
-		.remove_headshot {
-          position: relative;
-          float: left;
-        }
-
-	</style>
+	
 	<div class="container animated fadeIn">
-		<form class="cbp-mc-form">
-			<div class="cbp-mc-column">
+		<form >
+			<div>
 				<label for="first_name">First Name</label>
 				<input type="text" id="first_name" name="first_name" placeholder="{{ first_name }}">
 				<label for="last_name">Last Name</label>
@@ -169,7 +18,7 @@
 					<label class="checkbox"><input class="iam" type="checkbox" value="cinematographer">&nbsp;&nbsp;Cinematographer</label>
 				</div>
 			</div>
-			<div class="cbp-mc-column">
+			<div>
 				<label for="interests">Interests</label>
 				<div class="checkbox" id="interests">
 					<label class="checkbox"><input class="interests" type="checkbox" value="short films">&nbsp;&nbsp;Short Films</label>
@@ -184,7 +33,7 @@
 				<label for="website">Website</label>
 				<input type="text" id="website" name="website" placeholder="http://yoursite">
 			</div>
-			<div class="cbp-mc-column">
+			<div>
 				<label for="avatar_file">Update avatar</label>
 				<div class="logo" id="mypic"></div> 
 				<label class="custom-file">
@@ -197,7 +46,7 @@
 			<!-- UNO -->
 			<hr>
 			<label for="works_url">Examples of works online:</label>
-			<div class="cbp-mc-submit-wrap" style="text-align:left"><input class="cbp-mc-submit formated" type="submit" value="Add Online Work" id="works_url_submit" /></div>
+			<div style="text-align:left"><input class="formated" type="submit" value="Add Online Work" id="works_url_submit" /></div>
 			<!-- tables -->
 			{{ #if worksExamples }}
 				<div class="container tbspace">        

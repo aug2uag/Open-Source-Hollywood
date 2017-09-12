@@ -67,6 +67,12 @@ Template.BoardsLayout.rendered = function() {
         didRender = true;
     });
     document.styleSheets[0].disabled = true;
+    // document.style.visibility = 'hidden';
+    // $(document).ready(function() {
+    //   setTimeout(function() {
+    //     $('document').fadeIn();
+    //   }, 800);
+    // });
 }
 
 Template.StaticLayout.rendered = function() {
@@ -82,5 +88,11 @@ Template.SplashLayout.rendered = function() {
     clearcss();
     loadcss('main.css');
     document.styleSheets[0].disabled = true;
+    // document.style.visibility = 'hidden';
+    // $(document).ready(function() {
+    //   setTimeout(function() {
+    //     $('document').fadeIn();
+    //   }, 800);
+    // });
 
 }

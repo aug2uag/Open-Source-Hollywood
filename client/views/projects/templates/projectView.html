@@ -25,7 +25,7 @@
           {{#unless isOwner}}
             {{#if isLive}}
               {{#unless archived}}
-              <a class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
+              <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
               <hr>
               {{/unless}}
             {{/if}}
@@ -157,7 +157,6 @@
           </div>
         </div>        
         <div class="panel panel-default">
-          {{ foo }}
           {{ #if this.project.creators }}
           <h3>CREATORS</h3>
           <p>{{ this.project.creators }}</p>

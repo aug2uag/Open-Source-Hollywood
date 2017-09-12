@@ -4,6 +4,11 @@ Router.route('/projects', {
     layoutTemplate: 'StaticLayout',
     bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
+      if (Meteor.user() === null) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
       return [
         Meteor.subscribe('projectsList'), 
         Meteor.subscribe('connectUser'),
@@ -11,10 +16,6 @@ Router.route('/projects', {
       ];
     },
     onBeforeAction: function() {
-      if (!Meteor.user()) {
-        Router.go('Home');
-        return
-      }
       document.title = "Campaigns";
       this.next();
     }
@@ -26,20 +27,22 @@ Router.route('/newproject', {
     layoutTemplate: 'StaticLayout',
     bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
+      if (!Meteor.user()) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
         return [
           Meteor.subscribe('getUser', Meteor.user()._id), 
           Meteor.subscribe('connectUser')
         ];
     },
     onBeforeAction: function() {
-      if (!Meteor.user()) {
-        Router.go('Home');
-        return
-      }
       var u = Users.findOne({_id: Meteor.user()._id});
       if ((!u.firstName || !u.lastName) || u.iam.length === 0) {
         bootbox.alert('you must update your profile before creating a campaign');
         Router.go('Settings');
+        window.location.assign('/settings');
         return;
       };
       
@@ -54,6 +57,11 @@ Router.route('/activeprojects', {
     layoutTemplate: 'StaticLayout',
     bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
+      if (!Meteor.user()) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
         return [
           Meteor.subscribe('getUser', Meteor.user()._id),
           Meteor.subscribe('activeProjects'), 
@@ -61,10 +69,6 @@ Router.route('/activeprojects', {
         ];
     },
     onBeforeAction: function() {
-      if (!Meteor.user()) {
-        Router.go('Home');
-        return
-      }
       document.title = "Active Campaigns";
       this.next();
     }
@@ -76,14 +80,15 @@ Router.route('/projects/:slug', {
   layoutTemplate: 'StaticLayout',
   bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   onBeforeAction: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      return
-    }
     document.title = "Campaign";
     this.next();
   },
   waitOn: function() {
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
+    }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
@@ -172,13 +177,14 @@ Router.route('/projects/:slug/edit', {
   layoutTemplate: 'StaticLayout',
   bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   onBeforeAction: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      return
-    }
     this.next();
   },
   waitOn: function() {
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
+    }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('connectUser'),

@@ -73,7 +73,11 @@ Router.route('/dashboard', {
         ];
     },
     onBeforeAction: function() {
-        if (!Meteor.user()) Router.go('Home');
+        if (!Meteor.user()) {
+            Router.go('Home');
+            window.location.assign('/');
+            return;
+        }
         else this.next();
     }
 });

@@ -18,5 +18,15 @@ Template.splashPage.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
     lock.show();
+  },
+  'click #subscribe': function(e) {
+    e.preventDefault();
+    var email = $('#email').val();
+    if (email) {
+      Session.set('subscriptionEmail', email);
+      Meteor.call("subscribeEmail", email);
+      $('#email').val('');
+      swal('Thank you for subscribing!');
+    }
   }
 });

@@ -9,7 +9,10 @@ Template.modal.events({
     },
     'click .js-close-window': function(event) {
         Utils.goBoardId(this.card.board()._id);
-        $(document).fadeOut();
+        $('html').css('visibility', 'hidden');
+        setTimeout(function() {
+            $('html').css('visibility', 'visible');
+        }, 1300);
         event.preventDefault();
     }
 });

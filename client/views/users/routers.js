@@ -4,6 +4,11 @@ Router.route('/profile/:_id', {
   layoutTemplate: 'StaticLayout',
   bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   waitOn: function() {
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
+    }
     return [
       Meteor.subscribe('getUser', this.params._id), 
       Meteor.subscribe('getUser', Meteor.user()._id),
@@ -20,10 +25,6 @@ Router.route('/profile/:_id', {
     });
   },
   onBeforeAction: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      return
-    }
     this.next();
   }
 });
@@ -34,16 +35,17 @@ Router.route('/settings', {
     layoutTemplate: 'StaticLayout',
     bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
+      if (!Meteor.user()) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
       return [
         Meteor.subscribe('getUser', Meteor.user()._id), 
         Meteor.subscribe('connectUser')
       ];
     },
     onBeforeAction: function() {
-      if (!Meteor.user()) {
-        Router.go('Home');
-        return
-      }
       document.title = "Settings";
       this.next();
     }
@@ -65,6 +67,7 @@ Router.route('/gallery', {
     onBeforeAction: function() {
       if (!Meteor.user()) {
         Router.go('Home');
+        window.location.assign('/');
         return
       }
       document.title = "Members Gallery";

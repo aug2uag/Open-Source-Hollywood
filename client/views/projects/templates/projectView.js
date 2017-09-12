@@ -13,9 +13,6 @@ Template.projectView.helpers({
       return ! true;
     }
   },
-  foo: function() {
-    console.log(this)
-  },
   crowdsourced: function() {
     return this.selectedSegment === 'Crowdsourced';
   },
@@ -28,6 +25,12 @@ Template.projectView.helpers({
 })
 
 Template.projectView.events({
+  "click #boardButton": function() {
+    $('html').css('visibility', 'hidden');
+    setTimeout(function() {
+        $('html').css('visibility', 'visible');
+    }, 1300);
+  },
   "click .closeProj": function () {
     var was = this;
     if (bootbox.confirm("Are you sure you want to close this project?", function(r) {
