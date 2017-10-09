@@ -15,9 +15,6 @@
 
 <template name="StaticLayout">
     {{#if currentUser}}
-      <style type="text/css">
-        html { display: none; }
-      </style>
       {{ > nav}}
       {{#unless profileSet}}
         <div class="alert alert-info col-xs-12">
@@ -33,13 +30,6 @@
       <div style="position:relative;top:60px">
         {{ > footer }}
       </div>
-      <script type="text/javascript">
-        $(document).ready(function() {
-          setTimeout(function() {
-            $('html').fadeIn();
-          }, 800);
-        });
-      </script>
     {{else}}
       
     {{/if}}

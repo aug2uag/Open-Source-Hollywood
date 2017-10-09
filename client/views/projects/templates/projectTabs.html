@@ -1,5 +1,7 @@
 <template name="projectTabs">
-
+  <style type="text/css">
+    document { display: none; }
+  </style>
   <div class="container">
     <hr>
     <div class="col-sm-12">
@@ -37,10 +39,20 @@
     margin: 0px;
   }
   </style>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      setTimeout(function() {
+        $('document').fadeIn();
+      }, 1300);
+    });
+  </script>
 </template>
 
 
 <template name="userTabs">
+  <style type="text/css">
+    document { display: none; }
+  </style>
   <style type="text/css">
     @import url(https://fonts.googleapis.com/css?family=Oswald);
     @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
@@ -164,5 +176,11 @@
     </div>
 
   </div>
-
+  <script type="text/javascript">
+    $(document).ready(function() {
+      setTimeout(function() {
+        $('document').fadeIn();
+      }, 800);
+    });
+  </script>
 </template>

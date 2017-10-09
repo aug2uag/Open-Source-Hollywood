@@ -29,7 +29,7 @@ Template.nav.events({
         window.location.assign('/');
         document.title = "Open Source Hollywood";
       }, 300);
-    }, 800);
+    }, 500);
   },
   'click #profile': function() {
     document.title = 'Profile View';
