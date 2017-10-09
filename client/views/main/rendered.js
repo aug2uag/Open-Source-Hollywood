@@ -1,14 +1,14 @@
-const csss = ['core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'home.css', 'component.css', 'fullcalendar.css', 'main.css', 'bootstrap.css'];
 const css = ['core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
-var didRender = false;
 
-function clearcss() {
-    csss.forEach(function(f) {
-        var href = '/css/' + f;
-        var _id = 'link[rel=stylesheet][href~="' + href + '"]';
-        $(_id).remove();
-    });
+function hasCore() {
+    return $("link[href='css/core.css']").length;
 }
+
+function hasMain() {
+    return $("link[href='css/main.css']").length;   
+}
+
+
 
 function loadcss(f){
     var href = '/css/' + f;
@@ -59,28 +59,26 @@ Template.editor.rendered = function() {
 
 
 Template.BoardsLayout.rendered = function() {
-    clearcss();
+    if (!hasMain()) loadcss('main.css');
+    if (hasCore()) return;
+
+    //clearcss();
     this.autorun(function() {
         css.forEach(function(f) {
             loadcss(f);
         });
-        didRender = true;
     });
+    
+        
     // document.styleSheets[0].disabled = true;
 }
 
 Template.StaticLayout.rendered = function() {
-    clearcss();
-    loadcss('bootstrap.css');
-    loadcss('component.css');
-    document.styleSheets[0].disabled = true;
+    if (!hasMain()) loadcss('main.css');
+
 }
 
 
 Template.SplashLayout.rendered = function() {
-    // strip all CSS, add main.css only
-    clearcss();
-    loadcss('main.css');
-    document.styleSheets[0].disabled = true;
-
+    if (!hasMain()) loadcss('main.css');
 }

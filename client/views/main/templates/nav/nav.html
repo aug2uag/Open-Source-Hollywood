@@ -8,7 +8,7 @@
         {{> user_options}}
       {{else}}
         {{#if finishedLoading}}
-        <button class="login login btn btn-primary pull-right" style="z-index:999">Log In</button>
+        <button class="login button special" style="z-index:999">Log In</button>
         {{/if}}
       {{/if}}
 
@@ -20,42 +20,33 @@
 
 </template>
 
-<template name="user_options">
-  <style type="text/css">
-  .logo {
-      background-image: url('{{ avatar }}');
-  }
-  </style>
-  <header class="header">
-    <div class="burger" id="showmainnavmenu">
-      <div class="burger__patty"></div>
-      <div class="burger__patty"></div>
-      <div class="burger__patty"></div>
-    </div>
-
-    <nav class="menu" id="mainnavmenu">
-      <div class="menu__brand">
-        <a href=""><div class="logo"></div></a>
-        <br>
-        <h4>{{ who }}</h4>
-        <br>
-        <ul class="list-inline">
-          {{#each specialties}}
-            <li class="specialty_li">{{this}}</li>
-          {{else}}
-            <li class="specialty_li">no specialty listed</li>
-            <li><a class="close_burger" href="/settings">update your profile</a></li>
-          {{/each}}
-        </ul>
-      </div>
-      <ul class="menu__list">
-        <li class="menu__item"><a class="menu__link" id="settings" href="/settings">Edit Profile</a></li>
-        <li class="menu__item"><a class="menu__link" href="/newproject" role="button" aria-haspopup="false" aria-expanded="false">Create Campaign</a></li>
-        <li class="menu__item"><a class="menu__link" href="/dashboard">Dashboard</a></li>
-        <li class="menu__item"><a class="menu__link" href="/projects">Campaigns</a></li>
-        <li class="menu__item"><a class="menu__link" id="signout" href="#">Sign out</a></li>
-      </ul>
-    </nav>
+<template name="user_options"> 
+  <!-- Header -->
+  <header id="header">
+      <li><a id="signout" href="#">Sign out</a></li>
+      <nav id="nav">
+          <ul>
+              <li>
+                  <a href="#">PROJECTS</a>
+                  <ul>
+                      
+                      <li>
+                          <a href="#">Submenu</a>
+                          <ul>
+                              <li><a href="#">Option 1</a></li>
+                              <li><a href="#">Option 2</a></li>
+                              <li><a href="#">Option 3</a></li>
+                              <li><a href="#">Option 4</a></li>
+                          </ul>
+                      </li>
+                  </ul>
+              </li>
+              <li><a href="/newproject">Create Campaign</a></li>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><a href="/projects">Campaigns</a></li>
+              <li><a id="settings" href="/settings">Edit Profile</a></li>
+          </ul>
+      </nav>
   </header>
 </template>
 
