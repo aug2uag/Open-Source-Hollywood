@@ -2,7 +2,6 @@ Router.route('/projects', {
     name: 'Projects',
     template: 'projectTabs',
     layoutTemplate: 'StaticLayout',
-    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
       if (Meteor.user() === null) {
         Router.go('Home');
@@ -25,7 +24,6 @@ Router.route('/newproject', {
     name: 'Create Project',
     template: 'newProject',
     layoutTemplate: 'StaticLayout',
-    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
       if (!Meteor.user()) {
         Router.go('Home');
@@ -55,7 +53,6 @@ Router.route('/activeprojects', {
     name: 'Actives',
     template: 'projectTabs',
     layoutTemplate: 'StaticLayout',
-    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
       if (!Meteor.user()) {
         Router.go('Home');
@@ -78,7 +75,6 @@ Router.route('/projects/:slug', {
   name: 'projectView',
   template: 'projectView',
   layoutTemplate: 'StaticLayout',
-  bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   onBeforeAction: function() {
     document.title = "Campaign";
     this.next();
@@ -175,7 +171,6 @@ Router.route('/projects/:slug/edit', {
   name: 'EditProject',
   template: 'editProject',
   layoutTemplate: 'StaticLayout',
-  bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   onBeforeAction: function() {
     this.next();
   },

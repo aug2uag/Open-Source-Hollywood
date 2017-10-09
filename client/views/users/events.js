@@ -16,12 +16,12 @@ Template.memberHeader.events({
     'click #asss': Popup.open('asss'),
     'click #mine': Popup.open('mine'),
     'click #exit': function() {
-        console.log('exit yo');
-        // remove board css
-        clearcss();
-        // add main.css
+        $('html').css('visibility', 'hidden');
+        setTimeout(function() {
+            $('html').css('visibility', 'visible');
+        }, 800);
         Router.go('Projects');
-        // {{pathFor 'Projects'}}
+        clearcss();
     }
 });
 

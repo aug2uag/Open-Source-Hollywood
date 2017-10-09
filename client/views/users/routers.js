@@ -11,7 +11,6 @@ Router.route('/profile/:_id', {
     }
     return [
       Meteor.subscribe('getUser', this.params._id), 
-      Meteor.subscribe('getUser', Meteor.user()._id),
       Meteor.subscribe('projectsList'), 
       Meteor.subscribe('connectUser')
     ];

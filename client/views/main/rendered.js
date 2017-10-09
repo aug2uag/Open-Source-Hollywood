@@ -1,5 +1,13 @@
 const css = ['core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
 
+function clearcss() {
+    return css.forEach(function(f) {
+        var href = '/css/' + f;
+        var _id = 'link[rel=stylesheet][href~="' + href + '"]';
+        $(_id).remove();
+    });
+}
+
 function hasCore() {
     return $("link[href='css/core.css']").length;
 }
@@ -59,26 +67,26 @@ Template.editor.rendered = function() {
 
 
 Template.BoardsLayout.rendered = function() {
-    if (!hasMain()) loadcss('main.css');
     if (hasCore()) return;
-
     //clearcss();
     this.autorun(function() {
         css.forEach(function(f) {
             loadcss(f);
         });
     });
-    
+    if (!hasMain()) loadcss('main.css');
         
     // document.styleSheets[0].disabled = true;
 }
 
 Template.StaticLayout.rendered = function() {
+    if (hasCore()) clearcss();
     if (!hasMain()) loadcss('main.css');
 
 }
 
 
 Template.SplashLayout.rendered = function() {
+    if (hasCore()) clearcss();
     if (!hasMain()) loadcss('main.css');
 }

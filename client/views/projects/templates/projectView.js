@@ -1,3 +1,14 @@
+const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
+
+function loadcss(f){
+    var href = '/css/' + f;
+    var ref=document.createElement("link")
+    ref.setAttribute("rel", "stylesheet")
+    ref.setAttribute("type", "text/css")
+    ref.setAttribute("href", href)
+    document.getElementsByTagName("head")[0].appendChild(ref)
+};
+
 Template.projectView.helpers({
   projectRemovedNotBoard: function() {
     if (this.isLive) {
@@ -29,7 +40,10 @@ Template.projectView.events({
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
-    }, 1300);
+    }, 500);
+    css.forEach(function(f) {
+        loadcss(f);
+    });
   },
   "click .closeProj": function () {
     var was = this;
