@@ -3,6 +3,7 @@
 	
 	<div id="page-wrapper">
         <!-- Main -->
+        {{foo}}
         <div id="main" class="wrapper style1">
             <div class="container">
                 <header class="major">
@@ -16,14 +17,14 @@
                     <hr />
                     <div class="row uniform 50%">
                         <div class="6u 12u$(xsmall)">
-                            <input type="text" name="title" id="title" value="" placeholder="Name" />
+                            <input type="text" name="firstname" id="first_name" value="" placeholder="{{ first_name }}" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="subtitle" id="subtitle" value="" placeholder="Email" />
+                            <input type="text" name="lastname" id="last_name" value="" placeholder="{{ last_name }}" />
                         </div>
 
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Bio" rows="6"></textarea>
+                            <textarea name="bio" id="bio" placeholder="{{ bio }}" rows="6"></textarea>
                         </div>
 
 
@@ -57,47 +58,47 @@
                     <div class="row uniform 50%">
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Producer" name="checkbox-Producer">
+                        <input class="user-role" type="checkbox" id="checkbox-Producer" name="Producer">
                         <label for="checkbox-Producer">Producer</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Director" name="checkbox-Director">
+                        <input class="user-role" type="checkbox" id="checkbox-Director" name="Director">
                         <label for="checkbox-Director">Director</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Writer" name="checkbox-Writer">
+                        <input class="user-role" type="checkbox" id="checkbox-Writer" name="Writer">
                         <label for="checkbox-Writer">Writer</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Actor" name="checkbox-Actor">
+                        <input class="user-role" type="checkbox" id="checkbox-Actor" name="Actor">
                         <label for="checkbox-Actor">Actor</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Video" name="checkbox-Video">
+                        <input class="user-role" type="checkbox" id="checkbox-Video" name="Video">
                         <label for="checkbox-Video">Video</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Audio" name="checkbox-Audio">
+                        <input class="user-role" type="checkbox" id="checkbox-Audio" name="Audio">
                         <label for="checkbox-Audio">Audio</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-SFX" name="checkbox-SFX">
+                        <input class="user-role" type="checkbox" id="checkbox-SFX" name="SFX">
                         <label for="checkbox-SFX">SFX</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Support" name="checkbox-Support">
+                        <input class="user-role" type="checkbox" id="checkbox-Support" name="Support">
                         <label for="checkbox-Support">Support</label>
                       </div>
 
                       <div class="4u 8u$(medium)">
-                        <input type="checkbox" id="checkbox-Viewer" name="checkbox-Viewer">
+                        <input class="user-role" type="checkbox" id="checkbox-Viewer" name="Viewer">
                         <label for="checkbox-Viewer">Viewer</label>
                       </div>
 
@@ -114,24 +115,19 @@
                     <hr />
                     <div class="box alt">
                         <div class="row 100% uniform">
-                            <div class="12u$" id="dropzone">
-                              <FORM class="dropzone needsclick" id="img-upload" action="/upload">
-                                <DIV class="dz-message needsclick"> 
-                                  <br>   
-                                  Drop file here or <strong>click here</strong> to upload.
-                                </DIV>
-                              </FORM>
-                            </div>
+                            <label class="custom-file">
+                              <input type="file" id="avatar_file">
+                            </label>
                         </div>
                     </div>
 
                     <h2> Reels, Demos, &amp; Portfolios </h2>
                     <div class="row uniform 50%">
                         <div class="6u 12u$(xsmall)">
-                            <input type="text" name="title" id="reel-title" value="" placeholder="Description" />
+                            <input type="text" name="reel-title" id="reel-title" value="" placeholder="Description" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="subtitle" id="reel-url" value="" placeholder="URL or username" />
+                            <input type="email" name="reel-url" id="reel-url" value="" placeholder="URL or username" />
                         </div>
                     </div>
                     <br>
@@ -239,7 +235,7 @@
                     <div class="row">
                       <div class="12u 24u$(xsmall)">
                         <ul class="actions fit">
-                          <li><a href="#" class="button special fit big">SAVE CHANGES</a></li>
+                          <li><a id="save_settings" class="button special fit big">SAVE CHANGES</a></li>
                         </ul>
                       </div>
                     </div>
