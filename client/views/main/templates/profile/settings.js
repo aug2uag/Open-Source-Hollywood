@@ -49,6 +49,7 @@ Template.settings.events({
 		o.lastName = $('#last_name').val();
 		o.bio = $('#bio').val();
 		o.primaryRole = $('#category').find(":selected").text();
+		if (o.primaryRole.toLowerCase().indexOf('primary')>-1) delete o['primaryRole'];
 		o.iam = [];
 		o.assets = [];
 		o.social = [];
@@ -167,11 +168,39 @@ Template.settings.rendered = function () {
     }
    });
 
+  // set primaryRole
+  if (Meteor.user().primaryRole) {
+  	$("#category").val(Meteor.user().primaryRole);
+  };
+
+  // set user-role
+  Meteor.user().iam.forEach(function(el) {
+  	var elId = '#checkbox-' + el;
+  	console.log(elId)
+  	$(elId).prop("checked", true);
+  });
+  
+  // set needs-table
+  Meteor.user().assets.forEach(function(el) {
+  	$('#needs-table').append('<tr class="needs-val"><td>'+el.category+'</td><td>'+el.description+'</td><td>'+el.quantity+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+  	$('.deleteRow').on('click', deleteRow);
+  });
+
+  // set social table
+  Meteor.user().social.forEach(function(el) {
+  	$('#social-table').append('<tr class="social-val"><td>'+el.name+'</td><td>'+el.address+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+  	$('.deleteRow').on('click', deleteRow);
+  });
+
+  // set reel-table
+  Meteor.user().reels.forEach(function(el) {
+  	$('#reel-table').append('<tr class="social-val"><td>'+el.name+'</td><td>'+el.address+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+  	$('.deleteRow').on('click', deleteRow);
+  });
+
   var wbs = Meteor.user().website && Meteor.user().website.length > 0 ? Meteor.user().website : 'http://yoursite';
   $('#website').attr('placeholder', wbs);
 
-  // var _bio = Meteor.user().bio && Meteor.user().bio.length > 0 ? Meteor.user().bio : 'describe yourself and experiences';
-  // $('#bio').attr('placeholder', _bio);
 };
 
 
