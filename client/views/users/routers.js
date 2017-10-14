@@ -40,7 +40,7 @@ Router.route('/settings', {
         return
       }
       return [
-        Meteor.subscribe('getUser', Meteor.user()._id), 
+        Meteor.subscribe('getMe'), 
         Meteor.subscribe('connectUser')
       ];
     },
@@ -60,7 +60,7 @@ Router.route('/gallery', {
       return [
         Meteor.subscribe('getUsers'), 
         Meteor.subscribe('connectUser'),
-        Meteor.subscribe('getUser', Meteor.user()._id)
+        Meteor.subscribe('getMe')
       ];
     },
     onBeforeAction: function() {

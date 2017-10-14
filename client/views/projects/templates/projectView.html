@@ -1,219 +1,218 @@
 <template name="projectView">
-  {{#if projectRemovedNotBoard}}
-    <h1>Project isn't available!</h1>
-  {{else}}
-  <div class="container animated fadeIn" style="position:relative;top:60px">
-    {{#if isLive}}
-      <div class="alert">
-        <strong>Your project is LIVE!</strong>
-      </div>
-    {{/if}}  
-    <div class="row">
-      <div class="col-sm-8">
-        {{#if isOwner}}
-          {{#unless isLive}}
-          <a class="btn btn-info start">Start Project</a>
-            <a class="btn btn-success edit" href="/projects/{{_slug}}/edit">Edit</a>
-            <a class="btn btn-danger delete">Delete</a>
-          {{/unless}}
+<style type="text/css">
+  .panel {
+    background-color:transparent
+  }
+  .panel-default {
+    border-color:transparent
+  }
+</style>
 
-          {{#if isLive}}
-            <a class="btn btn-success closeProj">Close and mark project as Finished</a>
-          {{/if}}
-        {{/if}}
-        {{#if isMember}}
-          {{#unless isOwner}}
+<div class="page-wrapper">
+  <div id="main" class="wrapper style1">
+      <div class="container">
+        {{#if projectRemovedNotBoard}}
+          <header class="major">
+              <h2 class="page-header">This Campaign is not available !</h2>
+          </header>
+          {{else}}
+          <section>
             {{#if isLive}}
-              {{#unless archived}}
-              <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
-              <hr>
-              {{/unless}}
-            {{/if}}
-          {{/unless}}
-          {{#if isOwner}}
-            <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
-            <hr>
-          {{/if}}
-        {{/if}}
-
-        <div id="uid" style="display:none;" val={{uid}}></div>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <table width="100%">
-              <tr> 
-                <td>
-                  <h1>{{title}}</h1>
-                  <h2><small>by <a href="/profile/{{ownerId}}">{{ownerName}}</a></small></h2>
-                </td>
-                <td> 
-                  <div class="pull-right">
-                    <center>
-                      {{> actionBar}}
-                    </center>
-                  </div>
-                </td>
-              </tr>
-            </table>
-            <br>
-            {{> projectThumbnailCenter}}
-            <div class="panel-body">
-              <h3><em>{{logline}}</em></h3>
-            </div>
-            <hr>
-            {{#if currentUser}}
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <table>
-                  <tr>
-                    <td style="width: 50%;">
-                      <a href="/profile/{{ownerId}}"><img class="user-photo" src="{{ownerAvatar}}" style="width:75px; margin: 5px"></a>
-                    </td>
-                    <td>
-                      <h3 style="margin: 5px !important;font-size: 24px;"><small><a href="/profile/{{ownerId}}">{{ownerName}}</a></small></h3>
-                    </td>
-                  </tr>
-                </table>
+              <div class="alert">
+                <strong>Your project is LIVE!</strong>
               </div>
-            </div>
-            <hr>
+            {{/if}}  
+
+            {{#if isOwner}}
+              {{#unless isLive}}
+              <a class="btn btn-info start">Start Project</a>
+                <a class="btn btn-success edit" href="/projects/{{_slug}}/edit">Edit</a>
+                <a class="btn btn-danger delete">Delete</a>
+              {{/unless}}
+
+              {{#if isLive}}
+                <a class="btn btn-success closeProj">Close and mark project as Finished</a>
+              {{/if}}
             {{/if}}
-            <h4>{{numComments}}</h4>
-            {{#if currentUser}}
-            <br>
-            {{#each projectComments}}
-            {{>comment}}
-            {{/each}}
-            {{> commentBox}}
+
+            {{#if isMember}}
+              {{#unless isOwner}}
+                {{#if isLive}}
+                  {{#unless archived}}
+                  <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
+                  <hr>
+                  {{/unless}}
+                {{/if}}
+              {{/unless}}
+              {{#if isOwner}}
+                <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
+                <hr>
+              {{/if}}
             {{/if}}
-          </div>
-        </div>
 
-      </div>
+            <div class="row">
+              <div id="uid" style="display:none;" val={{uid}}></div>
+              <div class="panel panel-default">
+                <div class="panel-body table-wrapper">
+                  <table width="100%">
+                    <tr> 
+                      <td>
+                        <h2>{{title}}</h2>
+                        <h4><small>by <a href="/profile/{{ownerId}}">{{ownerName}}</a></small></h4>
+                      </td>
+                      <td> 
+                        <div class="pull-right">
+                          <center>
+                            {{> actionBar}}
+                          </center>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                  <br>
+                  {{> projectThumbnailCenter}}
+                  <div class="panel-body">
+                    <h4><em>{{logline}}</em></h4>
+                  </div>
+                  <hr>
+                  {{#if currentUser}}
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="6u"><span class="image fit"><img src="{{ownerAvatar}}" alt=""></span></div>
+                      <div class="6u"><span class="image fit"><a href="/profile/{{ownerId}}">{{ownerName}}</a></span></div>
+                    </div>
+                  </div>
+                  <hr>
+                  {{/if}}
+                  <h4>{{numComments}}</h4>
+                  {{#if currentUser}}
+                  <br>
+                  {{#each projectComments}}
+                  {{>comment}}
+                  {{/each}}
+                  {{> commentBox}}
+                  {{/if}}
+                </div>
+              </div>
 
-      <style type="text/css">
-        .tags {
-          margin-top: 10px;
-          display: flex;
-          flex-wrap: wrap;
-        }
-        .tags.focused {
-          border-bottom: 1px solid #2196f3;
-        }
-        .tags > p {
-          margin: 0;
-          align-self: center;
-        }
-        .tags span {
-          padding: 2px 5px;
-          border: 1px solid #2196f3;
-          margin-right: 5px;
-          margin-bottom: 5px;
-          margin: 3px 5px;
-          color: #2196f3;
-          cursor: pointer;
-        }
-        .tags span span {
-          padding: 2px;
-          font-weight: bold;
-          font-family: sans-serif;
-        }
-      </style>
 
-      <div class="col-sm-4">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <h3>Published on {{createdAt}}</h3>
-            <span id="helpBlock" class="help-block"><b>description</b></span>
-            <p>{{#markdown}}{{details}}{{/markdown}}</p>
-            <br>
-            <span id="helpBlock" class="help-block"><b>needs</b></span>
-            {{ #each needs }}
-              {{#markdown}}{{ this.need }}{{/markdown}}
-              <div class="tags">
-                {{ #each this.tags }}
-                  <span>{{ this }}</span>
+
+              <style type="text/css">
+                .tags {
+                  margin-top: 10px;
+                  display: flex;
+                  flex-wrap: wrap;
+                }
+                .tags.focused {
+                  border-bottom: 1px solid #2196f3;
+                }
+                .tags > p {
+                  margin: 0;
+                  align-self: center;
+                }
+                .tags span {
+                  padding: 2px 5px;
+                  border: 1px solid #2196f3;
+                  margin-right: 5px;
+                  margin-bottom: 5px;
+                  margin: 3px 5px;
+                  color: #2196f3;
+                  cursor: pointer;
+                }
+                .tags span span {
+                  padding: 2px;
+                  font-weight: bold;
+                  font-family: sans-serif;
+                }
+              </style>
+
+              <div class="col-sm-4">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <h3>Published on {{createdAt}}</h3>
+                    <span id="helpBlock" class="help-block"><b>description</b></span>
+                    <p>{{#markdown}}{{details}}{{/markdown}}</p>
+                    <br>
+                    <span id="helpBlock" class="help-block"><b>needs</b></span>
+                    {{ #each needs }}
+                      {{#markdown}}{{ this.need }}{{/markdown}}
+                      <div class="tags">
+                        {{ #each this.tags }}
+                          <span>{{ this }}</span>
+                        {{ /each }}
+                      </div>
+                    {{ /each }}
+                    <br>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <h1>${{funded}}</h1><p>pledged</p>
+                    {{#if currentUser}}
+                    <button id="fund" class="btn btn-success">Apply to this project</button>
+                    <br>
+                    {{/if}}
+                    <br>
+                    <b>Funding goal</b>
+                    <p>{{budget}}</p>
+                    <b>Days left</b>
+                    <p>{{duration}} days</p>
+                    <b>Progress</b>
+                    <p>{{perCent}}</p>
+                    <b>Users applied</b>
+                    <p>{{applied}}</p>
+                  </div>
+                </div>        
+                <div class="panel panel-default">
+                  {{ #if this.project.creators }}
+                  <h3>CREATORS</h3>
+                  <p>{{ this.project.creators }}</p>
+                  <br>
+                  {{ /if }}
+                  {{ #if this.project.story }}
+                  <h3>STORY</h3>
+                  <p>{{ this.project.story }}</p>
+                  <br>
+                  {{ /if }}
+                  {{ #if this.project.history }}
+                  <h3>HISTORY</h3>
+                  <p>{{ this.project.history }}</p>
+                  <br>
+                  {{ /if }}
+                  {{ #if this.project.plans }}
+                  <h3>PLANS</h3>
+                  <p>{{ this.project.plans }}</p>
+                  <br>
+                  {{ /if }}
+                  {{ #if this.project.needsExplained }}
+                  <h3>EXPLANATION of NEEDS</h3>
+                  <p>{{ this.project.needsExplained }}</p>
+                  {{ /if }}
+                </div>  
+              </div>
+
+              {{ #if this.project.files }}
+              <div class="col-sm-12">
+                {{ #each this.project.files }}
+                  <section class="image-list">
+                    <div class="media">
+                      <figure class="media-figure">
+                        <img src="{{ this.data }}">
+                      </figure>
+                    </div>
+                  </section>
                 {{ /each }}
               </div>
-            {{ /each }}
-            <br>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <h1>${{funded}}</h1><p>pledged</p>
-            {{#if currentUser}}
-            <button id="fund" class="btn btn-success">Apply to this project</button>
-            <br>
-            {{/if}}
-            <br>
-            <b>Funding goal</b>
-            <p>{{budget}}</p>
-            <b>Days left</b>
-            <p>{{duration}} days</p>
-            <b>Progress</b>
-            <p>{{perCent}}</p>
-            <b>Users applied</b>
-            <p>{{applied}}</p>
-          </div>
-        </div>        
-        <div class="panel panel-default">
-          {{ #if this.project.creators }}
-          <h3>CREATORS</h3>
-          <p>{{ this.project.creators }}</p>
-          <br>
-          {{ /if }}
-          {{ #if this.project.story }}
-          <h3>STORY</h3>
-          <p>{{ this.project.story }}</p>
-          <br>
-          {{ /if }}
-          {{ #if this.project.history }}
-          <h3>HISTORY</h3>
-          <p>{{ this.project.history }}</p>
-          <br>
-          {{ /if }}
-          {{ #if this.project.plans }}
-          <h3>PLANS</h3>
-          <p>{{ this.project.plans }}</p>
-          <br>
-          {{ /if }}
-          {{ #if this.project.needsExplained }}
-          <h3>EXPLANATION of NEEDS</h3>
-          <p>{{ this.project.needsExplained }}</p>
-          {{ /if }}
-        </div>  
-<!--         <div class="panel panel-default">
-          <div class="panel-body">
-            <h2>Similar Projects</h2>
-            <br>
-            <center>
-              {{>similarProjects}}
-            </center>
-          </div>
-        </div> -->
+              {{ /if }}
+
+
+            </div>
+
+          </section>
+          {{/if}}
       </div>
-    </div>
-    {{ #if this.project.files }}
-    <div class="col-sm-12">
-      {{ #each this.project.files }}
-        <section class="image-list">
-          <div class="media">
-            <figure class="media-figure">
-              <img src="{{ this.data }}">
-            </figure>
-          </div>
-        </section>
-      {{ /each }}
-    </div>
-    {{ /if }}
-<!--     <div class="col-sm-12">
-      <h1>Users Applied</h1>
-      <ul class="list-group">
-        {{# each usersApplied}}
-          
-        {{/each}}
-      </ul>
-    </div> -->
   </div>
-  {{/if}}
+</div>
+
+
 </template>

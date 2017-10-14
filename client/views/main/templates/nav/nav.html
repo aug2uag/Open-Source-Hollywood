@@ -23,28 +23,30 @@
 <template name="user_options"> 
   <!-- Header -->
   <header id="header">
-      <li><a id="signout" href="#">Sign out</a></li>
+      <a id="signout" class="button special">Sign out</a>
       <nav id="nav">
           <ul>
-              <li>
-                  <a href="#">PROJECTS</a>
+              <!--<li>
+                  <a>PROJECTS</a>
                   <ul>
                       
                       <li>
-                          <a href="#">Submenu</a>
+                          <a>Submenu</a>
                           <ul>
-                              <li><a href="#">Option 1</a></li>
-                              <li><a href="#">Option 2</a></li>
-                              <li><a href="#">Option 3</a></li>
-                              <li><a href="#">Option 4</a></li>
+                              <li><a>Option 1</a></li>
+                              <li><a>Option 2</a></li>
+                              <li><a>Option 3</a></li>
+                              <li><a>Option 4</a></li>
                           </ul>
                       </li>
                   </ul>
-              </li>
+              </li>-->
+              {{#if producerReady}}
               <li><a href="/newproject">Create Campaign</a></li>
-              <li><a href="/dashboard">Dashboard</a></li>
-              <li><a href="/projects">Campaigns</a></li>
+              {{/if}}
               <li><a id="settings" href="/settings">Edit Profile</a></li>
+              <li><a href="/projects">Campaigns</a></li>
+              <li><a href="/dashboard">Dashboard</a></li>
           </ul>
       </nav>
   </header>
@@ -53,7 +55,7 @@
 
 
 <!-- <a role="presentation" class="pull-right">
-      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list"></i></a>
+      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list"></i></a>
       <ul id="profile-dropdown-menu" class="dropdown-menu">
         <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Pages</p>
         <li><a id="profile" href="/profile/{{currentUser._id}}">Profile</a></li>
@@ -68,7 +70,7 @@
         <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Dashboard</p>
         <li><a href="/dashboard">Dashboard</a></li>
         <hr>
-        <li><a id="signout" href="#">Sign out</a></li>
+        <li><a id="signout">Sign out</a></li>
       </ul>
     </a>
     -->

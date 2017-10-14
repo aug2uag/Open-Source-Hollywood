@@ -35,7 +35,7 @@ Router.route('/boards/:boardId/:slug', {
 
             Meteor.subscribe('getAssets', params.boardId),
 
-            Meteor.subscribe('getUser', Meteor.user()._id)
+            Meteor.subscribe('getMe')
 
             // Meteor.subscribe('getExpiringTasks', params.boardId)
         ];

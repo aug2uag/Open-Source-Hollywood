@@ -11,7 +11,7 @@ Router.route('/projects', {
       return [
         Meteor.subscribe('projectsList'), 
         Meteor.subscribe('connectUser'),
-        Meteor.subscribe('getUser', Meteor.user()._id)
+        Meteor.subscribe('getMe')
       ];
     },
     onBeforeAction: function() {
@@ -31,13 +31,13 @@ Router.route('/newproject', {
         return
       }
         return [
-          Meteor.subscribe('getUser', Meteor.user()._id), 
+          Meteor.subscribe('getMe'), 
           Meteor.subscribe('connectUser')
         ];
     },
     onBeforeAction: function() {
       var u = Users.findOne({_id: Meteor.user()._id});
-      if ((!u.firstName || !u.lastName) || u.iam.length === 0) {
+      if ((!u.firstName || !u.lastName) || !u.iam || u.iam.length === 0) {
         bootbox.alert('you must update your profile before creating a campaign');
         Router.go('Settings');
         window.location.assign('/settings');
@@ -60,7 +60,7 @@ Router.route('/activeprojects', {
         return
       }
         return [
-          Meteor.subscribe('getUser', Meteor.user()._id),
+          Meteor.subscribe('getMe'),
           Meteor.subscribe('activeProjects'), 
           Meteor.subscribe('connectUser')
         ];
@@ -89,7 +89,7 @@ Router.route('/projects/:slug', {
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
       Meteor.subscribe('commentsList', this.params.slug),
-      Meteor.subscribe('getUser', Meteor.user()._id)
+      Meteor.subscribe('getMe')
     ];
   },
   data: function() {
@@ -183,7 +183,7 @@ Router.route('/projects/:slug/edit', {
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('connectUser'),
-      Meteor.subscribe('getUser', Meteor.user()._id)
+      Meteor.subscribe('getMe')
     ];
   },
   action: function() {

@@ -3,13 +3,13 @@
     <ul>
       <center>
         {{#if currentUser}}
-        <li class="actions"><a id="upvote" href="#"><i class="fa fa-chevron-up"></i></a></li>
-        <li class="actions"><span class="badge" style="font-size: 20px">{{count}}</span></li>
-        <li class="actions"><a id="downvote" href="#"><i class="fa fa-chevron-down"></i></a></li>
+        <li style="list-style: none;" class="actions"><a id="upvote" href="#"><i class="fa fa-chevron-up"></i></a></li>
+        <li style="list-style: none;" class="actions"><span class="badge" style="font-size: 20px">{{count}}</span></li>
+        <li style="list-style: none;" class="actions"><a id="downvote" href="#"><i class="fa fa-chevron-down"></i></a></li>
         {{else}}
-        <li class="actions"><a href="#"><i class="fa fa-chevron-up" title="You must be signed in to upvote"></i></a></li>
-        <li class="actions"><span class="badge" style="font-size: 20px">{{count}}</span></li>
-        <li class="actions"><a href="#"><i class="fa fa-chevron-down" title="You must be signed in to downvote"></i></a></li>
+        <li style="list-style: none;" class="actions"><a href="#"><i class="fa fa-chevron-up" title="You must be signed in to upvote"></i></a></li>
+        <li style="list-style: none;" class="actions"><span class="badge" style="font-size: 20px">{{count}}</span></li>
+        <li style="list-style: none;" class="actions"><a href="#"><i class="fa fa-chevron-down" title="You must be signed in to downvote"></i></a></li>
         {{/if}}
       </center>
     </ul>

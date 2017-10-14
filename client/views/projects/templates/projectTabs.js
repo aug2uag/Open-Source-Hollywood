@@ -11,6 +11,9 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
 });
 
 Template.projectTabs.helpers({
+  producerReady: function() {
+    return !(Meteor.user() && Meteor.user().didSetProfile);
+  },
   counts3: function() {
     var x = Session.get('pCount');
     x = x || 0;

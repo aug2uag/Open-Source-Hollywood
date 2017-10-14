@@ -33,3 +33,10 @@ Template.nav.events({
   }
 
 });
+
+
+Template.user_options.helpers({
+  producerReady: function() {
+    return Meteor.user() && Meteor.user().didSetProfile
+  }
+})

@@ -23,6 +23,9 @@
     </div>
 
     <div class="col-sm-12">
+      {{#if producerReady}}
+        <h3>Edit Profile to View, Create, and Join Campaigns</h3>
+      {{else}}
       <ol>
         {{#each projects}}
           {{> project}}
@@ -30,6 +33,7 @@
           <h3>No campaigns, <a id="createnewproject">create one now</a></h3>
         {{/each}}
       </ol>
+      {{/if}}
     </div>
 
   </div>
