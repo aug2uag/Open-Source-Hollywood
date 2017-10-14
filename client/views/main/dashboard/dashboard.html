@@ -1,42 +1,52 @@
 <template name="dashboard">
 	<div id="userId" val="{{uid}}" style="visibility:none;"></div>
-	<div class="container">
-		<h1 class="page-header"><i class="glyphicon glyphicon-dashboard"></i>&nbsp;DASHBOARD</h1>
-
-
-		<div class="row">
-			<h3 class="page-header">PROJECTS APPLIED</h3>
-			{{#each foo}}
-				{{> applied_to_project}}
-			{{else}}
-				<p class="empty">No content</p>
-			{{/each}}
-		</div>
-
-
-		<div class="row">
-			<h3 class="page-header">PROJECTS ACCEPTED</h3>
-			{{#each bar}}
-				{{ > approved_for_project }}
-			{{else}}
-				<p class="empty">No content</p>
-			{{/each}}
-		</div>
-
-
-		<div class="row">
-	        <h3 class="page-header">PRODUCTIONS</h3>
-	        {{#each baz}}
-	        	{{> collapses}}
-	        {{/each}}
-	    </div>
-
-	    <a href="/receipts" class="btn btn-lg btn-primary col-xs-12">View transactions history</a>
+	<div class="page-wrapper">
+		<div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2 class="page-header"><i class="glyphicon glyphicon-dashboard"></i>&nbsp;&nbsp;DASHBOARD</h2>
+                    <p>View active and previous projects. Access your transactions.</p>
+                </header>
+                <section>
+                	<div class="table-wrapper">
+                		<h3 class="12u page-header">PROJECTS APPLIED</h3>
+						<table>
+							<tbody>
+								{{#each foo}}
+									<tr><td>{{> applied_to_project}}</td></tr>
+								{{else}}
+									<tr><td><p class="empty">No content</p></td></tr>
+								{{/each}}
+							</tbody>							
+						</table>
+					</div>
+					<div class="table-wrapper">
+						<h3 class="12u page-header">PROJECTS ACCEPTED</h3>
+						<table>
+							<tbody>
+								{{#each bar}}
+									<tr><td>{{ > approved_for_project }}</td></tr>
+								{{else}}
+									<tr><td><p class="empty">No content</p></td></tr>
+								{{/each}}
+							</tbody>							
+						</table>
+					</div>
+					<div class="table-wrapper">
+				        <h3 class="12u page-header">PRODUCTIONS</h3>
+				        {{#each baz}}
+				        	{{> collapses}}
+				        {{/each}}
+				    </div>
+				    <a href="/receipts" class="btn btn-lg btn-primary col-xs-12">View transactions history</a>
+                </section>
+            </div>
+        </div>
 	</div>
 </template>
 
 <template name="applied_to_project">
-	<div class="panel panel-warning">
+	<div class="panel panel-warning 12u">
 		<a href="/projects/{{this.slug}}"><div class="panel-heading">
 			<h3 class="panel-title">{{this.title}}</h3>
 		</div></a>
@@ -78,7 +88,7 @@
 </template>
 
 <template name="approved_for_project">
-	<div class="panel {{#if this.isLive}}panel-success{{else}}panel-info{{/if}}">
+	<div class="12u panel {{#if this.isLive}}panel-success{{else}}panel-info{{/if}}">
 		<a href="/projects/{{this.slug}}"><div class="panel-heading">
 			<h3 class="panel-title">{{this.title}}</h3>
 		</div></a>
@@ -124,7 +134,7 @@
 </template>
 
 <template name="production_applicant">
-	<div class="panel panel-info">
+	<div class="panel panel-info 12u">
 		<a href="/profile/{{user._id}}"><div class="panel-body">
 			<div class="col-xs-9">
 	        	<i class="glyphicon glyphicon-user"></i>&nbsp;{{user.services.auth0.name}}
@@ -211,7 +221,7 @@
 
 <template name="collapses">
     <div class="panel-group" id="{{uuid_accordion}}">
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="border-color:transparent;background-color:transparent;">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{this.slug}}" class="">
@@ -222,38 +232,38 @@
             </div>
             <div id="{{this.slug}}" class="panel-collapse collapse">
                 <div class="panel-body">
-                	<div class="row col-xs-12">
+                	<div class="row">
                     	{{#unless this.isLive}}
 	                    	{{#unless emptySetApplied}}
-	                    		<h3 class="page-header">Applied</h3>
+	                    		<h4 class="12u page-header">Applied</h4>
 	                    		{{#each projectApplicants}}
 	                    			{{> production_applicant}}
 	                    		{{/each}}
 		                    {{else}}
-		                    	<h3 class="page-header">No Applicants</h3>
+		                    	<h4 class="12u page-header">No Applicants</h4>
 		                    {{/unless}}
 	                    {{/unless}}
                     </div>
 
-                    <div class="row col-xs-12">
+                    <div class="row">
                     	{{#unless emptySetApproved}}
                 			{{#unless this.isLive}}
-                    			<h3 class="page-header">Approved</h3>
+                    			<h4 class="12u page-header">Approved</h4>
                     		{{else}}
-                    			<h3 class="page-header">Project Members</h3>
+                    			<h4 class="12u page-header">Project Members</h4>
                     		{{/unless}}
                     		{{#each projectApprovals}}
                     			{{> production_member}}
                     		{{/each}}
 	                    {{else}}
 	                    	{{#unless this.isLive}}
-	                    		<h3 class="page-header">No Approvals</h3>
+	                    		<h4 class="12u page-header">No Approvals</h4>
 	                    	{{/unless}}
 	                    {{/unless}}
                     </div>
 
-                	<div class="row col-xs-12">
-                		<h3 class="page-header">Status</h3>
+                	<div class="row">
+                		<h4 class="12u page-header">Status</h4>
                 		{{#if this.isLive}}
                 			<a href="#" class="btn btn-success btn-lg col-xs-12">LIVE</a>
                 		{{else}}

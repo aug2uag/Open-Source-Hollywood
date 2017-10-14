@@ -1,334 +1,253 @@
 <template name="settings">
 	{{#if currentUser}}
 	
-	<div class="container animated fadeIn">
-		<form >
-			<div>
-				<label for="first_name">First Name</label>
-				<input type="text" id="first_name" name="first_name" placeholder="{{ first_name }}">
-				<label for="last_name">Last Name</label>
-				<input type="text" id="last_name" name="last_name" placeholder="{{ last_name }}">
-				<label for="iam">I am a:</label>
-				<div class="checkbox" id="iam">
-					<label class="checkbox"><input class="iam" type="checkbox" value="viewer">&nbsp;&nbsp;Viewer</label>
-					<label class="checkbox"><input class="iam" type="checkbox" value="writer">&nbsp;&nbsp;Writer</label>
-					<label class="checkbox"><input class="iam" type="checkbox" value="actor">&nbsp;&nbsp;Actor</label>
-					<label class="checkbox"><input class="iam" type="checkbox" value="director">&nbsp;&nbsp;Director</label>
-					<label class="checkbox"><input class="iam" type="checkbox" value="producer">&nbsp;&nbsp;Producer</label>
-					<label class="checkbox"><input class="iam" type="checkbox" value="cinematographer">&nbsp;&nbsp;Cinematographer</label>
-				</div>
-			</div>
-			<div>
-				<label for="interests">Interests</label>
-				<div class="checkbox" id="interests">
-					<label class="checkbox"><input class="interests" type="checkbox" value="short films">&nbsp;&nbsp;Short Films</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="sketches">&nbsp;&nbsp;Sketches</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="feature films">&nbsp;&nbsp;Feature Films</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="series">&nbsp;&nbsp;Series</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="drama">&nbsp;&nbsp;Drama</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="comedy">&nbsp;&nbsp;Comedy</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="action/adventure">&nbsp;&nbsp;Action/Adventure</label>
-					<label class="checkbox"><input class="interests" type="checkbox" value="sci-fi/fantasy">&nbsp;&nbsp;Sci-Fi/Fantasy</label>
-				</div>
-				<label for="website">Website</label>
-				<input type="text" id="website" name="website" placeholder="http://yoursite">
-			</div>
-			<div>
-				<label for="avatar_file">Update avatar</label>
-				<div class="logo" id="mypic"></div> 
-				<label class="custom-file">
-				  <input type="file" id="avatar_file">
-				</label>
-				<label for="bio">About me:</label>
-				<textarea id="bio" name="bio" placeholder="describe yourself and experiences"></textarea>
-			</div>
+	<div id="page-wrapper">
+        <!-- Main -->
+        <div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2>Edit Profile</h2>
+                    <p>Create your project bla bla</p>
+                </header>
 
-			<!-- UNO -->
-			<hr>
-			<label for="works_url">Examples of works online:</label>
-			<div style="text-align:left"><input class="formated" type="submit" value="Add Online Work" id="works_url_submit" /></div>
-			<!-- tables -->
-			{{ #if worksExamples }}
-				<div class="container tbspace">        
-				  <h2>URLs:</h2>
-				  <p style="font-size: smaller;">Headshots, writing samples, samples, etc.</p>  
-				  <p>The following are your link listed works and articles that are hosted online and available online with a specific URL:</p> 
-				  <table class="table table-striped">
-				    <thead>
-				      <tr>
-				        <th>URL</th>
-				        <th>Description</th>
-				        <th>Date</th>
-				        <th></th>
-				      </tr>
-				    </thead>
-				    <tbody>
-				      {{#each worksList}}
-					      <tr>
-					        <td>{{ this.url }}</td>
-					        <td>{{ this.description }}</td>
-					        <td>{{ this.date }}</td>
-					        <td><input class="deleteWorksRow" type="button" value="Delete Row" id="{{ this.id }}"></td>
-					      </tr>
-				      {{/each}}
-				    </tbody>
-				  </table>
-				</div>
-			{{/if}}
-			<hr>
+                <!-- Text -->
+                <section>
+                    <h3>General Information</h3>
+                    <hr />
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+                            <input type="text" name="title" id="title" value="" placeholder="Name" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <input type="email" name="subtitle" id="subtitle" value="" placeholder="Email" />
+                        </div>
 
-			<!-- DOS -->
-			<label for="headshots">Upload files:</label>
-			<style type="text/css">
-				* {
-				  box-sizing: border-box;
-				}
-
-				.zoot::-webkit-input-placeholder {
-				   color: white;
-				}
-
-				.zoot:-moz-placeholder { /* Firefox 18- */
-				   color: white;  
-				}
-
-				.zoot::-moz-placeholder {  /* Firefox 19+ */
-				   color: white;  
-				}
-
-				.zoot:-ms-input-placeholder {  
-				   color: white;  
-				}
-
-				html {
-				  font-family: sans-serif;
-				  size-adjust: 100%;
-				  -webkit-text-size-adjust: 100%;
-				}
-
-				body {
-				  margin: 0;
-				  color: #525147;
-				  background-color: #efefef;
-				}
-
-				figure {
-				  margin: 0;
-				}
-
-				h3 {
-				  margin: 5px 0;
-				  font-size: 16px;
-				}
-
-				.image-list {
-				  width: calc(100% - 40px);
-				  max-width: 1200px;
-				  margin: auto;
-				  padding: 10px;
-				  background-color: #fff;
-				  border-top: 1px solid #efefef;
-				  position: relative;
-				}
-				.image-list:first-of-type {
-				  border-top: none;
-				}
-				.image-list:before {
-				  content: attr(data-progress);
-				  position: absolute;
-				  top: 0;
-				  left: 0;
-				  width: attr(data-progress);
-				  height: 4px;
-				  background-color: #2196f3;
-				}
-
-				.progress {
-				  width: 100%;
-				  height: 5px;
-				  background-color: #efefef;
-				}
-				.progress .progres-fill {
-				  display: block;
-				  width: 10%;
-				  height: 100%;
-				  background-color: #2196f3;
-				}
-
-				.media {
-				  display: flex;
-				}
-
-				.media-figure {
-				  width: 100px;
-				}
-				.media-figure img {
-				  width: 100%;
-				}
-
-				.media-body {
-				  flex: 1;
-				  padding: 0 20px;
-				}
-
-				.tags {
-				  margin-top: 10px;
-				  display: flex;
-				  flex-wrap: wrap;
-				}
-				.tags.focused {
-				  border-bottom: 1px solid #2196f3;
-				}
-				.tags > p {
-				  margin: 0;
-				  align-self: center;
-				}
-				.tags span {
-				  padding: 2px 5px;
-				  border: 1px solid #2196f3;
-				  margin-right: 5px;
-				  margin-bottom: 5px;
-				  margin: 3px 5px;
-				  color: #2196f3;
-				  cursor: pointer;
-				}
-				.tags span span {
-				  padding: 2px;
-				  font-weight: bold;
-				  font-family: sans-serif;
-				}
-
-				.select_tag.active {
-					background-color: #2196f3;
-					color: #fff
-				}
-			</style>
-			<label class="cbp-mc-submit-wrap">
-			  <div class="cbp-mc-submit-wrap" style="text-align:left">
-			  	{{ > uploadForm }}
-			  	<br><br>
-			  	<input class="cbp-mc-submit formated zoot" type="text" placeholder="Name or title" id="headshots_name" />
-			  	<input class="cbp-mc-submit formated zoot" type="text" placeholder="Description of file" id="headshots_description" />
-			  	<input class="cbp-mc-submit formated" type="date" id="headshots_date" />
-			  	<p style="font-size:smaller;"><i>date is used to sort files from newest to oldest</i></p>
-			  	<div class="tags">
-					<p><b>Tags:</b></p>
-					<span class="select_tag" val="0">Image</span> <span class="select_tag" val="0">Video</span> <span class="select_tag" val="0">Audio</span><span class="select_tag" val="0">Text</span> <span class="select_tag" val="0">PDF</span> <span class="select_tag" val="0">Script</span> <span class="select_tag" val="0">Animation</span> <span class="select_tag" val="0">Score</span> <span class="select_tag" val="0">Headshots</span> <span class="select_tag" val="0">Location</span> <span class="select_tag" val="0">Acting</span> <span class="select_tag" val="0">Writing</span><span class="select_tag" val="0">Photography</span> <span class="select_tag" val="0">Video</span> <span class="select_tag" val="0">Special FX</span> <span class="select_tag" val="0">Screenplay</span> <span class="select_tag" val="0">Demonstration</span> <span class="select_tag" val="0">Dance</span> <span class="select_tag" val="0">Acting</span> <span class="select_tag" val="0">Performance</span> <span class="select_tag" val="0">Audience</span> <span class="select_tag" val="0">Location</span> <span class="select_tag" val="0">Other</span>
-				</div>
-				<p style="font-size:smaller;"><i>Meaningful tags help match you to projects.</i></p>
-				<br><br>
-				<input class="cbp-mc-submit formated" type="submit" value="Add file" id="headshots_submit" />
-			  </div>
-			</label>
-			<!-- tables -->
-			{{ #if headfiles }}
-				<br>
-				<h2>Personal Works</h2>
-				<p style="font-size: smaller;">Headshots, writing samples, samples, etc.</p>
-				<p>The following are your uploaded works:</p>
-				
-				{{ #each headshots }}
-					<section class="image-list">
-						<div class="media">
-							<figure class="media-figure">
-								<img src="{{ this.url }}">
-							</figure>
-							<a class="remove_headshot" href="#"><i class="glyphicon glyphicon-trash"></i></a>
-							<div class="media-body">
-								<h3>Date: {{this.date }}</h3>
-								<h4>Name: {{ this.name }}</h4>
-								<h6>"{{ this.type }}"</h6>
-								{{ #if this.tags }}
-									<div class="tags">
-										<p><b>Tags:</b></p>
-										{{ #each this.tags }}
-											<span>{{ this }}</span>
-										{{ /each }}
-									</div>
-								{{ /if }}
-							</div>
-						</div>
-					</section>
-				{{ /each }}
-			{{ /if }}
-			<hr>
-
-			<!-- TRES -->
-			<label for="resources">Your resources:</label>
-			<select id="object_category" name="resources">
-				<option>Choose a category</option>
-				<option>Camera gear</option>
-				<option>Lighting gear</option>
-				<option>Sound gear</option>
-				<option>Post production gear</option>
-				<option>Location</option>
-				<option>Other</option>
-			</select>
-			<input type="text" id="resource_details" name="resources" placeholder="Resource details" style="position: relative;width: 100%;">
-			<div class="cbp-mc-submit-wrap" style="text-align:left"><input class="cbp-mc-submit formated" type="submit" value="Add Resource" id="resource_submit" /></div>
-			<!-- tables -->
-			{{ #if resources }}
-				<div class="container tbspace">        
-				  <h2>Resources:</h2>
-				  <p>The following are the resources you marked as having:</p> 
-				  <table class="table table-striped">
-				    <thead>
-				      <tr>
-				        <th>Resource</th>
-				        <th>Details</th>
-				        <th></th>
-				      </tr>
-				    </thead>
-				    <tbody>
-				      {{#each resourceList}}
-					      <tr>
-					        <td>{{ this.resource }}</td>
-					        <td>{{ this.details }}</td>
-					        <td><input class="deleteResourceRow" type="button" value="Delete Row" id="{{ this.id }}"></td>
-					      </tr>
-				      {{/each}}
-				    </tbody>
-				  </table>
-				</div>
-			{{/if}}
-			<hr>
+                        <div class="12u$">
+                            <textarea name="discription" id="discription" placeholder="Bio" rows="6"></textarea>
+                        </div>
 
 
-			<!-- QUATRO -->
-			<label for="social_media">Social media links:</label>
-			<input type="text" id="social_media" name="social_media" placeholder="Copy &amp; Paste Link (should include http://)" style="position: relative;width: 100%;">
-			<div class="cbp-mc-submit-wrap" style="text-align:left"><input class="cbp-mc-submit formated" type="submit" value="Add Link" id="social_media_submit" /></div>
-			<!-- tables -->
-			{{ #if socialLinks }}
-				<div class="container tbspace">
-				  <h2>Social Media:</h2>
-				  <p>The following are your social media links:</p> 
-				  <table class="table table-striped">
-				    <thead>
-				      <tr>
-				        <th>Link</th>
-				        <th></th>
-				      </tr>
-				    </thead>
-				    <tbody>
-				      {{#each socialLinksList}}
-					      <tr>
-					        <td>{{ this.url }}</td>
-					        <td><input class="deleteSocialRow" type="button" value="Delete Row" id="{{ this.id }}"></td>
-					      </tr>
-				      {{/each}}
-				    </tbody>
-				  </table>
-				</div>
-			{{/if}}
-			<hr>
+                        <div class="12u$">
+                            <div class="select-wrapper">
+                              <select name="category" id="category">
+                                <option>- Primary Role -</option>
+                                <option value="1">Producer</option>
+                                <option value="1">Director</option>
+                                <option value="1">Writer</option>
+                                <option value="1">Actor</option>
+                                <option value="1">Video</option>
+                                <option value="1">Audio</option>
+                                <option value="1">SFX</option>
+                                <option value="1">Support</option>
+                                <option value="1">Viewer</option>
+                              </select>
+                            </div>
+                        </div>
 
 
-			<!-- SUBMIT -->
-			<div class="cbp-mc-submit-wrap"><input class="cbp-mc-submit" id="update" type="submit" value="Update your profile" /></div>
-		</form>
-		
-	</div>
+                    </div>
+
+
+                    <br>
+                    <br>
+                    <h2>Additional Roles</h2>
+                    <hr />
+
+
+                    <div class="row uniform 50%">
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Producer" name="checkbox-Producer">
+                        <label for="checkbox-Producer">Producer</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Director" name="checkbox-Director">
+                        <label for="checkbox-Director">Director</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Writer" name="checkbox-Writer">
+                        <label for="checkbox-Writer">Writer</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Actor" name="checkbox-Actor">
+                        <label for="checkbox-Actor">Actor</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Video" name="checkbox-Video">
+                        <label for="checkbox-Video">Video</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Audio" name="checkbox-Audio">
+                        <label for="checkbox-Audio">Audio</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-SFX" name="checkbox-SFX">
+                        <label for="checkbox-SFX">SFX</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Support" name="checkbox-Support">
+                        <label for="checkbox-Support">Support</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input type="checkbox" id="checkbox-Viewer" name="checkbox-Viewer">
+                        <label for="checkbox-Viewer">Viewer</label>
+                      </div>
+
+
+                    </div>
+                  </section>
+
+                    <br>
+                    <br>
+
+                  <!-- Image -->
+                  <section>
+                    <h2>Profile Image</h2>
+                    <hr />
+                    <div class="box alt">
+                        <div class="row 100% uniform">
+                            <div class="12u$" id="dropzone">
+                              <FORM class="dropzone needsclick" id="img-upload" action="/upload">
+                                <DIV class="dz-message needsclick"> 
+                                  <br>   
+                                  Drop file here or <strong>click here</strong> to upload.
+                                </DIV>
+                              </FORM>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2> Reels, Demos, &amp; Portfolios </h2>
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+                            <input type="text" name="title" id="reel-title" value="" placeholder="Description" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <input type="email" name="subtitle" id="reel-url" value="" placeholder="URL or username" />
+                        </div>
+                    </div>
+                    <br>
+                    <a id="add-reel" class="button special">+</a>
+                    <br>
+                    <br>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                              <tr>
+                                  <th>Description</th>
+                                  <th>URL or username</th>
+                                  <th>DELETE</th>
+                              </tr>
+                            </thead>
+                            <tbody id="reel-table"></tbody>
+                        </table>
+                    </div>
+
+
+                    <br>
+                    <br>
+
+                    <h2> Social Media &amp; Links</h2>
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+                            <input type="text" name="title" id="social-title" value="" placeholder="Name" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <input type="email" name="subtitle" id="social-url" value="" placeholder="URL or username" />
+                        </div>
+                    </div>
+                    <br>
+                    <a id="add-social" class="button special">+</a>
+                    <br>
+                    <br>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                              <tr>
+                                  <th>Link Title</th>
+                                  <th>URL or username</th>
+                                  <th>DELETE</th>
+                              </tr>
+                            </thead>
+                            <tbody id="social-table"></tbody>
+                        </table>
+                    </div>
+
+                  </section>
+
+
+                    <br>
+                    <br>
+
+                  <section>
+                    <h2>Production Assets</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
+
+                            <tbody>
+                                <tr>
+                                    <td>
+                                      <div class="select-wrapper">
+                                        <select name="category" id="needs-category">
+                                          <option value="">- Category -</option>
+                                          <option value="Equipment">Equipment</option>
+                                          <option value="Labor">Labor</option>
+                                          <option value="Location">Location</option>
+                                          <option value="Construction">Construction</option>
+                                          <option value="Legal">Legal</option>
+                                          <option value="Sales">Sales / Marketing</option>
+                                          <option value="Miscellaneous">Miscellaneous</option>
+                                        </select>
+                                      </div>
+                                    </td>
+                                    <td><input type="text" name="title" id="needs-description" value="" placeholder="Description" /></td>
+                                    <td><input type="text" name="title" id="needs-quantity" value="" placeholder="Quantity" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a id="add-needs" class="button special">+</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="needs-table"></tbody>
+                        </table>
+                    </div>
+                  </section>
+
+
+
+                <section>
+                    <div class="row">
+                      <div class="12u 24u$(xsmall)">
+                        <ul class="actions fit">
+                          <li><a href="#" class="button special fit big">SAVE CHANGES</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                </section>
+                
+            </div>
+        </div>
+    </div>
 	{{/if}}
 </template>
 

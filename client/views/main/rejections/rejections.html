@@ -1,35 +1,46 @@
 <template name="receipts">
-  <div class="container">
-    <div class="row">
-      <h3>TRANSACTIONS</h3>
-      {{#if receiptsNil}}
-        <h5>You have no transactions.</h5>
-      {{else}}
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Title</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-          {{#each receiptsList}}
-            <tr>
-              <td>{{formatDate}}</td>
-              <td>{{formatTitle}}</td>
-              <td>{{formatAmount}}</td>
-              <td>{{formatRefund}}</td>
-            </tr>
-          {{else}}
-            <tr>
-              <td colspan="4">None</td>
-            </tr>
-          {{/each}}
-          </tbody>
-        </table>
-      {{/if}}
-    </div>
+<div class="page-wrapper">
+  <div id="main" class="wrapper style1">
+      <div class="container">
+          <header class="major">
+              <h2 class="page-header"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;TRANSACTIONS</h2>
+              <p>Payment history and status.</p>
+          </header>
+          <section>
+            {{#if receiptsNil}}
+              <h5>You have no transactions.</h5>
+            {{else}}
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {{#each receiptsList}}
+                  <tr>
+                    <td>{{formatDate}}</td>
+                    <td>{{formatTitle}}</td>
+                    <td>{{formatAmount}}</td>
+                    <td>{{formatRefund}}</td>
+                  </tr>
+                {{else}}
+                  <tr>
+                    <td colspan="4">None</td>
+                  </tr>
+                {{/each}}
+                </tbody>             
+              </table>
+            </div>
+            {{/if}}
+          </section>
+      </div>
   </div>
+</div>
 </template>
+
+
