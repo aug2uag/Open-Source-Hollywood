@@ -14,37 +14,55 @@
                     <hr />
                     <div class="row uniform 50%">
                         <div class="6u 12u$(xsmall)">
-                            <input type="text" name="title" id="title" placeholder="Title" />
+                            <label for="title">title</label>
+                            <input type="text" name="title" id="title" placeholder="Your great title here." />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="logline" id="logline" placeholder="Logline" />
+                            <label for="logline">logline</label>
+                            <input type="email" name="logline" id="logline" placeholder="Couple sentences summarizing your vision." />
                         </div>
                         <div class="6u 12u$(xsmall)">
-                            <input type="text" name="location" id="location" placeholder="Location (zip code)" />
+                            <label for="location">location</label>
+                            <input type="text" name="location" id="location" placeholder="zip code (ex. 91204)" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="website" id="website" placeholder="Website" />
+                            <label for="website">website</label>
+                            <input type="email" name="website" id="website" placeholder="ex. https://link.com/id" />
                         </div>
 
                         <div class="12u$">
-                            <textarea name="description" id="description" placeholder="Description" rows="6"></textarea>
+                            <label for="description">description</label>
+                            <textarea name="description" id="description" placeholder="Write your project description or summary here." rows="6"></textarea>
                         </div>
 
 
                         <div class="12u$">
+                            <label for="category">genre</label>
                             <div class="select-wrapper">
                               <select name="category" id="category">
                                 <option>- Format -</option>
-                                <option value="1">Feature</option>
-                                <option value="1">Short Film</option>
-                                <option value="1">Series</option>
-                                <option value="1">Sketch</option>
-                                <option value="1">Animations</option>
-                                <option value="1">Theater art</option>
-                                <option value="1">Ensemble</option>
-                                <option value="1">Live Performance</option>
-                                <option value="1">Music Video</option>
-                                <option value="1">Other</option>
+                                <option>Feature</option>
+                                <option>Short Film</option>
+                                <option>Series</option>
+                                <option>Sketch</option>
+                                <option>Animations</option>
+                                <option>Theater art</option>
+                                <option>Ensemble</option>
+                                <option>Live Performance</option>
+                                <option>Music Video</option>
+                                <option>Other</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="12u$">
+                            <label for="purpose">purpose</label>
+                            <div class="select-wrapper">
+                              <select name="purpose" id="purpose">
+                                <option>Unspecified</option>
+                                <option>Print Media</option>
+                                <option>Motion Picture</option>
+                                <option>Music</option>
                               </select>
                             </div>
                         </div>
@@ -237,7 +255,7 @@
                     <div class="box alt">
                         <div class="row 100% uniform">
                             <div class="6u 12u$(xsmall)">
-                                <input type="text" name="video_explainer" id="video_explainer" placeholder="URL of video" />
+                                <input type="text" name="video_explainer" id="video_explainer" placeholder="ex. https://link.com/id" />
                             </div>
                         </div>
                     </div>

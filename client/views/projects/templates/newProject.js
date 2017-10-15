@@ -1,6 +1,10 @@
 var gifts = [];
 var osettings = {};
 
+function validateUrl(value) {
+  return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
+}
+
 function deleteRow(e) {
   e.preventDefault();
   $(this).closest('tr').remove();
@@ -24,32 +28,10 @@ Template.newProject.onRendered(function() {
 Template.newProject.events({
   'click #create_campaign': function(e) {
     e.preventDefault();
-    console.log('foolala')
-    /**
-      title
-      logline
-      location
-      website
-      description
-      category -- select
-      creators_info            ==> textarea
-      story_info               ==> textarea
-      history_info            ==> textarea
-      plans_info              ==> textarea
-      needs_info               ==> textarea
-      significance_info       ==> textarea
-      team
-      cast
-      needs
-      banner_file
-      video_explainer
-      social-table
-      gifts-table
-    */
     var o = {};
-    var loc = $('#location').val() && $('#location').val().replace(' ', '') || '';
-    if (loc.match(/\d{5}/)) {
-      var url = 'https://api.zippopotam.us/us/' + loc;
+    o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
+    if (o.zip.match(/\d{5}/)) {
+      var url = 'https://api.zippopotam.us/us/' + o.zip;
       var client = new XMLHttpRequest();
       client.open("GET", url, true);
       client.onreadystatechange = function() {
@@ -64,6 +46,7 @@ Template.newProject.events({
               campcallback();
             };
           } catch (e) {
+            console.log(e)
             bootbox.alert('something went wrong, please try again')
           }
         };
@@ -75,31 +58,75 @@ Template.newProject.events({
     }
 
     function campcallback() {
-      o.title = $('#title').val();
-      o.logline = $('#logline').val();
-      o.format = $('#category').find(":selected").text();
-      if (o.primaryRole.toLowerCase().indexOf('format')>-1) delete o['primaryRole'];
+      o.title = $('#title').val() || 'untitled';
+      o.logline = $('#logline').val() || 'nothing to see here';
+      o.category = $('#category').find(":selected").text();
+      if (o.category.toLowerCase().indexOf('format')>-1) return bootbox.alert('please select category or genre');
+      o.purpose = $('#purpose').find(":selected").text();
+      o._gifts = gifts;
+      if (validateUrl($('#website').val())) o.website = $('#website').val();
+      o.description = $('#description').val() || 'no description';
+      o.creatorsInfo = $('#creators_info').val() || 'not provided';
+      o.storyInfo = $('#story_info').val() || 'not provided';
+      o.historyInfo = $('#history_info').val() || 'not provided';
+      o.plansInfo = $('#plans_info').val() || 'not provided';
+      o.needsInfo = $('#needs_info').val() || 'not provided';
+      o.significanceInfo = $('#significance_info').val() || 'not provided';
+      if (validateUrl($('#video_explainer').val())) o.videoExplainer = $('#video_explainer').val();
+      if (osettings.banner.data) o._banner = osettings.banner.data;
+      else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner';
+      var crew = $('.crew-val'); 
+      o.crew = [];
+      crew.each(function(i, el) {
+        var _o = {};
+        var arr = $(el).children('td');
+        _o.title = $(arr[0]).text();
+        _o.description = $(arr[1]).text();
+        _o.status = $(arr[2]).text();
+        o.crew.push(_o);
+      });
+
+      var cast = $('.cast-val');
+      o.cast = [];
+      cast.each(function(i, el) {
+        var _o = {};
+        var arr = $(el).children('td');
+        _o.role = $(arr[0]).text();
+        _o.description = $(arr[1]).text();
+        _o.status = $(arr[2]).text();
+        o.cast.push(_o);
+      });
+
+      var needs = $('.needs-val');
+      o.needs = [];
+      needs.each(function(i, el) {
+        var _o = {};
+        var arr = $(el).children('td');
+        _o.category = $(arr[0]).text();
+        _o.description = $(arr[1]).text();
+        _o.quantity = $(arr[2]).text();
+        o.needs.push(_o);
+      });
+
+      var social = $('.social-val');
+      o.social = [];
+      social.each(function(i, el) {
+        var _o = {};
+        var arr = $(el).children('td');
+        _o.name = $(arr[0]).text();
+        _o.address = $(arr[1]).text();
+        o.social.push(_o);
+      });
+
+      // create virtual account for project
+      // add funds to virtual account, non-refundable
 
 
+      Meteor.call('addProject', o);
 
-      console.log(new Array(100).join('u'))
-      console.log(o)
-      
-      // if (!options.title || !options.logline|| !options.details || !options.videoURL || !options.needs || !options.purpose) {
-      //   bootbox.alert('enter values for all fields');
-      //   return false;
-      // };
-
-      // if (options.videoURL.indexOf('youtu.be') > -1) {
-      //   bootbox.alert('please select URL or embed URL, not this one');
-      //   return;
-      // } else if (options.videoURL.indexOf('youtube') > -1) {
-      //   options.videoURL = options.videoURL.replace('watch?v=', 'embed/');
-      // };
-      
       // var budget = parseInt(options.budget) || 0;
       // options.processingFee = (budget * 0.05);
-      // var _d2 = '<b>We charge a $10 fee for 1GB storage and 5% for money transfers, fees for additional storage apply. Do you agree to our <a href="/terms" target="_blank">Terms & Conditions</a>?';
+      // var _d2 = '<b>There\'s a $10 fee for hosting your project and storage, 5% on transfers, fees for additional storage apply. Do you agree to our <a href="/terms" target="_blank">Terms & Conditions</a>?';
       // bootbox.confirm(_d2, function(r) { 
       //   if (!r) return;
       //   StripeCheckout.open({
@@ -194,8 +221,6 @@ Template.newProject.events({
     else o.data = osettings.giftImage.data;
     osettings.giftImage = {};
     gifts.push(o);
-    console.log('gift pushed');
-    console.log(gifts)
     $('#gift-table').append('<tr class="social-val"><td>'+o.name+'</td><td>'+o.description+'</td><td>'+o.quantity+'</td><td>'+o.msrp+'</td><td><button class="removeGift button small">X</button></td></tr>');
     $('.removeGift').on('click', removeGift);
     $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
