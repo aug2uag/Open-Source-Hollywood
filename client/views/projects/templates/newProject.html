@@ -5,89 +5,84 @@
             <div class="container">
                 <header class="major">
                     <h2>New Campaign</h2>
-                    <p>Enter details below and create !</p>
+                    <p>Enter the details of your vision below.</p>
                 </header>
 
                 <!-- Text -->
                 <section>
-                    <h3>Basic information</h3>
+                    <h3>Basic Information</h3>
                     <hr />
                     <div class="row uniform 50%">
                         <div class="6u 12u$(xsmall)">
-                            <input type="text" name="title" id="title" value="" placeholder="Title" />
+                            <input type="text" name="title" id="title" placeholder="Title" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="subtitle" id="subtitle" value="" placeholder="Subtitle" />
+                            <input type="email" name="logline" id="logline" placeholder="Logline" />
                         </div>
                         <div class="6u 12u$(xsmall)">
-                            <input type="text" name="location" id="location" value="" placeholder="Location" />
+                            <input type="text" name="location" id="location" placeholder="Location (zip code)" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="website" id="website" value="" placeholder="Website" />
+                            <input type="email" name="website" id="website" placeholder="Website" />
                         </div>
 
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="description" id="description" placeholder="Description" rows="6"></textarea>
                         </div>
 
 
                         <div class="12u$">
                             <div class="select-wrapper">
-                                <select name="category" id="category">
-                          <option value="">- Genre -</option>
-                          <option value="1">Short film</option>
-                          <option value="1">Sketch</option>
-                          <option value="1">Animations</option>
-                          <option value="1">Theater art</option>
-                        </select>
+                              <select name="category" id="category">
+                                <option>- Format -</option>
+                                <option value="1">Feature</option>
+                                <option value="1">Short Film</option>
+                                <option value="1">Series</option>
+                                <option value="1">Sketch</option>
+                                <option value="1">Animations</option>
+                                <option value="1">Theater art</option>
+                                <option value="1">Ensemble</option>
+                                <option value="1">Live Performance</option>
+                                <option value="1">Music Video</option>
+                                <option value="1">Other</option>
+                              </select>
                             </div>
                         </div>
 
 
-                        <div class="6u$ 12u$(xsmall)">
-                            <input type="text" name="start" id="start" value="" placeholder="start time" />
-                        </div>
-
-
                     </div>
 
 
                     <br>
                     <br>
-                    <h2>Background</h2>
+                    <h2>Background Information</h2>
                     <hr />
 
 
                     <div class="row uniform 50%">
-                        <h4>Background information</h4>
-
-                        <div class="12u$">
-                            <textarea name="backgroundInfo" id="backgroundInfo" placeholder="Background Info" rows="6"></textarea>
-                        </div>
-
                         <h4>About the creators</h4>
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="creators_info" id="creators_info" placeholder="" rows="6"></textarea>
                         </div>
                         <h4>About the story</h4>
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="story_info" id="story_info" placeholder="" rows="6"></textarea>
                         </div>
                         <h4>Project history</h4>
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="history_info" id="history_info" placeholder="" rows="6"></textarea>
                         </div>
                         <h4>Project plans</h4>
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="plans_info" id="plans_info" placeholder="" rows="6"></textarea>
                         </div>
                         <h4>Explanation of needs</h4>
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="needs_info" id="needs_info" placeholder="" rows="6"></textarea>
                         </div>
                         <h4>Significance of work</h4>
                         <div class="12u$">
-                            <textarea name="discription" id="discription" placeholder="Description" rows="6"></textarea>
+                            <textarea name="significance_info" id="significance_info" placeholder="" rows="6"></textarea>
                         </div>
 
                     </div>
@@ -95,114 +90,129 @@
 
                     <br>
                     <br>
-                    <h2>Gifts</h2>
 
 
+                    <h2>Team</h2>
                     <hr />
-
                     <div class="table-wrapper">
                         <table>
-
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Name" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Description" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Quan" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="MSRP" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Image" /></td>
+                                    <td><input type="text" name="title" id="crew-title" placeholder="Title" /></td>
+                                    <td><input type="text" name="title" id="crew-description" placeholder="Description" /></td>
+                                    <td>
+                                        <input type="radio" id="crew-radio-needed" name="crew-radio" value="needed" checked>
+                                        <label for="crew-radio-needed">Needed</label>
+                                        <input type="radio" id="crew-radio-fulfilled" name="crew-radio" value="fulfilled">
+                                        <label for="crew-radio-fulfilled">Fulfilled</label>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    <a href="#" class="button special">Add gift</a>
+                    <a id="add-crew" class="button special">Add Crew</a>
                     <br>
                     <br />
                     <div class="table-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Crew Title</th>
                                     <th>Description</th>
-                                    <th>Q</th>
-                                    <th>MSRP</th>
-                                    <th>Image</th>
+                                    <th>Status</th>
+                                    <th>DELETE</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>T-Shirt</td>
-                                    <td>Cool t-shirt</td>
-                                    <td>1</td>
-                                    <td>20</td>
-                                    <td><a href="">media</a></td>
-                                </tr>
-                                <tr>
-                                    <td>T-Shirt</td>
-                                    <td>Cool t-shirt</td>
-                                    <td>1</td>
-                                    <td>20</td>
-                                    <td><a href="">media</a></td>
-                                </tr>
-
-                            </tbody>
+                            <tbody id="crew-table"></tbody>
                         </table>
                     </div>
+
                     <br>
                     <br>
-                    <h2>Needs</h2>
 
 
+                    <h2>Cast</h2>
                     <hr />
-
                     <div class="table-wrapper">
                         <table>
 
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Name" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Description" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Quan" /></td>
-                                    <td><input type="text" name="title" id="title" value="" placeholder="Budget" /></td>
+                                    <td><input type="text" name="cast-title" id="cast-title" placeholder="Role" /></td>
+                                    <td><input type="text" name="cast-description" id="cast-description" placeholder="Description" /></td>
+                                    <td>
+                                        <input type="radio" id="cast-radio-needed" name="cast-radio" value="needed" checked>
+                                        <label for="cast-radio-needed">Needed</label>
+                                        <input type="radio" id="cast-radio-fulfilled" name="cast-radio" value="fulfilled">
+                                        <label for="cast-radio-fulfilled">Fulfilled</label>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    <a href="#" class="button special">Add need</a>
+                    <a id="add-cast" class="button special">Add Role</a>
                     <br>
                     <br />
                     <div class="table-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Rent</th>
+                                    <th>Role</th>
                                     <th>Description</th>
-                                    <th>Q</th>
-                                    <th>Budget</th>
+                                    <th>Status</th>
+                                    <th>DELETE</th>
                                 </tr>
                             </thead>
+                            <tbody id="cast-table"></tbody>
+                        </table>
+                    </div>
+
+
+                    <br>
+                    <br>
+
+
+                    <h2>Production Needs</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
+
                             <tbody>
                                 <tr>
-                                    <td>Rent</td>
-                                    <td>Rent city street</td>
-                                    <td>1</td>
-                                    <td>$20.000</td>
+                                    <td>
+                                      <div class="select-wrapper">
+                                        <select name="category" id="needs-category">
+                                          <option>- Category -</option>
+                                          <option value="Equipment">Equipment</option>
+                                          <option value="Labor">Labor</option>
+                                          <option value="Location">Location</option>
+                                          <option value="Construction">Construction</option>
+                                          <option value="Legal">Legal</option>
+                                          <option value="Sales">Sales / Marketing</option>
+                                          <option value="Miscellaneous">Miscellaneous</option>
+                                        </select>
+                                      </div>
+                                    </td>
+                                    <td><input type="text" name="title" id="needs-description" placeholder="Description" /></td>
+                                    <td><input type="text" name="title" id="needs-quantity" placeholder="Quantity" /></td>
                                 </tr>
-                                <tr>
-                                    <td>Camera</td>
-                                    <td>Super camera X11</td>
-                                    <td>4</td>
-                                    <td>$25.000</td>
-
-                                </tr>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3">Total</td>
-                                        <td>$45.000</td>
-                                    </tr>
-                                </tfoot>
                             </tbody>
+                        </table>
+                    </div>
+                    <a id="add-needs" class="button special">Add Need</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="needs-table"></tbody>
                         </table>
                     </div>
 
@@ -212,45 +222,106 @@
                 <!-- Image -->
                 <section>
                     <h2>Image</h2>
-
-
                     <hr />
                     <div class="box alt">
                         <div class="row 100% uniform">
-                            <div class="12u$"><span class="image fit"><img src="images/pic07.jpg" alt="" /></span></div>
-
+                            <div class="4u  6u$(xsmall)"><label class="custom-file">
+                              <input type="file" id="banner_file">
+                            </label>
+                          </div>
                         </div>
-                    </div>
-
-                    <h2> Social Links</h2>
-                    <div class="row uniform 50%">
-                        <div class="6u 12u$(xsmall)">
-                            <input type="text" name="title" id="title" value="" placeholder="Name" />
-                        </div>
-                        <div class="6u$ 12u$(xsmall)">
-                            <input type="email" name="subtitle" id="subtitle" value="" placeholder="URL" />
+                    </div> 
+                    <br>
+                    <h2>Video Explainer</h2>
+                    <hr />
+                    <div class="box alt">
+                        <div class="row 100% uniform">
+                            <div class="6u 12u$(xsmall)">
+                                <input type="text" name="video_explainer" id="video_explainer" placeholder="URL of video" />
+                            </div>
                         </div>
                     </div>
                     <br>
-                    <a href="#" class="button special">+</a>
+                    <h2> Social &amp; Web Links</h2>
+                    <hr />
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+                            <input type="text" name="title" id="social-title" placeholder="Name" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <input type="email" name="subtitle" id="social-url" placeholder="URL or username" />
+                        </div>
+                    </div>
+                    <br>
+                    <a id="add-social" class="button special">+</a>
                     <br>
                     <br>
                     <div class="table-wrapper">
                         <table>
+                            <thead>
+                              <tr>
+                                  <th>Link Title</th>
+                                  <th>URL or username</th>
+                                  <th>DELETE</th>
+                              </tr>
+                            </thead>
+                            <tbody id="social-table"></tbody>
+                        </table>
+                    </div>
 
+
+                    <br>
+                    <br>
+
+                    <h2>Gifts for Supporters</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
                             <tbody>
                                 <tr>
-                                    <td><a href="google.com">Facebook</a></td>
+                                    <td><input type="text" name="title" id="gift-title" placeholder="Name" /></td>
+                                    <td><input type="text" name="title" id="gift-description" placeholder="Description" /></td>
+                                    <td><input type="text" name="title" id="gift-quantity" placeholder="Quantity" /></td>
+                                    <td><input type="text" name="title" id="gift-msrp" placeholder="MSRP" /></td>
+                                    <td>
+                                      <div class="4u  6u$(xsmall)"><label class="custom-file">
+                                          <input type="file" id="gift_file">
+                                        </label>
+                                      </div>
+                                  </td>
                                 </tr>
-                                <tr>
-                                    <td><a href="google.com">Instagram</a></td>
-
-                                </tr>
-
                             </tbody>
                         </table>
                     </div>
+                    <a id="add-gift" class="button special">Add Gift</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                              <tr>
+                                  <th>Name</th>
+                                  <th>Description</th>
+                                  <th>Quantity</th>
+                                  <th>MSRP</th>
+                                  <th>DELETE</th>
+                              </tr>
+                            </thead>
+                            <tbody id="gift-table"></tbody>
+                        </table>
+                    </div>
                 </section>
+
+                <section>
+                    <div class="row">
+                      <div class="12u 24u$(xsmall)">
+                        <ul class="actions fit">
+                          <li><a id="create_campaign" class="button special fit big">CREATE CAMPAIGN !</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                </section>
+                
             </div>
         </div>
     </div>

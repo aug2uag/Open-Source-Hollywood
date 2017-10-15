@@ -1,16 +1,53 @@
+var gifts = [];
+var osettings = {};
+
+function deleteRow(e) {
+  e.preventDefault();
+  $(this).closest('tr').remove();
+}
+
+function removeGift(e) {
+  e.preventDefault();
+  var idx = $($(this).closest('tr')).index();
+  gifts.splice(idx, 1);
+  $(this).closest('tr').remove();
+}
+
 var StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
 Template.newProject.onRendered(function() {
-  Session.set('needs', []);
-  Session.set('gifts', []);
-  Session.set('campaignFiles', []);
+  gifts = [];
+  osettings = {};
+  osettings.banner = {};
+  osettings.giftImage = {};
 });
 
 Template.newProject.events({
-  'submit .addProjectForm':function(e){
+  'click #create_campaign': function(e) {
     e.preventDefault();
-    var options = {};
-    // get location
-    var loc = e.target.location.value.replace(' ', '');
+    console.log('foolala')
+    /**
+      title
+      logline
+      location
+      website
+      description
+      category -- select
+      creators_info            ==> textarea
+      story_info               ==> textarea
+      history_info            ==> textarea
+      plans_info              ==> textarea
+      needs_info               ==> textarea
+      significance_info       ==> textarea
+      team
+      cast
+      needs
+      banner_file
+      video_explainer
+      social-table
+      gifts-table
+    */
+    var o = {};
+    var loc = $('#location').val() && $('#location').val().replace(' ', '') || '';
     if (loc.match(/\d{5}/)) {
       var url = 'https://api.zippopotam.us/us/' + loc;
       var client = new XMLHttpRequest();
@@ -21,9 +58,9 @@ Template.newProject.events({
             var data = JSON.parse(client.responseText);
             if (Object.keys(data).length === 0) return bootbox.alert('invalid zip code, please try again');
             if (data.country === 'United States') {
-              var o = data.places[0];
-              options.city = o['place name'];
-              options.state = o.state;
+              var _o = data.places[0];
+              o.city = _o['place name'];
+              o.state = _o.state;
               campcallback();
             };
           } catch (e) {
@@ -36,204 +73,132 @@ Template.newProject.events({
     } else {
       return bootbox.alert('invalid zip code, please try again');
     }
-    
 
     function campcallback() {
-      var genres = [];
-      $('.genre_tag.active').each(function(idx,el) {
-        genres.push($(el).html());
-        $(el).toggleClass("active");
-      });
-      if (genres.length === 0) {
-        bootbox.alert('you must selector Genres');
-        return false;
-      };
-      var needs = Session.get('needs') || [];
-      if (needs.length === 0) {
-        var _needsAgg = [];
-        $('.tag_need.active').each(function(idx,el) {
-          _needsAgg.push($(el).html());
-          $(el).toggleClass("active");
-        });
-        if ($('#needs').val()) {
-          needs.push({
-            need: $('#needs').val(),
-            tags: needsAgg
-          });
-        }
-        $('#needs').val('')
-        if (needs.length === 0) {
-          bootbox.alert('you must define Needs');
-          return false;
-        };
-      };
+      o.title = $('#title').val();
+      o.logline = $('#logline').val();
+      o.format = $('#category').find(":selected").text();
+      if (o.primaryRole.toLowerCase().indexOf('format')>-1) delete o['primaryRole'];
 
-      options.gifts = Session.get('gifts');
-      options.files = Session.get('campaignFiles');
-      options.title = e.target.title.value;
-      options.logline = e.target.logline.value;
-      options.videoURL = e.target.video.value;
-      options.details = e.target.details.value;
-      options.genres = genres;
-      options.needs = needs;
-      options.selectedSegment = selectedSegment;
-      options.budget = e.target.budget.value;
-      options.creators = $('#creators').val();
-      options.story = $('#story').val();
-      options.history = $('#history').val();
-      options.plans = $('#plans').val();
-      options.needsExplained = $('#needsExplained').val();
-      options.significance = $('#significance').val();
-      options.purpose = $( "#selector option:selected" ).text();
-      if (!options.title || !options.logline|| !options.details || !options.videoURL || !options.needs || !options.purpose) {
-        bootbox.alert('enter values for all fields');
-        return false;
-      };
 
-      if (options.videoURL.indexOf('youtu.be') > -1) {
-        bootbox.alert('please select URL or embed URL, not this one');
-        return;
-      } else if (options.videoURL.indexOf('youtube') > -1) {
-        options.videoURL = options.videoURL.replace('watch?v=', 'embed/');
-      };
+
+      console.log(new Array(100).join('u'))
+      console.log(o)
       
-      var budget = parseInt(options.budget) || 0;
-      options.processingFee = (budget * 0.05);
-      var _d2 = '<b>We charge a $10 fee for 1GB storage and 5% for money transfers, fees for additional storage apply. Do you agree to our <a href="/terms" target="_blank">Terms & Conditions</a>?';
-      bootbox.confirm(_d2, function(r) { 
-        if (!r) return;
-        StripeCheckout.open({
-          key: StripePublicKey,
-          amount: 1000,
-          currency: 'usd',
-          name: 'Create Campaign.',
-          description: 'Open Source Hollywood Production Creation.',
-          token: function(receipt) {
-            options.receipt = receipt;
-            Meteor.call('addProject', options);
-            Session.set('needs', []);
-            Session.set('gifts', []);
-            return false;
-          }
-        });
-      });
-    }
+      // if (!options.title || !options.logline|| !options.details || !options.videoURL || !options.needs || !options.purpose) {
+      //   bootbox.alert('enter values for all fields');
+      //   return false;
+      // };
 
-  },
-  'click .select_tag': function(e) {
-    e.preventDefault();
-    $(e.target).toggleClass("active");
-  },
-  'click #add_need': function(e) {
-    var needs = Session.get('needs');
-    var needsAgg = [];
-    $('.tag_need.active').each(function(idx,el) {
-      needsAgg.push($(el).html());
-      $(el).toggleClass("active");
-    });
-    if ($('#needs').val()) {
-      needs.push({
-        need: $('#needs').val(),
-        tags: needsAgg
-      });
-      Session.set('needs', needs);
+      // if (options.videoURL.indexOf('youtu.be') > -1) {
+      //   bootbox.alert('please select URL or embed URL, not this one');
+      //   return;
+      // } else if (options.videoURL.indexOf('youtube') > -1) {
+      //   options.videoURL = options.videoURL.replace('watch?v=', 'embed/');
+      // };
+      
+      // var budget = parseInt(options.budget) || 0;
+      // options.processingFee = (budget * 0.05);
+      // var _d2 = '<b>We charge a $10 fee for 1GB storage and 5% for money transfers, fees for additional storage apply. Do you agree to our <a href="/terms" target="_blank">Terms & Conditions</a>?';
+      // bootbox.confirm(_d2, function(r) { 
+      //   if (!r) return;
+      //   StripeCheckout.open({
+      //     key: StripePublicKey,
+      //     amount: 1000,
+      //     currency: 'usd',
+      //     name: 'Create Campaign.',
+      //     description: 'Open Source Hollywood Production Creation.',
+      //     token: function(receipt) {
+      //       options.receipt = receipt;
+      //       Meteor.call('addProject', options);
+      //       Session.set('needs', []);
+      //       Session.set('gifts', []);
+      //       return false;
+      //     }
+      //   });
+      // });
     }
-    $('#needs').val('')
   },
-  'click #add_gift': function(e) {
-    bootbox.confirm("<form id='gift_value' action=''>\
-        Gift title:<input id='gift_title' type='text' name='title' placeholder='title of your gift' /><br/>\
-        Gift description:<input id='gift_description' type='text' name='description' placeholder='description of your gift' />\
-        Gift offer:<input id='gift_offer' type='number' name='value' placeholder='dollar amount of your gift' />\
-        </form>", 
-    function(result) {
-        if(result) { 
-            var x = $('#gift_title').val(),
-                y = $('#gift_description').val(),
-                z = $('#gift_offer').val();
-            if (x && y && z) {
-              var gifts = Session.get('gifts');
-              gifts.push({
-                title: x,
-                description: y,
-                value: parseInt(z)
-              });
-              Session.set('gifts', gifts);
-            };
-            $('#gift_title').val('');
-            $('#gift_description').val('');
-            $('#gift_offer').val('');
-
-          }
-    });
-    if ($('#needs').val()) {
-      needs.push({
-        need: $('#needs').val(),
-        tags: needsAgg
-      });
-      Session.set('needs', needs);
-    }
-    $('#needs').val('')
-  },
-  'click .remove_need': function(e) {
-    e.preventDefault();
-    var _id = this.id;
-    var needs = Session.get('needs');
-    needs.forEach(function(n, i) {
-      if (i === _id) {
-        needs.splice(i, 1);
-        return;
-      };
-    });
-    Session.set('needs', needs);
-  },
-  'click .remove_gift': function(e) {
-    e.preventDefault();
-    var gifts = Session.get('gifts');
-    var _id = this.title + this.description + this.value;
-    gifts.forEach(function(g, idx) {
-      var __id = g.title + g.description + g.value;
-      if (__id === _id) {
-        gifts.splice(idx, 1);
-        return;
-      };
-    });
-    Session.set('gifts', gifts);
-  },
-  'click #campaign_files': function(e) {
-    e.preventDefault();
-    if (Object.keys(osettings).length === 0) return;
-    var reader = new FileReader();
-    reader.onload = function(readerEvt) {
-      var _campaignFiles = Session.get('campaignFiles');
-      osettings.data = readerEvt.target.result;
-      _campaignFiles.push(osettings);
-      osettings = {};
-      $('#fileInput').val('');
-      Session.set('campaignFiles', _campaignFiles);
-    };
-    reader.readAsDataURL(osettings.file);
-  },
-  'change #fileInput': function (e, template) {
-    // needs to collect all files
-    // in one array
-    // on create
-    // iterate each, and store as s3
-
+  'change #banner_file': function (e, template) {
       if (e.currentTarget.files && e.currentTarget.files[0]) {
-        osettings = {};
+        osettings.banner = {};
+        var reader = new FileReader();
         var files = e.target.files;
         var file = files[0];
-        osettings.file = file;
-        osettings.size = file.size;
-        osettings.type = file.type;
+        if (file.type.indexOf("image")==-1) {
+          bootbox.alert('Invalid File, you can only upload a static image for your profile picture');
+          return;
+        };
+        reader.onload = function(readerEvt) {
+            osettings.banner.data = readerEvt.target.result;
+          }; 
+        reader.readAsDataURL(file);
       }
   },
-  'click .remove_file': function(e) {
-    e.preventDefault;
-    var _f = Session.get('campaignFiles');
-    _f.splice(this.id, 1);
-    Session.set('campaignFiles', _f);
+  'change #gift_file': function (e, template) {
+      if (e.currentTarget.files && e.currentTarget.files[0]) {
+        osettings.giftImage = {};
+        var reader = new FileReader();
+        var files = e.target.files;
+        var file = files[0];
+        if (file.type.indexOf("image")==-1) {
+          bootbox.alert('Invalid File, you can only upload a static image for your profile picture');
+          return;
+        };
+        reader.onload = function(readerEvt) {
+            osettings.giftImage.data = readerEvt.target.result;
+        }; 
+        reader.readAsDataURL(file);
+      }
+  },
+  'click #add-crew': function(e) {
+    e.preventDefault();
+    var title = $('#crew-title').val(), description = $('#crew-description').val(), status = $('input[name=crew-radio]:checked').val();
+    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'</td><td>'+status+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    $('.deleteRow').on('click', deleteRow);
+    $('#crew-title').val(''), $('#crew-description').val(''), $("#crew-radio-needed").prop("checked", true);
+  },
+
+  'click #add-cast': function(e) {
+    e.preventDefault();
+    var title = $('#cast-title').val(), description = $('#cast-description').val(), status = $('input[name=cast-radio]:checked').val();
+    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'</td><td>'+status+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    $('.deleteRow').on('click', deleteRow);
+    $('#cast-title').val(''), description = $('#cast-description').val(''), $("#cast-radio-needed").prop("checked", true);
+  },
+
+  'click #add-needs': function(e) {
+    e.preventDefault();
+    var cat = $('#needs-category').val(), description = $('#needs-description').val(), quantity = parseInt($('#needs-quantity').val());
+    if (cat.toLowerCase().indexOf('category')>-1) return;
+    if (typeof quantity !== 'number' || quantity<1) return;
+    if (cat && description && quantity) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td>'+quantity+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    $('.deleteRow').on('click', deleteRow);
+    $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
+  },
+
+  'click #add-social': function(e) {
+    e.preventDefault();
+    var title = $('#social-title').val(), url = $('#social-url').val();
+    if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    $('.deleteRow').on('click', deleteRow);
+    $('#social-title').val(''), $('#social-url').val('');
+  },
+
+  'click #add-gift': function(e) {
+    e.preventDefault();
+    var o = {};
+    o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.quantity = parseInt($('#gift-quantity').val()), o.msrp = parseFloat($('#gift-msrp').val());
+    if (!o.name || !o.quantity || !o.msrp || typeof o.quantity !== 'number' || typeof o.msrp !== 'number' || o.quantity < 1 || o.msrp < 1) return;
+    if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift';
+    else o.data = osettings.giftImage.data;
+    osettings.giftImage = {};
+    gifts.push(o);
+    console.log('gift pushed');
+    console.log(gifts)
+    $('#gift-table').append('<tr class="social-val"><td>'+o.name+'</td><td>'+o.description+'</td><td>'+o.quantity+'</td><td>'+o.msrp+'</td><td><button class="removeGift button small">X</button></td></tr>');
+    $('.removeGift').on('click', removeGift);
+    $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
   }
 });
 

@@ -176,7 +176,6 @@ Template.settings.rendered = function () {
   // set user-role
   Meteor.user().iam.forEach(function(el) {
   	var elId = '#checkbox-' + el;
-  	console.log(elId)
   	$(elId).prop("checked", true);
   });
   
