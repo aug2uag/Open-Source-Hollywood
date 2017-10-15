@@ -182,7 +182,9 @@ Template.calPopup.helpers({
             });
             setTimeout(function() {
                 $('.fc-prev-button').empty().append('<i class="fa fa-caret-left"></i>');
-                $('.fc-next-button').empty().append('<i class="fa fa-caret-right"></i>')
+                $('.fc-next-button').empty().append('<i class="fa fa-caret-right"></i>');
+                $('.fc-day-header').css('color', '#333');
+                $($('fc-left').child()).css('color', '#333');
             }, 10);
         }, 100);
     }
