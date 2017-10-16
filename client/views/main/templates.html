@@ -15,6 +15,7 @@
 </head>
 
 <template name="StaticLayout">
+  <div id="preloader"></div>
     {{#if currentUser}}
       {{ > nav}}
       {{#unless profileSet}}
@@ -35,13 +36,6 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-          setTimeout(function() {
-            $('#page-wrapper-o').fadeIn();
-          }, 800);
-      });
-    </script>
       
     {{/if}}
 </template>
@@ -143,10 +137,7 @@
 </template>
 
 <template name="splashPage">
-  <style type="text/css">
-    div#page-wrapper-o { display: none; }
-    html { color: white; }
-  </style>
+    <div id="preloader"></div>
     <div id="page-wrapper-o">
 
       <!-- Banner -->
@@ -319,12 +310,5 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-          setTimeout(function() {
-            $('#page-wrapper-o').fadeIn();
-          }, 800);
-      });
-    </script>
 
 </template>

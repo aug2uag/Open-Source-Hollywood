@@ -37,13 +37,6 @@ Router.route('/newproject', {
     },
     onBeforeAction: function() {
       var u = Users.findOne({_id: Meteor.user()._id});
-      if ((!u.firstName || !u.lastName) || !u.iam || u.iam.length === 0) {
-        bootbox.alert('you must update your profile before creating a campaign');
-        Router.go('Settings');
-        window.location.assign('/settings');
-        return;
-      };
-      
       document.title = "New Campaign";
       this.next();
     }

@@ -67,7 +67,7 @@
                           
                           <div class="c-price__row">
                             <div class="c-price__index c-price__index--xl">{{project.city}}, {{project.state}}
-                              <div class="c-price__date">{{project.purpose}} <br /> {{project.createdAt}}</div>
+                              <div class="c-price__date">{{project.purpose}} <br /> since {{project.createdAt}}</div>
                             </div>
                             <div class="c-price__value c-price__value--xl c-price__value--b">{{project.category}}</div>
                           </div>
@@ -93,22 +93,19 @@
                         
                       </div>
                       <div class="w100">
+                        <div class="c-title--h2">Donation</div>
                         <div class="c-add-to">
                           <div class="c-add-to__container">
                             <div class="c-add-to__cell">
                               <form action="/" class="c-amount">
 
-                                  <div class="c-amount__item">
-                                    <button class="btn btn-primary c-amount__control">-</button>
-                                  </div>
-
                                   <div class="c-amount__item c-amount__item--input">
-                                    <label for="amount" class="control-label c-amount__label">Amount</label>
-                                    <input class="form-control c-amount__input" id="amount">
+                                    <label for="amount" class="control-label c-amount__label">Contribution</label>
+                                    <input min="5" type="number" class="form-control c-amount__input" id="donation_amount">
                                   </div>
-
+                                  <br>
                                   <div class="c-amount__item">
-                                    <button class="btn btn-primary c-amount__control">+</button>
+                                    <button class="btn btn-primary c-amount__control" id="donation_add_to">+</button>
                                   </div>
 
                               </form>
@@ -116,7 +113,7 @@
                             
                             <div class="c-add-to__cell c-add-to__cell--end">
                               <div class="basket-button">
-                                <button class="btn btn-primary basket-button__btn">Add to basket</button>
+                                <button class="btn btn-primary basket-button__btn" id="donation_btn" disabled>Click '+' to Add</button>
                               </div>
                             </div>
                             
@@ -124,11 +121,11 @@
                               <div class="c-info c-info--total">
                                 <div class="c-info__row">
                                   <div class="c-info__index">Total</div>
-                                  <div class="c-info__value c-info__value--total">55.00 CHF <span class="c-info__math">5 x 11.00</span></div>
+                                  <div class="c-info__value c-info__value--total"><span id="total_usd">0</span> USD <span class="c-info__math" id="before_fees"></span></div>
                                 </div>
                                 <div class="c-info__row">
-                                  <div class="c-info__index">Packing</div>
-                                  <div class="c-info__value">1 CO da 24 PZ da 51 GR</div>
+                                  <div class="c-info__index">Transfer</div>
+                                  <div class="c-info__value" id="transfer_amt">0</div>
                                 </div>                    
                               </div>
                               
@@ -137,22 +134,22 @@
                               <div class="c-total">
                                 
                                 <div class="c-total__row">
-                                  <div class="c-total__col">Already in basket</div>
-                                  <div class="c-total__col">43</div>
-                                  <div class="c-total__col">473.00 CHF</div>
+                                  <div class="c-total__col">Total raised</div>
+                                  <div class="c-total__col" id="proj_funds">{{project.funded}}</div>
+                                  <!-- <div class="c-total__col">473.00 CHF</div> -->
                                 </div>
                                 
                                 <div class="c-total__row">
-                                  <div class="c-total__col">After addition</div>
-                                  <div class="c-total__col">48</div>
-                                  <div class="c-total__col">528.00 CHF</div>
+                                  <div class="c-total__col">Per cent total</div>
+                                  <div class="c-total__col" id="percent_total">0</div>
+                                  <!-- <div class="c-total__col">528.00 CHF</div> -->
                                 </div>
                                 
                                 <hr class="c-total__hr" />
                                 
                                 <div class="c-total__row">
-                                  <div class="c-total__col c-total__col--half">Whole basket total cost</div>
-                                  <div class="c-total__col c-total__col--half">2360.86 CHF</div>
+                                  <div class="c-total__col c-total__col--half">Up-to-date data</div>
+                                  <div class="c-total__col c-total__col--half">Real-Time</div>
                                 </div>
                               
                               </div>
@@ -212,7 +209,7 @@
                       </div>
               
               
-                    <div class="c-title--h2">Gifts for Donations</div>
+                    <div class="c-title--h2">Gifts for Purchase</div>
                     <div class="c-related">
 
                       {{#each project.gifts}}

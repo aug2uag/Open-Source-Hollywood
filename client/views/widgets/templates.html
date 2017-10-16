@@ -41,7 +41,7 @@
     <hr>
     <div class="board-widget board-widget-members clearfix">
         <div class="board-widget-title">
-            <h3>{{_ 'members'}}</h3>
+            <h3 style="color:#333">{{_ 'members'}}</h3>
         </div>
         <div class="board-widget-content">
             <div class="board-widget-members js-list-board-members clearfix js-list-draggable-board-members">
@@ -65,7 +65,7 @@
         <hr>
         <div class="board-widget board-widget-activity bottom clearfix">
             <div class="board-widget-title">
-                <h3>{{_ 'activity'}}</h3>
+                <h3 style="color:#333">{{_ 'activity'}}</h3>
             </div>
             <div class="board-widget-content">
                 <div class="activity-gradient-t"></div>
@@ -81,7 +81,7 @@
 <template name="applicantsPopup">
     <div class="board-widgets-content-wrapper fancy-scrollbar">
         <div class="board-widgets-content">
-            <h3>{{_ 'applicants'}}</h3>
+            <h3 style="color:#333">{{_ 'applicants'}}</h3>
             <hr>
             <div class="board-backgrounds-list clearfix">
                 {{#if areApplicants}}
@@ -89,7 +89,7 @@
                         {{> applicantAvatar user=this draggable=false size="large"}}
                     {{/ each}}
                 {{else}}
-                    <h3>There are no applicants</h3>
+                    <h3 style="color:#333">There are no applicants</h3>
                 {{/if}}
             </div>
 

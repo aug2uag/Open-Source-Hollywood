@@ -1,5 +1,6 @@
 const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
-
+const StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
+var donationObject = {};
 function loadcss(f){
     var href = '/css/' + f;
     var ref=document.createElement("link")
@@ -8,6 +9,28 @@ function loadcss(f){
     ref.setAttribute("href", href)
     document.getElementsByTagName("head")[0].appendChild(ref)
 };
+
+function makeStripeCharge(options) {
+  StripeCheckout.open({
+    key: StripePublicKey,
+    amount: options.amount * 100,
+    currency: 'usd',
+    name: options.message,
+    description: options.description,
+    panelLabel: 'Pay Now',
+    token: function(_token) {
+      if (_token) {
+        bootbox.alert('your payment succeeded, thanks !')
+        options.token = _token;
+        if (options.route === 'donateToProject') {
+          Meteor.call('donateToProject', options);
+        };
+      } else {
+        bootbox.alert('your payment did not succeed');
+      }
+    }
+  });
+}
 
 Template.projectView.helpers({
   website: function() {
@@ -46,6 +69,61 @@ Template.projectView.helpers({
 })
 
 Template.projectView.events({
+  'click #donation_add_to': function(e) {
+    e.preventDefault();
+    donationObject = {};
+    var amt = parseFloat($('#donation_amount').val());
+    if (amt && typeof amt === 'number' && amt >= 5) {
+      $('#total_usd').text(amt);
+      $('#transfer_amt').text((amt*.05).toFixed(2));
+      var funds = parseFloat($('#proj_funds').text());
+      if (funds>1) $('#percent_total').text(((amt/funds)*100).toFixed(1)+'%');
+      else $('#percent_total').text('infinity');
+      donationObject.amount = amt;
+      donationObject.user = {
+        first: Meteor.user().firstName,
+        last: Meteor.user().lastName,
+        email: Meteor.user().email,
+        id: Meteor.user()._id
+      }
+      $('#donation_btn').prop('disabled', false);
+      $('#donation_btn').html('Donate to Campaign !');
+    };
+  },
+
+  'click #donation_btn': function(e) {
+    e.preventDefault();
+    var was = this;
+    var intmodal = bootbox.dialog({
+      title: 'Your Donation',
+      message: '<label for="application_offer" style="display:break;">Please verify payment for $'+donationObject.amount+'</label>',
+      buttons: {
+        danger:  {
+          label: 'Cancel',
+          className: "btn-danger",
+          callback: function() { intmodal.modal('hide') }
+        },
+        success: {
+          label: "PROCEED",
+          className: "btn-success",
+          callback: function() {
+            intmodal.modal('hide')
+            makeStripeCharge({
+              amount: donationObject.amount,
+              message: 'Donation to ' + was.project.title,
+              description: '$' + donationObject.amount + ' donated',
+              destination: was.project.account && was.project.account.id,
+              donationObject: donationObject,
+              route: 'donateToProject',
+              slug: was._slug
+            });
+          }
+        }
+      }
+    });
+  },
+
+
   "click #boardButton": function() {
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
