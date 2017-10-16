@@ -74,7 +74,7 @@ Template.newProject.events({
       o.significanceInfo = $('#significance_info').val() || 'not provided';
       if (validateUrl($('#video_explainer').val())) o.videoExplainer = $('#video_explainer').val();
       if (osettings.banner.data) o._banner = osettings.banner.data;
-      else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner';
+      else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
       var crew = $('.crew-val'); 
       o.crew = [];
       crew.each(function(i, el) {
@@ -217,7 +217,7 @@ Template.newProject.events({
     var o = {};
     o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.quantity = parseInt($('#gift-quantity').val()), o.msrp = parseFloat($('#gift-msrp').val());
     if (!o.name || !o.quantity || !o.msrp || typeof o.quantity !== 'number' || typeof o.msrp !== 'number' || o.quantity < 1 || o.msrp < 1) return;
-    if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift';
+    if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
     else o.data = osettings.giftImage.data;
     osettings.giftImage = {};
     gifts.push(o);

@@ -11,6 +11,7 @@ function loadcss(f){
 
 Template.projectView.helpers({
   website: function() {
+    console.log(this)
     return this.project.website || 'not specified';
   },
   title: function() {

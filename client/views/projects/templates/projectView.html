@@ -273,7 +273,7 @@
                           <div class="c-title--h2">Request for Assets</div>
                           <div class="c-prod-attr__section">
                             
-                            <div class="c-prod-attr__title">click to offer asset</div>
+                            <div class="c-prod-attr__title">request for assets</div>
 
                             {{#if project.needs.length}}
                             {{#each project.needs}}
@@ -343,70 +343,46 @@
                         </div>
                         
                         <div class="c-prod-attr">
-                          <div class="c-title--h2">Product attributes</div>
+                          <div class="c-title--h2">Project team</div>
                           <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">Allergens</div>
-                            
+                            <div class="c-prod-attr__title">TEAM</div>
+                            {{#each project.crew}}
                             <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Eggs</div>
-                              <div class="c-prod-attr__value">Contains</div>
+                              <div class="c-prod-attr__name">{{this.title}}</div>
+                              <div class="c-prod-attr__value"><a class="crew_detail button special" id="{{@index}}">DETAILS</a></div>
                             </div>
+                            {{else}}
                             <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Peanuts</div>
-                              <div class="c-prod-attr__value">Contains not</div>
+                              <div class="c-prod-attr__name">N / A</div>
                             </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Fish</div>
-                              <div class="c-prod-attr__value">Contains not</div>
-                            </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Gluten</div>
-                              <div class="c-prod-attr__value">Contains not</div>
-                            </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Crustacean</div>
-                              <div class="c-prod-attr__value">Contains not</div>
-                            </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Milk</div>
-                              <div class="c-prod-attr__value">Contains not</div>
-                            </div>                
+                            {{/each}}
+
                           </div>
                           
                           <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">General information</div>
-                            <div class="c-prod-attr__no-info"> no inforamtion yet</div>
+                            <div class="c-prod-attr__title">Video Explainer</div>
+                            <div class="c-prod-attr__no-info">{{#if project.videoExplainer}}project.videoExplainer{{else}}N / A{{/if}}</div>
                           </div>
-                          
-                          
+                        </div>
+                        <div class="c-prod-attr">
+                          <div class="c-title--h2">Project roles</div>
                           <div class="c-prod-attr__section">
                             
-                            <div class="c-prod-attr__title">Macro-nutrients</div>
-                            
+                            <div class="c-prod-attr__title">ROLES</div>
+
+                            {{#each project.cast}}
                             <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Energy kcal</div>
-                              <div class="c-prod-attr__value">136 g per 100 g/ml</div>
+                              <div class="c-prod-attr__name">{{this.role}}</div>
+                              <div class="c-prod-attr__value"><a class="role_detail button special" id="{{@index}}">DETAILS</a></div>
                             </div>
+                            {{else}}
                             <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Energy kJ</div>
-                              <div class="c-prod-attr__value">570 g per 100 g/ml</div>
+                              <div class="c-prod-attr__name">N / A</div>
                             </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Protein</div>
-                              <div class="c-prod-attr__value">1 g per 100 g/ml</div>
-                            </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Total fat</div>
-                              <div class="c-prod-attr__value">15 g per 100 g/ml</div>
-                            </div>
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">Saturated fat</div>
-                              <div class="c-prod-attr__value">3 g per 100 g/ml</div>
-                            </div>              
+                            {{/each}}           
                           </div>
                           
-                          <div class="c-prod-attr__section">
+                          <!-- <div class="c-prod-attr__section">
                             
                             <div class="c-prod-attr__title">Further information</div>
                             
@@ -415,7 +391,7 @@
                               <div class="c-prod-attr__value">Spain</div>
                             </div>
                             
-                          </div>
+                          </div> -->
 
                         
                         </div>
