@@ -1,4 +1,5 @@
 <template name="projectView">
+  {{foo}}
 <style type="text/css">
   .panel {
     background-color:transparent
@@ -26,7 +27,7 @@
             {{#if isOwner}}
               {{#unless isLive}}
               <a class="btn btn-info start">Start Project</a>
-                <a class="btn btn-success edit" href="/projects/{{_slug}}/edit">Edit</a>
+                <a class="btn btn-success edit" href="/edit/projects/{{_slug}}/edit">Edit</a>
                 <a class="btn btn-danger delete">Delete</a>
               {{/unless}}
 
@@ -50,162 +51,383 @@
               {{/if}}
             {{/if}}
 
-            <div class="row">
-              <div id="uid" style="display:none;" val={{uid}}></div>
-              <div class="panel panel-default">
-                <div class="panel-body table-wrapper">
-                  <table width="100%">
-                    <tr> 
-                      <td>
-                        <h2>{{title}}</h2>
-                        <h4><small>by <a href="/profile/{{ownerId}}">{{ownerName}}</a></small></h4>
-                      </td>
-                      <td> 
-                        <div class="pull-right">
-                          <center>
-                            {{> actionBar}}
-                          </center>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                  <br>
-                  {{> projectThumbnailCenter}}
-                  <div class="panel-body">
-                    <h4><em>{{logline}}</em></h4>
-                  </div>
-                  <hr>
-                  {{#if currentUser}}
-                  <div class="panel panel-default">
-                    <div class="panel-body">
-                      <div class="6u"><span class="image fit"><img src="{{ownerAvatar}}" alt=""></span></div>
-                      <div class="6u"><span class="image fit"><a href="/profile/{{ownerId}}">{{ownerName}}</a></span></div>
-                    </div>
-                  </div>
-                  <hr>
-                  {{/if}}
-                  <h4>{{numComments}}</h4>
-                  {{#if currentUser}}
-                  <br>
-                  {{#each projectComments}}
-                  {{>comment}}
-                  {{/each}}
-                  {{> commentBox}}
-                  {{/if}}
-                </div>
-              </div>
-
-
-
-              <style type="text/css">
-                .tags {
-                  margin-top: 10px;
-                  display: flex;
-                  flex-wrap: wrap;
-                }
-                .tags.focused {
-                  border-bottom: 1px solid #2196f3;
-                }
-                .tags > p {
-                  margin: 0;
-                  align-self: center;
-                }
-                .tags span {
-                  padding: 2px 5px;
-                  border: 1px solid #2196f3;
-                  margin-right: 5px;
-                  margin-bottom: 5px;
-                  margin: 3px 5px;
-                  color: #2196f3;
-                  cursor: pointer;
-                }
-                .tags span span {
-                  padding: 2px;
-                  font-weight: bold;
-                  font-family: sans-serif;
-                }
-              </style>
-
-              <div class="col-sm-4">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <h3>Published on {{createdAt}}</h3>
-                    <span id="helpBlock" class="help-block"><b>description</b></span>
-                    <p>{{#markdown}}{{details}}{{/markdown}}</p>
-                    <br>
-                    <span id="helpBlock" class="help-block"><b>needs</b></span>
-                    {{ #each needs }}
-                      {{#markdown}}{{ this.need }}{{/markdown}}
-                      <div class="tags">
-                        {{ #each this.tags }}
-                          <span>{{ this }}</span>
-                        {{ /each }}
+            
+            <div class="page">
+              <div class="modal-container">
+                <div class="l-product">
+                  <div class="l-product__container">
+                    <div class="l-product__title">{{project.title}}</div>
+                    {{> actionBar}}
+                    <main class="l-product__main">
+                      <div class="l-product__image">
+                        <img src="{{project.banner}}"  style="width: 100%;"/>
                       </div>
-                    {{ /each }}
-                    <br>
+                      <div class="l-product__price">
+                        <div class="c-price">
+                          
+                          <div class="c-price__row">
+                            <div class="c-price__index c-price__index--xl">{{project.city}}, {{project.state}}
+                              <div class="c-price__date">{{project.purpose}} <br /> {{project.createdAt}}</div>
+                            </div>
+                            <div class="c-price__value c-price__value--xl c-price__value--b">{{project.category}}</div>
+                          </div>
+                          
+                          <div class="c-price__row">
+                            <div class="c-price__index"> users applied </div>
+                            <div class="c-price__value c-price__value--green">{{project.usersApplied.length}}</div>
+                          </div>
+                          
+                          <div class="c-price__row">
+                            <div class="c-price__index"> users approved </div>
+                            <div class="c-price__value c-price__value--green">{{project.usersApproved.length}}</div>
+                          </div>        
+                          
+                          <div class="c-price__row">
+                            <div class="c-price__index c-price__index--m"> funds raised </div>
+                            <div class="c-price__value c-price__value--green">${{project.funded}}</div>
+                          </div>
+
+                        </div>
+
+                                    
+                        
+                      </div>
+                      <div class="w100">
+                        <div class="c-add-to">
+                          <div class="c-add-to__container">
+                            <div class="c-add-to__cell">
+                              <form action="/" class="c-amount">
+
+                                  <div class="c-amount__item">
+                                    <button class="btn btn-primary c-amount__control">-</button>
+                                  </div>
+
+                                  <div class="c-amount__item c-amount__item--input">
+                                    <label for="amount" class="control-label c-amount__label">Amount</label>
+                                    <input class="form-control c-amount__input" id="amount">
+                                  </div>
+
+                                  <div class="c-amount__item">
+                                    <button class="btn btn-primary c-amount__control">+</button>
+                                  </div>
+
+                              </form>
+                            </div>
+                            
+                            <div class="c-add-to__cell c-add-to__cell--end">
+                              <div class="basket-button">
+                                <button class="btn btn-primary basket-button__btn">Add to basket</button>
+                              </div>
+                            </div>
+                            
+                            <div class="c-add-to__cell">
+                              <div class="c-info c-info--total">
+                                <div class="c-info__row">
+                                  <div class="c-info__index">Total</div>
+                                  <div class="c-info__value c-info__value--total">55.00 CHF <span class="c-info__math">5 x 11.00</span></div>
+                                </div>
+                                <div class="c-info__row">
+                                  <div class="c-info__index">Packing</div>
+                                  <div class="c-info__value">1 CO da 24 PZ da 51 GR</div>
+                                </div>                    
+                              </div>
+                              
+                            </div>
+                            <div class="c-add-to__cell">
+                              <div class="c-total">
+                                
+                                <div class="c-total__row">
+                                  <div class="c-total__col">Already in basket</div>
+                                  <div class="c-total__col">43</div>
+                                  <div class="c-total__col">473.00 CHF</div>
+                                </div>
+                                
+                                <div class="c-total__row">
+                                  <div class="c-total__col">After addition</div>
+                                  <div class="c-total__col">48</div>
+                                  <div class="c-total__col">528.00 CHF</div>
+                                </div>
+                                
+                                <hr class="c-total__hr" />
+                                
+                                <div class="c-total__row">
+                                  <div class="c-total__col c-total__col--half">Whole basket total cost</div>
+                                  <div class="c-total__col c-total__col--half">2360.86 CHF</div>
+                                </div>
+                              
+                              </div>
+                            
+                            
+                            </div>
+                          </div>
+                        
+                        </div>
+                      </div>
+                      <div class="w100">
+                        <div class="c-title--h2">Description</div>
+                        
+                        <div class="c-desription">
+                          {{ project.description }}
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <h4>About the story</h4>
+                        
+                        <div class="c-desription">
+                          {{ project.description }}
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <h4>Project history</h4>
+                        
+                        <div class="c-desription">
+                          {{ project.description }}
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <h4>Project plans</h4>
+                        
+                        <div class="c-desription">
+                          {{ project.description }}
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <h4>Explanation of needs</h4>
+                        
+                        <div class="c-desription">
+                          {{ project.description }}
+                        </div>
+                      </div>
+
+                      <div class="w100">
+                        <h4>Significance of work</h4>
+                        
+                        <div class="c-desription">
+                          {{ project.description }}
+                        </div>
+                      </div>
+              
+              
+                    <div class="c-title--h2">Gifts for Donations</div>
+                    <div class="c-related">
+
+                      {{#each project.gifts}}
+                        <div class="c-related__item">
+                          <div class="c-related__figure">
+                            <a href="#" class="c-related__a">
+                              <img class="c-related__img" src="http://placehold.it/200x200" />
+                            </a>
+                          </div>
+                          <div class="c-related__title">
+                            <a href="#" class="c-related__a">Aceto bianco (Thomy 15 L) (1553)</a>
+                            <div class="c-related__supplier">Supplier test supplier (74)</div>
+                          </div>
+                        </div>
+                      {{else}}
+                        <div class="c-related__title">
+                          <a class="c-related__a button">N / A</a>
+                        </div>
+                      {{/each}}
+
+                    </div>
+
+                    <div class="w100">
+                      <div style="position:relative;padding-top:20px;width:80%">
+                        <h4>{{numComments}}</h4>
+                        {{#if currentUser}}
+                        <br>
+                        {{#each projectComments}}
+                        {{>comment}}
+                        {{/each}}
+                        {{> commentBox}}
+                        {{/if}}
+                      </div>
+                    </div>
+              
+              
+                      
+                    </main>
+
+
+                    <!-- ASIDE COL -->
+                    
+                    <aside class="l-product__aside">
+                      <div class="l-product__attr">
+                        
+                        <div class="c-prod-attr">
+                          <div class="c-prod-attr__section">
+                            <div class="c-prod-attr__title">logline</div>
+                            <div class="c-prod-attr__no-info"> {{project.logline}} </div>
+                          </div>
+
+                          <div class="c-prod-attr__section">
+                            <div class="c-prod-attr__title">website</div>
+                            <div class="c-prod-attr__no-info"> {{website}} </div>
+                          </div>
+
+
+                          <div class="c-title--h2">Request for Assets</div>
+                          <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">click to offer asset</div>
+
+                            {{#if project.needs.length}}
+                            {{#each project.needs}}
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">{{this.category}}</div>
+                              <div class="c-prod-attr__value"><a class="general_need-response button special">offer</a></div>
+                            </div>
+
+                            {{/each}}
+                            {{else}}
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">N / A</div>
+                            </div>
+                            {{/if}}         
+                          </div>
+                          
+                          
+                          
+                          
+                          <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">Links &amp; Social</div>
+
+                            {{#each project.social}}
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">{{this.name}}</div>
+                              <div class="c-prod-attr__value">{{this.address}}</div>
+                            </div>
+
+                            {{ else }}
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">N / A</div>
+                            </div>
+
+                            {{/each}}
+                                   
+                          </div>
+                          
+                          <div class="c-prod-attr__section">
+                            <div class="c-title--h2">Author</div>
+                            <div class="c-prod-attr__title">campaign creator</div>
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">{{project.ownerName}}</div>
+                              <div class="c-prod-attr__value"><a href="/profile/{{ownerId}}" class="button">VIEW</a></div>
+                            </div>
+
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">score</div>
+                              <div class="c-prod-attr__value">{{_ownerStats.score}}</div>
+                            </div>
+
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">rating</div>
+                              <div class="c-prod-attr__value">{{_ownerStats.rating}}/5</div>
+                            </div>
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">role</div>
+                              <div class="c-prod-attr__value">{{uPrimaryRole}}</div>
+                            </div>
+                          </div>
+
+                        
+                        </div>
+                        
+                        <div class="c-prod-attr">
+                          <div class="c-title--h2">Product attributes</div>
+                          <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">Allergens</div>
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Eggs</div>
+                              <div class="c-prod-attr__value">Contains</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Peanuts</div>
+                              <div class="c-prod-attr__value">Contains not</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Fish</div>
+                              <div class="c-prod-attr__value">Contains not</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Gluten</div>
+                              <div class="c-prod-attr__value">Contains not</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Crustacean</div>
+                              <div class="c-prod-attr__value">Contains not</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Milk</div>
+                              <div class="c-prod-attr__value">Contains not</div>
+                            </div>                
+                          </div>
+                          
+                          <div class="c-prod-attr__section">
+                            <div class="c-prod-attr__title">General information</div>
+                            <div class="c-prod-attr__no-info"> no inforamtion yet</div>
+                          </div>
+                          
+                          
+                          <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">Macro-nutrients</div>
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Energy kcal</div>
+                              <div class="c-prod-attr__value">136 g per 100 g/ml</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Energy kJ</div>
+                              <div class="c-prod-attr__value">570 g per 100 g/ml</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Protein</div>
+                              <div class="c-prod-attr__value">1 g per 100 g/ml</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Total fat</div>
+                              <div class="c-prod-attr__value">15 g per 100 g/ml</div>
+                            </div>
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">Saturated fat</div>
+                              <div class="c-prod-attr__value">3 g per 100 g/ml</div>
+                            </div>              
+                          </div>
+                          
+                          <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">Further information</div>
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">country</div>
+                              <div class="c-prod-attr__value">Spain</div>
+                            </div>
+                            
+                          </div>
+
+                        
+                        </div>
+                        
+                      </div>
+
+                    </aside>  
+                    
                   </div>
                 </div>
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <h1>${{funded}}</h1><p>pledged</p>
-                    {{#if currentUser}}
-                    <button id="fund" class="btn btn-success">Apply to this project</button>
-                    <br>
-                    {{/if}}
-                    <br>
-                    <b>Funding goal</b>
-                    <p>{{budget}}</p>
-                    <b>Days left</b>
-                    <p>{{duration}} days</p>
-                    <b>Progress</b>
-                    <p>{{perCent}}</p>
-                    <b>Users applied</b>
-                    <p>{{applied}}</p>
-                  </div>
-                </div>        
-                <div class="panel panel-default">
-                  {{ #if this.project.creators }}
-                  <h3>CREATORS</h3>
-                  <p>{{ this.project.creators }}</p>
-                  <br>
-                  {{ /if }}
-                  {{ #if this.project.story }}
-                  <h3>STORY</h3>
-                  <p>{{ this.project.story }}</p>
-                  <br>
-                  {{ /if }}
-                  {{ #if this.project.history }}
-                  <h3>HISTORY</h3>
-                  <p>{{ this.project.history }}</p>
-                  <br>
-                  {{ /if }}
-                  {{ #if this.project.plans }}
-                  <h3>PLANS</h3>
-                  <p>{{ this.project.plans }}</p>
-                  <br>
-                  {{ /if }}
-                  {{ #if this.project.needsExplained }}
-                  <h3>EXPLANATION of NEEDS</h3>
-                  <p>{{ this.project.needsExplained }}</p>
-                  {{ /if }}
-                </div>  
+
               </div>
-
-              {{ #if this.project.files }}
-              <div class="col-sm-12">
-                {{ #each this.project.files }}
-                  <section class="image-list">
-                    <div class="media">
-                      <figure class="media-figure">
-                        <img src="{{ this.data }}">
-                      </figure>
-                    </div>
-                  </section>
-                {{ /each }}
-              </div>
-              {{ /if }}
-
-
             </div>
 
           </section>

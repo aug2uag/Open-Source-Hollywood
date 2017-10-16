@@ -71,7 +71,7 @@ Router.route('/activeprojects', {
     }
 });
 
-Router.route('/projects/:slug', {
+Router.route('/projects/:slug/:uid', {
   name: 'projectView',
   template: 'projectView',
   layoutTemplate: 'StaticLayout',
@@ -89,7 +89,7 @@ Router.route('/projects/:slug', {
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
       Meteor.subscribe('commentsList', this.params.slug),
-      Meteor.subscribe('getMe')
+      Meteor.subscribe('stringId', this.params.uid)
     ];
   },
   data: function() {
@@ -97,6 +97,7 @@ Router.route('/projects/:slug', {
     var project = Projects.findOne({slug: slug});
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
+    var user = Users.findOne({_id: project.ownerId});
     return {
         uid: project._id,
         perCent: function() {
@@ -139,6 +140,11 @@ Router.route('/projects/:slug', {
             return 'no genres specified';
           }
         },
+        _ownerStats: {
+          score: user.influenceScore,
+          rating: user.rating
+        },
+        uPrimaryRole: user.primaryRole.toLowerCase().indexOf('primary')===-1?user.primaryRole:user.iam[0]?user.iam[0]:'unknown role',
         needs: project.needs || 'watch video for details',
         videoURL: project.videoURL,
         _bid: board._id,
@@ -167,7 +173,7 @@ Router.route('/projects/:slug', {
     }
 });
 
-Router.route('/projects/:slug/edit', {
+Router.route('/edit/projects/:slug/edit', {
   name: 'EditProject',
   template: 'editProject',
   layoutTemplate: 'StaticLayout',

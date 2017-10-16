@@ -1,6 +1,6 @@
 Template.project.events({
   "click .edit": function () {
-    var path = '/projects/' + this.slug + '/edit';
+    var path = '/edit/projects/' + this.slug + '/edit';
     Router.go(path);
   },
   "click .delete": function () {

@@ -5,7 +5,7 @@
       <div class="videowrapper" style="padding: 0">
         <div style="padding:5px">
           {{#if currentUser}}
-          <a title={{title}} href="/projects/{{slug}}">
+          <a title={{title}} href="/projects/{{slug}}/{{ownerId}}">
             {{> projectVideo}}
           </a>
           {{else}}
@@ -16,7 +16,7 @@
         </div>
         <div class="caption">
           {{#if currentUser}}
-          <h2><a href="/projects/{{slug}}">{{title}}</a></h2>
+          <h2><a href="/projects/{{slug}}/{{ownerId}}">{{title}}</a></h2>
           <p>by <a href="/profile/{{ownerId}}">{{ownerName}}</a></p>
           {{else}}
           <h2>{{title}}</h2>

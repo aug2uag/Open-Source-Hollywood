@@ -10,6 +10,15 @@ function loadcss(f){
 };
 
 Template.projectView.helpers({
+  website: function() {
+    return this.project.website || 'not specified';
+  },
+  title: function() {
+    return this.project.title;
+  },
+  author: function() {
+    return 'a campaign by ' + this.project.ownerName;
+  },
   projectRemovedNotBoard: function() {
     if (this.isLive) {
       var falsy = project.ownerId === Meteor.user()._id ? true : false;

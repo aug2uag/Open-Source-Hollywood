@@ -47,7 +47,7 @@
 
 <template name="applied_to_project">
 	<div class="panel panel-warning 12u">
-		<a href="/projects/{{this.slug}}"><div class="panel-heading">
+		<a href="/projects/{{this.slug}}/{{this.ownerId}}"><div class="panel-heading">
 			<h3 class="panel-title">{{this.title}}</h3>
 		</div></a>
 		<div class="panel-body">
@@ -89,7 +89,7 @@
 
 <template name="approved_for_project">
 	<div class="12u panel {{#if this.isLive}}panel-success{{else}}panel-info{{/if}}">
-		<a href="/projects/{{this.slug}}"><div class="panel-heading">
+		<a href="/projects/{{this.slug}}/{{this.ownerId}}"><div class="panel-heading">
 			<h3 class="panel-title">{{this.title}}</h3>
 		</div></a>
 		<div class="panel-body">
@@ -226,7 +226,7 @@
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#{{uuid_accordion}}" href="#{{this.slug}}" class="">
                         {{this.title}}
-                    	<a href="/projects/{{this.slug}}" class="pull-right"><i class="glyphicon glyphicon-eye-open"></i></a>
+                    	<a href="/projects/{{this.slug}}/{{this.ownerId}}" class="pull-right"><i class="glyphicon glyphicon-eye-open"></i></a>
                     </a>
                 </h4>
             </div>
@@ -265,9 +265,9 @@
                 	<div class="row">
                 		<h4 class="12u page-header">Status</h4>
                 		{{#if this.isLive}}
-                			<a href="/projects/{{this.slug}}" class="btn btn-success btn-lg col-xs-12">LIVE</a>
+                			<a href="/projects/{{this.slug}}/{{this.ownerId}}" class="btn btn-success btn-lg col-xs-12">LIVE</a>
                 		{{else}}
-                			<a href="/projects/{{this.slug}}" class="btn btn-danger btn-lg col-xs-12">PRE-PRODUCTION</a>
+                			<a href="/projects/{{this.slug}}/{{this.ownerId}}" class="btn btn-danger btn-lg col-xs-12">PRE-PRODUCTION</a>
                 		{{/if}}
                 	</div>
                 </div>
