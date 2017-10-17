@@ -1,69 +1,396 @@
 <template name="editProject">
   {{#if currentUser}}
-  <div class="container animated fadeIn">
+  {{foo}}
+  <div id="page-wrapper fadeIn">
+        <!-- Main -->
+        <div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2>{{title}}</h2>
+                    <p>Edit fields below as needed.</p>
+                </header>
 
-    <div class="row">
-      <div class="col-sm-8">
-        <a class="btn btn-default cancel">Cancel</a>
-        <a class="btn btn-primary update">Done</a>
-        <table width="100%">
-          <tr> 
-            <td>
-              <h1 id="title" class="editable" contenteditable="true">{{title}}</h1>
-              <span id="helpBlock" class="help-block"><b>edit title</b></span>
+                <!-- Text -->
+                <section>
+                    <h3>Basic Information</h3>
+                    <hr />
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+                            <label for="title">title</label>
+                            <input type="text" name="title" id="title" placeholder="{{title}}" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <label for="logline">logline</label>
+                            <input type="email" name="logline" id="logline" placeholder="{{logline}}" />
+                        </div>
+                        <div class="6u 12u$(xsmall)">
+                            <label for="location">location</label>
+                            <input type="text" name="location" id="location" placeholder="{{zip}}" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <label for="website">website</label>
+                            <input type="email" name="website" id="website" placeholder="{{website}}" />
+                        </div>
 
-              <h1 id="videoURL" class="editable" contenteditable="true">{{videoURL}}</h1>
-              <span id="helpBlock" class="help-block"><b>project explainer video URL</b></span>
+                        <div class="12u$">
+                            <label for="description">description</label>
+                            <textarea name="description" id="description" placeholder="{{description}}" rows="6"></textarea>
+                        </div>
 
-              <small><h1 id="logline" class="editable" contenteditable="true">{{logline}}</h1></small>
-              <span id="helpBlock" class="help-block"><b>edit logline</b></span>
-            </td>
-            <td> 
-              <div class="pull-right non-editable">
-                <center>
-                  <span class="badge" id="badge-lg">{{count}}</span>
-                  <h1><small>votes</small></h1>
-                </center>
-              </div>
-            </td>
-          </tr>
-        </table>
-        <br>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <h2>Details</h2>
-            <b><p>Published on {{createdAt}}</p></b>
-            <b><p>Description</p></b>
-            <p id="details" class="editable" contenteditable="true">{{details}}</p>
-            <span id="helpBlock" class="help-block"><b>edit description</b></span>
-            <b><p>Genres</p></b>
-            <p id="genres" class="editable" contenteditable="true">{{genresFormatted}}</p>
-            <span id="helpBlock" class="help-block"><b>edit comma separated genres</b></span>
-          </div>
+
+                        <div class="12u$">
+                            <label for="category">genre</label>
+                            <div class="select-wrapper">
+                              <select name="category" id="category">
+                                <option>- Format -</option>
+                                <option>Feature</option>
+                                <option>Short Film</option>
+                                <option>Series</option>
+                                <option>Sketch</option>
+                                <option>Animations</option>
+                                <option>Theater art</option>
+                                <option>Ensemble</option>
+                                <option>Live Performance</option>
+                                <option>Music Video</option>
+                                <option>Other</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="12u$">
+                            <label for="purpose">purpose</label>
+                            <div class="select-wrapper">
+                              <select name="purpose" id="purpose">
+                                <option>Unspecified</option>
+                                <option>Print Media</option>
+                                <option>Motion Picture</option>
+                                <option>Performance</option>
+                              </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <br>
+                    <br>
+                    <h2>Background Information</h2>
+                    <hr />
+
+
+                    <div class="row uniform 50%">
+                        <h4>About the creators</h4>
+                        <div class="12u$">
+                            <textarea name="creators_info" id="creators_info" placeholder="{{creatorsInfo}}" rows="6"></textarea>
+                        </div>
+                        <h4>About the story</h4>
+                        <div class="12u$">
+                            <textarea name="story_info" id="story_info" placeholder="{{storyInfo}}" rows="6"></textarea>
+                        </div>
+                        <h4>Project history</h4>
+                        <div class="12u$">
+                            <textarea name="history_info" id="history_info" placeholder="{{historyInfo}}" rows="6"></textarea>
+                        </div>
+                        <h4>Project plans</h4>
+                        <div class="12u$">
+                            <textarea name="plans_info" id="plans_info" placeholder="{{plansInfo}}" rows="6"></textarea>
+                        </div>
+                        <h4>Explanation of needs</h4>
+                        <div class="12u$">
+                            <textarea name="needs_info" id="needs_info" placeholder="{{needsInfo}}" rows="6"></textarea>
+                        </div>
+                        <h4>Significance of work</h4>
+                        <div class="12u$">
+                            <textarea name="significance_info" id="significance_info" placeholder="{{significanceInfo}}" rows="6"></textarea>
+                        </div>
+
+                    </div>
+
+
+                    <br>
+                    <br>
+
+
+                    <h2>Team</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="title" id="crew-title" placeholder="Title" /></td>
+                                    <td><input type="text" name="title" id="crew-description" placeholder="Description" /></td>
+                                    <td>
+                                        <input type="radio" id="crew-radio-needed" name="crew-radio" value="needed" checked>
+                                        <label for="crew-radio-needed">Needed</label>
+                                        <input type="radio" id="crew-radio-fulfilled" name="crew-radio" value="fulfilled">
+                                        <label for="crew-radio-fulfilled">Fulfilled</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a id="add-crew" class="button special">Add Crew</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Crew Title</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crew-table">
+                              {{#each crew}}
+                                <tr class="crew-val">
+                                  <td>{{title}}</td>
+                                  <td>{{description}}</td>
+                                  <td>{{status}}</td>
+                                  <td><button class="deleteRow button small">X</button></td>
+                                </tr>
+                              {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <br>
+                    <br>
+
+
+                    <h2>Cast</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
+
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="cast-title" id="cast-title" placeholder="Role" /></td>
+                                    <td><input type="text" name="cast-description" id="cast-description" placeholder="Description" /></td>
+                                    <td>
+                                        <input type="radio" id="cast-radio-needed" name="cast-radio" value="needed" checked>
+                                        <label for="cast-radio-needed">Needed</label>
+                                        <input type="radio" id="cast-radio-fulfilled" name="cast-radio" value="fulfilled">
+                                        <label for="cast-radio-fulfilled">Fulfilled</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a id="add-cast" class="button special">Add Role</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cast-table">
+                              {{#each cast}}
+                                <tr class="crew-val">
+                                  <td>{{role}}</td>
+                                  <td>{{description}}</td>
+                                  <td>{{status}}</td>
+                                  <td><button class="deleteRow button small">X</button></td>
+                                </tr>
+                              {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <br>
+                    <br>
+
+
+                    <h2>Production Needs</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
+
+                            <tbody>
+                                <tr>
+                                    <td>
+                                      <div class="select-wrapper">
+                                        <select name="category" id="needs-category">
+                                          <option>- Category -</option>
+                                          <option value="Equipment">Equipment</option>
+                                          <option value="Labor">Labor</option>
+                                          <option value="Location">Location</option>
+                                          <option value="Construction">Construction</option>
+                                          <option value="Legal">Legal</option>
+                                          <option value="Sales">Sales / Marketing</option>
+                                          <option value="Miscellaneous">Miscellaneous</option>
+                                        </select>
+                                      </div>
+                                    </td>
+                                    <td><input type="text" name="title" id="needs-description" placeholder="Description" /></td>
+                                    <td><input type="text" name="title" id="needs-quantity" placeholder="Quantity" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a id="add-needs" class="button special">Add Need</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="needs-table">
+                              {{#each needs}}
+                                <tr class="crew-val">
+                                  <td>{{category}}</td>
+                                  <td>{{description}}</td>
+                                  <td>{{quantity}}</td>
+                                  <td><button class="deleteRow button small">X</button></td>
+                                </tr>
+                              {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+
+                <!-- Image -->
+                <section>
+                    <h2>Image</h2>
+                    <hr />
+                    <div class="box alt">
+                        <div class="row 100% uniform">
+                          <div class="4u  6u$(xsmall)"><span class="image fit"><img src="{{ banner }}" alt=""></span></div>
+                          <div class="4u  6u$(xsmall)"><label class="custom-file">
+                              <input type="file" id="banner_file">
+                            </label>
+                          </div>
+                            
+                        </div>
+                    </div>
+                    <br>
+                    <h2>Video Explainer</h2>
+                    <hr />
+                    <div class="box alt">
+                        <div class="row 100% uniform">
+                            <div class="6u 12u$(xsmall)">
+                                <input type="text" name="video_explainer" id="video_explainer" placeholder="{{videoExplainer}}" />
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <h2> Social &amp; Web Links</h2>
+                    <hr />
+                    <div class="row uniform 50%">
+                        <div class="6u 12u$(xsmall)">
+                            <input type="text" name="title" id="social-title" placeholder="Name" />
+                        </div>
+                        <div class="6u$ 12u$(xsmall)">
+                            <input type="email" name="subtitle" id="social-url" placeholder="URL or username" />
+                        </div>
+                    </div>
+                    <br>
+                    <a id="add-social" class="button special">+</a>
+                    <br>
+                    <br>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                              <tr>
+                                  <th>Link Title</th>
+                                  <th>URL or username</th>
+                                  <th>DELETE</th>
+                              </tr>
+                            </thead>
+                            <tbody id="social-table">
+                              {{#each social}}
+                                <tr class="crew-val">
+                                  <td>{{name}}</td>
+                                  <td>{{address}}</td>
+                                  <td><button class="deleteRow button small">X</button></td>
+                                </tr>
+                              {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <br>
+                    <br>
+
+                    <h2>Gifts for Supporters</h2>
+                    <hr />
+                    <div class="table-wrapper">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="title" id="gift-title" placeholder="Name" /></td>
+                                    <td><input type="text" name="title" id="gift-description" placeholder="Description" /></td>
+                                    <td><input type="text" name="title" id="gift-quantity" placeholder="Quantity" /></td>
+                                    <td><input type="text" name="title" id="gift-msrp" placeholder="MSRP" /></td>
+                                    <td>
+                                      <div class="4u  6u$(xsmall)"><label class="custom-file">
+                                          <input type="file" id="gift_file">
+                                        </label>
+                                      </div>
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a id="add-gift" class="button special">Add Gift</a>
+                    <br>
+                    <br />
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                              <tr>
+                                  <th>Name</th>
+                                  <th>Description</th>
+                                  <th>Quantity</th>
+                                  <th>MSRP</th>
+                                  <th>DELETE</th>
+                              </tr>
+                            </thead>
+                            <tbody id="gift-table">
+                              {{#each gifts}}
+                                <tr class="crew-val">
+                                  <td>{{name}}</td>
+                                  <td>{{description}}</td>
+                                  <td>{{quantity}}</td>
+                                  <td>{{msrp}}</td>
+                                  <td><button class="deleteRow button small">X</button></td>
+                                </tr>
+                              {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="row">
+                      <div class="12u 24u$(xsmall)">
+                        <ul class="actions fit">
+                          <li><a id="update_campaign" class="button special fit big">CLICK TO SAVE CHANGES</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                </section>
+                
+            </div>
         </div>
-
-
-      </div>
-
-      <div class="col-sm-4">
-
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <h2>Funding</h2>
-            <br>
-            <b>Funding goal</b>
-            <p id="goal" contenteditable="true">{{fundingGoal}}</p>
-            <b>Days remaining</b>
-            <p id="duration" contenteditable="true">{{duration}}</p>
-            <b>Progress</b>
-            <p id="funded">${{funded}}</p>
-            <b>Number Applied</b>
-            <p id="applied">{{applied}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
   {{/if}}
 

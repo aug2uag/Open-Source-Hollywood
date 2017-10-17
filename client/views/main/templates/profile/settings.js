@@ -170,7 +170,7 @@ Template.settings.rendered = function () {
 
   // set primaryRole
   if (Meteor.user().primaryRole) {
-  	$("#category").val(Meteor.user().primaryRole);
+  	$("#category").text(Meteor.user().primaryRole);
   };
 
   // set user-role
