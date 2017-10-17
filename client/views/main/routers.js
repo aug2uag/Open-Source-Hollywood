@@ -78,6 +78,7 @@ Router.route('/dashboard', {
             window.location.assign('/');
             return;
         }
-        else this.next();
+        document.title = "Dashboard";
+        this.next();
     }
 });

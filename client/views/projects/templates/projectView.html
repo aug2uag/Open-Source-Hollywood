@@ -1,5 +1,5 @@
 <template name="projectView">
-  {{foo}}
+
 <style type="text/css">
   .panel {
     background-color:transparent
@@ -277,7 +277,7 @@
                             
                             <div class="c-prod-attr__item">
                               <div class="c-prod-attr__name">{{this.category}}</div>
-                              <div class="c-prod-attr__value"><a class="general_need-response button special">offer</a></div>
+                              <div class="c-prod-attr__value"><a class="general_need-response button special" id="{{@index}}-need">offer</a></div>
                             </div>
 
                             {{/each}}
@@ -346,7 +346,7 @@
                             {{#each project.crew}}
                             <div class="c-prod-attr__item">
                               <div class="c-prod-attr__name">{{this.title}}</div>
-                              <div class="c-prod-attr__value"><a class="crew_detail button special" id="{{@index}}">DETAILS</a></div>
+                              <div class="c-prod-attr__value"><a class="crew_detail button special" id="{{@index}}-team">DETAILS</a></div>
                             </div>
                             {{else}}
                             <div class="c-prod-attr__item">
@@ -370,7 +370,7 @@
                             {{#each project.cast}}
                             <div class="c-prod-attr__item">
                               <div class="c-prod-attr__name">{{this.role}}</div>
-                              <div class="c-prod-attr__value"><a class="role_detail button special" id="{{@index}}">DETAILS</a></div>
+                              <div class="c-prod-attr__value"><a class="role_detail button special" id="{{@index}}-role">DETAILS</a></div>
                             </div>
                             {{else}}
                             <div class="c-prod-attr__item">

@@ -1,6 +1,7 @@
 const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
 const StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
 var donationObject = {};
+var currentSlug, currentTitle, destinationAccount;
 function loadcss(f){
     var href = '/css/' + f;
     var ref=document.createElement("link")
@@ -20,11 +21,15 @@ function makeStripeCharge(options) {
     panelLabel: 'Pay Now',
     token: function(_token) {
       if (_token) {
-        bootbox.alert('your payment succeeded, thanks !')
         options.token = _token;
-        if (options.route === 'donateToProject') {
-          Meteor.call('donateToProject', options);
-        };
+        Meteor.call(options.route, options, function(err, result) {
+          console.log('Meteor callback')
+          console.log(err, result)
+          console.log(typeof err, typeof result)
+          // if (err) bootbox.alert('your payment failed');
+          // bootbox.alert('your payment was processed, thank you for the donation !')
+
+        });
       } else {
         bootbox.alert('your payment did not succeed');
       }
@@ -34,7 +39,9 @@ function makeStripeCharge(options) {
 
 Template.projectView.helpers({
   website: function() {
-    console.log(this)
+    currentSlug = this._slug || '';
+    currentTitle = this.project.title || '';
+    destinationAccount = this.project.account && this.project.account.id || '';
     return this.project.website || 'not specified';
   },
   title: function() {
@@ -90,7 +97,6 @@ Template.projectView.events({
       $('#donation_btn').html('Donate to Campaign !');
     };
   },
-
   'click #donation_btn': function(e) {
     e.preventDefault();
     var was = this;
@@ -110,9 +116,9 @@ Template.projectView.events({
             intmodal.modal('hide')
             makeStripeCharge({
               amount: donationObject.amount,
-              message: 'Donation to ' + was.project.title,
+              message: 'Donation to ' + currentTitle,
               description: '$' + donationObject.amount + ' donated',
-              destination: was.project.account && was.project.account.id,
+              destination: destinationAccount,
               donationObject: donationObject,
               route: 'donateToProject',
               slug: was._slug
@@ -122,7 +128,211 @@ Template.projectView.events({
       }
     });
   },
+  'click .general_need-response': function(e) {
+    e.preventDefault();
+    console.log(this)
+    var was = this;
+    var intmodal = bootbox.dialog({
+      title: 'Resource Needed',
+      message: '<div class="bs-callout bs-callout-danger"><h4>'+was.category+'</h4> <p>'+was.description+'</p> </div>',
+      buttons: {
+        danger:  {
+          label: 'Cancel',
+          className: "btn-danger",
+          callback: function() { intmodal.modal('hide') }
+        },
+        success: {
+          label: "LEND RESOURCE",
+          className: "btn-success",
+          callback: function() {
+            intmodal.modal('hide')
+            // add user to requested resource
+            Meteor.call("lendResource", {
+              slug: currentSlug,
+              asset: was.category
+            });
+            bootbox.alert('Your offer was successfully dispatched, thank you !');
+          }
+        }
+      }
+    });
+  },
+  'click .crew_detail': function(e) {
+    e.preventDefault();
+    var was = this;
+    var buttons = {
+      danger:  {
+        label: 'Close',
+        className: "btn-danger",
+        callback: function() { intmodal.modal('hide') }
+      }
+    }
+    var intmodal = null;
+    if (was.status==='needed') {
+      buttons.success = {
+        label: "APPLY",
+        className: "btn-success",
+        callback: function() {
+          intmodal.modal('hide')
+          /**
+              ask for pay: [equity and/or pay]
+              gratis or conditional donation: pay (default 0)
+          */
+          var innermodal = bootbox.dialog({
+            title: was.title.toUpperCase(),
+            message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">Thanks for applying</p></h3><h5> <p class="align-center bootbox">what are your terms?</p></h5><div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5></div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-10 col-md-offset-1"> <div class="bootpadded"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="input-group input-group-sm"> <h4> <p class="align-center bootbox bootpadded">your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div></div></div></div>',
+            buttons: {
+              danger:  {
+                label: 'Cancel',
+                className: "btn-danger",
+                callback: function() { innermodal.modal('hide') }
+              }, 
+              success: {
+                label: "PROCEED",
+                className: "btn-success",
+                callback: function() {
+                  var s = $("input:radio[name='apply_type']:checked").val(), o = {ctx:'crew', position:was.title};
+                  if (s==='hired') {
+                    var pay = parseFloat($('#apply-pay').val());
+                    var equity = parseFloat($('#apply-equity').val());
+                    o.type = 'hired';
+                    if (pay&&typeof pay==='number'&&pay>1) o.pay=pay||0;
+                    if (equity&&typeof equity==='number'&&equity>1) o.equity=equity;
+                  } else {
+                    var pay = parseFloat($('#apply-gratis').val());
+                    o.type = 'sourced';
+                    if (pay&&typeof pay==='number'&&pay>=0) o.pay=pay||0;
+                  }
 
+                  o.project = currentSlug;
+                  o.route = 'applyToTeam';
+                  if (o.pay) o.amount = o.pay;
+                  o.message = currentTitle + ' crew offer'; 
+                  
+                  makeStripeCharge({
+                    destination: was.project.account && was.project.account.id,
+                    donationObject: donationObject,
+                    route: 'applyToProject',
+                    slug: was._slug,
+                    key: 'crew',
+                    type: o.type,
+                    equity: o.equity,
+                    ctx: 'crew',
+                    position: was.title
+                  });
+                }
+              }
+            }
+          }).on('shown.bs.modal', function (e) {
+            $("input:radio[name='apply_type']").change(function(){
+              $('#apply_instruct').hide();
+                var _val = $(this).val();
+               if(_val==='hired'){
+                $('#forhired').show();
+                $('#forsourced').hide();
+               }else{
+                $('#forhired').hide();
+                $('#forsourced').show(); 
+               }
+            });
+          });
+        }
+      }
+    }
+    intmodal = bootbox.dialog({
+      title: was.title.toUpperCase(),
+      message: '<div class="bs-callout bs-callout-danger"><h4>This crew position is currently '+((was.status==='needed')?'':'NOT')+' AVAILABLE for applicants to apply.</h4> <p>'+was.description+'</p> </div>',
+      buttons: buttons
+    });
+  },
+
+  'click .role_detail': function(e) {
+    e.preventDefault();
+    console.log(this)
+    var was = this;
+    var buttons = {
+      danger:  {
+        label: 'Close',
+        className: "btn-danger",
+        callback: function() { intmodal.modal('hide') }
+      }
+    }
+    var intmodal = null;
+    if (was.status==='needed') {
+      buttons.success = {
+        label: "APPLY",
+        className: "btn-success",
+        callback: function() {
+          intmodal.modal('hide')
+          // add user to requested resource
+          Meteor.call("lendResource", {
+            slug: currentSlug,
+            asset: was.category
+          });
+          /**
+              ask for pay: [equity and/or pay]
+              gratis or conditional donation: pay (default 0)
+          */
+          var innermodal = bootbox.dialog({
+            title: was.role.toUpperCase(),
+            message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">Thanks for applying</p></h3><h5> <p class="align-center bootbox">what are your terms?</p></h5><div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5></div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-10 col-md-offset-1"> <div class="bootpadded"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="input-group input-group-sm"> <h4> <p class="align-center bootbox bootpadded">your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div></div></div></div>',
+            buttons: {
+              danger:  {
+                label: 'Cancel',
+                className: "btn-danger",
+                callback: function() { innermodal.modal('hide') }
+              }, 
+              success: {
+                label: "PROCEED",
+                className: "btn-success",
+                callback: function() {
+                  var s = $("input:radio[name='apply_type']:checked").val(), o = {ctx:'cast', position:was.role};
+                  if (s==='hired') {
+                    var pay = parseFloat($('#apply-pay').val());
+                    var equity = parseFloat($('#apply-equity').val());
+                    o.type = 'hired';
+                    if (pay&&typeof pay==='number'&&pay>1) o.pay=pay;
+                    if (equity&&typeof equity==='number'&&equity>1) o.equity=equity;
+                  } else {
+                    var pay = parseFloat($('#apply-gratis').val());
+                    o.type = 'sourced';
+                    if (pay&&typeof pay==='number'&&pay>=0) o.pay=pay;
+                  }
+                  o.project = currentSlug;
+                  makeStripeCharge({
+                    amount: donationObject.amount,
+                    message: was.project.title + ' crew offer',
+                    description: '$' + donationObject.amount,
+                    destination: was.project.account && was.project.account.id,
+                    donationObject: donationObject,
+                    route: 'donateToProject',
+                    slug: was._slug
+                  });
+                }
+              }
+            }
+          }).on('shown.bs.modal', function (e) {
+            $("input:radio[name='apply_type']").change(function(){
+              $('#apply_instruct').hide();
+                var _val = $(this).val();
+               if(_val==='hired'){
+                $('#forhired').show();
+                $('#forsourced').hide();
+               }else{
+                $('#forhired').hide();
+                $('#forsourced').show(); 
+               }
+            });
+          });
+        }
+      }
+    }
+    intmodal = bootbox.dialog({
+      title: was.role.toUpperCase(),
+      message: '<div class="bs-callout bs-callout-danger"><h4>This cast position is '+((was.status==='needed')?'':'NOT')+' AVAILABLE for applicants to apply.</h4> <p>'+was.description+'</p> </div>',
+      buttons: buttons
+    });
+  },
 
   "click #boardButton": function() {
     $('html').css('visibility', 'hidden');
@@ -159,415 +369,7 @@ Template.projectView.events({
     document.getElementById('comment-box').innerHTML = '';
     Meteor.call('addProjectComment', this._slug, 0, text);
   },
-  'click #apply_campaign': function() {
 
-  },
-  'click #fund_funded': function() {
-    var was = this;
-
-    var gifts = was.gifts || [];
-    gifts = gifts.filter(function(g) {
-      if (!g.claimed) return g;
-    });
-    var giftsTable = '';
-    if (gifts.length > 0) {
-      giftsTable += '<table class="table table-striped" style="height:100px;overflow:scroll;">';
-      giftsTable += '<thead><tr><th>#</th><th>Description</th><th>Value</th><th>#</th></tr></thead><tbody>';
-      gifts.forEach(function(g, idx) {
-        if (g.claimed) return;
-        giftsTable += '<tr>';
-        giftsTable += '<td>' + g.title + '</td>';
-        giftsTable += '<td>' + g.description + '</td>';
-        giftsTable += '<td>$' + g.value + '</td>';
-        giftsTable += '<td><a href="#" class="accept_gift" btn btn-success" id="' + idx + '">Select</a></td>';
-        giftsTable += '</tr>';
-      });
-      giftsTable += '</tbody></table>';
-    };
-    var _message = '';
-    if (giftsTable) {
-      _message += '<h1>Select a gift or donate a designated amount</h1>' + giftsTable;
-    } else {
-      _message += '<p class="lead">There are currently no gifts available from this campaign. Enter the amount you wish to support.</p>';
-    }
-    _message += '<label for="application_support" style="display:break;">Define the dollar amount you wish to support this campaign, 5% transaction fee applies:</label><div class="input-group"><span class="input-group-addon">$</span><input id="application_support" type="number" class="form-control" placeholder="the amount of your support"></div>';
-
-    var intmodal = bootbox.dialog({
-      title: 'Your Financial Support',
-      message: _message,
-      buttons: {
-        danger:  {
-          label: 'Cancel',
-          className: "btn-danger",
-          callback: function() { initialDialog.modal('hide') }
-        },
-        success: {
-          label: "Support " + was.title,
-          className: "btn-success",
-          callback: function() {
-            initialDialog.modal('hide')
-            var contribution = parseInt($('#application_support').val());
-            if (!contribution || contribution < 0) {
-              contribution = 0;
-            };
-            var dollarValue = parseInt(contribution);
-            var processingFee = (contribution * 0.05);
-            dollarValue += processingFee;
-            var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-            Meteor.call('addUserToProject', contribution, dollarValue, was._slug, __desc, was.title, false, true);
-          }
-        }
-      }
-    });
-
-    $('.accept_gift').on('click', function(e) {
-      var idx = parseInt(this.id), _gift = gifts[idx];
-      bootbox.dialog({
-        title: 'Your Financial Support',
-        message: '<p class="lead">Please confirm your gift:</p><br><h3>' + _gift.title + '<h3><br>' + _gift.description + '<br>$' + _gift.value,
-        buttons: {
-          danger:  {
-            label: 'Cancel',
-            className: "btn-danger",
-            callback: function() { intmodal.modal('hide') && initialDialog.modal('hide') }
-          },
-          success: {
-            label: "Support " + was.title,
-            className: "btn-success",
-            callback: function() {
-              intmodal.modal('hide');
-              initialDialog.modal('hide');
-              var contribution = _gift.value;
-              if (!contribution || contribution < 0) {
-                intmodal.modal('hide');
-                initialDialog.modal('hide');
-                return;
-              };
-              var dollarValue = parseInt(contribution);
-              var processingFee = (contribution * 0.05);
-              dollarValue += processingFee;
-              var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-              Meteor.call('supportProjectForGift', contribution, dollarValue, was._slug, __desc, was.title, _gift);
-            }
-          }
-        }
-      });
-    });
-    
-  },
-  'click #fund_sourced': function() {
-    var was = this;
-    var initialDialog = bootbox.dialog({
-      title: 'How would you like to participate?',
-      message: '<div class="modal-content col-xs-10 col-xs-offset-1"> <section class="row" style=" padding-top: 5px;"> <div class="col-xs-8 col-xs-offset-2"> <p class="lead text-center">Choose among two options:</p><hr/> </div></section> <div class="row"> <article class="col-xs-6"> <div class="cards" style="padding-bottom: 10px;"> <span class="glyphicon glyphicon-flash icon"></span> <hr class="divider"/> <h2 class="title">Angel</h2> <div class="info fontcard"> <hr class="divider"/> <p class="lead" style="font-size: medium;">Financiers and capital support.</p><a id="goFund" class="btn btn-lg btn-success center-block">Go Fund!</a> </div></div></article> <article class="col-xs-4"> <div class="cards" style="padding-bottom: 10px;"> <span class="glyphicon glyphicon-ice-lolly-tasted icon"></span> <hr class="divider"/> <h2 class="title">Professional</h2> <div class="info fontcard"> <hr class="divider"/> <p class="lead" style="font-size: medium;">Apply to join for consideration.</p><a id="makeOffer" class="btn btn-lg btn-success center-block">Make Offer!</a> </div></div></article> </div></div>',
-      buttons: {
-        danger: {
-          label: "Cancel",
-          className: "btn-danger",
-          callback: function() {
-            
-          }
-        }
-      }
-    });
-
-    $('#goFund').on('click', function(e) {
-      // show gifts in table
-      // show dollar amounts input
-      var gifts = was.gifts || [];
-      gifts = gifts.filter(function(g) {
-        if (!g.claimed) return g;
-      });
-      var giftsTable = '';
-      if (gifts.length > 0) {
-        giftsTable += '<table class="table table-striped" style="height:100px;overflow:scroll;">';
-        giftsTable += '<thead><tr><th>#</th><th>Description</th><th>Value</th><th>#</th></tr></thead><tbody>';
-        gifts.forEach(function(g, idx) {
-          if (g.claimed) return;
-          giftsTable += '<tr>';
-          giftsTable += '<td>' + g.title + '</td>';
-          giftsTable += '<td>' + g.description + '</td>';
-          giftsTable += '<td>$' + g.value + '</td>';
-          giftsTable += '<td><a href="#" class="accept_gift" btn btn-success" id="' + idx + '">Select</a></td>';
-          giftsTable += '</tr>';
-        });
-        giftsTable += '</tbody></table>';
-      };
-      var _message = '';
-      if (giftsTable) {
-        _message += '<h1>Select a gift or donate a designated amount</h1>' + giftsTable;
-      } else {
-        _message += '<p class="lead">There are currently no gifts available from this campaign. Enter the amount you wish to support.</p>';
-      }
-      _message += '<label for="application_support" style="display:break;">Define the dollar amount you wish to support this campaign, 5% transaction fee applies:</label><div class="input-group"><span class="input-group-addon">$</span><input id="application_support" type="number" class="form-control" placeholder="the amount of your support"></div>';
-
-      var intmodal = bootbox.dialog({
-        title: 'Your Financial Support',
-        message: _message,
-        buttons: {
-          danger:  {
-            label: 'Cancel',
-            className: "btn-danger",
-            callback: function() { initialDialog.modal('hide') }
-          },
-          success: {
-            label: "Support " + was.title,
-            className: "btn-success",
-            callback: function() {
-              initialDialog.modal('hide')
-              var contribution = parseInt($('#application_support').val());
-              if (!contribution || contribution < 0) {
-                contribution = 0;
-              };
-              var dollarValue = parseInt(contribution);
-              var processingFee = (contribution * 0.05);
-              dollarValue += processingFee;
-              var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-              Meteor.call('addUserToProject', contribution, dollarValue, was._slug, __desc, was.title, false, true);
-            }
-          }
-        }
-      });
-
-      $('.accept_gift').on('click', function(e) {
-        var idx = parseInt(this.id), _gift = gifts[idx];
-        bootbox.dialog({
-          title: 'Your Financial Support',
-          message: '<p class="lead">Please confirm your gift:</p><br><h3>' + _gift.title + '<h3><br>' + _gift.description + '<br>$' + _gift.value,
-          buttons: {
-            danger:  {
-              label: 'Cancel',
-              className: "btn-danger",
-              callback: function() { intmodal.modal('hide') && initialDialog.modal('hide') }
-            },
-            success: {
-              label: "Support " + was.title,
-              className: "btn-success",
-              callback: function() {
-                intmodal.modal('hide');
-                initialDialog.modal('hide');
-                var contribution = _gift.value;
-                if (!contribution || contribution < 0) {
-                  intmodal.modal('hide');
-                  initialDialog.modal('hide');
-                  return;
-                };
-                var dollarValue = parseInt(contribution);
-                var processingFee = (contribution * 0.05);
-                dollarValue += processingFee;
-                var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-                Meteor.call('supportProjectForGift', contribution, dollarValue, was._slug, __desc, was.title, _gift);
-              }
-            }
-          }
-        });
-
-      });
-    });
-
-    $('#applyToday').on('click', function(e) {
-      // show bootbox with number input as original
-      bootbox.dialog({
-        title: 'Payment Necessary',
-        message: '<h1>By paying, you agree to the following:</h1><p class="lead">Money will be transfered contingent upon your acceptance, and the campaign starting. Once transfered, a refund cannot be recovered. A $2 application fee and 5% transfer fee apply.</p><div class="input-group" style="display:inline-flex;"><label for="application_amount">Your offer:</label><span class="input-group-addon">$</span><input id="application_amount" type="number" class="form-control" placeholder="enter the amount you wish to support"></div>',
-        buttons: {
-          danger:  {
-            label: 'Cancel',
-            className: "btn-danger",
-            callback: function() { initialDialog.modal('hide') }
-          },
-          success: {
-            label: "Apply to " + was.title,
-            className: "btn-success",
-            callback: function() {
-              initialDialog.modal('hide')
-              var contribution = parseInt($('#application_amount').val());
-              if (!contribution || contribution < 0) {
-                contribution = 0;
-              };
-              var dollarValue = parseInt(contribution);
-              var processingFee = 2 + (contribution * 0.05);
-              dollarValue += processingFee;
-              var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-              Meteor.call('addUserToProject', contribution, dollarValue, was._slug, __desc, was.title, false, false);
-            }
-          }
-        }
-      });
-    });
-
-  },
-  'click #fund': function() {
-    var was = this;
-    var initialDialog = bootbox.dialog({
-      title: 'How would you like to participate?',
-      message: '<div class="modal-content col-xs-10 col-xs-offset-1"> <section class="row" style=" padding-top: 5px;"> <div class="col-xs-8 col-xs-offset-2"> <p class="lead text-center">Choose among three options:</p><hr/> </div></section> <div class="row"> <article class="col-xs-4"> <div class="cards" style="padding-bottom: 10px;"> <span class="glyphicon glyphicon-flash icon"></span> <hr class="divider"/> <h2 class="title">Angel</h2> <div class="info fontcard"> <hr class="divider"/> <p class="lead" style="font-size: medium;">Financiers and capital support.</p><a id="goFund" class="btn btn-lg btn-success center-block">Go Fund!</a> </div></div></article> <article class="col-xs-4"> <div class="cards" style="padding-bottom: 10px;"> <span class="glyphicon glyphicon-bookmark icon"></span> <hr class="divider"/> <h2 class="title">Joint Venture</h2> <div class="info fontcard"> <hr class="divider"/> <p class="lead" style="font-size: medium;">Apply with an offer to support.</p><a id="applyToday" class="btn btn-lg btn-success center-block">Apply Today!</a> </div></div></article> <article class="col-xs-4"> <div class="cards" style="padding-bottom: 10px;"> <span class="glyphicon glyphicon-ice-lolly-tasted icon"></span> <hr class="divider"/> <h2 class="title">Professional</h2> <div class="info fontcard"> <hr class="divider"/> <p class="lead" style="font-size: medium;">Apply to join for consideration.</p><a id="makeOffer" class="btn btn-lg btn-success center-block">Make Offer!</a> </div></div></article> </div></div>',
-      buttons: {
-        danger: {
-          label: "Cancel",
-          className: "btn-danger",
-          callback: function() {
-            
-          }
-        }
-      }
-    });
-
-    $('#goFund').on('click', function(e) {
-      // show gifts in table
-      // show dollar amounts input
-      var gifts = was.gifts || [];
-      gifts = gifts.filter(function(g) {
-        if (!g.claimed) return g;
-      });
-      var giftsTable = '';
-      if (gifts.length > 0) {
-        giftsTable += '<table class="table table-striped" style="height:100px;overflow:scroll;">';
-        giftsTable += '<thead><tr><th>#</th><th>Description</th><th>Value</th><th>#</th></tr></thead><tbody>';
-        gifts.forEach(function(g, idx) {
-          if (g.claimed) return;
-          giftsTable += '<tr>';
-          giftsTable += '<td>' + g.title + '</td>';
-          giftsTable += '<td>' + g.description + '</td>';
-          giftsTable += '<td>$' + g.value + '</td>';
-          giftsTable += '<td><a href="#" class="accept_gift" btn btn-success" id="' + idx + '">Select</a></td>';
-          giftsTable += '</tr>';
-        });
-        giftsTable += '</tbody></table>';
-      };
-      var _message = '';
-      if (giftsTable) {
-        _message += '<h1>Select a gift or donate a designated amount</h1>' + giftsTable;
-      } else {
-        _message += '<p class="lead">There are currently no gifts available from this campaign. Enter the amount you wish to support.</p>';
-      }
-      _message += '<label for="application_support" style="display:break;">Define the dollar amount you wish to support this campaign, 5% transaction fee applies:</label><div class="input-group"><span class="input-group-addon">$</span><input id="application_support" type="number" class="form-control" placeholder="the amount of your support"></div>';
-
-      var intmodal = bootbox.dialog({
-        title: 'Your Financial Support',
-        message: _message,
-        buttons: {
-          danger:  {
-            label: 'Cancel',
-            className: "btn-danger",
-            callback: function() { initialDialog.modal('hide') }
-          },
-          success: {
-            label: "Support " + was.title,
-            className: "btn-success",
-            callback: function() {
-              initialDialog.modal('hide')
-              var contribution = parseInt($('#application_support').val());
-              if (!contribution || contribution < 0) {
-                contribution = 0;
-              };
-              var dollarValue = parseInt(contribution);
-              var processingFee = (contribution * 0.05);
-              dollarValue += processingFee;
-              var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-              Meteor.call('addUserToProject', contribution, dollarValue, was._slug, __desc, was.title, false, true);
-            }
-          }
-        }
-      });
-
-      $('.accept_gift').on('click', function(e) {
-        var idx = parseInt(this.id), _gift = gifts[idx];
-        bootbox.dialog({
-          title: 'Your Financial Support',
-          message: '<p class="lead">Please confirm your gift:</p><br><h3>' + _gift.title + '<h3><br>' + _gift.description + '<br>$' + _gift.value,
-          buttons: {
-            danger:  {
-              label: 'Cancel',
-              className: "btn-danger",
-              callback: function() { intmodal.modal('hide') && initialDialog.modal('hide') }
-            },
-            success: {
-              label: "Support " + was.title,
-              className: "btn-success",
-              callback: function() {
-                intmodal.modal('hide');
-                initialDialog.modal('hide');
-                var contribution = _gift.value;
-                if (!contribution || contribution < 0) {
-                  intmodal.modal('hide');
-                  initialDialog.modal('hide');
-                  return;
-                };
-                var dollarValue = parseInt(contribution);
-                var processingFee = (contribution * 0.05);
-                dollarValue += processingFee;
-                var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-                Meteor.call('supportProjectForGift', contribution, dollarValue, was._slug, __desc, was.title, _gift);
-              }
-            }
-          }
-        });
-
-      });
-    });
-
-    $('#applyToday').on('click', function(e) {
-      // show bootbox with number input as original
-      bootbox.dialog({
-        title: 'Payment Necessary',
-        message: '<h1>By paying, you agree to the following:</h1><p class="lead">Money will be transfered contingent upon your acceptance, and the campaign starting. Once transfered, a refund cannot be recovered. A $2 application fee and 5% transfer fee apply.</p><div class="input-group" style="display:inline-flex;"><label for="application_amount">Your offer:</label><span class="input-group-addon">$</span><input id="application_amount" type="number" class="form-control" placeholder="enter the amount you wish to support"></div>',
-        buttons: {
-          danger:  {
-            label: 'Cancel',
-            className: "btn-danger",
-            callback: function() { initialDialog.modal('hide') }
-          },
-          success: {
-            label: "Apply to " + was.title,
-            className: "btn-success",
-            callback: function() {
-              initialDialog.modal('hide')
-              var contribution = parseInt($('#application_amount').val());
-              if (!contribution || contribution < 0) {
-                contribution = 0;
-              };
-              var dollarValue = parseInt(contribution);
-              var processingFee = 2 + (contribution * 0.05);
-              dollarValue += processingFee;
-              var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-              Meteor.call('addUserToProject', contribution, dollarValue, was._slug, __desc, was.title, false, false);
-            }
-          }
-        }
-      });
-    });
-
-    $('#makeOffer').on('click', function(e) {
-      bootbox.dialog({
-        title: 'Your Professional Offer',
-        message: '<label for="application_offer" style="display:break;">Define the dollar amount offer for your participation in this campaign:</label><div class="input-group"><span class="input-group-addon">$</span><input id="application_offer" type="number" class="form-control" placeholder="the amount for your participation"></div>',
-        buttons: {
-          danger:  {
-            label: 'Cancel',
-            className: "btn-danger",
-            callback: function() { initialDialog.modal('hide') }
-          },
-          success: {
-            label: "Make Offer",
-            className: "btn-success",
-            callback: function() {
-              initialDialog.modal('hide')
-              var contribution = parseInt($('#application_offer').val());
-              if (!contribution || contribution < 0) {
-                contribution = 0;
-              };
-              var dollarValue = parseInt(contribution);
-              var processingFee = 2 + (contribution * 0.03);
-              dollarValue += processingFee;
-              var __desc = '$' + contribution.toFixed(2) + ' to Open Source Hollywood campaign.';
-              Meteor.call('addUserToProject', contribution, dollarValue, was._slug, __desc, was.title, true, false);
-            }
-          }
-        }
-      });
-    });
-  },
   'click #upvote': function() {
     Meteor.call('upvoteProject', this._slug);
   },
