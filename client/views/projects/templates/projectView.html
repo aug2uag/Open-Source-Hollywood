@@ -211,17 +211,17 @@
               
                     <div class="c-title--h2">Gifts for Purchase</div>
                     <div class="c-related">
-
                       {{#each project.gifts}}
                         <div class="c-related__item">
                           <div class="c-related__figure">
-                            <a href="#" class="c-related__a">
-                              <img class="c-related__img" src="http://placehold.it/200x200" />
+                            <a class="c-related__a">
+                              <img class="c-related__img" src="{{this.url}}" />
                             </a>
                           </div>
                           <div class="c-related__title">
-                            <a href="#" class="c-related__a">Aceto bianco (Thomy 15 L) (1553)</a>
-                            <div class="c-related__supplier">Supplier test supplier (74)</div>
+                            <p class="c-related__a align-center">{{this.name}}<br>price: ${{this.msrp}}</p>
+                            <div class="c-related__supplier"><p class="align-center">quantity available ({{this.quantity}})</p></div>
+                            <p class="align-center"><a class="c-related__a button special purchase_gift">PURCHASE NOW</a></p>
                           </div>
                         </div>
                       {{else}}

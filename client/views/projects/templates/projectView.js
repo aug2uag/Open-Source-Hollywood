@@ -14,20 +14,17 @@ function loadcss(f){
 function makeStripeCharge(options) {
   StripeCheckout.open({
     key: StripePublicKey,
-    amount: options.amount * 100,
+    amount: Math.abs(Math.floor(options.amount*100))<1?1:Math.abs(Math.floor(options.amount*100)),
     currency: 'usd',
     name: options.message,
-    description: options.description,
+    description: options.description || 'opensourcehollywood.org',
     panelLabel: 'Pay Now',
     token: function(_token) {
       if (_token) {
         options.token = _token;
         Meteor.call(options.route, options, function(err, result) {
-          console.log('Meteor callback')
-          console.log(err, result)
-          console.log(typeof err, typeof result)
-          // if (err) bootbox.alert('your payment failed');
-          // bootbox.alert('your payment was processed, thank you for the donation !')
+          if (err) bootbox.alert('your payment failed');
+          bootbox.alert(result)
 
         });
       } else {
@@ -130,7 +127,6 @@ Template.projectView.events({
   },
   'click .general_need-response': function(e) {
     e.preventDefault();
-    console.log(this)
     var was = this;
     var intmodal = bootbox.dialog({
       title: 'Resource Needed',
@@ -196,30 +192,26 @@ Template.projectView.events({
                     var pay = parseFloat($('#apply-pay').val());
                     var equity = parseFloat($('#apply-equity').val());
                     o.type = 'hired';
-                    if (pay&&typeof pay==='number'&&pay>1) o.pay=pay||0;
-                    if (equity&&typeof equity==='number'&&equity>1) o.equity=equity;
+                    o.pay=pay||0;
+                    o.equity=equity||0;
                   } else {
                     var pay = parseFloat($('#apply-gratis').val());
                     o.type = 'sourced';
-                    if (pay&&typeof pay==='number'&&pay>=0) o.pay=pay||0;
+                    o.pay=pay||0;
                   }
-
-                  o.project = currentSlug;
-                  o.route = 'applyToTeam';
+                  if (!o.pay) o.type='hired';
                   if (o.pay) o.amount = o.pay;
-                  o.message = currentTitle + ' crew offer'; 
-                  
-                  makeStripeCharge({
-                    destination: was.project.account && was.project.account.id,
-                    donationObject: donationObject,
-                    route: 'applyToProject',
-                    slug: was._slug,
-                    key: 'crew',
-                    type: o.type,
-                    equity: o.equity,
-                    ctx: 'crew',
-                    position: was.title
+                  o.message = currentTitle + ' crew offer';
+                  o.destination = destinationAccount;
+                  o.route = 'applyToProject';
+                  o.slug = currentSlug;
+                  o.appliedFor = was.title;
+                  if (o.pay&&o.type!=='hired') makeStripeCharge(o);
+                  else Meteor.call(o.route, o, function(err, result) {
+                    bootbox.alert(err||result);
                   });
+                  
+                  
                 }
               }
             }
@@ -245,10 +237,8 @@ Template.projectView.events({
       buttons: buttons
     });
   },
-
   'click .role_detail': function(e) {
     e.preventDefault();
-    console.log(this)
     var was = this;
     var buttons = {
       danger:  {
@@ -298,15 +288,16 @@ Template.projectView.events({
                     o.type = 'sourced';
                     if (pay&&typeof pay==='number'&&pay>=0) o.pay=pay;
                   }
-                  o.project = currentSlug;
-                  makeStripeCharge({
-                    amount: donationObject.amount,
-                    message: was.project.title + ' crew offer',
-                    description: '$' + donationObject.amount,
-                    destination: was.project.account && was.project.account.id,
-                    donationObject: donationObject,
-                    route: 'donateToProject',
-                    slug: was._slug
+                  if (!o.pay) o.type='hired';
+                  if (o.pay) o.amount = o.pay;
+                  o.message = currentTitle + ' cast offer';
+                  o.destination = destinationAccount;
+                  o.route = 'applyToProject';
+                  o.slug = currentSlug;
+                  o.appliedFor = was.role;
+                  if (o.pay&&o.type!=='hired') makeStripeCharge(o);
+                  else Meteor.call(o.route, o, function(err, result) {
+                    bootbox.alert(err||result);
                   });
                 }
               }
@@ -331,6 +322,55 @@ Template.projectView.events({
       title: was.role.toUpperCase(),
       message: '<div class="bs-callout bs-callout-danger"><h4>This cast position is '+((was.status==='needed')?'':'NOT')+' AVAILABLE for applicants to apply.</h4> <p>'+was.description+'</p> </div>',
       buttons: buttons
+    });
+  },
+  'click .purchase_gift': function(e) {
+    e.preventDefault();
+    var was = this, o={gift:was};
+    // popup get address for delivery
+    // leave phone number and email
+    // send to fulfill
+    var intmodal = bootbox.dialog({
+      title: 'PURCHASE GIFT',
+      message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">'+was.name+'</p></h3><h5> <p class="align-center bootbox">'+was.description+'</p></h5><div class="row"> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">please enter shipping addressing and purchase info</p></h5> </div><div class="col-md-12"> <div class="col-md-6 bootpadded"> <label for="address-gift">street address</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="city-gift">city name</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="state-gift">state name</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="zip-gift">zip code</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="email-gift">correspondence email</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="phone-gift">correspondence phone number</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift"> </div></div></div></div>',
+      buttons: {
+        danger:  {
+          label: 'Cancel',
+          className: "btn-danger",
+          callback: function() { intmodal.modal('hide') }
+        }, 
+        success: {
+          label: "Purchase",
+          className: "btn-success",
+          callback: function() {
+            o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val(), o.phone = $('#phone-gift').val();
+            if (!o.address||!o.city||!o.state||!o.zip||!o.email||!o.phone) return;
+            var innermodal = bootbox.dialog({
+              title: 'VERIFY GIFT PURCHASE',
+              message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">Please Verify Purchase</p></h3><h5> <p class="align-center bootbox">$'+was.msrp+' gift purchase with shipping and correspondence information as below.</p></h5><ul class="alt"> <li>address: '+o.address.toUpperCase()+'</li><li>city: '+o.city.toUpperCase()+'</li><li>state: '+o.state.toUpperCase()+'</li><li>zip: '+o.zip+'</li><li>email: '+o.email.toLowerCase()+'</li><li>phone: '+o.phone+'</li></ul></div>',
+              buttons: {
+                danger:  {
+                  label: 'Cancel',
+                  className: "btn-danger",
+                  callback: function() { innermodal.modal('hide') }
+                }, 
+                success: {
+                  label: "PROCEED",
+                  className: "btn-success",
+                  callback: function() {
+                    o.amount = was.msrp;
+                    o.message = was.name + ' purchase';
+                    o.destination = destinationAccount;
+                    o.route = 'purchaseGift';
+                    o.slug = currentSlug;
+                    makeStripeCharge(o);
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
     });
   },
 
