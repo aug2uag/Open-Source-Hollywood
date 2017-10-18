@@ -392,17 +392,14 @@ Template.projectView.events({
   },
   "click .delete": function () {
     var was = this;
-    if (bootbox.confirm("Are you sure you want to delete this?", function(r) {
+    if (bootbox.confirm("This action will permanently delete your project. Are you sure you want to continue?", function(r) {
       if (!r || r === false) return;
       Meteor.call("deleteProject", was._slug);
-    }))l
+    }));
   },
   "click .start": function () {
     var was = this;
-    if (bootbox.confirm("By starting the project, you allow members you approved on the project to access the board; others will no longer be able to join this project, and the approved members' contributions will be applied for use towards production. <strong>By agreeing, you will be assuming the risk and responsibility of the members' contributions funds</strong>. Would you like to proceed?", function(r) {
-      if (!r || r === false) return;
-      Meteor.call("startProject", was._slug);
-    }));
+    Meteor.call("startProject", was._slug);
   },
   'click #submit-comment': function() {
     var text = document.getElementById('comment-box').value;

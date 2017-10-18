@@ -1,7 +1,27 @@
+var gifts = [];
+var osettings = {};
+var currentSlug, currentTitle;
+
+function validateUrl(value) {
+  return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
+}
+
+function deleteRow(e) {
+  e.preventDefault();
+  $(this).closest('tr').remove();
+}
+
+function removeGift(e) {
+  e.preventDefault();
+  var idx = $($(this).closest('tr')).index();
+  gifts.splice(idx, 1);
+  $(this).closest('tr').remove();
+}
+
 Template.editProject.events({
   'click #update_campaign': function(e) {
     e.preventDefault();
-    var o = {};
+    var o = {slug: currentSlug};
     o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
     if (o.zip.match(/\d{5}/)) {
       var url = 'https://api.zippopotam.us/us/' + o.zip;
@@ -93,8 +113,6 @@ Template.editProject.events({
 
       // create virtual account for project
       // add funds to virtual account, non-refundable
-
-
       Meteor.call('editProject', o);
       bootbox.alert("Project updated!");
       Router.go('Projects');
@@ -182,8 +200,12 @@ Template.editProject.events({
 });
 
 Template.editProject.helpers({
-  foo: function() {
+  init: function() {
     console.log(this)
+    currentSlug = this.slug;
+    currentTitle = this.title;
+    $("#category").text(this.category);
+    $("#purpose").text(this.purpose);
   },
   fundingGoal: function() {
     if (this.budget) {
@@ -202,19 +224,9 @@ Template.editProject.helpers({
 });
 
 Template.editProject.rendered = function () {
-
-  console.log(new Array(100).join('*'))
-  console.log(this)
-  $("#category").text(this.category);
-  $("#purpose").text(this.purpose);
-
-  function deleteRow(e) {
-    e.preventDefault();
-    $(this).closest('tr').remove();
-  };
-
   $('.deleteRow').on('click', deleteRow);
-  
-
-
+  gifts = [];
+  osettings = {};
+  osettings.banner = {};
+  osettings.giftImage = {};
 };

@@ -1,6 +1,6 @@
 <template name="editProject">
   {{#if currentUser}}
-  {{foo}}
+  {{init}}
   <div id="page-wrapper fadeIn">
         <!-- Main -->
         <div id="main" class="wrapper style1">
@@ -17,24 +17,24 @@
                     <div class="row uniform 50%">
                         <div class="6u 12u$(xsmall)">
                             <label for="title">title</label>
-                            <input type="text" name="title" id="title" placeholder="{{title}}" />
+                            <input type="text" name="title" id="title" placeholder="{{title}}" value="{{title}}" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
                             <label for="logline">logline</label>
-                            <input type="email" name="logline" id="logline" placeholder="{{logline}}" />
+                            <input type="email" name="logline" id="logline" placeholder="{{logline}}" value="{{logline}}" />
                         </div>
                         <div class="6u 12u$(xsmall)">
                             <label for="location">location</label>
-                            <input type="text" name="location" id="location" placeholder="{{zip}}" />
+                            <input type="text" name="location" id="location" placeholder="{{zip}}" value="{{zip}}" />
                         </div>
                         <div class="6u$ 12u$(xsmall)">
                             <label for="website">website</label>
-                            <input type="email" name="website" id="website" placeholder="{{website}}" />
+                            <input type="email" name="website" id="website" placeholder="{{website}}" value="{{website}}" />
                         </div>
 
                         <div class="12u$">
                             <label for="description">description</label>
-                            <textarea name="description" id="description" placeholder="{{description}}" rows="6"></textarea>
+                            <textarea name="description" id="description" placeholder="{{description}}" value="{{description}}" rows="6"></textarea>
                         </div>
 
 
@@ -82,27 +82,27 @@
                     <div class="row uniform 50%">
                         <h4>About the creators</h4>
                         <div class="12u$">
-                            <textarea name="creators_info" id="creators_info" placeholder="{{creatorsInfo}}" rows="6"></textarea>
+                            <textarea name="creators_info" id="creators_info" placeholder="{{creatorsInfo}}" value="{{creatorsInfo}}" rows="6"></textarea>
                         </div>
                         <h4>About the story</h4>
                         <div class="12u$">
-                            <textarea name="story_info" id="story_info" placeholder="{{storyInfo}}" rows="6"></textarea>
+                            <textarea name="story_info" id="story_info" placeholder="{{storyInfo}}" value="{{storyInfo}}" rows="6"></textarea>
                         </div>
                         <h4>Project history</h4>
                         <div class="12u$">
-                            <textarea name="history_info" id="history_info" placeholder="{{historyInfo}}" rows="6"></textarea>
+                            <textarea name="history_info" id="history_info" placeholder="{{historyInfo}}" value="{{historyInfo}}" rows="6"></textarea>
                         </div>
                         <h4>Project plans</h4>
                         <div class="12u$">
-                            <textarea name="plans_info" id="plans_info" placeholder="{{plansInfo}}" rows="6"></textarea>
+                            <textarea name="plans_info" id="plans_info" placeholder="{{plansInfo}}" value="{{plansInfo}}" rows="6"></textarea>
                         </div>
                         <h4>Explanation of needs</h4>
                         <div class="12u$">
-                            <textarea name="needs_info" id="needs_info" placeholder="{{needsInfo}}" rows="6"></textarea>
+                            <textarea name="needs_info" id="needs_info" placeholder="{{needsInfo}}" value="{{needsInfo}}" rows="6"></textarea>
                         </div>
                         <h4>Significance of work</h4>
                         <div class="12u$">
-                            <textarea name="significance_info" id="significance_info" placeholder="{{significanceInfo}}" rows="6"></textarea>
+                            <textarea name="significance_info" id="significance_info" placeholder="{{significanceInfo}}" value="{{significanceInfo}}" rows="6"></textarea>
                         </div>
 
                     </div>
@@ -286,7 +286,7 @@
                     <div class="box alt">
                         <div class="row 100% uniform">
                             <div class="6u 12u$(xsmall)">
-                                <input type="text" name="video_explainer" id="video_explainer" placeholder="{{videoExplainer}}" />
+                                <input type="text" name="video_explainer" id="video_explainer" placeholder="{{videoExplainer}}" value="{{videoExplainer}}" />
                             </div>
                         </div>
                     </div>
