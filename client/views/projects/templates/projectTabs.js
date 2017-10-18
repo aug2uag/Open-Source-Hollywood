@@ -11,6 +11,25 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
 });
 
 Template.projectTabs.helpers({
+  defaultQ: function() {
+    return this.logline||this.description||'click <code>DETAILS</code> for more info';
+  },
+  castLn: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var msg_;
+    if (x===0) msg_=' none';
+    if (x===1) msg_=' role';
+    else msg_ = ' roles';
+    return (x + msg_);
+  },
+  crewLn: function() {
+    var x = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    var msg_;
+    if (x===0) msg_=' none';
+    if (x===1) msg_=' position';
+    else msg_ = ' positions';
+    return (x + msg_);
+  },
   producerReady: function() {
     return !(Meteor.user() && Meteor.user().didSetProfile);
   },

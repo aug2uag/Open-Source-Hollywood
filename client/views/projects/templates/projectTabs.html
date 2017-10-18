@@ -1,142 +1,108 @@
 <template name="projectTabs">
-  <style type="text/css">
-    document { display: none; }
-  </style>
-  <div class="container">
-    <hr>
-    <div class="col-sm-12">
+    <div id="page-wrapper">
+        <!-- Main -->
+        <div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2>Live Campaigns</h2>
+                    <p>Browse, view, and participate.</p>
+                </header>
 
-       <div class="btn-toolbar" role="toolbar" aria-label="...">
-          {{#if counts3}}
-          <div class="btn-group" role="group" aria-label="...">
-            {{>sortBar}}
-          </div>
-          {{/if}}
-          {{#if counts30}}
-          <div class="btn-group pull-right" role="group" aria-label="...">
-            {{>pager}}
-          </div>
-          {{/if}}
-       </div>
+                <!-- Text -->
+                <section>
+                  <div class="container">
+                    <div class="c-related">
+                      {{#if producerReady}}
+                          <div class="c-related__item mod80">
+                            <div class="c-related__title">
+                              <h3 class="h10"><p class="align-center">Edit Profile to View, Create, and Join Campaigns</p></h3>
+                              <div class="c-related__supplier"><p class="align-center"><blockquote>click "Edit Profile" on the navigation menu above</blockquote></p></div>  
+                            </div>
+                          </div>
+                      {{else}}
+                        {{#each projects}}
+                        {{foo}}
+                          <div class="c-related__item mod31">
+                            <div class="c-related__figure">
+                              <a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a">
+                                <img class="c-related__img" src="{{banner}}" />
+                              </a>
+                            </div>
+                            <div class="c-related__title">
+                              <h3 class="h10"><p class="align-center">{{title}}</p></h3>
+                              <div class="c-related__supplier"><p class="align-center"><blockquote>{{defaultQ}}</blockquote></p></div>
 
-      <br>
-    </div>
+                              
+                              <ul class="alt mod80 sm_li">
 
-    <div class="col-sm-12">
-      {{#if producerReady}}
-        <h3>Edit Profile to View, Create, and Join Campaigns</h3>
-      {{else}}
-      <ol>
-        {{#each projects}}
-          {{> project}}
-        {{else}}
-          <h3>No campaigns, <a id="createnewproject">create one now</a></h3>
-        {{/each}}
-      </ol>
-      {{/if}}
-    </div>
+                                <li class="tabs_projs">
+                                  <div class="page-header">
+                                    <div class="pull-left">
+                                      <h1 class="sm_li">Roles Available:</h1>
+                                    </div>
+                                    <div class="pull-right">
+                                      <h3 class="text-right">{{ castLn }}</h3>
+                                    </div><div class="clearfix"></div></div>
+                                </li>
+                                
+                                <li class="tabs_projs">
+                                  <div class="page-header">
+                                    <div class="pull-left">
+                                      <h1 class="sm_li">Positions Available:</h1>
+                                    </div>
+                                    <div class="pull-right">
+                                      <h3 class="text-right">{{ crewLn }}</h3>
+                                    </div><div class="clearfix"></div></div>
+                                </li>
 
+                                <li class="tabs_projs">
+                                  <div class="page-header">
+                                    <div class="pull-left">
+                                      <h1 class="sm_li">Funds Raised:</h1>
+                                    </div>
+                                    <div class="pull-right">
+                                      <h3 class="text-right">${{ funded }}</h3>
+                                    </div><div class="clearfix"></div></div>
+                                </li>
+
+                              </ul>
+
+
+
+                              <div class="container">
+                                <div class="row">
+                                    <div>
+                                      <p class="align-center"><a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a button">VIEW DETAILS</a></p>
+                                    </div>
+                                    <div>
+                                      <p class="align-center"><a class="c-related__a button special quick_apply">QUICK APPLY</a></p>
+                                    </div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                        {{else}}
+                          <div class="c-related__item mod80">
+                            <div class="c-related__title">
+                              <h3 class="h10"><p class="align-center">No campaigns, <a id="createnewproject">create one now</a></p></h3>
+                            </div>
+                          </div>
+                        {{/each}}
+                      {{/if}}
+                    </div>
+                  </div>
+                </section>
+                
+            </div>
+        </div>
   </div>
-
-  <style>
-  ul.pager {
-    margin: 0px;
-  }
-  </style>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      setTimeout(function() {
-        $('document').fadeIn();
-      }, 1300);
-    });
-  </script>
 </template>
 
 
 <template name="userTabs">
   <style type="text/css">
     document { display: none; }
-  </style>
-  <style type="text/css">
-    @import url(https://fonts.googleapis.com/css?family=Oswald);
-    @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
-    @import url(https://fonts.googleapis.com/css?family=Quattrocento);
-    .snip1376 {
-      font-family: 'Quattrocento', Arial, sans-serif;
-      position: relative;
-      float: left;
-      overflow: hidden;
-      margin: 10px 1%;
-      min-width: 230px;
-      max-width: 315px;
-      width: 100%;
-      color: #141414;
-      text-align: left;
-      line-height: 1.4em;
-      font-size: 16px;
-    }
-    .snip1376 * {
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-    .snip1376 img {
-      max-width: 100%;
-      vertical-align: top;
-    }
-    .snip1376 figcaption {
-      width: 100%;
-      background-color: #ffffff;
-      padding: 15px 25px 65px;
-      position: relative;
-    }
-    .snip1376 figcaption:before {
-      position: absolute;
-      content: '';
-      z-index: 2;
-      bottom: 100%;
-      left: 0;
-      width: 100%;
-      height: 80px;
-      background-image: -webkit-linear-gradient(top, transparent 0%, #ffffff 100%);
-      background-image: linear-gradient(to bottom, transparent 0%, #ffffff 100%);
-    }
-    .snip1376 h2,
-    .snip1376 p {
-      margin: 0 0 10px;
-    }
-    .snip1376 h2 {
-      font-weight: 300;
-      font-size: 1.5em;
-      line-height: 1.2em;
-      font-family: 'Oswald', Arial, sans-serif;
-      text-transform: uppercase;
-    }
-    .snip1376 p {
-      font-size: 0.9em;
-      letter-spacing: 1px;
-      opacity: 0.9;
-    }
-    .snip1376 .icons {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      background-color: #e6e6e6;
-      width: 100%;
-      text-align: center;
-    }
-    .snip1376 i {
-      padding: 10px 5px;
-      display: inline-block;
-      font-size: 24px;
-      color: #141414;
-      opacity: 0.65;
-    }
-    .snip1376 i:hover {
-      opacity: 1;
-      -webkit-transition: all 0.35s ease;
-      transition: all 0.35s ease;
-    }
-
   </style>
 
   <div class="container">
