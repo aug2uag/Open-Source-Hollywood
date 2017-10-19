@@ -49,7 +49,6 @@
                 <hr>
               {{/if}}
             {{/if}}
-
             
             <div class="page">
               <div class="modal-container">
@@ -57,6 +56,7 @@
                   <div class="l-product__container">
                     <div class="l-product__title">{{project.title}}</div>
                     {{> actionBar}}
+                    <!-- LEFT -->
                     <main class="l-product__main">
                       <div class="l-product__image">
                         <img src="{{project.banner}}"  style="width: 100%;"/>
@@ -86,10 +86,7 @@
                             <div class="c-price__value c-price__value--green">${{project.funded}}</div>
                           </div>
 
-                        </div>
-
-                                    
-                        
+                        </div>              
                       </div>
                       <div class="w100">
                         <div class="c-title--h2">Donation</div>
@@ -166,91 +163,79 @@
                           {{ project.description }}
                         </div>
                       </div>
-
                       <div class="w100">
                         <h4>About the story</h4>
                         
                         <div class="c-desription">
-                          {{ project.description }}
+                          {{ project.storyInfo }}
                         </div>
                       </div>
-
                       <div class="w100">
                         <h4>Project history</h4>
                         
                         <div class="c-desription">
-                          {{ project.description }}
+                          {{ project.historyInfo }}
                         </div>
                       </div>
-
                       <div class="w100">
                         <h4>Project plans</h4>
                         
                         <div class="c-desription">
-                          {{ project.description }}
+                          {{ project.plansInfo }}
                         </div>
                       </div>
-
                       <div class="w100">
                         <h4>Explanation of needs</h4>
                         
                         <div class="c-desription">
-                          {{ project.description }}
+                          {{ project.needsInfo }}
                         </div>
                       </div>
-
                       <div class="w100">
                         <h4>Significance of work</h4>
                         
                         <div class="c-desription">
-                          {{ project.description }}
+                          {{ project.significanceInfo }}
                         </div>
                       </div>
               
               
-                    <div class="c-title--h2">Gifts for Purchase</div>
-                    <div class="c-related">
-                      {{#each project.gifts}}
-                        <div>
-                          <div class="c-related__figure">
-                            <a class="c-related__a">
-                              <img class="c-related__img" src="{{this.url}}" />
-                            </a>
+                      <div class="c-title--h2">Gifts for Purchase</div>
+                      <div class="c-related">
+                        {{#each project.gifts}}
+                          <div>
+                            <div class="c-related__figure">
+                              <a class="c-related__a">
+                                <img class="c-related__img" src="{{this.url}}" />
+                              </a>
+                            </div>
+                            <div class="c-related__title">
+                              <p class="c-related__a align-center">{{this.name}}<br>price: ${{this.msrp}}</p>
+                              <div class="c-related__supplier"><p class="align-center">quantity available ({{this.quantity}})</p></div>
+                              <p class="align-center"><a class="c-related__a button special purchase_gift">PURCHASE NOW</a></p>
+                            </div>
                           </div>
+                        {{else}}
                           <div class="c-related__title">
-                            <p class="c-related__a align-center">{{this.name}}<br>price: ${{this.msrp}}</p>
-                            <div class="c-related__supplier"><p class="align-center">quantity available ({{this.quantity}})</p></div>
-                            <p class="align-center"><a class="c-related__a button special purchase_gift">PURCHASE NOW</a></p>
+                            <a class="c-related__a button">N / A</a>
                           </div>
-                        </div>
-                      {{else}}
-                        <div class="c-related__title">
-                          <a class="c-related__a button">N / A</a>
-                        </div>
-                      {{/each}}
-
-                    </div>
-
-                    <div class="w100">
-                      <div style="position:relative;padding-top:20px;width:80%">
-                        <h4>{{numComments}}</h4>
-                        {{#if currentUser}}
-                        <br>
-                        {{#each projectComments}}
-                        {{>comment}}
                         {{/each}}
-                        {{> commentBox}}
-                        {{/if}}
                       </div>
-                    </div>
-              
-              
-                      
+
+                      <div class="w100">
+                        <div style="position:relative;padding-top:20px;width:80%">
+                          <h4>{{numComments}}</h4>
+                          {{#if currentUser}}
+                          <br>
+                          {{#each projectComments}}
+                          {{>comment}}
+                          {{/each}}
+                          {{> commentBox}}
+                          {{/if}}
+                        </div>
+                      </div>      
                     </main>
-
-
-                    <!-- ASIDE COL -->
-                    
+                    <!-- RIGHT -->
                     <aside class="l-product__aside">
                       <div class="l-product__attr">
                         
@@ -393,8 +378,11 @@
                         </div>
                         
                       </div>
+                    </aside>
 
-                    </aside>  
+                    {{#if isOwner}}
+                      <div class="w100">{{> applicants}}</div>
+                    {{/if}}
                     
                   </div>
                 </div>
@@ -408,4 +396,43 @@
   </div>
 </div>
 
+</template>
+
+<template name="applicants">
+  <h3>Applicants for Roles</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Applicant</th>
+          <th>Applicant Link</th>
+          <th>ACCEPT</th>
+          <th>REJECT</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.project.roleApplicants}}
+          {{yolo}}
+          <tr>
+            <td>{{appliedFor}}</td>
+            <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
+            <td><a href="/profile/{{ user.id }}" class="button">VIEW</a></td>
+            <td><a class="button special accept_role">ACCEPT</a></td>
+            <td><a class="button special_reject reject_role">REJECT</a></td>
+          </tr>
+        {{else}}
+
+        {{/each}}
+
+      
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total applicants for roles</td>
+          <td>{{project.roleApplicants.length}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </template>

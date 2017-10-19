@@ -423,3 +423,9 @@ Template.projectView.onRendered(function() {
       $('#upvote').css('left', '7px');
      }
  });
+
+Template.applicants.helpers({
+  yolo: function() {
+    console.log(this)
+  }
+})
