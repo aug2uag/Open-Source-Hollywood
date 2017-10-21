@@ -139,6 +139,10 @@ Template.settings.events({
 });
 
 Template.settings.helpers({
+	foo: function() {
+		var x = Meteor.user();
+		return !!x.primaryRole && (x.iam && x.iam.length);
+	},
 	bio: function() {
 		return Meteor.user().bio || 'describe yourself and your experiences'
 	},
@@ -170,11 +174,15 @@ Template.settings.rendered = function () {
 
   // set primaryRole
   if (Meteor.user().primaryRole) {
-  	$("#category").text(Meteor.user().primaryRole);
+  	var val = Meteor.user().primaryRole;
+  	console.log(new Array(100).join('#'))
+  	console.log(val)
+  	$("#category").val(val);
   };
 
   // set user-role
   Meteor.user().iam.forEach(function(el) {
+  	console.log(new Array(100).join('*'))
   	var elId = '#checkbox-' + el;
   	$(elId).prop("checked", true);
   });

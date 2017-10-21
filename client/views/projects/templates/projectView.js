@@ -34,7 +34,46 @@ function makeStripeCharge(options) {
   });
 }
 
+function acceptUser(offer) {
+  // 1) handle money
+  // if pay $
+      // is there enough money to cover half?
+      // else upload funds, needs at least asking amount
+
+          // fn pay
+              // transfer money to user
+              // create receipts
+
+  // if pay equity, deduct from equity
+
+  // if receive, update funds
+
+
+  
+
+  // 2) update roles
+  // update roles availability
+
+
+
+
+  // 3) notify applicant
+}
+
+
+function rejectUser(offer) {
+  // 1) notify applicant
+  // 2) refund money if applicable
+  // 3) update project
+}
+
 Template.projectView.helpers({
+  usersApplied: function() {
+    console.log(this)
+  },
+  usersApproved: function() {
+
+  },
   isAllowed: function() {
     return this.isOwner || this.isMember;
   },
@@ -86,7 +125,7 @@ Template.projectView.events({
     var user_avatar = this.user && this.user.avatar || '';
     var intmodal = bootbox.dialog({
       title: 'Gift Fulfillment',
-      message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-sm-12 col-md-8 col-lg-5"> <div class="main-profile"> <div class="profile-header"> <img src="'+user_avatar+'" alt="'+user_name+'"> <h1>'+user_name+'</h1><p class="align-center">'+this.gift.name+'</p> </div><div> <p class="align-center">'+this.gift.description+'</p><h4>Ship to:</h4> <ul class="alt"> <li><p class="align-center">'+this.address+'</p></li><li><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></li></ul> </div></div></div></div></div>',
+      message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-sm-12 col-md-8 col-lg-5"> <div class="main-profile"> <div class="profile-header"> <img class="bootbox_img" src="'+user_avatar+'" alt="'+user_name+'"> <h1>'+user_name+'</h1><p class="align-center">'+this.gift.name+'</p> </div><div> <p class="align-center">'+this.gift.description+'</p><h4>Ship to:</h4> <ul class="alt"> <li><p class="align-center">'+this.address+'</p></li><li><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></li></ul> </div></div></div></div></div>',
       buttons: {
         danger:  {
           label: 'Close',
@@ -199,7 +238,7 @@ Template.projectView.events({
           */
           var innermodal = bootbox.dialog({
             title: was.title.toUpperCase(),
-            message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">Thanks for applying</p></h3><h5> <p class="align-center bootbox">what are your terms?</p></h5><div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5></div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-10 col-md-offset-1"> <div class="bootpadded"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="input-group input-group-sm"> <h4> <p class="align-center bootbox bootpadded">your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div></div></div></div>',
+            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h4> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
             buttons: {
               danger:  {
                 label: 'Cancel',
@@ -221,6 +260,7 @@ Template.projectView.events({
                     var pay = parseFloat($('#apply-gratis').val());
                     o.type = 'sourced';
                     o.pay=pay||0;
+                    o.expires=$('#apply-gratis-exp').val();
                   }
                   if (!o.pay) o.type='hired';
                   if (o.pay) o.amount = o.pay;
@@ -277,18 +317,13 @@ Template.projectView.events({
         className: "btn-success",
         callback: function() {
           intmodal.modal('hide')
-          // add user to requested resource
-          Meteor.call("lendResource", {
-            slug: currentSlug,
-            asset: was.category
-          });
           /**
               ask for pay: [equity and/or pay]
               gratis or conditional donation: pay (default 0)
           */
           var innermodal = bootbox.dialog({
             title: was.role.toUpperCase(),
-            message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">Thanks for applying</p></h3><h5> <p class="align-center bootbox">what are your terms?</p></h5><div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5></div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-10 col-md-offset-1"> <div class="bootpadded"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="input-group input-group-sm"> <h4> <p class="align-center bootbox bootpadded">your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div></div></div></div>',
+            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h4> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
             buttons: {
               danger:  {
                 label: 'Cancel',
@@ -310,6 +345,7 @@ Template.projectView.events({
                     var pay = parseFloat($('#apply-gratis').val());
                     o.type = 'sourced';
                     if (pay&&typeof pay==='number'&&pay>=0) o.pay=pay;
+                    o.expires=$('#apply-gratis-exp').val();
                   }
                   if (!o.pay) o.type='hired';
                   if (o.pay) o.amount = o.pay;
@@ -447,6 +483,39 @@ Template.projectView.onRendered(function() {
 
 Template.applicants.helpers({
   yolo: function() {
+    console.log(this)
+  }
+})
+
+Template.applicants.events({
+  'click .view_offer': function(e) {
+    console.log(this)
+    var was = this;
+    // var message;
+    // if (was.type==='sourced') {
+    //   var expiresOn = new Date(was.expires).toLocaleDateString();
+    //   message = 'this applicant is offering $'+was.pay+' that expires on '+expiresOn;
+    // } else {
+    //   var message = 'this applicant is requesting ';
+    //   if (was.pay) message+='$'+was.pay;
+    //   if (was.pay&&was.equity) message+=' and ';
+    //   if (was.equity) message+=was.equity+'%';
+    //   message+=' to join your campaign'
+    // }
+    // show offer with accept/reject buttons
+    var intmodal = bootbox.dialog({
+      title: 'APPLICATION & TERMS',
+      message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-md-5"> <div class="main-profile"> <div class="profile-header"> <img class="bootbox_img" src="'+was.user.avatar+'" alt="'+was.user.name+'"> <h1 style="color:#333">'+was.user.name+'</h1><p class="align-center">'+was.appliedFor+'</p> </div><div> <p class="align-center">'+was.message+'</p></div></div></div></div></div>',
+      buttons: {
+        danger:  {
+          label: 'Close',
+          className: "btn-danger",
+          callback: function() { intmodal.modal('hide') }
+        }
+      }
+    });
+  },
+  'click .cast_offer': function(e) {
     console.log(this)
   }
 })

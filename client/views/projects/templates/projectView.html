@@ -49,12 +49,12 @@
                           
                           <div class="c-price__row">
                             <div class="c-price__index"> users applied </div>
-                            <div class="c-price__value c-price__value--green">{{project.usersApplied.length}}</div>
+                            <div class="c-price__value c-price__value--green">{{usersApplied}}</div>
                           </div>
                           
                           <div class="c-price__row">
                             <div class="c-price__index"> users approved </div>
-                            <div class="c-price__value c-price__value--green">{{project.usersApproved.length}}</div>
+                            <div class="c-price__value c-price__value--green">{{usersApproved}}</div>
                           </div>        
                           
                           <div class="c-price__row">
@@ -383,7 +383,7 @@
         <tr>
           <th><p class="align-center">Role</p></th>
           <th><p class="align-center">Applicant</p></th>
-          <th><p class="align-center">Profile</p></th>
+          <th><p class="align-center">Offer</p></th>
           <th><p class="align-center">ACCEPT</p></th>
           <th><p class="align-center">REJECT</p></th>
         </tr>
@@ -392,8 +392,8 @@
         {{#each this.project.roleApplicants}}
           <tr>
             <td><p class="align-center">{{appliedFor}}</p></td>
-            <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
-            <td><a style="width:100%" href="/profile/{{ user.id }}" class="button">VIEW</a></td>
+            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
+            <td><a style="width:100%" class="button view_offer">VIEW OFFER</a></td>
             <td><a style="width:100%" class="button special accept_role"><p class="align-center">ACCEPT</p></a></td>
             <td><a style="width:100%" class="button special_reject reject_role"><p class="align-center">REJECT</p></a></td>
           </tr>
@@ -416,18 +416,17 @@
         <tr>
           <th><p class="align-center">Role</p></th>
           <th><p class="align-center">Applicant</p></th>
-          <th><p class="align-center">Profile</p></th>
+          <th><p class="align-center">Offer</p></th>
           <th><p class="align-center">ACCEPT</p></th>
           <th><p class="align-center">REJECT</p></th>
         </tr>
       </thead>
       <tbody>
         {{#each this.project.crewApplicants}}
-          {{yolo}}
           <tr>
             <td><p class="align-center">{{appliedFor}}</p></td>
-            <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
-            <td><a style="width:100%" href="/profile/{{ user.id }}" class="button">VIEW</a></td>
+            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
+            <td><a style="width:100%" class="button view_offer">VIEW OFFER</a></td>
             <td><a style="width:100%" class="button special accept_role"><p class="align-center">ACCEPT</p></a></td>
             <td><a style="width:100%" class="button special_reject reject_role"><p class="align-center">REJECT</p></a></td>
           </tr>

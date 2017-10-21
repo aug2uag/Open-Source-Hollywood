@@ -74,7 +74,7 @@ Template.profile.onRendered(function() {
 
 	ready(function() {
 		var counts = [90, 70, 50, 45, 80, 60, 40, 65, 55, 85, 60, 70];
-		var interests = was.data.interests.map(function(i) {
+		var interests = was.data.iam.map(function(i) {
 			return i.toUpperCase();
 		});
 		var icounts = counts.splice(0, interests.length);
@@ -109,36 +109,36 @@ Template.profile.onRendered(function() {
 	});
 
 
-				$(document).ready(function(){
-				  $("img").click(function(){
-				  var t = $(this).attr("src");
-				  $(".modal-body").html("<img src='"+t+"' class='modal-img'>");
-				  $("#myModal").modal();
-				});
+		$(document).ready(function(){
+		  $("img").click(function(){
+		  var t = $(this).attr("src");
+		  $(".modal-body").html("<img src='"+t+"' class='modal-img'>");
+		  $("#myModal").modal();
+		});
 
-				$("video").click(function(){
-				  var v = $("video > source");
-				  var t = v.attr("src");
-				  $(".modal-body").html("<video class='model-vid' controls><source src='"+t+"' type='video/mp4'></source></video>");
-				  $("#myModal").modal();  
-				});
-				});//EOF Document.ready
+		$("video").click(function(){
+		  var v = $("video > source");
+		  var t = v.attr("src");
+		  $(".modal-body").html("<video class='model-vid' controls><source src='"+t+"' type='video/mp4'></source></video>");
+		  $("#myModal").modal();  
+		});
+		});//EOF Document.ready
 
 })
 
 
 Template.settings.helpers({
 	avatar: function() {
-		return Meteor.user().services.auth0.picture;
+		return Meteor.user().avatar;
 	},
 	bio: function() {
 		return Meteor.user().bio || 'you don\'t have a bio';
 	},
 	links: function() {
-		if (Meteor.user().socialLinks.length === 0) {
+		if (Meteor.user().social.length === 0) {
 			return 'you don\'t have social links';
 		} else {
-			return Meteor.user().socialLinks.join('<br>');
+			return Meteor.user().social.join('<br>');
 		};
 	}
 });

@@ -2,7 +2,12 @@
 	{{#if currentUser}}
 	<div id="page-wrapper">
         <!-- Main -->
-        {{foo}}
+        {{#if foo}}
+        <div class="alert alert-warning col-md-12" role="alert">
+          <strong>Missing Roles!</strong>
+          " Select one or more secondary and primary roles to continue. "
+        </div>
+        {{/if}}
         <div id="main" class="wrapper style1">
             <div class="container">
                 <header class="major">
@@ -31,15 +36,18 @@
                             <div class="select-wrapper">
                               <select name="category" id="category">
                                 <option>- Primary Role -</option>
-                                <option value="1">Producer</option>
-                                <option value="1">Director</option>
-                                <option value="1">Writer</option>
-                                <option value="1">Actor</option>
-                                <option value="1">Video</option>
-                                <option value="1">Audio</option>
-                                <option value="1">SFX</option>
-                                <option value="1">Support</option>
-                                <option value="1">Viewer</option>
+                                <option value="Producer">Producer</option>
+                                <option value="Director">Director</option>
+                                <option value="Writer">Writer</option>
+                                <option value="Writer">Editor</option>
+                                <option value="Actor">Actor</option>
+                                <option value="Video">Video</option>
+                                <option value="Audio">Audio</option>
+                                <option value="SFX">SFX</option>
+                                <option value="Support">Support</option>
+                                <option value="Writer">Musician</option>
+                                <option value="Writer">Dancer</option>
+                                <option value="Viewer">Viewer</option>
                               </select>
                             </div>
                         </div>

@@ -83,6 +83,8 @@ Template.comms.helpers({
     }
 })
 
-Template.comms.onRendered(function(){
-    console.log('foolala')
+Template.comms.events({
+    'click .gotocomm': function() {
+        console.log(this)
+    }
 })

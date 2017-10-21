@@ -49,11 +49,8 @@
   <div id="main" class="wrapper style1">
       <div class="container">
           <header class="major">
-              <h2><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;Communications</h2>
-              <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons">
-                <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="comms_type" id="received" value="received" >RECEIVED </label> </div>
-                <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="comms_type" id="sent" value="sent">SENT </label> </div>
-            </div>
+              <h2><i class="glyphicon glyphicon-volume-up"></i>&nbsp;&nbsp;Notifications</h2>
+              <p>Important updates to your campaigns, click to respond.</p>
           </header>
           <section>
             <div class="table-wrapper">
@@ -69,11 +66,11 @@
                 <tbody>
                 {{#each comms}}
                   {{foo}}
-                  <tr>
-                    <td><small>({{purpose}})</small></td>
-                    <td><p class="align-center">{{name}}<br><img src="{{avatar}}"></p></td>
-                    <td><p class="align-center">{{message}}</p></td>
-                    <td><p class="align-center">{{projectTitle}}<br>{{formatDate}}</p></td>
+                  <tr class="gotocomm">
+                    <td style="vertical-align: middle;"><small>({{purpose}})</small></td>
+                    <td style="vertical-align: middle;"><p class="align-center">{{name}}<br><img class="attachment-image-preview m40" src="{{avatar}}"></p></td>
+                    <td style="vertical-align: middle;"><p class="align-center">{{message}}</p></td>
+                    <td style="vertical-align: middle;"><p class="align-center">{{projectTitle}}<br>{{formatDate}}</p></td>
                   </tr>
                 {{else}}
                   <tr>
@@ -83,7 +80,6 @@
                 </tbody>             
               </table>
             </div>
-            {{/if}}
           </section>
       </div>
   </div>
