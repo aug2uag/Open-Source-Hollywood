@@ -17,37 +17,13 @@
           </header>
           {{else}}
           <section>
-            {{#if isLive}}
-              <div class="alert">
-                <strong>Your project is LIVE!</strong>
-              </div>
-            {{/if}}  
-
             {{#if isOwner}}
-              {{#unless isLive}}
-              <a class="btn btn-info start">Start Project</a>
-                <a class="btn btn-success edit" href="/edit/projects/{{_slug}}/edit">Edit</a>
-                <a class="btn btn-danger delete">Delete</a>
-              {{/unless}}
-
-              {{#if isLive}}
-                <a class="btn btn-success closeProj">Close and mark project as Finished</a>
-              {{/if}}
+                <a class="btn btn-danger closeProj">Close and mark project as Finished</a>
+                <a class="btn btn-success" href="/edit/projects/{{_slug}}/edit">Edit Details</a>
             {{/if}}
 
-            {{#if isMember}}
-              {{#unless isOwner}}
-                {{#if isLive}}
-                  {{#unless archived}}
-                  <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
-                  <hr>
-                  {{/unless}}
-                {{/if}}
-              {{/unless}}
-              {{#if isOwner}}
-                <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Board</a>
-                <hr>
-              {{/if}}
+            {{#if isAllowed}}
+                <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
             {{/if}}
             
             <div class="page">
@@ -205,7 +181,7 @@
                         {{#each project.gifts}}
                           <div>
                             <div class="c-related__figure">
-                              <a class="c-related__a">
+                              <a class="c-related__a purchase_gift">
                                 <img class="c-related__img" src="{{this.url}}" />
                               </a>
                             </div>
@@ -399,40 +375,151 @@
 </template>
 
 <template name="applicants">
+  {{yolo}}
   <h3>Applicants for Roles</h3>
   <div class="table-wrapper">
     <table>
       <thead>
         <tr>
-          <th>Role</th>
-          <th>Applicant</th>
-          <th>Applicant Link</th>
-          <th>ACCEPT</th>
-          <th>REJECT</th>
+          <th><p class="align-center">Role</p></th>
+          <th><p class="align-center">Applicant</p></th>
+          <th><p class="align-center">Profile</p></th>
+          <th><p class="align-center">ACCEPT</p></th>
+          <th><p class="align-center">REJECT</p></th>
         </tr>
       </thead>
       <tbody>
         {{#each this.project.roleApplicants}}
-          {{yolo}}
           <tr>
-            <td>{{appliedFor}}</td>
+            <td><p class="align-center">{{appliedFor}}</p></td>
             <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
-            <td><a href="/profile/{{ user.id }}" class="button">VIEW</a></td>
-            <td><a class="button special accept_role">ACCEPT</a></td>
-            <td><a class="button special_reject reject_role">REJECT</a></td>
+            <td><a style="width:100%" href="/profile/{{ user.id }}" class="button">VIEW</a></td>
+            <td><a style="width:100%" class="button special accept_role"><p class="align-center">ACCEPT</p></a></td>
+            <td><a style="width:100%" class="button special_reject reject_role"><p class="align-center">REJECT</p></a></td>
           </tr>
         {{else}}
-
-        {{/each}}
-
-      
+        {{/each}} 
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="2">Total applicants for roles</td>
+          <td colspan="2">Total applicants for cast</td>
           <td>{{project.roleApplicants.length}}</td>
         </tr>
       </tfoot>
+    </table>
+  </div>
+  <br>
+  <h3>Applicants for Team</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><p class="align-center">Role</p></th>
+          <th><p class="align-center">Applicant</p></th>
+          <th><p class="align-center">Profile</p></th>
+          <th><p class="align-center">ACCEPT</p></th>
+          <th><p class="align-center">REJECT</p></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.project.crewApplicants}}
+          {{yolo}}
+          <tr>
+            <td><p class="align-center">{{appliedFor}}</p></td>
+            <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
+            <td><a style="width:100%" href="/profile/{{ user.id }}" class="button">VIEW</a></td>
+            <td><a style="width:100%" class="button special accept_role"><p class="align-center">ACCEPT</p></a></td>
+            <td><a style="width:100%" class="button special_reject reject_role"><p class="align-center">REJECT</p></a></td>
+          </tr>
+        {{else}}
+        {{/each}}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total applicants for crew</td>
+          <td>{{project.crewApplicants.length}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <br>
+  <h3>Offered Resources</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><p class="align-center">Asset</p></th>
+          <th><p class="align-center">User</p></th>
+          <th><p class="align-center">Profile</p></th>
+          <th><p class="align-center">COMM</p></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.project.offeredResources}}
+          {{yolo}}
+          <tr>
+            <td><p class="align-center">{{asset}}</p></td>
+            <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
+            <td><a style="width:100%" href="/profile/{{ user.id }}" class="button">VIEW</a></td>
+            <td><a style="width:100%" class="button special comm_assets"><p class="align-center">ACCEPT</p></a></td>
+          </tr>
+        {{else}}
+        {{/each}}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total offers for resources</td>
+          <td>{{project.offeredResources.length}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <br>
+  <h3>Sold Gifts</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><p class="align-center">Name</p></th>
+          <th><p class="align-center">Purchaser</p></th>
+          <th><p class="align-center">Amount</p></th>
+          <th><p class="align-center">FULFILL</p></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.project.giftPurchases}}
+          {{yolo}}
+          <tr>
+            <td><p class="align-center">{{gift.name}}</p></td>
+            <td><p class="align-center_min"><img src="{{ user.avatar }}" class="attachment-image-preview m40"></p><br><p class="align-center_min">{{user.name}}</p></td>
+            <td><p class="align-center">{{amount}}</p></td>
+            <td><a class="button special fulfill_gift" style="width: 100%;">FULFILL</a></td>
+          </tr>
+        {{else}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Donations</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><p class="align-center">Donee</p></th>
+          <th><p class="align-center">Donation Amount</p></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.project.donations}}
+          {{yolo}}
+          <tr>
+            <td><p class="align-center_min">{{donationObject.user.first}} {{donationObject.user.last}}</p></td>
+            <td><p class="align-center_min">{{amount}}</p></td>
+          </tr>
+        {{else}}
+        {{/each}}
+      </tbody>
     </table>
   </div>
 </template>

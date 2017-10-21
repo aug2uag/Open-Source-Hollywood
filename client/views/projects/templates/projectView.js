@@ -35,6 +35,9 @@ function makeStripeCharge(options) {
 }
 
 Template.projectView.helpers({
+  isAllowed: function() {
+    return this.isOwner || this.isMember;
+  },
   website: function() {
     currentSlug = this._slug || '';
     currentTitle = this.project.title || '';
@@ -73,6 +76,26 @@ Template.projectView.helpers({
 })
 
 Template.projectView.events({
+  'click .comm_assets': function(e) {
+    e.preventDefault();
+    console.log('fofofofofofof')
+  },
+  'click .fulfill_gift': function(e) {
+    e.preventDefault();
+    var user_name = this.user && this.user.name || '';
+    var user_avatar = this.user && this.user.avatar || '';
+    var intmodal = bootbox.dialog({
+      title: 'Gift Fulfillment',
+      message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-sm-12 col-md-8 col-lg-5"> <div class="main-profile"> <div class="profile-header"> <img src="'+user_avatar+'" alt="'+user_name+'"> <h1>'+user_name+'</h1><p class="align-center">'+this.gift.name+'</p> </div><div> <p class="align-center">'+this.gift.description+'</p><h4>Ship to:</h4> <ul class="alt"> <li><p class="align-center">'+this.address+'</p></li><li><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></li></ul> </div></div></div></div></div>',
+      buttons: {
+        danger:  {
+          label: 'Close',
+          className: "btn-danger",
+          callback: function() { intmodal.modal('hide') }
+        }
+      }
+    });
+  },
   'click #donation_add_to': function(e) {
     e.preventDefault();
     donationObject = {};
@@ -373,7 +396,6 @@ Template.projectView.events({
       }
     });
   },
-
   "click #boardButton": function() {
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
@@ -406,7 +428,6 @@ Template.projectView.events({
     document.getElementById('comment-box').innerHTML = '';
     Meteor.call('addProjectComment', this._slug, 0, text);
   },
-
   'click #upvote': function() {
     Meteor.call('upvoteProject', this._slug);
   },

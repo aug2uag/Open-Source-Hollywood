@@ -1,30 +1,30 @@
 const css = ['core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
 
 function clearcss() {
-    return css.forEach(function(f) {
-        var href = '/css/' + f;
-        var _id = 'link[rel=stylesheet][href~="' + href + '"]';
-        $(_id).remove();
-    });
+    // return css.forEach(function(f) {
+    //     var href = '/css/' + f;
+    //     var _id = 'link[rel=stylesheet][href~="' + href + '"]';
+    //     $(_id).remove();
+    // });
 }
 
 function hasCore() {
-    return $("link[href='css/core.css']").length;
+    return false//$("link[href='css/core.css']").length;
 }
 
 function hasMain() {
-    return $("link[href='css/main.css']").length;   
+    return false//$("link[href='css/main.css']").length;   
 }
 
 
 
 function loadcss(f){
-    var href = '/css/' + f;
-    var ref=document.createElement("link")
-    ref.setAttribute("rel", "stylesheet")
-    ref.setAttribute("type", "text/css")
-    ref.setAttribute("href", href)
-    document.getElementsByTagName("head")[0].appendChild(ref)
+    // var href = '/css/' + f;
+    // var ref=document.createElement("link")
+    // ref.setAttribute("rel", "stylesheet")
+    // ref.setAttribute("type", "text/css")
+    // ref.setAttribute("href", href)
+    // document.getElementsByTagName("head")[0].appendChild(ref)
 };
 
 
@@ -80,13 +80,13 @@ Template.BoardsLayout.rendered = function() {
 }
 
 Template.StaticLayout.rendered = function() {
-    if (hasCore()) clearcss();
-    if (!hasMain()) loadcss('main.css');
+    // if (hasCore()) clearcss();
+    // if (!hasMain()) loadcss('main.css');
 
 }
 
 
 Template.SplashLayout.rendered = function() {
-    if (hasCore()) clearcss();
-    if (!hasMain()) loadcss('main.css');
+    // if (hasCore()) clearcss();
+    // if (!hasMain()) loadcss('main.css');
 }
