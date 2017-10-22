@@ -1,458 +1,80 @@
 <template name="profile">
-	<style type="text/css">
-		h1, .location, h2 {
-		  font-size: 1.5em;
-		}
-
-		.uis {
-			color: #333,
-			font-weight: 200;
-		}
-
-		.fauxpanel {
-			padding-top: 10px;
-		}
-
-		body {
-		  font-family: 'Roboto', sans-serif;
-		  font-size: 18px;
-		  font-weight: 300;
-		}
-
-		p {
-		  line-height: 1.45;
-		}
-
-		h1 {
-		  margin-bottom: 0.5em;
-		  font-weight: 400;
-		}
-
-		h2 {
-		  margin-bottom: 0.5em;
-		  margin-top: 0.5em;
-		}
-
-		.button {
-		  padding: 0.5em 1.5em;
-		  font-family: 'Roboto Condensed', 'Roboto', sans-serif;
-		  border: 1px solid;
-		  border-radius: 0.5em;
-		  cursor: pointer;
-		  transition: background 0.2s, color 0.2s;
-		}
-		.button:hover {
-		  background: white;
-		  color: #fff;
-		}
-
-		.main {
-		  max-width: 480px;
-		  margin: 70px auto;
-		  color: white;
-		}
-
-		.banner {
-		  box-sizing: border-box;
-		  height: 200px;
-		}
-
-		.banner-content {
-		  box-sizing: border-box;
-		  width: 140px;
-		  height: 100%;
-		  position: relative;
-		  padding: 27.2px 32px;
-		  float: right;
-		  text-align: right;
-		  background: #fff;
-		}
-		.banner-content:before {
-		  content: '';
-		  display: block;
-		  position: absolute;
-		  right: 99%;
-		  top: 0;
-		  border-style: solid;
-		  border-color: transparent;
-		  border-right-color: #fff;
-		  border-width: 0 200px 200px 200px;
-		  z-index: 0;
-		}
-		.banner-content > * {
-		  z-index: 1;
-		  position: relative;
-		  float: right;
-		}
-		.banner-content > *:nth-child(1) {
-		  width: 300%;
-		  float: right;
-		}
-
-		.banner-button {
-		  position: absolute;
-		  bottom: 32px;
-		  right: 32px;
-		}
-
-		.tabs {
-		  display: flex;
-		  flex-direction: column-reverse;
-		}
-
-		.tab {
-		  flex-grow: 1;
-		  text-align: center;
-		  font-family: 'Roboto Condensed', 'Roboto', sans-serif;
-		  font-weight: 300;
-		}
-		.tab a {
-		  display: block;
-		  padding: 3px;
-		  cursor: pointer;
-		}
-		.tab:hover, .tab.selected {
-		  color: #fff;
-		}
-
-		.tab-panes {
-		  padding: 0 32px 32px;
-		}
-
-		.tab-panes-2 {
-		  padding: 0 32px 0px;
-		}
-
-		.makeroom {
-			padding-bottom: 10px;
-		}
-
-		.skills-radar {
-		  width: 90%;
-		  height: 300px;
-		  margin: 0 auto;
-		  display: block;
-		  position: relative;
-    	  right: 60px;
-		}
-
-		table{
-		  width:100%;
-		  table-layout: fixed;
-		}
-		.tbl-content{
-		  height:auto;
-		  max-height: 300px;
-		  overflow-x:auto;
-		  margin-top: 0px;
-		  border: 1px solid rgba(255,255,255,0.3);
-		}
-		td{
-		  padding: 15px;
-		  text-align: left;
-		  vertical-align:middle;
-		  font-weight: 300;
-		  font-size: 12px;
-		  color: #333;
-		  border-bottom: solid 1px rgba(255,255,255,0.1);
-		}
-	</style>
-	<div class="container animated fadeIn">
-		<div class="main">
-			<div class="banner">
-			    <div class="banner-content">
-			      <h1>{{name}}</h1>
-			      {{ #if hasIAM }}
-				    <ul class="tabs">
-				      {{ #each iam }}
-				      <li class="tab"><p class="uis">{{ this }}</p></li>
-				      {{ /each }}
-				    </ul>
-				  {{ /if }}
-			    </div>
-			</div>
-			<style type="text/css">
-				.post {
-				  position: relative;
-				  width: 100%;
-				  max-width: 650px;
-				  margin: 0 auto;
-				  height: auto;
-				  background: 'white';
-				  border: 1px solid 'grey';
-				}
-
-				.post-content {
-				  width: 100%;
-				  height: auto;
-				  padding: 10px;
-				}
-				.post-content .post-media-text {
-				  display: table;
-				  margin-bottom: 10px;
-				}
-				.post-content .post-media,
-				.post-content .post-text {
-				  display: table-cell;
-				  vertical-align: top;
-				}
-				.post-content .post-media {
-				  width: 100px;
-				  min-width: 100px;
-				}
-				.post-content .post-media img {
-				  width: 100%;
-				  height: auto;
-				  max-width: 100%;
-				  max-height: 100%;
-				  border: 2px solid transparent;
-				}
-				.post-content .post-text {
-				  font-size: 14px;
-				  padding-left: 10px;
-				}
-
-				.post.post-view {
-				  max-width: 650px;
-				  margin: 0 auto;
-				}
-				.post.post-view .post-media-text {
-				  display: block;
-				  margin-bottom: 10px;
-				}
-				.post.post-view .post-media,
-				.post.post-view .post-text {
-				  display: block;
-				  vertical-align: none;
-				}
-				.post.post-view .post-media {
-				  width: 100%;
-				  min-width: 100px;
-				}
-
-				.post.image-view {
-				  width: calc(100% - 30px);
-				  height: calc(100% - 30px);
-				  max-width: 100%;
-				}
-				.post.image-view .post-header,
-				.post.image-view .post-content,
-				.post.image-view .post-footer {
-				  width: 350px;
-				  float: right;
-				  clear: both;
-				}
-				.post.image-view .post-header,
-				.post.image-view .post-footer {
-				  position: absolute;
-				  right: 0;
-				}
-				.post.image-view .post-content {
-				  height: calc(100% - 80px);
-				  margin-top: 50px;
-				  margin-bottom: 30px;
-				  padding: 10px;
-				  overflow: auto;
-				}
-				.post.image-view .post-media-text {
-				  display: block;
-				  margin-bottom: 10px;
-				}
-				.post.image-view .post-media,
-				.post.image-view .post-text {
-				  display: block;
-				  vertical-align: none;
-				}
-				.post.image-view .post-media {
-				  position: absolute;
-				  top: 0;
-				  left: 0;
-				  bottom: 0;
-				  background: '#333';
-				  width: calc(100% - 350px);
-				  height: 100%;
-				  padding: 10px;
-				}
-				.post.image-view .post-media img {
-				  display: block;
-				  width: auto;
-				  height: auto;
-				  max-width: 100%;
-				  max-height: 100%;
-				  margin: 0 auto;
-				}
-			</style>
-			<div class="content">
-		      	<div class="post">
-					<div class="post-content">
-						<div class="post-media-text">
-							<a href="" class="post-media">
-								<img src="{{ avatar }}" width="150px" alt="user avatar" />
-							</a>
-							<div class="post-text">
-								<h5>Score: {{influenceScore}}</h5>
-								<h5>Rating: {{rating}}/5</h5>
-								<p>Joined: {{createdAt}} </p>
-								{{ #if hasWebsite }}
-								<p><a href="{{ website }}" target="_blank">Website</a></p>
-								{{ /if }}
-							</div>
+	<div id="page-wrapper">
+	  <div id="main" class="wrapper style1">
+	      <div class="container">
+	          <header class="major">
+	              <h2><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{name}}</h2>
+	              <p>{{bio}}</p>
+	          </header>
+	          <section>
+		      {{ #if hasIAM }}
+			    <ul class="tabs">
+			      {{ #each iam }}
+			      <li class="tab"><p class="uis">{{ this }}</p></li>
+			      {{ /each }}
+			    </ul>
+			  {{ /if }}
+				<div class="content">
+			      	<div class="col-md-6">
+						<img src="{{ avatar }}" width="50%" alt="user avatar" />
+						<div class="post-text">
+							<h5>Score: {{influenceScore}}</h5>
+							<h5>Rating: {{rating}}/5</h5>
+							<p>Joined: {{createdAt}} </p>
+							{{ #if hasWebsite }}
+							<p><a href="{{ website }}" target="_blank">Website</a></p>
+							{{ /if }}
 						</div>
 					</div>
+					<div class="tab-panes">
+				      <div class="tab-pane">
+				      	{{ #if hasInterests }}
+				        <h2>Interests</h2>
+				        <canvas id="skills-radar" class="skills-radar"></canvas>
+				        {{ /if }}
+				        <br>
+				        <h2>Bio</h2>
+				        <p class="makeroom">{{bio}}</p>
+				      </div>
+				    </div>
 				</div>
-				<div class="tab-panes">
-			      <div class="tab-pane">
-			      	{{ #if hasInterests }}
-			        <h2>Interests</h2>
-			        <canvas id="skills-radar" class="skills-radar"></canvas>
-			        {{ /if }}
-			        <br>
-			        <h2>Bio</h2>
-			        <p class="makeroom">{{bio}}</p>
-			      </div>
-			    </div>
-			</div>
-			{{ #if hasLinks }}
-			<div class="content">
 				<div class="tab-panes-2">
 			      <div class="tab-pane">
-			        <h2>Social Media</h2>
+			        <h2>Previous Projects</h2>
 			      </div>
 			    </div>
-			  <div class="tbl-content">
-			    <table class="makeroom" cellpadding="0" cellspacing="0" border="0">
-			      <tbody>
-			      	{{ #each links }}
-				        <tr>
-				          <td><a class="uis" href="{{ this.url }}" target="_blank">{{ this.url }}</a></td>
-				        </tr>
-				    {{ /each }}
-			      </tbody>
-			    </table>
-			  </div>
-			</div>
-			{{ /if }}
-			{{ #if hasWorks }}
-			<div class="content">
-				<div class="tab-panes-2">
-			      <div class="tab-pane">
-			        <h2>Online Works</h2>
-			      </div>
-			    </div>
-			  <div class="tbl-content">
-			    <table class="makeroom" cellpadding="0" cellspacing="0" border="0">
-			      <tbody>
-			      	{{ #each works }}
-				        <tr>
-				          <td><a class="uis" href="{{ this.url }}" target="_blank">{{ this.url }}</a></td>
-				          <td><p>{{ this.description }}</p></td>
-				        </tr>
-				    {{ /each }}
-			      </tbody>
-			    </table>
-			  </div>
-			</div>
-			{{ /if }}
-			{{ #if hasHeadshots }}
-			<div class="content">
-			    <div class="tab-panes">
-			      <div class="tab-pane">
-			        <h2>Gallery</h2>
-			        <style type="text/css">
-
-						#gallery{
-						  -webkit-column-count:4;
-						  -moz-column-count:4;
-						  column-count:4;
-						  
-						  -webkit-column-gap:20px;
-						  -moz-column-gap:20px;
-						  column-gap:20px;
-						}
-						@media (max-width:1200px){
-						  #gallery{
-						  -webkit-column-count:3;
-						  -moz-column-count:3;
-						  column-count:3;
-						    
-						  -webkit-column-gap:20px;
-						  -moz-column-gap:20px;
-						  column-gap:20px;
-						}
-						}
-						@media (max-width:800px){
-						  #gallery{
-						  -webkit-column-count:2;
-						  -moz-column-count:2;
-						  column-count:2;
-						    
-						  -webkit-column-gap:20px;
-						  -moz-column-gap:20px;
-						  column-gap:20px;
-						}
-						}
-						@media (max-width:600px){
-						  #gallery{
-						  -webkit-column-count:1;
-						  -moz-column-count:1;
-						  column-count:1;
-						}  
-						}
-						.card{
-						  width:100%;
-						  height:auto;
-						  margin: 4% auto;
-						  box-shadow:-3px 5px 15px #000;
-						  cursor: pointer;
-						}
-						.modal-img,.model-vid{
-						  width:100%;
-						  height:auto;
-						}
-						.modal-body{
-						  padding:0px;
-						}
-					</style>
-					<div id="gallery" class="container-fluid">  
-					  {{ #each headshots }}
-					  	<img src=" {{ this.url }} " class="card img-responsive">
-					  {{ /each }}
-					</div>
-			      </div>
-			    </div>
-			</div>
-
-			<div id="myModal" class="modal fade" role="dialog">
-			  <div class="modal-dialog">
-
-			    <!-- Modal content-->
-			    <div class="modal-content">
-			      <div class="modal-body">
-			        <p>Some text in the modal.</p>
-			      </div>
-			    </div>
-
-			  </div>
-			</div>
-			{{ /if }}
-			<div class="tab-panes-2">
-		      <div class="tab-pane">
-		        <h2>Previous Projects</h2>
-		      </div>
-		    </div>
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<center>
-						{{#each userProjects}}
-						{{>userProject}}
-						{{/each}}
-					</center>
+				<ul class="alt">
+					{{#each userProjects}}
+					<li><a href="/projects/{{slug}}/{{ownerId}}" style="font-size: 1.5em;">{{title}}</a></li>
+					{{else}}
+					<li><a style="font-size: 1.5em;">N / A</a></li>
+					{{/each}}
+				</ul>
+				<div class="content">
+					<div class="tab-panes-2">
+				      <div class="tab-pane">
+				        <h2>Social Media &amp; Links</h2>
+				      </div>
+				    </div>
+				  <div class="table-wrapper">
+				    <table>
+				      <tbody>
+				      	{{ #each social }}
+					        <tr>
+					          <td><p class="align-center">{{this.name}}</p></td>
+					          <td><p class="align-center">{{this.address}}</p></td>
+					        </tr>
+					    {{ else }}
+					        <tr>
+					          <td><p class="align-center">N / A</p></td>
+					        </tr>
+					    {{ /each }}
+				      </tbody>
+				    </table>
+				  </div>
 				</div>
-			</div>
-		</div>
+	          </section>
+	      </div>
+	  </div>
 	</div>
-</template>
-
-<template name="userProject">
-	<p><a href="/projects/{{slug}}/{{ownerId}}">{{title}}</a></p>
 </template>

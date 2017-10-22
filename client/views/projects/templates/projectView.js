@@ -125,7 +125,7 @@ Template.projectView.events({
     var user_avatar = this.user && this.user.avatar || '';
     var intmodal = bootbox.dialog({
       title: 'Gift Fulfillment',
-      message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-sm-12 col-md-8 col-lg-5"> <div class="main-profile"> <div class="profile-header"> <img class="bootbox_img" src="'+user_avatar+'" alt="'+user_name+'"> <h1>'+user_name+'</h1><p class="align-center">'+this.gift.name+'</p> </div><div> <p class="align-center">'+this.gift.description+'</p><h4>Ship to:</h4> <ul class="alt"> <li><p class="align-center">'+this.address+'</p></li><li><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></li></ul> </div></div></div></div></div>',
+      message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-sm-12 col-md-8 col-lg-5"> <div class="main-profile"> <div class="profile-header"> <img class="bootbox_img" src="'+user_avatar+'" alt="'+user_name+'"> <h1 style="color:#333">'+user_name+'</h1><p class="align-center">'+this.gift.name+'</p> </div><div> <p class="align-center">'+this.gift.description+'</p><h4>Ship to:</h4> <ul class="alt"> <li><p class="align-center">'+this.address+'</p></li><li><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></li></ul> </div></div></div></div></div>',
       buttons: {
         danger:  {
           label: 'Close',

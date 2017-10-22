@@ -33,7 +33,7 @@ Template.receipts.helpers({
         return moment(this.created).format('MMMM Do YYYY, h:mm:ss a');
     },
     formatTitle: function() {
-        return this.projTitle;
+        return this.projTitle||this.projectTitle||this.title||'undefined';
     },
     formatAmount: function() {
         return '$' + this.amount.toFixed(2);
@@ -71,7 +71,7 @@ Template.comms.helpers({
         return moment(this.created).format('MM-DD-YY');
     },
     formatTitle: function() {
-        return this.projTitle;
+        return this.projTitle||this.projectTitle||this.title||'undefined';
     },
     formatAmount: function() {
         return '$' + this.amount.toFixed(2);

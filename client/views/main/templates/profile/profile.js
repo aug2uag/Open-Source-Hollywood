@@ -104,8 +104,8 @@ Template.profile.onRendered(function() {
 			showTooltips: false
 		};
 
-		var ctx = document.getElementById("skills-radar").getContext("2d");
-		var radar = new Chart(ctx).Radar(data, radarOpts);
+		// var ctx = document.getElementById("skills-radar").getContext("2d");
+		// var radar = new Chart(ctx).Radar(data, radarOpts);
 	});
 
 
