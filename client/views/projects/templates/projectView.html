@@ -48,13 +48,13 @@
                           </div>
                           
                           <div class="c-price__row">
-                            <div class="c-price__index"> users applied </div>
+                            <div class="c-price__index"> active applications </div>
                             <div class="c-price__value c-price__value--green">{{usersApplied}}</div>
                           </div>
                           
                           <div class="c-price__row">
-                            <div class="c-price__index"> users approved </div>
-                            <div class="c-price__value c-price__value--green">{{usersApproved}}</div>
+                            <div class="c-price__index"> equity distributed </div>
+                            <div class="c-price__value c-price__value--green">{{equityDistributed}}%</div>
                           </div>        
                           
                           <div class="c-price__row">
@@ -395,9 +395,9 @@
             <td><p class="align-center">{{appliedFor}}</p></td>
             <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
             <td><a style="width:100%" class="button view_offer">VIEW OFFER</a></td>
-            <td><a style="width:100%" class="button special accept_role"><p class="align-center">ACCEPT</p></a></td>
-            <td><a style="width:100%" class="button special_reject reject_role"><p class="align-center">REJECT</p></a></td>
-            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button">GO</a></td>
+            <td><a style="width:100%" class="button special accept"><p class="align-center">ACCEPT</p></a></td>
+            <td><a style="width:100%" class="button special_reject reject"><p class="align-center">REJECT</p></a></td>
+            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
         {{/each}} 
@@ -430,9 +430,9 @@
             <td><p class="align-center">{{appliedFor}}</p></td>
             <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
             <td><a style="width:100%" class="button view_offer">VIEW OFFER</a></td>
-            <td><a style="width:100%" class="button special accept_role"><p class="align-center">ACCEPT</p></a></td>
-            <td><a style="width:100%" class="button special_reject reject_role"><p class="align-center">REJECT</p></a></td>
-            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button">GO</a></td>
+            <td><a style="width:100%" class="button special accept"><p class="align-center">ACCEPT</p></a></td>
+            <td><a style="width:100%" class="button special_reject reject"><p class="align-center">REJECT</p></a></td>
+            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
         {{/each}}
@@ -467,12 +467,6 @@
         {{else}}
         {{/each}}
       </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2">Total offers for resources</td>
-          <td>{{project.offeredResources.length}}</td>
-        </tr>
-      </tfoot>
     </table>
   </div>
   <br>
@@ -485,6 +479,7 @@
           <th><p class="align-center">Purchaser</p></th>
           <th><p class="align-center">Amount</p></th>
           <th><p class="align-center">FULFILL</p></th>
+          <th><p class="align-center">Message</p></th>
         </tr>
       </thead>
       <tbody>
@@ -495,6 +490,7 @@
             <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
             <td><p class="align-center">{{amount}}</p></td>
             <td><a class="button special fulfill_gift" style="width: 100%;">FULFILL</a></td>
+            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
         {{/each}}

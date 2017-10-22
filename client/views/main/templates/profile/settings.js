@@ -88,10 +88,7 @@ Template.settings.events({
 			_o.address = $(arr[1]).text();
 			o.reels.push(_o);
 		});
-
-		console.log(new Array(100).join('*'))
-		console.log(o)
-
+		
 		Meteor.call('upgradeProfile', o);
 
 	},
@@ -141,7 +138,7 @@ Template.settings.events({
 Template.settings.helpers({
 	foo: function() {
 		var x = Meteor.user();
-		return !!x.primaryRole && (x.iam && x.iam.length);
+		return !(x.primaryRole || (x.iam && x.iam.length));
 	},
 	bio: function() {
 		return Meteor.user().bio || 'describe yourself and your experiences'

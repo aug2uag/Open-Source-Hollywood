@@ -8,9 +8,9 @@
 	          </header>
 	          <section>
 		      {{ #if hasIAM }}
-			    <ul class="tabs">
+			    <ul style="display: -webkit-box;list-style: cjk-ideographic;position: relative;left: 22.5%;">
 			      {{ #each iam }}
-			      <li class="tab"><p class="uis">{{ this }}</p></li>
+			      <li style="padding-right: 40px;position: relative;left: 30px;">{{ this }}</li>
 			      {{ /each }}
 			    </ul>
 			  {{ /if }}
@@ -26,40 +26,31 @@
 							{{ /if }}
 						</div>
 					</div>
-					<div class="tab-panes">
-				      <div class="tab-pane">
-				      	{{ #if hasInterests }}
-				        <h2>Interests</h2>
-				        <canvas id="skills-radar" class="skills-radar"></canvas>
-				        {{ /if }}
-				        <br>
-				        <h2>Bio</h2>
-				        <p class="makeroom">{{bio}}</p>
-				      </div>
-				    </div>
 				</div>
-				<div class="tab-panes-2">
-			      <div class="tab-pane">
-			        <h2>Previous Projects</h2>
-			      </div>
-			    </div>
-				<ul class="alt">
-					{{#each userProjects}}
-					<li><a href="/projects/{{slug}}/{{ownerId}}" style="font-size: 1.5em;">{{title}}</a></li>
-					{{else}}
-					<li><a style="font-size: 1.5em;">N / A</a></li>
-					{{/each}}
-				</ul>
-				<div class="content">
-					<div class="tab-panes-2">
-				      <div class="tab-pane">
-				        <h2>Social Media &amp; Links</h2>
-				      </div>
-				    </div>
-				  <div class="table-wrapper">
-				    <table>
-				      <tbody>
-				      	{{ #each social }}
+				<h2>Bio</h2>
+				<p class="makeroom">{{bio}}</p>
+				<hr>
+				<h2>Previous Campaigns</h2>
+				<div class="table-wrapper">
+					<table>
+					  <tbody>
+					  	{{#each userProjects}}
+						  	<tr>
+					          <td><a href="/projects/{{slug}}/{{ownerId}}" style="font-size: 1.5em;">{{title}}</a></td>
+					        </tr>
+					    {{ else }}
+					        <tr>
+					          <td><p class="align-center">N / A</p></td>
+					        </tr>
+					    {{ /each }}
+					  </tbody>
+					</table>
+				</div>
+				<h2>Reels, Headshots, and Previous Work</h2>
+				<div class="table-wrapper">
+					<table>
+					  <tbody>
+					  	{{ #each reels }}
 					        <tr>
 					          <td><p class="align-center">{{this.name}}</p></td>
 					          <td><p class="align-center">{{this.address}}</p></td>
@@ -69,9 +60,42 @@
 					          <td><p class="align-center">N / A</p></td>
 					        </tr>
 					    {{ /each }}
-				      </tbody>
-				    </table>
-				  </div>
+					  </tbody>
+					</table>
+				</div>
+				<h2>Social Media &amp; Links</h2>
+				<div class="table-wrapper">
+					<table>
+					  <tbody>
+					  	{{ #each social }}
+					        <tr>
+					          <td><p class="align-center">{{this.name}}</p></td>
+					          <td><p class="align-center">{{this.address}}</p></td>
+					        </tr>
+					    {{ else }}
+					        <tr>
+					          <td><p class="align-center">N / A</p></td>
+					        </tr>
+					    {{ /each }}
+					  </tbody>
+					</table>
+				</div>
+				<h2>User Owned Assets</h2>
+				<div class="table-wrapper">
+					<table>
+					  <tbody>
+					  	{{ #each assets }}
+					        <tr>
+					          <td><p class="align-center">{{this.name}}</p></td>
+					          <td><p class="align-center">{{this.address}}</p></td>
+					        </tr>
+					    {{ else }}
+					        <tr>
+					          <td><p class="align-center">N / A</p></td>
+					        </tr>
+					    {{ /each }}
+					  </tbody>
+					</table>
 				</div>
 	          </section>
 	      </div>

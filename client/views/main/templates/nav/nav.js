@@ -12,15 +12,15 @@ Template.nav.helpers({
 
 Template.nav.events({
   'click #signout': function() {
+    $('html').css('visibility', 'hidden');
     setTimeout(function() {
-      Meteor.logout();
-      Meteor.logoutOtherClients();
-      Router.go('Home');
-      setTimeout(function() {
-        window.location.assign('/');
-        document.title = "Open Source Hollywood";
-      }, 300);
-    }, 500);
+        $('html').css('visibility', 'visible');
+    }, 610);
+    Meteor.logout();
+    Meteor.logoutOtherClients();
+    Router.go('Home');
+    window.location.assign('/');
+    document.title = "Open Source Hollywood";
   },
   'click #profile': function() {
     document.title = 'Profile View';

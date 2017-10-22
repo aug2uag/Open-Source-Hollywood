@@ -1,7 +1,7 @@
 const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
 const StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
 var donationObject = {};
-var currentSlug, currentTitle, destinationAccount;
+var currentSlug, currentTitle, destinationAccount, currentProject;
 function loadcss(f){
     var href = '/css/' + f;
     var ref=document.createElement("link")
@@ -25,7 +25,6 @@ function makeStripeCharge(options) {
         Meteor.call(options.route, options, function(err, result) {
           if (err) bootbox.alert('your payment failed');
           bootbox.alert(result)
-
         });
       } else {
         bootbox.alert('your payment did not succeed');
@@ -34,7 +33,27 @@ function makeStripeCharge(options) {
   });
 }
 
+function generateOfferMessage(offer){
+  var message = "Please confirm:\n\nyou are accepting ";
+  message+= offer.user.name;
+  if (offer.type==='sourced') {
+    var expiresOn = new Date(offer.expires).toLocaleDateString();
+    message += ' as unpaid position that is offering $'+offer.pay+' conditioned to your agreement and that expires on '+expiresOn;
+  } else {
+    message += ' as paid position for ';
+    if (offer.pay) message+='$'+offer.pay;
+    if (offer.pay&&offer.equity) message+=' and ';
+    if (offer.equity) message+=offer.equity+'%';
+  }
+  message+=' to join your campaign as '+offer.appliedFor;
+  message+='. This is a binding agreement, and your acceptance also confirms your agreement to our Terms and Conditions.';
+  return message;
+}
+
 function acceptUser(offer) {
+  console.log('acceptUser')
+  console.log(offer)
+  offer.slug = currentSlug;
   // 1) handle money
   // if pay $
       // is there enough money to cover half?
@@ -58,21 +77,131 @@ function acceptUser(offer) {
 
 
   // 3) notify applicant
+
+  bootbox.confirm({
+      message: generateOfferMessage(offer),
+      buttons: {
+          confirm: {
+              label: 'I WANT '+offer.user.name.toUpperCase()+' TO JOIN',
+              className: 'btn-success'
+          },
+          cancel: {
+              label: 'Cancel',
+              className: 'btn-danger'
+          }
+      },
+      callback: function (result) {
+        console.log('This was logged in the callback: ' + result);
+        if (result) {
+          console.log('acceptUserToProject')
+          Meteor.call('acceptUserToProject', offer);
+
+
+          bootbox.alert('you have accepted the user, you can update the status of your positions in the "Edit Campaign" section and by rejecting other users applying for the same position');
+
+
+          // var arr = currentProject[offer.ctx];
+          // var nameKey = offer.ctx==='cast'?'role':'title';
+          // var modal = '<style>input[type="checkbox"]:checked + label:before, input[type="radio"]:checked + label:before{color:#333}</style><div class="table-wrapper"><table><tbody>';
+          // var labelNeeded = '<label for="position-radio-needed">Needed</label>';
+          // var labelFulfilled = '<label for="position-radio-fulfilled">Fulfilled</label>';
+
+          // arr.forEach(function(a, i) {
+          //   var checkedNeeded = '<input type="radio" name="position-radio'+i+'" value="needed" checked>';
+          //   var uncheckedNeeded = '<input type="radio" name="position-radio'+i+'" value="needed">';
+          //   var checkedFulfilled = '<input type="radio" name="position-radio'+i+'" value="fulfilled" checked>';
+          //   var uncheckedFulfilled = '<input type="radio" name="position-radio'+i+'" value="fulfilled">';
+          //   modal+='<tr>';
+          //   modal+='<td>'+a[nameKey]+'</td>';
+          //   modal+='<td>';
+          //   if (a.status==='needed') {
+          //     modal+=checkedNeeded+labelNeeded+uncheckedFulfilled+labelFulfilled;
+          //   } else {
+          //     modal+=uncheckedNeeded+labelNeeded+checkedFulfilled+labelFulfilled;
+          //   }
+          //   modal+='</td>'
+          //   modal+='</tr>';
+          // });
+          // console.log(arr)
+          // update role
+          /**
+            
+                
+                    
+                        <tr>
+                            <td><input type="text" name="title" id="crew-title" placeholder="Title" /></td>
+                            <td><input type="text" name="title" id="crew-description" placeholder="Description" /></td>
+                            <td>
+                                <input type="radio" id="crew-radio-needed" name="crew-radio" value="needed" checked>
+                                <label for="crew-radio-needed">Needed</label>
+                                <input type="radio" id="crew-radio-fulfilled" name="crew-radio" value="fulfilled">
+                                <label for="crew-radio-fulfilled">Fulfilled</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        */
+          // var intmodal = bootbox.dialog({
+          //   title: 'Update Campaign '+nameKey.toUpperCase()+' Positions',
+          //   message: modal,
+          //   buttons: {
+          //     danger:  {
+          //       label: 'Close',
+          //       className: "btn-danger",
+          //       callback: function() { intmodal.modal('hide') }
+          //     },
+          //     success: {
+          //       label: 'Update',
+          //       className: 'btn-success',
+          //       callback: function() {
+          //         console.log('hallelujah')
+          //       }
+          //     }
+          //   }
+          // });
+        }
+      }
+  });
 }
 
 
 function rejectUser(offer) {
+  console.log('rejectUser')
+  console.log(offer)
+  offer.slug = currentSlug;
   // 1) notify applicant
   // 2) refund money if applicable
   // 3) update project
+  bootbox.confirm({
+      message: "Please confirm: you are rejecting " + offer.user.name,
+      buttons: {
+          confirm: {
+              label: 'Yes',
+              className: 'btn-success'
+          },
+          cancel: {
+              label: 'No',
+              className: 'btn-danger'
+          }
+      },
+      callback: function (result) {
+        console.log('This was logged in the callback: ' + result);
+        if (result) {
+          Meteor.call('rejectUserFromProject', offer);
+        };
+      }
+  });
 }
 
 Template.projectView.helpers({
   usersApplied: function() {
+    console.log('usersApplied')
     console.log(this)
+    return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
   },
-  usersApproved: function() {
-
+  equityDistributed: function() {
+    return this.project.equityAllocated||0;
   },
   isAllowed: function() {
     return this.isOwner || this.isMember;
@@ -80,6 +209,7 @@ Template.projectView.helpers({
   website: function() {
     currentSlug = this._slug || '';
     currentTitle = this.project.title || '';
+    currentProject = this.project;
     destinationAccount = this.project.account && this.project.account.id || '';
     return this.project.website || 'not specified';
   },
@@ -115,6 +245,14 @@ Template.projectView.helpers({
 })
 
 Template.projectView.events({
+  'click .accept': function(e) {
+    e.preventDefault();
+    acceptUser(this);
+  },
+  'click .reject': function(e) {
+    e.preventDefault();
+    rejectUser(this);
+  },
   'click .comm_assets': function(e) {
     e.preventDefault();
     console.log('fofofofofofof')
@@ -238,7 +376,7 @@ Template.projectView.events({
           */
           var innermodal = bootbox.dialog({
             title: was.title.toUpperCase(),
-            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h4> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
+            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h5> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision before the expiration date</p></h5> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
             buttons: {
               danger:  {
                 label: 'Cancel',
@@ -323,7 +461,7 @@ Template.projectView.events({
           */
           var innermodal = bootbox.dialog({
             title: was.role.toUpperCase(),
-            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h4> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
+            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h5> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision before the expiration date</p></h5> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
             buttons: {
               danger:  {
                 label: 'Cancel',
