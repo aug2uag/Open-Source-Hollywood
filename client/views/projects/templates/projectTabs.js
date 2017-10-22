@@ -1,3 +1,28 @@
+const StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
+
+function makeStripeCharge(options) {
+  StripeCheckout.open({
+    key: StripePublicKey,
+    amount: Math.abs(Math.floor(options.amount*100))<1?1:Math.abs(Math.floor(options.amount*100)),
+    currency: 'usd',
+    name: options.message,
+    description: options.description || 'opensourcehollywood.org',
+    panelLabel: 'Pay Now',
+    token: function(_token) {
+      if (_token) {
+        options.token = _token;
+        Meteor.call(options.route, options, function(err, result) {
+          if (err) bootbox.alert('your payment failed');
+          bootbox.alert(result)
+
+        });
+      } else {
+        bootbox.alert('your payment did not succeed');
+      }
+    }
+  });
+}
+
 Handlebars.registerHelper('each_with_index', function(array, fn) {
   var buffer, i, item, j, len;
   buffer = '';
@@ -126,11 +151,69 @@ Template.projectTabs.events({
 });
 
 Template.projectTabs.events({
-  'click #createnewproject': function() {
+  'click #createnewproject': function(e) {
     if (!Meteor.user()) {
       return bootbox.alert('you must sign in to do that')
     };
     Router.go('Create Project');
+  },
+  'click .quick_apply': function(e) {
+    e.preventDefault();
+    var was = this;
+    console.log(was)
+    var innermodal = bootbox.dialog({
+      title: 'Apply for a positions',
+      message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h4> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision</p></h4> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
+      buttons: {
+        danger:  {
+          label: 'Cancel',
+          className: "btn-danger",
+          callback: function() { innermodal.modal('hide') }
+        }, 
+        success: {
+          label: "PROCEED",
+          className: "btn-success",
+          callback: function() {
+            var s = $("input:radio[name='apply_type']:checked").val(), o = {ctx:'crew', position:'ANY'};
+            if (s==='hired') {
+              var pay = parseFloat($('#apply-pay').val());
+              var equity = parseFloat($('#apply-equity').val());
+              o.type = 'hired';
+              if (pay&&typeof pay==='number'&&pay>1) o.pay=pay;
+              if (equity&&typeof equity==='number'&&equity>1) o.equity=equity;
+            } else {
+              var pay = parseFloat($('#apply-gratis').val());
+              o.type = 'sourced';
+              if (pay&&typeof pay==='number'&&pay>=0) o.pay=pay;
+              o.expires=$('#apply-gratis-exp').val();
+            }
+            if (!o.pay) o.type='hired';
+            if (o.pay) o.amount = o.pay;
+            o.message = was.title + ' application';
+            o.destination = was.account.id;
+            o.route = 'applyToProject';
+            o.slug = was.slug;
+            o.appliedFor = 'any cast or crew position that is the best fit';
+            if (o.pay&&o.type!=='hired') makeStripeCharge(o);
+            else Meteor.call(o.route, o, function(err, result) {
+              bootbox.alert(err||result);
+            });
+          }
+        }
+      }
+    }).on('shown.bs.modal', function (e) {
+      $("input:radio[name='apply_type']").change(function(){
+        $('#apply_instruct').hide();
+          var _val = $(this).val();
+         if(_val==='hired'){
+          $('#forhired').show();
+          $('#forsourced').hide();
+         }else{
+          $('#forhired').hide();
+          $('#forsourced').show(); 
+         }
+      });
+    });
   }
 })
 

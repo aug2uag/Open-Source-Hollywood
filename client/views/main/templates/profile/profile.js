@@ -5,6 +5,9 @@ Template.profile.helpers({
 	avatar: function() {
 		return this.avatar;
 	},
+	role: function() {
+		return this.primaryRole || this.iam.split(' || ') || 'this user likes to keep an air of mystery about them';
+	},
 	bio: function() {
 		return this.bio || 'no bio available';
 	},
