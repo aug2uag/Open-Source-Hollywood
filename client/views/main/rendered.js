@@ -71,7 +71,7 @@ Template.BoardsLayout.rendered = function() {
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
-    }, 610);
+    }, 377);
     clearcss();
     this.autorun(function() {
         css.forEach(function(f) {
@@ -89,7 +89,7 @@ Template.StaticLayout.rendered = function() {
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
-    }, 610);
+    }, 377);
     clearcss();
     loadcss('main.css');
 
@@ -99,10 +99,8 @@ Template.StaticLayout.rendered = function() {
 Template.SplashLayout.rendered = function() {
     // if (hasCore()) clearcss();
     // if (!hasMain()) loadcss('main.css');
-    $('html').css('visibility', 'hidden');
-    setTimeout(function() {
-        $('html').css('visibility', 'visible');
-    }, 610);
-    clearcss();
-    loadcss('main.css');
+    // $('html').css('visibility', 'hidden');
+    // setTimeout(function() {
+    //     $('html').css('visibility', 'visible');
+    // }, 55);
 }

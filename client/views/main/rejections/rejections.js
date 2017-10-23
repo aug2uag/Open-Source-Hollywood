@@ -54,14 +54,7 @@ Template.comms.helpers({
     },
     comms: function() {
         return Notifications.find({
-            $or: [
-                {
-                    user: Meteor.user()._id
-                },
-                {
-                    from: Meteor.user()._id
-                }
-            ]
+            user: Meteor.user()._id
         });
     },
     receiptsList: function() {

@@ -196,15 +196,16 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   usersApplied: function() {
-    console.log('usersApplied')
-    console.log(this)
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
   },
   equityDistributed: function() {
     return this.project.equityAllocated||0;
   },
   isAllowed: function() {
-    return this.isOwner || this.isMember;
+    // if owner or accepted user
+    var projectOwnerId = this.project.ownerId;
+    var acceptedUsers = this.project.acceptedUsers;
+    return Meteor.user()._id === projectOwnerId || acceptedUsers.indexOf(Meteor.user()._id)>-1;
   },
   website: function() {
     currentSlug = this._slug || '';

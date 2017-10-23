@@ -375,7 +375,6 @@
 </template>
 
 <template name="applicants">
-  {{yolo}}
   <h3>Applicants for Roles</h3>
   <div class="table-wrapper">
     <table>
@@ -458,7 +457,6 @@
       </thead>
       <tbody>
         {{#each this.project.offeredResources}}
-          {{yolo}}
           <tr>
             <td><p class="align-center">{{asset}}</p></td>
             <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
@@ -484,7 +482,6 @@
       </thead>
       <tbody>
         {{#each this.project.giftPurchases}}
-          {{yolo}}
           <tr>
             <td><p class="align-center">{{gift.name}}</p></td>
             <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
@@ -509,7 +506,6 @@
       </thead>
       <tbody>
         {{#each this.project.donations}}
-          {{yolo}}
           <tr>
             <td><p class="align-center_min">{{donationObject.user.first}} {{donationObject.user.last}}</p></td>
             <td><p class="align-center_min">${{amount}}</p></td>

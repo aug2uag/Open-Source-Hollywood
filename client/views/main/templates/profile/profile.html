@@ -8,11 +8,13 @@
 	          </header>
 	          <section>
 		      {{ #if hasIAM }}
-			    <ul style="display: -webkit-box;list-style: cjk-ideographic;position: relative;left: 22.5%;">
+		      <div class="table_hul">
+			    <ul style="display: -webkit-box;list-style: cjk-ideographic;position: relative;">
 			      {{ #each iam }}
 			      <li style="padding-right: 40px;position: relative;left: 30px;">{{ this }}</li>
 			      {{ /each }}
 			    </ul>
+			  </div>
 			  {{ /if }}
 				<div class="content">
 			      	<div class="col-md-6">
