@@ -193,3 +193,42 @@ Router.route('/edit/projects/:slug/edit', {
     });
   }
 });
+
+Router.route('/message/project/:slug/:uid', {
+  name: 'ProjectMessage',
+  template: 'projectMessage',
+  layoutTemplate: 'StaticLayout',
+  onBeforeAction: function() {
+    this.next();
+  },
+  waitOn: function() {
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
+    }
+    return [
+      Meteor.subscribe('getProject', this.params.slug), 
+      Meteor.subscribe('getUsers'),
+      Meteor.subscribe('getMe'),
+      Meteor.subscribe('getComms'),
+      Meteor.subscribe('getReceipts'),
+      Meteor.subscribe('getProjectMessages')
+    ];
+  },
+  data: function() {
+    var slug = this.params.slug;
+    var project = Projects.findOne({slug: this.params.slug});
+    var user = Users.findOne({_id: this.params.uid});
+    var notifications = Notifications.find({user: user._id, slug: project.slug});
+    var receipts = Receipts.find({user: user._id, slug: project.slug});
+    var messages = ProjectMessages.find({user: user._id, project: project._id});
+    return {
+      project: project,
+      user: user,
+      notifications: notifications,
+      receipts: receipts,
+      messages: messages
+    }
+  }
+})

@@ -1,0 +1,51 @@
+<template name="projectMessage">
+    
+  <div id="page-wrapper">
+        <!-- Main -->
+        <div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2>{{title}}</h2>
+                    <p>Enter the details of your vision below.</p>
+                </header>
+
+                <section>
+                    
+                    <h3>The following are actions made by Rex for the {{project.title}} campaign</h3>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <tbody>
+                                {{#each notifications}}
+                                <tr>
+                                    <td>{{message}}</td>
+                                </tr>
+                                {{else}}
+                                <tr>
+                                    <td>N / A</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </section>
+
+                <section>
+                    <div class="w100">
+                        <div style="position:relative;padding-top:20px;width:80%">
+                          <h4>{{numMessages}}</h4>
+                          <br>
+                          {{#each messages}}
+                          {{> comment}}
+                          {{/each}}
+                          {{> messageBox}}
+                        </div>
+                      </div>    
+                </section>
+                
+            </div>
+        </div>
+  </div>
+
+</template>

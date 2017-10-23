@@ -26,3 +26,11 @@ Router.route('/boards/:boardId/:slug/:cardId', {
         });
     }
 });
+
+
+Router.route('/markdown', {
+
+    name: 'Markdown',
+    template: 'markdownInfo',
+    layoutTemplate: 'StaticLayout'
+})
