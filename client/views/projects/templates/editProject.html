@@ -44,16 +44,16 @@
                             <div class="select-wrapper">
                               <select name="category" id="category">
                                 <option>- Format -</option>
-                                <option>Feature</option>
-                                <option>Short Film</option>
-                                <option>Series</option>
-                                <option>Sketch</option>
-                                <option>Animations</option>
-                                <option>Theater art</option>
-                                <option>Ensemble</option>
-                                <option>Live Performance</option>
-                                <option>Music Video</option>
-                                <option>Other</option>
+                                <option vla="Feature">Feature</option>
+                                <option vla="Short Film">Short Film</option>
+                                <option vla="Series">Series</option>
+                                <option vla="Sketch">Sketch</option>
+                                <option vla="Animations">Animations</option>
+                                <option vla="Theater">Theater</option>
+                                <option vla="Ensemble">Ensemble</option>
+                                <option vla="Live Performance">Live Performance</option>
+                                <option vla="Music Video">Music Video</option>
+                                <option vla="Other">Other</option>
                               </select>
                             </div>
                         </div>
@@ -63,9 +63,9 @@
                             <div class="select-wrapper">
                               <select name="purpose" id="purpose">
                                 <option>Unspecified</option>
-                                <option>Print Media</option>
-                                <option>Motion Picture</option>
-                                <option>Performance</option>
+                                <option val="Print Media">Print Media</option>
+                                <option val="Motion Picture">Motion Picture</option>
+                                <option val="Performance">Performance</option>
                               </select>
                             </div>
                         </div>
@@ -149,7 +149,12 @@
                                 <tr class="crew-val">
                                   <td>{{title}}</td>
                                   <td>{{description}}</td>
-                                  <td>{{status}}</td>
+                                  <td>
+                                        <input type="radio" id="crew-radio-needed{{@index}}" name="crew-radio{{@index}}" value="needed" {{neededCheck}}>
+                                        <label for="crew-radio-needed{{@index}}">Needed</label>
+                                        <input type="radio" id="crew-radio-fulfilled{{@index}}" name="crew-radio{{@index}}" value="fulfilled"  {{fulfilledCheck}}>
+                                        <label for="crew-radio-fulfilled{{@index}}">Fulfilled</label>
+                                  </td>
                                   <td><button class="deleteRow button small">X</button></td>
                                 </tr>
                               {{/each}}
@@ -195,10 +200,15 @@
                             </thead>
                             <tbody id="cast-table">
                               {{#each cast}}
-                                <tr class="crew-val">
+                                <tr class="cast-val">
                                   <td>{{role}}</td>
                                   <td>{{description}}</td>
-                                  <td>{{status}}</td>
+                                  <td>
+                                        <input type="radio" id="cast-radio-needed{{@index}}" name="cast-radio{{@index}}" value="needed" {{neededCheck}}>
+                                        <label for="cast-radio-needed{{@index}}">Needed</label>
+                                        <input type="radio" id="cast-radio-fulfilled{{@index}}" name="cast-radio{{@index}}" value="fulfilled" {{fulfilledCheck}}>
+                                        <label for="cast-radio-fulfilled{{@index}}">Fulfilled</label>
+                                   </td>
                                   <td><button class="deleteRow button small">X</button></td>
                                 </tr>
                               {{/each}}
@@ -253,10 +263,10 @@
                             </thead>
                             <tbody id="needs-table">
                               {{#each needs}}
-                                <tr class="crew-val">
+                                <tr class="needs-val">
                                   <td>{{category}}</td>
                                   <td>{{description}}</td>
-                                  <td>{{quantity}}</td>
+                                  <td><input type="text" id="needs-quant{{@index}}" value="{{quantity}}" /></td>
                                   <td><button class="deleteRow button small">X</button></td>
                                 </tr>
                               {{/each}}
@@ -317,7 +327,7 @@
                             </thead>
                             <tbody id="social-table">
                               {{#each social}}
-                                <tr class="crew-val">
+                                <tr class="social-val">
                                   <td>{{name}}</td>
                                   <td>{{address}}</td>
                                   <td><button class="deleteRow button small">X</button></td>
@@ -367,7 +377,7 @@
                             </thead>
                             <tbody id="gift-table">
                               {{#each gifts}}
-                                <tr class="crew-val">
+                                <tr class="gift-val">
                                   <td>{{name}}</td>
                                   <td>{{description}}</td>
                                   <td>{{quantity}}</td>

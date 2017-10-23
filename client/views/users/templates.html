@@ -44,21 +44,21 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Number of tasks</th>
+                    <th style="color:#333">Number of tasks</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Total</td>
-                    <td>{{ tasks.tasksTotal }}</td>
+                    <td style="color:#333">Total</td>
+                    <td style="color:#333">{{ tasks.tasksTotal }}</td>
                 </tr>
                 <tr>
-                    <td>Finished</td>
-                    <td>{{ tasks.tasksCompleted }}</td>
+                    <td style="color:#333">Finished</td>
+                    <td style="color:#333">{{ tasks.tasksCompleted }}</td>
                 </tr>
                 <tr>
-                    <td>Remaining</td>
-                    <td>{{ tasks.tasksRemaining }}</td>
+                    <td style="color:#333">Remaining</td>
+                    <td style="color:#333">{{ tasks.tasksRemaining }}</td>
                 </tr>
             </tbody>
         </table>
@@ -68,17 +68,17 @@
 <template name="asssPopup">
     <br><br>
     {{#if noAsss}}
-    <h3>There are no assets</h3>
+    <h3 style="color:#333">There are no assets</h3>
     {{else}}
     <div class="board-member-menu">
         {{#each asss}}
             <div class="list-group">
-                <a class="list-group-item list-card-details clearfix show active" href="{{ this.card }}">
+                <a style="color:#333" class="list-group-item list-card-details clearfix show active" href="{{ this.card }}">
                     View Asset
                 </a>
               {{#each this.val}}
-                <li class="list-group-item">
-                    <span class="asset_popup_mime label label-default label-pill pull-xs-right">{{this.type}}</span>
+                <li class="list-group-item" style="color:#333">
+                    <span style="color:#333" class="asset_popup_mime label label-info label-pill pull-xs-right">{{this.type}}</span>
                     {{this.name}}
               </li>
               {{/each}}
@@ -92,7 +92,7 @@
     <br/><br/>
     {{#each mine}}
         <div class="list-group">
-            <a class="list-group-item list-card-details clearfix show active" href="{{ this.href }}">
+            <a style="color:#333" class="list-group-item-info list-card-details clearfix show" href="{{ this.href }}">
                 {{this.title}}
             </a>
         </div>

@@ -51,8 +51,6 @@ function generateOfferMessage(offer){
 }
 
 function acceptUser(offer) {
-  console.log('acceptUser')
-  console.log(offer)
   offer.slug = currentSlug;
   // 1) handle money
   // if pay $
@@ -91,9 +89,7 @@ function acceptUser(offer) {
           }
       },
       callback: function (result) {
-        console.log('This was logged in the callback: ' + result);
         if (result) {
-          console.log('acceptUserToProject')
           Meteor.call('acceptUserToProject', offer);
 
 
@@ -167,8 +163,6 @@ function acceptUser(offer) {
 
 
 function rejectUser(offer) {
-  console.log('rejectUser')
-  console.log(offer)
   offer.slug = currentSlug;
   // 1) notify applicant
   // 2) refund money if applicable
@@ -186,7 +180,6 @@ function rejectUser(offer) {
           }
       },
       callback: function (result) {
-        console.log('This was logged in the callback: ' + result);
         if (result) {
           Meteor.call('rejectUserFromProject', offer);
         };
@@ -253,10 +246,6 @@ Template.projectView.events({
   'click .reject': function(e) {
     e.preventDefault();
     rejectUser(this);
-  },
-  'click .comm_assets': function(e) {
-    e.preventDefault();
-    console.log('fofofofofofof')
   },
   'click .fulfill_gift': function(e) {
     e.preventDefault();
@@ -622,13 +611,12 @@ Template.projectView.onRendered(function() {
 
 Template.applicants.helpers({
   yolo: function() {
-    console.log(this)
+    // console.log(this)
   }
 })
 
 Template.applicants.events({
   'click .view_offer': function(e) {
-    console.log(this)
     var was = this;
     // var message;
     // if (was.type==='sourced') {
@@ -653,8 +641,5 @@ Template.applicants.events({
         }
       }
     });
-  },
-  'click .cast_offer': function(e) {
-    console.log(this)
   }
 })

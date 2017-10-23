@@ -39,17 +39,15 @@ Template.editProject.events({
               campcallback();
             };
           } catch (e) {
-            console.log(e)
-            bootbox.alert('something went wrong, please try again')
-          }
+            console.log(e);
+            bootbox.alert('something went wrong, please try again');
+          };
         };
       };
-
       client.send();
     } else {
       return bootbox.alert('invalid zip code, please try again');
     }
-
     function campcallback() {
       o.title = $('#title').val() || 'untitled';
       o.logline = $('#logline').val() || 'nothing to see here';
@@ -86,7 +84,7 @@ Template.editProject.events({
         var arr = $(el).children('td');
         _o.role = $(arr[0]).text();
         _o.description = $(arr[1]).text();
-        _o.status = $(arr[2]).text();
+        _o.status = $('input[name='+('cast-radio'+i)+']:checked').val()
         o.cast.push(_o);
       });
 
@@ -97,9 +95,10 @@ Template.editProject.events({
         var arr = $(el).children('td');
         _o.category = $(arr[0]).text();
         _o.description = $(arr[1]).text();
-        _o.quantity = $(arr[2]).text();
+        _o.quantity = parseInt($(('#needs-quant'+i)).val())||1;
         o.needs.push(_o);
       });
+
 
       var social = $('.social-val');
       o.social = [];
@@ -193,7 +192,7 @@ Template.editProject.events({
     else o.data = osettings.giftImage.data;
     osettings.giftImage = {};
     gifts.push(o);
-    $('#gift-table').append('<tr class="social-val"><td>'+o.name+'</td><td>'+o.description+'</td><td>'+o.quantity+'</td><td>'+o.msrp+'</td><td><button class="removeGift button small">X</button></td></tr>');
+    $('#gift-table').append('<tr class="gift-val"><td>'+o.name+'</td><td>'+o.description+'</td><td>'+o.quantity+'</td><td>'+o.msrp+'</td><td><button class="removeGift button small">X</button></td></tr>');
     $('.removeGift').on('click', removeGift);
     $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
   }
@@ -201,11 +200,26 @@ Template.editProject.events({
 
 Template.editProject.helpers({
   init: function() {
-    console.log(this)
     currentSlug = this.slug;
     currentTitle = this.title;
-    $("#category").text(this.category);
-    $("#purpose").text(this.purpose);
+    var category = this.category;
+    var purpose = this.purpose;
+    setTimeout(function() {
+      $("#category").val(category);
+      $("#purpose").val(purpose);
+    }, 377);
+    // var val = Meteor.user().primaryRole;
+    // $("#category").val(val);
+  },
+  neededCheck: function() {
+    if (this.status==='needed') {
+      return 'checked'
+    };
+  },
+  fulfilledCheck: function() {
+    if (this.status==='fulfilled') {
+      return 'checked'
+    };
   },
   fundingGoal: function() {
     if (this.budget) {

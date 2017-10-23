@@ -46,16 +46,9 @@
         <div class="board-widget-content">
             <div class="board-widget-members js-list-board-members clearfix js-list-draggable-board-members">
                 {{# each board.members }}
-                    {{> memberAvatar user=this.userId draggable=true size="small"}}
+                    {{> memberAvatar user=this.userId draggable=false size="small"}}
                 {{/ each }}
             </div>
-            {{# if currentUser.isBoardAdmin }}
-                {{#unless board.isLive}}
-                    <a href="#" class="button-link js-open-manage-board-members">
-                        <span class="icon-sm fa fa-user"></span> {{_ 'add-members'}}
-                    </a>
-                {{/unless}}
-            {{/ if }}
         </div>
     </div>
 </template>

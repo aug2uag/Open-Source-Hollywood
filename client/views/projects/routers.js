@@ -149,6 +149,7 @@ Router.route('/projects/:slug/:uid', {
         ownerId: project.ownerId,
         details: project.details,
         funded: project.funded,
+        count: project.count,
         createdAt: project.createdAt,
         title: project.title,
         gifts: project.gifts,

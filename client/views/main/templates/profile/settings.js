@@ -88,7 +88,7 @@ Template.settings.events({
 			_o.address = $(arr[1]).text();
 			o.reels.push(_o);
 		});
-		
+
 		Meteor.call('upgradeProfile', o);
 
 	},
@@ -172,14 +172,11 @@ Template.settings.rendered = function () {
   // set primaryRole
   if (Meteor.user().primaryRole) {
   	var val = Meteor.user().primaryRole;
-  	console.log(new Array(100).join('#'))
-  	console.log(val)
   	$("#category").val(val);
   };
 
   // set user-role
   Meteor.user().iam.forEach(function(el) {
-  	console.log(new Array(100).join('*'))
   	var elId = '#checkbox-' + el;
   	$(elId).prop("checked", true);
   });
