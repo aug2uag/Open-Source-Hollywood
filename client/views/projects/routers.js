@@ -137,7 +137,6 @@ Router.route('/projects/:slug/:uid', {
           score: user.influenceScore,
           rating: user.rating
         },
-        uPrimaryRole: user.primaryRole.toLowerCase().indexOf('primary')===-1?user.primaryRole:user.iam[0]?user.iam[0]:'unknown role',
         needs: project.needs || 'watch video for details',
         videoURL: project.videoURL,
         _bid: board._id,
@@ -151,7 +150,6 @@ Router.route('/projects/:slug/:uid', {
         details: project.details,
         funded: project.funded,
         createdAt: project.createdAt,
-        count: project.count,
         title: project.title,
         gifts: project.gifts,
         budget: function() {

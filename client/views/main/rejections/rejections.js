@@ -43,41 +43,19 @@ Template.receipts.helpers({
         if (this.error) return 'REFUND ERROR, CONTACT US';
         return 'PAID';
     }
-})
+});
 
 
 Template.comms.helpers({
-    foo: function() {
-        console.log('got you badasssssssss\n\n')
-        console.log(this)
-
-    },
     comms: function() {
         return Notifications.find({
             user: Meteor.user()._id
         });
-    },
-    receiptsList: function() {
-        return Receipts.find({userId: Meteor.user()._id}).fetch();
-    },
-    formatDate: function() {
-        return moment(this.created).format('MM-DD-YY');
-    },
-    formatTitle: function() {
-        return this.projTitle||this.projectTitle||this.title||'undefined';
-    },
-    formatAmount: function() {
-        return '$' + this.amount.toFixed(2);
-    },
-    formatRefund: function() {
-        if (this.refunded) return 'REFUNDED';
-        if (this.error) return 'REFUND ERROR, CONTACT US';
-        return 'PAID';
     }
-})
+});
 
 Template.comms.events({
     'click .gotocomm': function() {
         console.log(this)
     }
-})
+});
