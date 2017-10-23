@@ -2,10 +2,11 @@ Template.dashboard.helpers({
 	foo: function() {
 		var _id = Meteor.user()._id;
 		return Projects.find({
-	        $and: [
-	          {archived: false},
-	          {usersApplied: {$elemMatch: {id: _id}}}
-	        ]
+	        archived: false,
+			$or: [
+				{crewApplicants: {$elemMatch: {'user.id': _id}}},
+				{roleApplicants: {$elemMatch: {'user.id': _id}}}
+			]
 	    }).fetch();
 	},
 	bar: function() {
@@ -28,8 +29,36 @@ Template.dashboard.helpers({
 	},
 	uid: function() {
 		return Meteor.user()._id;
+	},
+	messagesLink: function() {
+		return '/message/project/'+this.slug+'/'+Meteor.user()._id;
 	}
 });
+
+Template.dashboard.events({
+	'click .transfer_funds': function() {
+		/**
+			
+			SHOW POPUP
+				how much funded
+				funds transferred
+				funds available for transfer
+				transfer status
+					level C
+						bank account
+						routing
+					level B
+						name
+						address
+					level A
+						account type
+						ssn
+
+		  */
+		console.log(new Array(100).join('^$'))
+		console.log(this)
+	}
+})
 
 Template.collapses.helpers({
 	emptySetApplied: function() {

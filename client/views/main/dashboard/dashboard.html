@@ -5,39 +5,72 @@
             <div class="container">
                 <header class="major">
                     <h2><i class="glyphicon glyphicon-dashboard"></i>&nbsp;&nbsp;Dashboard</h2>
-                    <p>View active and previous projects. Access your transactions.</p>
+                    <p>View your active campaigns &amp; access your transactions history.</p>
                 </header>
                 <section>
                 	<div class="table-wrapper">
-                		<h3 class="12u page-header">PROJECTS APPLIED</h3>
+                		<h3 class="12u page-header">ACTIVE CAMPAIGNS</h3>
 						<table>
 							<tbody>
 								{{#each foo}}
-									<tr><td>{{> applied_to_project}}</td></tr>
+									<tr>
+										<td>
+											<a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a">
+					                          <img style="width:150px" class="c-related__img" src="{{banner}}" />
+					                        </a>
+					                    </td>
+										<td><a href="{{messagesLink}}"><h2>{{title}}</h2></a></td>
+										<td><a class="button special" href="/projects/{{slug}}/{{ownerId}}">GOTO</a></td>
+										<td><a class="button go" href="{{messagesLink}}">MESSAGES</a></td>
+									</tr>
 								{{else}}
-									<tr><td><p class="empty">No content</p></td></tr>
+									<tr><td>N / A</td></tr>
 								{{/each}}
 							</tbody>							
 						</table>
 					</div>
 					<div class="table-wrapper">
-						<h3 class="12u page-header">PROJECTS ACCEPTED</h3>
+						<h3 class="12u page-header">CAMPAIGNS ACCEPTED</h3>
 						<table>
 							<tbody>
 								{{#each bar}}
-									<tr><td>{{ > approved_for_project }}</td></tr>
+									<tr>
+										<td>
+											<a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a">
+					                          <img style="width:150px" class="c-related__img" src="{{banner}}" />
+					                        </a>
+					                    </td>
+										<td><a href="{{messagesLink}}"><h2>{{title}}</h2></a></td>
+										<td><a class="button special" href="/projects/{{slug}}/{{ownerId}}">GOTO</a></td>
+										<td><a class="button go" href="{{messagesLink}}">MESSAGES</a></td>
+									</tr>
 								{{else}}
-									<tr><td><p class="empty">No content</p></td></tr>
+									<tr><td>N / A</td></tr>
 								{{/each}}
 							</tbody>							
 						</table>
 					</div>
 					<div class="table-wrapper">
-				        <h3 class="12u page-header">PRODUCTIONS</h3>
-				        {{#each baz}}
-				        	{{> collapses}}
-				        {{/each}}
-				    </div>
+						<h3 class="12u page-header">CAMPAIGNS CREATED</h3>
+						<table>
+							<tbody>
+								{{#each baz}}
+									<tr>
+										<td>
+											<a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a">
+					                          <img style="width:150px" class="c-related__img" src="{{banner}}" />
+					                        </a>
+					                    </td>
+					                    <td><a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a"><h3>{{title}}</h3></a></td>
+					                    <td>created: {{created}}</td>
+					                    <td><a class="button special transfer_funds">FUNDS</a></td>
+					                </tr>
+								{{else}}
+									<tr><td>N / A</td></tr>
+								{{/each}}
+							</tbody>							
+						</table>
+					</div>
 				    <a href="/receipts" class="btn btn-lg btn-primary col-xs-12">View transactions history</a>
                 </section>
             </div>
