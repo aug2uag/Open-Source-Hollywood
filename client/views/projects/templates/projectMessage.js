@@ -6,9 +6,9 @@ Template.projectMessage.helpers({
 		return 'Conversation w ' + this.user.firstName + ' ' + this.user.lastName + ' campaign: ' + this.project.title;
 	},
 	messagesHeader: function() {
-		if (!this.notifications.length) return 'There have been no actions made by this user for the ' + this.project.title + ' campaign.';
-		if (this.notifications.length===1) return 'There is one action this user has taken.';
-		return 'There are ' + this.notifications.length + ' notifications regarding the ' + this.project.title + ' campaign.';
+		if (!this.offers.length) return 'There have been no actions made by this user for the ' + this.project.title + ' campaign.';
+		if (this.offers.length===1) return 'There is one action this user has taken.';
+		return 'There are ' + this.offers.length + ' offers regarding the ' + this.project.title + ' campaign.';
 	},
 	numMessages: function() {
 		if (!this.messages.length) return 'There is no history of communication between the two of you regarding the ' + this.project.title + ' campaign.';

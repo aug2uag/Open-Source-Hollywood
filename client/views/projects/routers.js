@@ -211,7 +211,7 @@ Router.route('/message/project/:slug/:uid', {
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('getUsers'),
       Meteor.subscribe('getMe'),
-      Meteor.subscribe('getOffers'),
+      Meteor.subscribe('offers'),
       Meteor.subscribe('getReceipts'),
       Meteor.subscribe('getProjectMessages')
     ];

@@ -188,6 +188,9 @@ function rejectUser(offer) {
 }
 
 Template.projectView.helpers({
+  currentSlug: function() {
+    return currentSlug;
+  },
   usersApplied: function() {
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
   },
