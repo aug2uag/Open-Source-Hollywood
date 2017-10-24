@@ -211,7 +211,7 @@ Router.route('/message/project/:slug/:uid', {
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('getUsers'),
       Meteor.subscribe('getMe'),
-      Meteor.subscribe('getComms'),
+      Meteor.subscribe('getOffers'),
       Meteor.subscribe('getReceipts'),
       Meteor.subscribe('getProjectMessages')
     ];
@@ -220,7 +220,7 @@ Router.route('/message/project/:slug/:uid', {
     var slug = this.params.slug;
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
-    var notifications = Notifications.find({from: user._id, slug: project.slug});
+    var notifications = Offers.find({uid: user._id, slug: project.slug});
     var receipts = Receipts.find({user: user._id, slug: project.slug});
     var messages = ProjectMessages.find({user: user._id, project: project._id});
     return {
