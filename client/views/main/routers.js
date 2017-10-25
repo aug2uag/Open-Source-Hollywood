@@ -67,7 +67,6 @@ Router.route('/dashboard', {
         var _id = Meteor.user()._id;
         return [
             Meteor.subscribe('usersList'),
-            Meteor.subscribe('accounts'),
             Meteor.subscribe('userActiveProjects', _id),
             Meteor.subscribe('activeProjectsApplied', _id),
             Meteor.subscribe('activeProjectsApproved', _id)

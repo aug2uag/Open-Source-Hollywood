@@ -1,8 +1,4 @@
-var was = {};
 Template.dashboard.helpers({
-	yolo: function() {
-		was.banks = BankAccounts.find({ user: Meteor.user()._id }).fetch();
-	},
 	foo: function() {
 		var _id = Meteor.user()._id;
 		return Projects.find({
