@@ -53,9 +53,3 @@ Template.comms.helpers({
         });
     }
 });
-
-Template.comms.events({
-    'click .gotocomm': function() {
-        console.log(this)
-    }
-});

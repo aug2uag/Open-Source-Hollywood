@@ -7,6 +7,20 @@
           <strong>Missing Roles!</strong>
           " Select one or more secondary and primary roles to continue. "
         </div>
+        {{else}}
+        {{#unless account}}
+        <div class="alert alert-danger col-md-12" role="alert">
+          <strong>Missing Account Data!</strong>
+          " An account will be created the next time you submit changes to your profile. "
+        </div>
+        {{else}}
+        {{#unless bank}}
+        <div class="alert alert-danger col-md-12" role="alert">
+          <strong>Missing Transfer Data!</strong>
+          " Configure your accounts for transfers from your campaigns. "
+        </div>
+        {{/unless}}
+        {{/unless}}
         {{/if}}
         <div id="main" class="wrapper style1">
             <div class="container">
@@ -239,8 +253,149 @@
                     </div>
                   </section>
 
+                  <br>
+                  <br>
+                  {{#if account}}
+                  {{#unless bank}}
+                  <section>
+                      <h2>Configure Transfers</h2>
+                      <h4>For transferring funds raised from campaigns to your personal or business bank account. You do not need to file this unless you intend to transfer funds from one or more campaigns as an author.</h4>
+                      <hr />
+                      <div class="row">
+                        <div style="width:100%">
+                          <div class="panel panel-default" style="background:transparent">
+                            <div class="panel-body">
+                              <form>
+                                <div class="errors"></div>
+                                <div class="row">
+                                  <div class="col-md-8">
+                                    <div class="form-group">
+                                      <label>Country</label>
+                                      <select class="form-control input-lg" id="country" data-stripe="country" style="line-height: normal;background:transparent;color:#fff">
+                                        <option value="US">United States</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="AT">Austria</option>
+                                        <option value="BE">Belgium</option>
+                                        <option value="BR">Brazil</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="DK">Denmark</option>
+                                        <option value="FI">Finland</option>
+                                        <option value="FR">France</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="HK">Hong Kong</option>
+                                        <option value="IE">Ireland</option>
+                                        <option value="IT">Italy</option>
+                                        <option value="JP">Japan</option>
+                                        <option value="LU">Luxembourg</option>
+                                        <option value="MX">Mexico</option>
+                                        <option value="NZ">New Zealand</option>
+                                        <option value="NL">Netherlands</option>
+                                        <option value="NO">Norway</option>
+                                        <option value="PT">Portugal</option>
+                                        <option value="SG">Singapore</option>
+                                        <option value="ES">Spain</option>
+                                        <option value="SE">Sweden</option>
+                                        <option value="CH">Switzerland</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label>Currency</label>
+                                      <select class="form-control input-lg" id="currency" data-stripe="currency" style="line-height: normal;background:transparent;color:#fff">
+                                        <option value="usd">USD</option>
+                                        <option value="aud">AUD</option>
+                                        <option value="brl">BRL</option>
+                                        <option value="cad">CAD</option>
+                                        <option value="eur">EUR</option>
+                                        <option value="gbp">GBP</option>
+                                        <option value="hkd">HKD</option>
+                                        <option value="jpy">JPY</option>
+                                        <option value="mxn">MXN</option>
+                                        <option value="nzd">NZD</option>
+                                        <option value="sgd">SGD</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Full Legal Name</label>
+                                      <input class="form-control input-lg account_holder_name" id="account_holder_name" type="text" data-stripe="account_holder_name" placeholder="Jane Doe" autocomplete="off" style="background:transparent;color:#fff">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Account Type</label>
+                                      <select class="form-control input-lg account_holder_type" id="account_holder_type" data-stripe="account_holder_type" style="line-height: normal;background:transparent;color:#fff">
+                                        <option value="individual">Individual</option>
+                                        <option value="company">Company</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-6" id="routing_number_div">
+                                    <div class="form-group">
+                                      <label id="routing_number_label">Routing Number</label>
+                                      <input class="form-control input-lg bank_account" id="routing_number" type="tel" size="12" data-stripe="routing_number" placeholder="111000025" autocomplete="off" style="background:transparent;color:#fff">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label id="account_number_label">Account Number</label>
+                                      <input class="form-control input-lg bank_account" style="background:transparent;color:#fff" id="account_number" type="tel" size="20" data-stripe="account_number" placeholder="000123456789" autocomplete="off">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <button class="btn btn-lg btn-block btn-success submit" type="submit" id="add_account">ADD ACCOUNT</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </section>
+                  {{else}}
+                  <section>
+                    <div class="bs-callout bs-callout-info" id="callout-glyphicons-location"> 
+                      <h4>Account Transfer Details</h4> 
+                      <p>Your account is configured as below and available for receiving transfers. To initiate a transfer visit <a href="/dashboard"><code>DASHBOARD</code></a> and navigate to your campaigns and select the <code>TRANSFER</code> option for the item of your choice:
+                      </p> 
+                      <h5>CONFIGURED ACCOUNTS</h5>
+                      <div class="table-wrapper">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Bank Name</th>
+                              <th>Account No.</th>
+                              <th>Routing No.</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th>{{bank_name}}</th>
+                              <th>{{account_no}}</th>
+                              <th>{{routing_no}}</th>
+                              <th><i class="glyphicon glyphicon-ok-sign"></i> Good</th>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <p>Click <strong>RESET</strong> to reset your transfer settings.</p> 
+                      <a class="button reset_transfer">RESET TRANSFER SETTINGS</a>
+                    </div>
+                  </section>
+                  {{/unless}}
+                  {{/if}}
 
-
+                  <br>
+                  <br>
                 <section>
                     <div class="row">
                       <div class="12u 24u$(xsmall)">

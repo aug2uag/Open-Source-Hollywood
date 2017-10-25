@@ -61,15 +61,17 @@
                     <th><p class="align-center">from</p></th>
                     <th><p class="align-center">message</p></th>
                     <th><p class="align-center">campaign</p></th>
+                    <th><p class="align-center"><i class="glyphicon glyphicon-envelope"></i></p></th>
                   </tr>
                 </thead>
                 <tbody>
                 {{#each comms}}
-                  <tr class="gotocomm">
+                  <tr>
                     <td style="vertical-align: middle;"><small>({{purpose}})</small></td>
                     <td style="vertical-align: middle;"><p class="align-center">{{name}}<br><img class="attachment-image-preview m40" src="{{avatar}}"></p></td>
                     <td style="vertical-align: middle;"><p class="align-center">{{message}}</p></td>
                     <td style="vertical-align: middle;"><p class="align-center">{{title}}<br>{{created}}</p></td>
+                    <td><a href="/message/project/{{ slug }}/{{ user }}" class="button go">GO</a></td>
                   </tr>
                 {{else}}
                   <tr>

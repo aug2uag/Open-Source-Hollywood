@@ -28,6 +28,6 @@ Template.project.helpers({
     return this.duration/30 * 100;
   },
   foo: function() {
-    console.log(this)
+    // console.log(this)
   }
 });

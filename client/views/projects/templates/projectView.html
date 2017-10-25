@@ -399,14 +399,11 @@
             <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
+        <tr>
+          <td colspan="6">N / A</td>
+        </tr>
         {{/each}} 
       </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2">Total applicants for cast</td>
-          <td>{{project.roleApplicants.length}}</td>
-        </tr>
-      </tfoot>
     </table>
   </div>
   <br>
@@ -434,14 +431,11 @@
             <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
+        <tr>
+          <td colspan="6">N / A</td>
+        </tr>
         {{/each}}
       </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2">Total applicants for crew</td>
-          <td>{{project.crewApplicants.length}}</td>
-        </tr>
-      </tfoot>
     </table>
   </div>
   <br>
@@ -463,6 +457,9 @@
             <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
+        <tr>
+          <td colspan="3">N / A</td>
+        </tr>
         {{/each}}
       </tbody>
     </table>
@@ -490,6 +487,9 @@
             <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO</a></td>
           </tr>
         {{else}}
+        <tr>
+          <td colspan="5">N / A</td>
+        </tr>
         {{/each}}
       </tbody>
     </table>
@@ -511,6 +511,9 @@
             <td><p class="align-center_min">${{amount}}</p></td>
           </tr>
         {{else}}
+          <tr>
+            <td colspan="2">N / A</td>
+          </tr>
         {{/each}}
       </tbody>
     </table>

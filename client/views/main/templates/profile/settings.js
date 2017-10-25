@@ -92,6 +92,25 @@ Template.settings.events({
 		Meteor.call('upgradeProfile', o);
 
 	},
+	'click #add_account': function(e) {
+		e.preventDefault();
+		var opts = {};
+		opts.country = $('#country').val();
+		opts.currency = $('#currency').val();
+		opts.account_holder_name = $('#account_holder_name').val();
+		opts.account_holder_type = $('#account_holder_type').val();
+		opts.routing_number = $('#routing_number').val();
+		opts.account_number = $('#account_number').val();
+		opts.default_for_currency = true;
+		opts.object = 'bank_account';
+		Meteor.call('updateBanking', opts, function(err, result) {
+			if (err) return bootbox.alert('there was an error updating your account information, please try again later or contact us if you need assistance');
+			return bootbox.alert(result||'account updated');
+		});
+	},
+	'click .reset_transfer': function(e) {
+		Meteor.call('deleteBanking');
+	},
 	'change #avatar_file': function (e, template) {
 	    if (e.currentTarget.files && e.currentTarget.files[0]) {
 	    	osettings.avatar = {};
@@ -151,7 +170,22 @@ Template.settings.helpers({
 	},
 	avatar: function() {
 		return Meteor.user().avatar;
-	}
+	},
+	account: function() {
+		return Meteor.user().account!==null;
+	},
+	bank: function() {
+		return Meteor.user()&&Meteor.user().bank||false;
+	},
+	bank_name: function() {
+		return Meteor.user().bank.bank_name;
+	},
+	account_no: function() {
+		return '********'+Meteor.user().bank.last4;
+	},
+	routing_no: function() {
+		return Meteor.user().bank.routing_number;
+	},
 });
 
 Template.settings.rendered = function () {
