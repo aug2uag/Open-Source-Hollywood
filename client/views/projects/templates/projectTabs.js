@@ -194,7 +194,7 @@ Template.projectTabs.events({
             o.appliedFor = 'any cast or crew position that is the best fit';
             if (o.pay&&o.type!=='hired') makeStripeCharge(o);
             else Meteor.call(o.route, o, function(err, result) {
-              bootbox.alert(err||result);
+              bootbox.alert(result||'your application was successful pending your payment');
             });
           }
         }
