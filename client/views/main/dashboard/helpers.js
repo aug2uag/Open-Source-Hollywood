@@ -55,53 +55,24 @@ Template.dashboard.events({
 						ssn
 
 		  */
-		console.log(new Array(100).join('^$'))
-		console.log(this)
+
 		var that = this;
 		// console.log(was)
 		if (this.funded<1) return bootbox.alert('there are no funds to transfer');
-		console.log('40948 40j4940j ')
 		// else show popup
 		// list bank accounts to choose
 		// + button to add bank account
 		// bank account type, ssn, FTIN as editable to add
 		// show err, and direct user to add details to account
 		function configurePersonalAccount() {
-			var intmodal = bootbox.dialog({
-	            title: 'TRANSFER FUNDS',
-	            message: '<div class="container" style="width:100%"><div class="row"><div style="width:100%"><div class="panel panel-default"><div class="panel-body"><div class="container" style="width:100%"><div class="errors"></div><div class="row"><div class="col-md-10 col-md-offset-1" id="routing_number_div"><div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">Funds Available</h3> </div><div class="panel-body"> $Panel content </div></div></div></div></div><div class="container" style="width:100%"><div class="errors"></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="alert alert-success" role="alert">Please define how much you want to transfer</div></div><div class="col-md-10 col-md-offset-1"><div class="input-group"> <span class="input-group-addon">$</span> <input id="transfer_amount" type="number" min="0" class="form-control dark_placeholder" placeholder="Enter Amount" aria-describedby="sizing-addon2"> </div></div></div><div class="row"> <div class="col-md-10 col-md-offset-1 bootpadded"><button class="btn btn-primary" type="button"> Transfer fee <span class="badge" id="transfer_fee">$0</span> </button> </div></div></div></div></div></div></div></div>',
-	            buttons: {
-					danger:  {
-						label: 'Cancel',
-						className: "btn-danger",
-						callback: function() { intmodal.modal('hide') }
-					},
-					success: {
-						label: 'TRANSFER',
-						className: 'btn-success',
-						callback: function() {
-						    var opts = {};
-							console.log('callback TRANSFER')
-							opts.amount = $('#transfer_amount').val();
-							if (opts.amount&&opts.amount>1) {
-								// make transfer with opts
-								console.log(that)
-							};
-							return false;	
-		                }
-		            }
-	            }
-			}).on('shown.bs.modal', function () {
-				console.log('foooolalalala')
-				$('#transfer_amount').on('input', function(e) { 
-				    e.preventDefault();
-					var _float = parseFloat($('#transfer_amount').val()).toFixed(2);
-					if (_float>1) _float=_float;
-					else _float='0';
-					$('#transfer_fee').text('$'+_float);
-				});
+			var opts = {slug:that.slug};
+			Meteor.call('transferFunds', opts, function(err, result) {
+				if (err) return bootbox.alert('there was an error, please contact us');
+				bootbox.alert(result);
 			});
+			return false;
 		}
+
 		// if no personal account
 		if (!Meteor.user().account) {
 			return bootbox.alert('your account status is invalid, please update your profile to correct this deficiency');

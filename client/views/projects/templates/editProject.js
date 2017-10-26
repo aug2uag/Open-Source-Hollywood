@@ -73,7 +73,7 @@ Template.editProject.events({
         var arr = $(el).children('td');
         _o.title = $(arr[0]).text();
         _o.description = $(arr[1]).text();
-        _o.status = $('input[name='+('cast-radio'+i)+']:checked').val();
+        _o.status = $('input[name='+('crew-radio'+i)+']:checked').val();
         o.crew.push(_o);
       });
 

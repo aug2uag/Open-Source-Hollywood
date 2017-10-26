@@ -27,11 +27,7 @@ Router.route('/comms', {
 
 Template.receipts.helpers({
     receiptsList: function() {
-        var q = {user: Meteor.user()._id}
-        console.log(q)
-        var x = Receipts.find(q).fetch();
-        console.log(x)
-        return x//Receipts.find({user: Meteor.user()._id}).fetch();
+        return Receipts.find({user: Meteor.user()._id}).fetch();
     },
     formatDate: function() {
         return moment(this.created).format('MMMM Do YYYY, h:mm:ss a');

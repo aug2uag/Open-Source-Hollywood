@@ -612,12 +612,6 @@ Template.projectView.onRendered(function() {
      }
  });
 
-Template.applicants.helpers({
-  yolo: function() {
-    // console.log(this)
-  }
-})
-
 Template.applicants.events({
   'click .view_offer': function(e) {
     var was = this;
