@@ -1,7 +1,7 @@
 const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
 const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A';
 var donationObject = {};
-var currentSlug, currentTitle, destinationAccount, currentProject;
+var currentSlug, currentTitle, currentProject;
 function loadcss(f){
     var href = '/css/' + f;
     var ref=document.createElement("link")
@@ -207,7 +207,6 @@ Template.projectView.helpers({
     currentSlug = this._slug || '';
     currentTitle = this.project.title || '';
     currentProject = this.project;
-    destinationAccount = this.project.account && this.project.account.id || '';
     return this.project.website || 'not specified';
   },
   title: function() {
@@ -308,7 +307,6 @@ Template.projectView.events({
               amount: donationObject.amount,
               message: 'Donation to ' + currentTitle,
               description: '$' + donationObject.amount + ' donated',
-              destination: destinationAccount,
               donationObject: donationObject,
               route: 'donateToProject',
               slug: was._slug
@@ -396,7 +394,6 @@ Template.projectView.events({
                   if (!o.pay) o.type='hired';
                   if (o.pay) o.amount = o.pay;
                   o.message = currentTitle + ' crew offer';
-                  o.destination = destinationAccount;
                   o.route = 'applyToProject';
                   o.slug = currentSlug;
                   o.appliedFor = was.title;
@@ -481,7 +478,6 @@ Template.projectView.events({
                   if (!o.pay) o.type='hired';
                   if (o.pay) o.amount = o.pay;
                   o.message = currentTitle + ' cast offer';
-                  o.destination = destinationAccount;
                   o.route = 'applyToProject';
                   o.slug = currentSlug;
                   o.appliedFor = was.role;
@@ -550,7 +546,6 @@ Template.projectView.events({
                   callback: function() {
                     o.amount = was.msrp;
                     o.message = was.name + ' purchase';
-                    o.destination = destinationAccount;
                     o.route = 'purchaseGift';
                     o.slug = currentSlug;
                     makeStripeCharge(o);

@@ -188,8 +188,7 @@ Template.projectTabs.events({
             }
             if (!o.pay) o.type='hired';
             if (o.pay) o.amount = o.pay;
-            o.message = was.title + ' application';
-            o.destination = was.account.id;
+            o.message = 'APPLY: "'+was.title+'"';
             o.route = 'applyToProject';
             o.slug = was.slug;
             o.appliedFor = 'any cast or crew position that is the best fit';
