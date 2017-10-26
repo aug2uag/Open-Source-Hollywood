@@ -172,7 +172,12 @@ Template.settings.helpers({
 		return Meteor.user().avatar;
 	},
 	account: function() {
-		return Meteor.user().account!==null;
+		console.log('73678369863987v83y783yb87y38y938y93y38by')
+		console.log(Meteor.user())
+		console.log(Meteor.user().account!==null)
+		console.log(Meteor.user().account==null)
+		if (Meteor.user().account) return true;
+		return false;
 	},
 	bank: function() {
 		return Meteor.user()&&Meteor.user().bank||false;
