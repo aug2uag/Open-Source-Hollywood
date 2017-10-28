@@ -33,14 +33,13 @@ Template.receipts.helpers({
         return moment(this.created).format('MMMM Do YYYY, h:mm:ss a');
     },
     formatTitle: function() {
-        return this.projTitle||this.projectTitle||this.title||'undefined';
+        return this.title;
     },
     formatAmount: function() {
         return '$' + this.amount.toFixed(2);
     },
     formatRefund: function() {
-        if (this.refunded) return 'REFUNDED';
-        if (this.error) return 'REFUND ERROR, CONTACT US';
+        if (this.purpose==='transfer') return 'TRANSFERRED';
         return 'PAID';
     }
 });
