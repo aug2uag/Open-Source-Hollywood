@@ -1,24 +1,12 @@
 <template name="StaticLayout">
-  <div id="preloader"></div>
-    {{#if currentUser}}
-      {{ > nav}}
-      {{#unless profileSet}}
-        <div class="alert alert-info col-xs-12">
-          <strong>Please update your profile, you cannot create or join a Campaign unless your profile is updated.</strong>
-        </div>
-      {{/unless}}
-      {{#if degenerateProfile}}
-        <div class="alert alert-warning col-xs-12">
-          <strong>You must define your role(s) in profile settings to be eligible for participation in campaigns.</strong>
-        </div>
-      {{/if}}
-      {{ > yield }}
-      <div style="position:relative;top:60px">
-        {{ > footer }}
-      </div>
-    {{else}}
-      
-    {{/if}}
+  <div id="page-wrapper">
+    {{ > nav}}
+
+    {{ > yield }}
+    <div style="position:relative;top:60px">
+      {{ > footer }}
+    </div>
+  </div>
 </template>
 
 <template name="SplashLayout">
@@ -118,7 +106,16 @@
 </template>
 
 <template name="splashPage">
-    <div >
+    <div id="page-wrapper">
+
+      <header id="header">
+          <h1 class="align-center" id="logo" style="position:relative;left:0px;font-size:1.5rem">Crowdsource Media &amp; Project Management</h1>
+          <nav id="nav">
+            <ul>
+              <li class="login"><a href="#" class="button special">Sign In</a></li>
+            </ul>
+          </nav>
+        </header>
 
       <!-- Banner -->
       <section id="banner">
@@ -130,7 +127,7 @@
             Just apps. Lots of mother flipping apps.</p> -->
           </header>
           <!-- <span class="image"><img src="img/pic01.jpg" alt="" /></span> -->
-          <a href="#" class="button special login">Sign In</a>
+          <!-- <a href="#" class="button special login">Sign In</a> -->
         </div>
 
         <a href="#one" class="goto-next scrolly">Next</a>
@@ -285,5 +282,6 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
+    <script type="text/javascript">$('.login').on('click', function(){lock.show()});</script>
 
 </template>
