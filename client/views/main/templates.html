@@ -2,17 +2,18 @@
   <div id="page-wrapper">
     {{ > nav}}
 
+
     {{ > yield }}
     <div style="position:relative;top:60px">
       {{ > footer }}
     </div>
   </div>
+
 </template>
 
 <template name="SplashLayout">
     {{ > splashPage }}
 </template>
-
 
 <template name='BoardsLayout'> 
 
@@ -108,14 +109,7 @@
 <template name="splashPage">
     <div id="page-wrapper">
 
-      <header id="header">
-          <h1 class="align-center" id="logo" style="position:relative;left:0px;font-size:1.5rem">Crowdsource Media &amp; Project Management</h1>
-          <nav id="nav">
-            <ul>
-              <li class="login"><a href="#" class="button special">Sign In</a></li>
-            </ul>
-          </nav>
-        </header>
+      {{>nav}}
 
       <!-- Banner -->
       <section id="banner">
@@ -132,6 +126,58 @@
 
         <a href="#one" class="goto-next scrolly">Next</a>
       </section>
+
+      <!-- INTRO / ABOUT US -->
+      <section id="zero" class="wrapper style1 special fade-up">
+          <div class="container">
+            <h1>Crowdsourced Media &amp; Project Management</h1>
+          </div>
+          <div class="container">
+            <header class="major">
+              <h2>What is crowdsourced media?</h2>
+              <p>We're your one stop shop to build teams, fund campaigns, and manage productions.</p><p>Includes a <strong>full</strong> project management backend at <strong>no cost</strong> .. ever!</p>
+            </header>
+            <div class="box alt">
+              <div class="row uniform">
+                <section class="4u 6u(medium) 12u$(xsmall)">
+                  <span class="icon alt major fa-area-chart"></span>
+                  <h3>Track Progress</h3>
+                  <p>Easy-to-use interface for managing campaigns and funds.</p>
+                </section>
+                <section class="4u 6u$(medium) 12u$(xsmall)">
+                  <span class="icon alt major fa-comment"></span>
+                  <h3>Secure &amp; Private Communications</h3>
+                  <p>We never expose your private data, communicate at your convenience.</p>
+                </section>
+                <section class="4u$ 6u(medium) 12u$(xsmall)">
+                  <span class="icon alt major fa-flask"></span>
+                  <h3>Ideas Laboratory</h3>
+                  <p>Consider us your platform for bringing print, audio, and mixed media ideas to life.</p>
+                </section>
+                <section class="4u 6u$(medium) 12u$(xsmall)">
+                  <span class="icon alt major fa-gift"></span>
+                  <h3>Marketplace</h3>
+                  <p>Super convenient to buy &amp; sell custom made gifts and items to raise funds.</p>
+                </section>
+                <section class="4u 6u(medium) 12u$(xsmall)">
+                  <span class="icon alt major fa-wrench"></span>
+                  <h3>Resource Sharing</h3>
+                  <p>Campaigns need resources, we connect resources to campaigns.</p>
+                </section>
+                <section class="4u$ 6u$(medium) 12u$(xsmall)">
+                  <span class="icon alt major fa-lock"></span>
+                  <h3>Project Management</h3>
+                  <p>FIPS140-2 compliant secure backend: we make team and assets management simple for you.</p>
+                </section>
+              </div>
+            </div>
+            <footer class="major">
+              <ul class="actions">
+                <li><a class="button login">Jump in and get started right away!</a></li>
+              </ul>
+            </footer>
+          </div>
+        </section>
 
       <!-- One -->
       <section id="one" class="spotlight style1 bottom">
@@ -264,20 +310,7 @@
       </section>
 
       <!-- Footer -->
-      <footer id="footer">
-        <ul class="icons">
-          <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
-          <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
-          <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-          <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
-          <li><a href="https://www.meetup.com/Open-Source-Hollywood/" class="icon alt fa-meetup"><span class="label">Meetup</span></a></li>
-          <li><a href="#" class="icon alt fa-snapchat"><span class="label">Snapchat</span></a></li>
-        </ul>
-        <ul class="copyright">
-          <li>2017 &copy; Open Source Hollywood.</li><li>All rights reserved.</li>
-        </ul>
-      </footer>
-
+      {{>footer}}
     </div>
 
     <!-- Scripts -->

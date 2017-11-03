@@ -7,6 +7,9 @@ Template.nav.onRendered(function() {
 Template.nav.helpers({
   finishedLoading: function() {
     return Session.get('connectReady');
+  },
+  producerReady: function() {
+    return Meteor.user() && Meteor.user().didSetProfile
   }
 })
 
