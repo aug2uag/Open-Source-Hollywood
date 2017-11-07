@@ -176,7 +176,17 @@ Template.WindowSidebarModule.events({
     }),
     'click .js-more-menu': Popup.open('cardMore'),
     'click .js-attach': Popup.open('cardAttachments'),
-    'click .js-due-date': Popup.open('dueDate')
+    'change #datetimepicker': function(e) {
+        var x = e.target.value;
+        if (!x.length) {
+            Cards.update(this.card._id, {$unset: {dueDate:1}});
+            bootbox.alert('due date removed');
+        } else {
+            console.log('yahooooo');
+            Cards.update(this.card._id, {$set: {dueDate: new Date(x)}});
+            bootbox.alert('task assigned due date of ' + x);
+        }
+    }
 });
 
 Template.WindowAttachmentsModule.events({
@@ -339,16 +349,5 @@ Template.cardAttachmentsPopup.events({
     'click .js-computer-upload': function(event, t) {
         t.find('.js-attach-file').click();
         event.preventDefault();
-    }
-});
-
-Template.dueDatePopup.events({
-    'click .js-due-date-submit': function() {
-        var _d = $('#task-due-date').val();
-        if (_d) {
-            Cards.update(this.card._id, {$set: {dueDate: _d}});
-            bootbox.alert('task assigned due date of ' + _d);
-        };
-        Popup.close();
     }
 });

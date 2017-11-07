@@ -140,18 +140,6 @@
     </div>
 </template>
 
-<template name="dueDatePopup">
-    <div style="position:relative;height:440px;overflow:auto;">
-    <div style="height:40px"></div>
-    <div class="input-group datetimepicker">
-        <span class="input-group-addon" id="glwiz"><i class="glyphicon glyphicon-calendar"></i></span>
-        <input class="set-due-date form-control" id="task-due-date" type="text"/>
-    </div>
-    </div>
-    <input class="col-xs-12 js-due-date-submit" type="submit" value="set due date"/>
-    {{ datecal }}
-</template>
-
 <template name="formLabel">
     <div class="colors clearfix">
         <label for="labelName">{{_ 'name'}}</label>
@@ -416,9 +404,6 @@
                 <a href="#" class="button-link js-attach" title="{{_ 'attachment-title'}}">
                     <span class="icon-sm fa fa-paperclip"></span> {{_ 'attachment'}}
                 </a>
-                <a href="#" class="button-link js-due-date" title="{{_ 'due-date-title'}}">
-                    <span class="icon-sm fa fa-calendar"></span> {{_ 'due_date'}}
-                </a>
             </div>
         </div>
         <div class="window-module other-actions clearfix">
@@ -437,6 +422,13 @@
                         <span class="icon-sm fa fa-archive"></span> {{_ 'archive'}}
                     </a>
                 {{ /if }}
+            </div>
+        </div>
+        <div class="window-module other-actions clearfix">
+            <h3>set due date</h3>
+            <div class="clearfix">
+                <hr>
+                <input type="date" id="datetimepicker" style="width: 100%;display: -webkit-inline-box;font-size: large;text-align: -webkit-center;" value="{{due}}">
             </div>
         </div>
         <div class="window-module clearfix">

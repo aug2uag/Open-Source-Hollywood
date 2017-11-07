@@ -167,24 +167,29 @@ Template.calPopup.helpers({
                 if (e.dueDate) {
                     var url = '/boards/' + board._id + '/' + board.slug + '/' + e._id;
                     // http://fullcalendar.io/docs/event_data/Event_Object/
+                    console.log(e);
                     events_array.push({
                         start: e.dueDate,
                         title: e.title,
-                        allDay: true,
                         url: url
                     });
                 };
             });
 
             $('#cali').fullCalendar({
-                defaultView: 'agendaWeek',
+                defaultView: 'basicWeek',
                 events: events_array
             });
             setTimeout(function() {
                 $('.fc-prev-button').empty().append('<i class="fa fa-caret-left"></i>');
                 $('.fc-next-button').empty().append('<i class="fa fa-caret-right"></i>');
                 $('.fc-day-header').css('color', '#333');
-                $($('fc-left').child()).css('color', '#333');
+                if($('fc-left').child)$($('fc-left').child()).css('color', '#333');
+                $('.fc-day-header').css('color', '#333');
+                $('.fc-today-button').css('display', 'none');
+                $('.fc-button').on('click', function() {
+                    $('.fc-day-header').css('color', '#333');
+                });
             }, 10);
         }, 100);
     }

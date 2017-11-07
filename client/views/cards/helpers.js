@@ -46,6 +46,19 @@ Template.createLabelPopup.helpers({
     }
 });
 
+Template.WindowSidebarModule.helpers({
+    due: function() {
+        if (this.card.dueDate) {
+            var x = new Date(this.card.dueDate);
+            var month = x.getMonth()+1+'';
+            if (month.length==1) month='0'+month;
+            var date = x.getDate()+1+'';
+            if (date.length==1) date='0'+date;
+            return ((x.getYear()+1900)+'-'+month+'-'+date);
+        };
+    }
+})
+
 Template.formLabel.helpers({
     labels: function() {
         return _.map(labelColors, function(color) {
@@ -58,16 +71,4 @@ Template.cardDetailWindow.helpers({
     foo: function() {
         return this.card && this.board;
     }
-});
-
-Template.dueDatePopup.helpers({
-    datecal: function() {
-        setTimeout(function() {
-            $('#glwiz').trigger('click');
-        }, 110);
-    }
-})
-
-Template.dueDatePopup.onRendered(function() {
-    this.$('.datetimepicker').datetimepicker();
 });
