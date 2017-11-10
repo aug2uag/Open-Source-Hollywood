@@ -287,12 +287,13 @@ Template.projectView.events({
       if (funds>1) $('#percent_total').text(((amt/funds)*100).toFixed(1)+'%');
       else $('#percent_total').text('infinity');
       donationObject.amount = amt;
-      donationObject.user = {
+      if (Meteor.user()) donationObject.user = {
         first: Meteor.user().firstName,
         last: Meteor.user().lastName,
         email: Meteor.user().email,
         id: Meteor.user()._id
       }
+      /** TODO: capture donee and gift purchaser name and email */
       $('#donation_btn').prop('disabled', false);
       $('#donation_btn').html('Donate to Campaign !');
     };
@@ -617,6 +618,12 @@ Template.projectView.onRendered(function() {
       $('#upvote').css('left', '7px');
      }
  });
+
+Template.applicants.helpers({
+  anon: function() {
+    return this.user.id==='anon';
+  }
+})
 
 Template.applicants.events({
   'click .view_offer': function(e) {
