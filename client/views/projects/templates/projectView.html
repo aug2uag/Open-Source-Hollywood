@@ -30,7 +30,9 @@
                 <div class="l-product">
                   <div class="l-product__container">
                     <div class="l-product__title">{{project.title}}</div>
+                    {{#if currentUser}}
                     {{> actionBar}}
+                    {{/if}}
                     <!-- LEFT -->
                     <main class="l-product__main">
                       <div class="l-product__image">
@@ -197,6 +199,7 @@
                         {{/each}}
                       </div>
 
+                      {{#if currentUser}}
                       <div class="w100">
                         <div style="position:relative;padding-top:20px;width:80%">
                           <h4>{{numComments}}</h4>
@@ -209,6 +212,7 @@
                           {{/if}}
                         </div>
                       </div>      
+                      {{/if}}
                     </main>
                     <!-- RIGHT -->
                     <aside class="l-product__aside">
@@ -236,7 +240,15 @@
                             
                             <div class="c-prod-attr__item">
                               <div class="c-prod-attr__name">{{this.category}}</div>
+                              {{#if currentUser}}
+                              {{#if producerReady}}
                               <div class="c-prod-attr__value"><a class="general_need-response button special" id="{{@index}}-need">offer</a></div>
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
+                              {{/if}}
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special login">sign in to apply</a></div>
+                              {{/if}}
                             </div>
 
                             {{/each}}
@@ -305,7 +317,15 @@
                             {{#each project.crew}}
                             <div class="c-prod-attr__item">
                               <div class="c-prod-attr__name">{{this.title}}</div>
+                              {{#if currentUser}}
+                              {{#if producerReady}}
                               <div class="c-prod-attr__value"><a class="crew_detail button special" id="{{@index}}-team">DETAILS</a></div>
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
+                              {{/if}}
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special login">sign in to apply</a></div>
+                              {{/if}}
                             </div>
                             {{else}}
                             <div class="c-prod-attr__item">
@@ -329,7 +349,15 @@
                             {{#each project.cast}}
                             <div class="c-prod-attr__item">
                               <div class="c-prod-attr__name">{{this.role}}</div>
+                              {{#if currentUser}}
+                              {{#if producerReady}}
                               <div class="c-prod-attr__value"><a class="role_detail button special" id="{{@index}}-role">DETAILS</a></div>
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
+                              {{/if}}
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special login">sign in to apply</a></div>
+                              {{/if}}
                             </div>
                             {{else}}
                             <div class="c-prod-attr__item">

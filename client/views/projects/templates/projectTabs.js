@@ -55,9 +55,6 @@ Template.projectTabs.helpers({
     else msg_ = ' positions';
     return (x + msg_);
   },
-  producerReady: function() {
-    return !(Meteor.user() && Meteor.user().didSetProfile);
-  },
   counts3: function() {
     var x = Session.get('pCount');
     x = x || 0;

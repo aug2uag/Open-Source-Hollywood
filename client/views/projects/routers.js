@@ -3,11 +3,6 @@ Router.route('/projects', {
     template: 'projectTabs',
     layoutTemplate: 'StaticLayout',
     waitOn: function() {
-      if (Meteor.user() === null) {
-        Router.go('Home');
-        window.location.assign('/');
-        return
-      }
       return [
         Meteor.subscribe('projectsList'), 
         Meteor.subscribe('connectUser'),
@@ -73,11 +68,6 @@ Router.route('/projects/:slug/:uid', {
     this.next();
   },
   waitOn: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      window.location.assign('/');
-      return
-    }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
@@ -102,9 +92,11 @@ Router.route('/projects/:slug/:uid', {
           return 'not available';
         },
         isOwner: function () {
+          if (!Meteor.user()) return false;
           return project.ownerId === Meteor.user()._id;
         },
         isMember: function() {
+          if (!Meteor.user()) return false;
           if (project.ownerId === Meteor.user()._id) return true;
           var falsy = false;
           project.usersApproved.forEach(function(u) {

@@ -191,6 +191,10 @@ Template.projectView.helpers({
   currentSlug: function() {
     return currentSlug;
   },
+  producerReady: function() {
+    if (!Meteor.user()) return false;
+    return (Meteor.user() && Meteor.user().didSetProfile);
+  },
   usersApplied: function() {
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
   },
@@ -198,6 +202,7 @@ Template.projectView.helpers({
     return this.project.equityAllocated||0;
   },
   isAllowed: function() {
+    if (!Meteor.user()) return false;
     // if owner or accepted user
     var projectOwnerId = this.project.ownerId;
     var acceptedUsers = this.project.acceptedUsers;
@@ -241,6 +246,12 @@ Template.projectView.helpers({
 })
 
 Template.projectView.events({
+  'click .login': function() {
+    Router.go('Projects');
+    setTimeout(function() {
+      lock.show();
+    }, 500);
+  },
   'click .accept': function(e) {
     e.preventDefault();
     acceptUser(this);

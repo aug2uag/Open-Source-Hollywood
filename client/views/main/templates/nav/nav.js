@@ -32,7 +32,10 @@ Template.nav.events({
     document.title = 'Settings Edit';
   },
   'click .login': function() {
-    lock.show();
+    Router.go('Projects')
+    setTimeout(function() {
+      lock.show();
+    }, 500);
   }
 
 });
