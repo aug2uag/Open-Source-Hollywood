@@ -4,11 +4,6 @@ Router.route('/profile/:_id', {
   layoutTemplate: 'StaticLayout',
   bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   waitOn: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      window.location.assign('/');
-      return
-    }
     return [
       Meteor.subscribe('getUser', this.params._id), 
       Meteor.subscribe('projectsList'), 

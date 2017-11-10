@@ -126,8 +126,8 @@ Router.route('/projects/:slug/:uid', {
           }
         },
         _ownerStats: {
-          score: user.influenceScore,
-          rating: user.rating
+          score: user&&user.influenceScore||0,
+          rating: user&&user.rating||0
         },
         needs: project.needs || 'watch video for details',
         videoURL: project.videoURL,
