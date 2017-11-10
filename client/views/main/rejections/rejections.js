@@ -50,5 +50,8 @@ Template.comms.helpers({
         return Notifications.find({
             user: Meteor.user()._id
         });
+    },
+    anon: function() {
+        return this.from==='anon';
     }
 });
