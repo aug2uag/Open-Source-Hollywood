@@ -69,42 +69,42 @@ Template.projectTabs.helpers({
     var pLimit = Session.get('pLimit') || 30;
     Session.set('pLimit', pLimit);
     if (Session.equals('order', 'hot')) {
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'top')){
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'newest')) {
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'alphabetical')) {
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'film')) {
-      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Motion Pictures/Theatrical"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}, purpose: "Motion Pictures/Theatrical"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'music')) {
-      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Music/Score"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}, purpose: "Music/Score"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'books')) {
-      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Writing/Novel"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}, purpose: "Writing/Novel"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else { /*by default the tab is on hot, in hot order */
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
