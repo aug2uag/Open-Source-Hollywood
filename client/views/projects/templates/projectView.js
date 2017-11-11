@@ -188,9 +188,11 @@ function rejectUser(offer) {
 }
 
 Template.projectView.helpers({
-  currentSlug: function() {
+  foo: function() {
     console.log(new Array(1000).join('0'))
     me = this.me
+  },
+  currentSlug: function() {
     return currentSlug;
   },
   producerReady: function() {
