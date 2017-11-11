@@ -194,7 +194,7 @@ Template.projectView.helpers({
   },
   producerReady: function() {
     if (!Meteor.user()) return false;
-    return me&&me.iam&&me.iam.length>0||me.primaryRole!==null;
+    return me&&me.iam&&me.iam.length>0||me&&me.primaryRole!==null;
   },
   usersApplied: function() {
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
