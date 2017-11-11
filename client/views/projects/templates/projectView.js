@@ -189,24 +189,12 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   currentSlug: function() {
-    console.log('check this\n--\n')
-    console.log(this)
-    console.log(new Array(1000).join('i'))
     me = this.me
     return currentSlug;
   },
   producerReady: function() {
-    console.log('check this\n--\n')
-    console.log(this)
-    console.log(new Array(1000).join('i'))
-    console.log(Meteor.user())
     if (!Meteor.user()) return false;
-    if (!Meteor.user().iam) {
-      // find user and evaluate
-      return me&&me.didSetProfile;
-    } else {
-      return (Meteor.user() && Meteor.user().didSetProfile);      
-    }
+    return me.iam.length>0||me.primaryRole!==null;
   },
   usersApplied: function() {
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
@@ -219,7 +207,8 @@ Template.projectView.helpers({
     // if owner or accepted user
     var projectOwnerId = this.project.ownerId;
     var acceptedUsers = this.project.acceptedUsers;
-    return Meteor.user()._id === projectOwnerId || acceptedUsers.indexOf(Meteor.user()._id)>-1;
+    var myId = Meteor.user()&&Meteor.user()._id||'myId';
+    return Meteor.user()._id === projectOwnerId || acceptedUsers.indexOf(myId)>-1;
   },
   website: function() {
     currentSlug = this._slug || '';
