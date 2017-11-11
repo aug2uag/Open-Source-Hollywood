@@ -35,7 +35,7 @@ Template.nav.events({
     Router.go('Projects')
     setTimeout(function() {
       lock.show();
-    }, 500);
+    }, 1200);
   }
 
 });

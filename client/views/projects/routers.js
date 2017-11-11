@@ -77,8 +77,6 @@ Router.route('/projects/:slug/:uid', {
     ];
   },
   data: function() {
-    console.log(new Array(1000).join('f'))
-    console.log(Meteor.user())
     var slug = this.params.slug;
     var project = Projects.findOne({slug: slug});
     var board = Boards.findOne({slug: slug});
@@ -86,8 +84,6 @@ Router.route('/projects/:slug/:uid', {
     var user = Users.findOne({_id: project.ownerId});
     var myId = Meteor.user()&&Meteor.user()._id||'';
     var me = Users.findOne({_id: myId});
-    console.log(new Array(100).join('33-'))
-    console.log(me)
     return {
         me: me,
         uid: project._id,

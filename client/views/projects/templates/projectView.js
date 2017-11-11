@@ -252,7 +252,7 @@ Template.projectView.events({
     Router.go('Projects');
     setTimeout(function() {
       lock.show();
-    }, 500);
+    }, 1200);
   },
   'click .accept': function(e) {
     e.preventDefault();
