@@ -76,14 +76,15 @@ Router.route('/projects/:slug/:uid', {
     ];
   },
   data: function() {
+    console.log(new Array(1000).join('f'))
+    console.log(Meteor.user())
     var slug = this.params.slug;
     var project = Projects.findOne({slug: slug});
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
     var user = Users.findOne({_id: project.ownerId});
-    var me = Users.findOne({_id: Meteor.user()&&Meteor.user()._id||''});
     return {
-        me: me,
+        me: Meteor.user(),
         uid: project._id,
         perCent: function() {
           if (project.funded && project.budget) {
