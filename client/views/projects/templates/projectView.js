@@ -189,12 +189,15 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   currentSlug: function() {
+    console.log(new Array(1000).join('0'))
     me = this.me
     return currentSlug;
   },
   producerReady: function() {
     if (!Meteor.user()) return false;
-    return me&&me.iam&&me.iam.length>0||me&&me.primaryRole!==null;
+    console.log(new Array(1000).join('!'))
+    console.log(me)
+    return me&&me.iam&&me.iam.length||me&&me.primaryRole;
   },
   usersApplied: function() {
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
@@ -208,7 +211,7 @@ Template.projectView.helpers({
     var projectOwnerId = this.project.ownerId;
     var acceptedUsers = this.project.acceptedUsers;
     var myId = Meteor.user()&&Meteor.user()._id||'myId';
-    return Meteor.user()._id === projectOwnerId || acceptedUsers.indexOf(myId)>-1;
+    return Meteor.user()._id === projectOwnerId || acceptedUsers&&acceptedUsers.indexOf(myId)>-1;
   },
   website: function() {
     currentSlug = this._slug || '';
