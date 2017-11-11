@@ -83,8 +83,10 @@ Router.route('/projects/:slug/:uid', {
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
     var user = Users.findOne({_id: project.ownerId});
+    var myId = Meteor.user()&&Meteor.user()._id||'';
+    var me = Users.findOne({_id: myId});
     return {
-        me: Meteor.user(),
+        me: me,
         uid: project._id,
         perCent: function() {
           if (project.funded && project.budget) {

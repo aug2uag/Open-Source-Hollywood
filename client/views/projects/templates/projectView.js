@@ -192,6 +192,8 @@ Template.projectView.helpers({
     return currentSlug;
   },
   producerReady: function() {
+    console.log('check this\n--\n')
+    console.log(this)
     console.log(new Array(1000).join('i'))
     console.log(Meteor.user())
     if (!Meteor.user()) return false;
