@@ -1,7 +1,7 @@
 const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
 const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A';
 var donationObject = {};
-var currentSlug, currentTitle, currentProject;
+var currentSlug, currentTitle, currentProject, me;
 function loadcss(f){
     var href = '/css/' + f;
     var ref=document.createElement("link")
@@ -189,6 +189,10 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   currentSlug: function() {
+    console.log('check this\n--\n')
+    console.log(this)
+    console.log(new Array(1000).join('i'))
+    me = this.me
     return currentSlug;
   },
   producerReady: function() {
@@ -199,7 +203,7 @@ Template.projectView.helpers({
     if (!Meteor.user()) return false;
     if (!Meteor.user().iam) {
       // find user and evaluate
-      return this.me.didSetProfile;
+      return me&&me.didSetProfile;
     } else {
       return (Meteor.user() && Meteor.user().didSetProfile);      
     }
