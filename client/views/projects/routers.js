@@ -72,7 +72,8 @@ Router.route('/projects/:slug/:uid', {
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
       Meteor.subscribe('commentsList', this.params.slug),
-      Meteor.subscribe('stringId', this.params.uid)
+      Meteor.subscribe('stringId', this.params.uid),
+      Meteor.subscribe('getMe')
     ];
   },
   data: function() {
@@ -85,6 +86,8 @@ Router.route('/projects/:slug/:uid', {
     var user = Users.findOne({_id: project.ownerId});
     var myId = Meteor.user()&&Meteor.user()._id||'';
     var me = Users.findOne({_id: myId});
+    console.log(new Array(100).join('33-'))
+    console.log(me)
     return {
         me: me,
         uid: project._id,
