@@ -191,6 +191,36 @@ Template.projectView.helpers({
   foo: function() {
     me = this.me
   },
+  subtitle: function() {
+    console.log(this)
+    var numGifts = 0;
+    this.project.gifts&&this.project.gifts.forEach&&this.project.gifts.forEach(function(g) {
+      if (g.quantity>0) numGifts+=1;
+    });
+    var teamPositions = 0;
+    this.project.crew&&this.project.crew.forEach&&this.project.crew.forEach(function(c) {
+      if (c.status&&c.status.indexOf&&c.status.indexOf('needed')>-1) teamPositions+=1;
+    });
+    var castPositions = 0;
+    this.project.cast&&this.project.cast.forEach&&this.project.cast.forEach(function(c) {
+      if (c.status&&c.status.indexOf&&c.status.indexOf('needed')>-1) castPositions+=1;
+    });
+    var msg='donate to campaign below ';
+    if (numGifts) {
+      msg+='or select from available gifts for purchase';
+    };
+    if (teamPositions) {
+      msg+=', there are crew positions available for you to apply';
+    };
+    if (teamPositions&&castPositions) {
+      msg+=', and roles are also available for you to apply';
+    };
+    if (!teamPositions&&castPositions) {
+      msg+=', there are roles on this campaign available for you to apply';
+    };
+    //donate or purchase gifts below || apply or contribute to needs
+    return msg;
+  },
   currentSlug: function() {
     return currentSlug;
   },

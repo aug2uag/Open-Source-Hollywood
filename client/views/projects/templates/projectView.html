@@ -16,6 +16,10 @@
               <h2 class="page-header">This Campaign is not available !</h2>
           </header>
           {{else}}
+          <header class="major">
+              <h2>Details for "<strong>{{project.title}}</strong>"</h2>
+              <p>{{subtitle}}</p>
+          </header>
           <section>
             {{#if isOwner}}
                 <a class="btn btn-danger closeProj">Close and mark project as Finished</a>
@@ -68,13 +72,14 @@
                       </div>
                       <div class="w100">
                         <div class="c-title--h2">Donation</div>
+                        <div class="c-title--h5">Enter your donation amount and press "+" to engage</div>
                         <div class="c-add-to">
                           <div class="c-add-to__container">
                             <div class="c-add-to__cell">
                               <form action="/" class="c-amount">
 
                                   <div class="c-amount__item c-amount__item--input">
-                                    <label for="amount" class="control-label c-amount__label">Contribution</label>
+                                    <label for="amount" class="control-label c-amount__label">Donation Amount</label>
                                     <input min="5" type="number" class="form-control c-amount__input" id="donation_amount">
                                   </div>
                                   <br>
@@ -108,7 +113,7 @@
                               <div class="c-total">
                                 
                                 <div class="c-total__row">
-                                  <div class="c-total__col">Total raised</div>
+                                  <div class="c-total__col">Total raised to date</div>
                                   <div class="c-total__col" id="proj_funds">{{project.funded}}</div>
                                   <!-- <div class="c-total__col">473.00 CHF</div> -->
                                 </div>
@@ -122,8 +127,8 @@
                                 <hr class="c-total__hr" />
                                 
                                 <div class="c-total__row">
-                                  <div class="c-total__col c-total__col--half">Up-to-date data</div>
-                                  <div class="c-total__col c-total__col--half">Real-Time</div>
+                                  <div class="c-total__col c-total__col--half">All information is up-to-date data</div>
+                                  <div class="c-total__col c-total__col--half">in Real-Time</div>
                                 </div>
                               
                               </div>
@@ -212,12 +217,17 @@
                           {{> commentBox}}
                           {{/if}}
                         </div>
-                      </div>      
+                      </div>
                       {{/if}}
                     </main>
                     <!-- RIGHT -->
                     <aside class="l-product__aside">
                       <div class="l-product__attr">
+
+                        <div class="c-prod-attr__section" style="color: chartreuse;">
+                            <div class="c-title--h2 align-center" style="border-bottom: 1px solid #fff;padding-bottom:3px;width:80%">Campaign Opportunities</div>
+                            <div class="c-prod-attr__no-info align-center" style="width:80%"><i class="fa fa-arrow-down"></i>&nbsp;&nbsp;&nbsp;view open opportunities below</div>
+                          </div>
                         
                         <div class="c-prod-attr">
                           <div class="c-prod-attr__section">
@@ -248,7 +258,7 @@
                               <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
                               {{/if}}
                               {{else}}
-                              <div class="c-prod-attr__value"><a class="button special login">sign in to apply</a></div>
+                              <div class="c-prod-attr__value"><a class="button special login">sign in to view</a></div>
                               {{/if}}
                             </div>
 
@@ -325,7 +335,7 @@
                               <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
                               {{/if}}
                               {{else}}
-                              <div class="c-prod-attr__value"><a class="button special login">sign in to apply</a></div>
+                              <div class="c-prod-attr__value"><a class="button special login">sign in to view</a></div>
                               {{/if}}
                             </div>
                             {{else}}
@@ -357,7 +367,7 @@
                               <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
                               {{/if}}
                               {{else}}
-                              <div class="c-prod-attr__value"><a class="button special login">sign in to apply</a></div>
+                              <div class="c-prod-attr__value"><a class="button special login">sign in to view</a></div>
                               {{/if}}
                             </div>
                             {{else}}
@@ -402,6 +412,12 @@
 </template>
 
 <template name="applicants">
+  <br>
+  <br>
+  <header class="major">
+      <h2>Campaign Management</h2>
+      <p>Approve or decline applicants || Fulfillment info for gift purchases</p>
+  </header>
   <h3>Applicants for Roles</h3>
   <div class="table-wrapper">
     <table>

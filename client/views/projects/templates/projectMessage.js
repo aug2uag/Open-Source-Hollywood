@@ -1,7 +1,4 @@
 Template.projectMessage.helpers({
-	foo: function() {
-		// console.log(this)
-	},
 	title: function() {
 		return 'Conversation w ' + this.user.firstName + ' ' + this.user.lastName + ' campaign: ' + this.project.title;
 	},
@@ -20,7 +17,8 @@ Template.projectMessage.helpers({
 Template.projectMessage.events({
 	'click #submit-message': function() {
 		var text = document.getElementById('message-box').value;
-		document.getElementById('message-box').innerHTML = '';
+		document.getElementById('message-box').value = '';
+		// $('#message-box').val('');
 		Meteor.call('addProjectMessage', {
 			user: this.user._id,
 			project: this.project._id,
