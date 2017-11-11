@@ -189,7 +189,6 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   foo: function() {
-    console.log(new Array(1000).join('0'))
     me = this.me
   },
   currentSlug: function() {
@@ -197,8 +196,6 @@ Template.projectView.helpers({
   },
   producerReady: function() {
     if (!Meteor.user()) return false;
-    console.log(new Array(1000).join('!'))
-    console.log(me)
     return me&&me.iam&&me.iam.length||me&&me.primaryRole;
   },
   usersApplied: function() {
