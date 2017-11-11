@@ -195,7 +195,12 @@ Template.projectView.helpers({
     console.log(new Array(1000).join('i'))
     console.log(Meteor.user())
     if (!Meteor.user()) return false;
-    return (Meteor.user() && Meteor.user().didSetProfile);
+    if (!Meteor.user().iam) {
+      // find user and evaluate
+      return this.me.didSetProfile;
+    } else {
+      return (Meteor.user() && Meteor.user().didSetProfile);      
+    }
   },
   usersApplied: function() {
     return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
