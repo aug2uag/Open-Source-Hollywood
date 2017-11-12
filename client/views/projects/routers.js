@@ -118,6 +118,7 @@ Router.route('/projects/:slug/:uid', {
           score: user&&user.influenceScore||0,
           rating: user&&user.rating||0
         },
+        count: project.count,
         _bid: board._id,
         _slug: board.slug,
         isLive: project.isLive,

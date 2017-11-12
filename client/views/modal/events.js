@@ -12,7 +12,7 @@ Template.modal.events({
         $('html').css('visibility', 'hidden');
         setTimeout(function() {
             $('html').css('visibility', 'visible');
-        }, 500);
+        }, 987);
         event.preventDefault();
     }
 });
