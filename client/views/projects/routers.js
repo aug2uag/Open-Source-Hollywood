@@ -84,7 +84,7 @@ Router.route('/projects/:slug/:uid', {
     var user = Users.findOne({_id: project.ownerId});
     var myId = Meteor.user()&&Meteor.user()._id||'';
     var me = Users.findOne({_id: myId});
-    var uPrimaryRole = user.primaryRole ? user.primaryRole : user.iam.join(' / ');
+    var uPrimaryRole = user.primaryRole ? user.primaryRole : user.iam&&user.iam&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
     return {
         me: me,
         uid: project._id,
