@@ -38,7 +38,8 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
 Template.projectTabs.helpers({
   foo: function() {
     var x = Meteor.user();
-    return !(x&&x.primaryRole || (x&&x.iam&&x.iam.length));
+    if (!x) return false;
+    return !(x.primaryRole || (x.iam&&x.iam.length));
   },
   defaultQ: function() {
     return this.logline||this.description||'click <code>DETAILS</code> for more info';
