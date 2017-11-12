@@ -129,7 +129,8 @@ Template.projectView.helpers({
     if (!teamPositions&&castPositions) {
       msg+=', there are roles on this campaign available for you to apply';
     };
-    return msg;
+    var _msg = msg[0].toUpperCase() + msg.substr(1,msg.length-1) + '.';
+    return _msg;
   },
   currentSlug: function() {
     return currentSlug;
