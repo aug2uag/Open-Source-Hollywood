@@ -84,6 +84,7 @@ Router.route('/projects/:slug/:uid', {
     var user = Users.findOne({_id: project.ownerId});
     var myId = Meteor.user()&&Meteor.user()._id||'';
     var me = Users.findOne({_id: myId});
+    var uPrimaryRole = user.primaryRole ? user.primaryRole : user.iam.join(' / ');
     return {
         me: me,
         uid: project._id,
@@ -156,7 +157,8 @@ Router.route('/projects/:slug/:uid', {
           return 'none specified';
         },
         duration: project.duration,
-        applied: project.applied
+        applied: project.applied,
+        uPrimaryRole: uPrimaryRole
       }
     }
 });

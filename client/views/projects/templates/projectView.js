@@ -192,7 +192,6 @@ Template.projectView.helpers({
     me = this.me
   },
   subtitle: function() {
-    console.log(this)
     var numGifts = 0;
     this.project.gifts&&this.project.gifts.forEach&&this.project.gifts.forEach(function(g) {
       if (g.quantity>0) numGifts+=1;
