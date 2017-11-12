@@ -71,25 +71,25 @@ Template.BoardsLayout.rendered = function() {
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
-    }, 377);
+    }, 610);
     clearcss();
     this.autorun(function() {
         css.forEach(function(f) {
             loadcss(f);
         });
     });
-    // if (!hasMain()) loadcss('main.css');
+    /** if (!hasMain()) loadcss('main.css'); */
         
-    // document.styleSheets[0].disabled = true;
+    /** document.styleSheets[0].disabled = true; */
 }
 
 Template.StaticLayout.rendered = function() {
-    // if (hasCore()) clearcss();
-    // if (!hasMain()) loadcss('main.css');
+    /** if (hasCore()) clearcss(); */
+    /** if (!hasMain()) loadcss('main.css'); */
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
-    }, 377);
+    }, 610);
     clearcss();
     loadcss('main.css');
 
@@ -97,10 +97,10 @@ Template.StaticLayout.rendered = function() {
 
 
 Template.SplashLayout.rendered = function() {
-    // if (hasCore()) clearcss();
-    // if (!hasMain()) loadcss('main.css');
-    // $('html').css('visibility', 'hidden');
-    // setTimeout(function() {
-    //     $('html').css('visibility', 'visible');
-    // }, 55);
+    /** if (hasCore()) clearcss(); */
+    /** if (!hasMain()) loadcss('main.css'); */
+    /** $('html').css('visibility', 'hidden'); */
+    /** setTimeout(function() { */
+    /**     $('html').css('visibility', 'visible'); */
+    /** }, 55); */
 }

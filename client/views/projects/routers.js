@@ -84,7 +84,7 @@ Router.route('/projects/:slug/:uid', {
     var user = Users.findOne({_id: project.ownerId});
     var myId = Meteor.user()&&Meteor.user()._id||'';
     var me = Users.findOne({_id: myId});
-    var uPrimaryRole = user&&user.primaryRole ? user.primaryRole : user.iam&&user.iam&&user.iam.length&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
+    var role = user&&user.primaryRole ? user.primaryRole : user&&user.iam&&user.iam&&user.iam.length&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
     return {
         me: me,
         uid: project._id,
@@ -124,7 +124,7 @@ Router.route('/projects/:slug/:uid', {
         isLive: project.isLive,
         project: project,
         title: project.title,
-        uPrimaryRole: uPrimaryRole
+        role: role
       }
     }
 });

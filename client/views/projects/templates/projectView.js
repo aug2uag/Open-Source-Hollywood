@@ -4,11 +4,11 @@ var donationObject = {};
 var currentSlug, currentTitle, currentProject, me;
 function loadcss(f){
     var href = '/css/' + f;
-    var ref=document.createElement("link")
-    ref.setAttribute("rel", "stylesheet")
-    ref.setAttribute("type", "text/css")
-    ref.setAttribute("href", href)
-    document.getElementsByTagName("head")[0].appendChild(ref)
+    var ref=document.createElement("link");
+    ref.setAttribute("rel", "stylesheet");
+    ref.setAttribute("type", "text/css");
+    ref.setAttribute("href", href);
+    document.getElementsByTagName("head")[0].appendChild(ref);
 };
 
 function makeStripeCharge(options) {
@@ -52,30 +52,6 @@ function generateOfferMessage(offer){
 
 function acceptUser(offer) {
   offer.slug = currentSlug;
-  // 1) handle money
-  // if pay $
-      // is there enough money to cover half?
-      // else upload funds, needs at least asking amount
-
-          // fn pay
-              // transfer money to user
-              // create receipts
-
-  // if pay equity, deduct from equity
-
-  // if receive, update funds
-
-
-  
-
-  // 2) update roles
-  // update roles availability
-
-
-
-
-  // 3) notify applicant
-
   bootbox.confirm({
       message: generateOfferMessage(offer),
       buttons: {
@@ -91,71 +67,7 @@ function acceptUser(offer) {
       callback: function (result) {
         if (result) {
           Meteor.call('acceptUserToProject', offer);
-
-
           bootbox.alert('you have accepted the user, you can update the status of your positions in the "Edit Campaign" section and by rejecting other users applying for the same position');
-
-
-          // var arr = currentProject[offer.ctx];
-          // var nameKey = offer.ctx==='cast'?'role':'title';
-          // var modal = '<style>input[type="checkbox"]:checked + label:before, input[type="radio"]:checked + label:before{color:#333}</style><div class="table-wrapper"><table><tbody>';
-          // var labelNeeded = '<label for="position-radio-needed">Needed</label>';
-          // var labelFulfilled = '<label for="position-radio-fulfilled">Fulfilled</label>';
-
-          // arr.forEach(function(a, i) {
-          //   var checkedNeeded = '<input type="radio" name="position-radio'+i+'" value="needed" checked>';
-          //   var uncheckedNeeded = '<input type="radio" name="position-radio'+i+'" value="needed">';
-          //   var checkedFulfilled = '<input type="radio" name="position-radio'+i+'" value="fulfilled" checked>';
-          //   var uncheckedFulfilled = '<input type="radio" name="position-radio'+i+'" value="fulfilled">';
-          //   modal+='<tr>';
-          //   modal+='<td>'+a[nameKey]+'</td>';
-          //   modal+='<td>';
-          //   if (a.status==='needed') {
-          //     modal+=checkedNeeded+labelNeeded+uncheckedFulfilled+labelFulfilled;
-          //   } else {
-          //     modal+=uncheckedNeeded+labelNeeded+checkedFulfilled+labelFulfilled;
-          //   }
-          //   modal+='</td>'
-          //   modal+='</tr>';
-          // });
-          // console.log(arr)
-          // update role
-          /**
-            
-                
-                    
-                        <tr>
-                            <td><input type="text" name="title" id="crew-title" placeholder="Title" /></td>
-                            <td><input type="text" name="title" id="crew-description" placeholder="Description" /></td>
-                            <td>
-                                <input type="radio" id="crew-radio-needed" name="crew-radio" value="needed" checked>
-                                <label for="crew-radio-needed">Needed</label>
-                                <input type="radio" id="crew-radio-fulfilled" name="crew-radio" value="fulfilled">
-                                <label for="crew-radio-fulfilled">Fulfilled</label>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        */
-          // var intmodal = bootbox.dialog({
-          //   title: 'Update Campaign '+nameKey.toUpperCase()+' Positions',
-          //   message: modal,
-          //   buttons: {
-          //     danger:  {
-          //       label: 'Close',
-          //       className: "btn-danger",
-          //       callback: function() { intmodal.modal('hide') }
-          //     },
-          //     success: {
-          //       label: 'Update',
-          //       className: 'btn-success',
-          //       callback: function() {
-          //         console.log('hallelujah')
-          //       }
-          //     }
-          //   }
-          // });
         }
       }
   });
@@ -164,9 +76,6 @@ function acceptUser(offer) {
 
 function rejectUser(offer) {
   offer.slug = currentSlug;
-  // 1) notify applicant
-  // 2) refund money if applicable
-  // 3) update project
   bootbox.confirm({
       message: "Please confirm: you are rejecting " + offer.user.name,
       buttons: {
@@ -189,7 +98,7 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   foo: function() {
-    me = this.me
+    me = this.me;
     currentSlug = this._slug || '';
     currentTitle = this.project.title || '';
     currentProject = this.project;
@@ -220,7 +129,6 @@ Template.projectView.helpers({
     if (!teamPositions&&castPositions) {
       msg+=', there are roles on this campaign available for you to apply';
     };
-    //donate or purchase gifts below || apply or contribute to needs
     return msg;
   },
   currentSlug: function() {
@@ -231,14 +139,13 @@ Template.projectView.helpers({
     return me&&me.iam&&me.iam.length||me&&me.primaryRole;
   },
   usersApplied: function() {
-    return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0)
+    return (this.project.roleApplicants&&this.project.roleApplicants.length||0)+(this.project.crewApplicants&&this.project.crewApplicants.length||0);
   },
   equityDistributed: function() {
     return this.project.equityAllocated||0;
   },
   isAllowed: function() {
     if (!Meteor.user()) return false;
-    // if owner or accepted user
     var projectOwnerId = this.project.ownerId;
     var acceptedUsers = this.project.acceptedUsers;
     var myId = Meteor.user()&&Meteor.user()._id||'myId';
@@ -369,7 +276,6 @@ Template.projectView.events({
           className: "btn-success",
           callback: function() {
             intmodal.modal('hide')
-            // add user to requested resource
             Meteor.call("lendResource", {
               slug: currentSlug,
               asset: was.category
@@ -396,7 +302,7 @@ Template.projectView.events({
         label: "APPLY",
         className: "btn-success",
         callback: function() {
-          intmodal.modal('hide')
+          intmodal.modal('hide');
           /**
               ask for pay: [equity and/or pay]
               gratis or conditional donation: pay (default 0)
@@ -549,9 +455,6 @@ Template.projectView.events({
   'click .purchase_gift': function(e) {
     e.preventDefault();
     var was = this, o={gift:was};
-    // popup get address for delivery
-    // leave phone number and email
-    // send to fulfill
     var intmodal = bootbox.dialog({
       title: 'PURCHASE GIFT',
       message: '<div class="container" style=" position: relative; width: 100%;"><h3> <p class="align-center bootbox">'+was.name+'  |  ($'+was.msrp+')</p></h3><h5> <p class="align-center bootbox">'+was.description+'</p></h5><div class="row"> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">please enter shipping addressing and purchase info</p></h5> </div><div class="col-md-12"> <div class="col-md-6 bootpadded"> <label for="address-gift">street address</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="city-gift">city name</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="state-gift">state name</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="zip-gift">zip code</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="email-gift">correspondence email</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift"> </div></div><div class="col-md-6 bootpadded"> <label for="phone-gift">correspondence phone number</label> <div class="input-group input-group-sm"> <span class="input-group-addon"></span> <input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift"> </div></div></div></div>',
@@ -598,7 +501,7 @@ Template.projectView.events({
     $('html').css('visibility', 'hidden');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
-    }, 500);
+    }, 610);
     css.forEach(function(f) {
         loadcss(f);
     });
@@ -652,18 +555,6 @@ Template.applicants.helpers({
 Template.applicants.events({
   'click .view_offer': function(e) {
     var was = this;
-    // var message;
-    // if (was.type==='sourced') {
-    //   var expiresOn = new Date(was.expires).toLocaleDateString();
-    //   message = 'this applicant is offering $'+was.pay+' that expires on '+expiresOn;
-    // } else {
-    //   var message = 'this applicant is requesting ';
-    //   if (was.pay) message+='$'+was.pay;
-    //   if (was.pay&&was.equity) message+=' and ';
-    //   if (was.equity) message+=was.equity+'%';
-    //   message+=' to join your campaign'
-    // }
-    // show offer with accept/reject buttons
     var intmodal = bootbox.dialog({
       title: 'APPLICATION & TERMS',
       message: '<div class="container"> <div class="row d-flex justify-content-center"> <div class="col-md-5"> <div class="main-profile"> <div class="profile-header"> <img class="bootbox_img" src="'+was.user.avatar+'" alt="'+was.user.name+'"> <h1 style="color:#333">'+was.user.name+'</h1><p class="align-center">'+was.appliedFor+'</p> </div><div> <p class="align-center">'+was.message+'</p></div></div></div></div></div>',
@@ -671,7 +562,7 @@ Template.applicants.events({
         danger:  {
           label: 'Close',
           className: "btn-danger",
-          callback: function() { intmodal.modal('hide') }
+          callback: function() { intmodal.modal('hide'); }
         }
       }
     });
