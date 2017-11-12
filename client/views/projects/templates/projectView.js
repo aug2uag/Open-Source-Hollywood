@@ -205,9 +205,9 @@ Template.projectView.helpers({
     this.project.cast&&this.project.cast.forEach&&this.project.cast.forEach(function(c) {
       if (c.status&&c.status.indexOf&&c.status.indexOf('needed')>-1) castPositions+=1;
     });
-    var msg='donate to campaign below ';
+    var msg='donate to campaign below';
     if (numGifts) {
-      msg+='or select from available gifts for purchase';
+      msg+=' or select from available gifts for purchase';
     };
     if (teamPositions) {
       msg+=', there are crew positions available for you to apply';
