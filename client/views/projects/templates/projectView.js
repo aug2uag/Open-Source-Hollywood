@@ -212,7 +212,7 @@ Template.projectView.events({
     if (amt && typeof amt === 'number' && amt >= 5) {
       $('#total_usd').text('$'+amt);
       $('#transfer_amt').text((amt*.05).toFixed(2)+' USD');
-      var funds = parseFloat($('#proj_funds').text().split['$'][1]);
+      var funds = parseFloat($('#proj_funds').text().split('$')[1]);
       if (funds>1) $('#percent_total').text(((amt/funds)*100).toFixed(1)+'%');
       else $('#percent_total').text('infinity');
       donationObject.amount = amt;
