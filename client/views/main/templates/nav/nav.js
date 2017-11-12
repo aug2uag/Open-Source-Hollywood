@@ -32,10 +32,9 @@ Template.nav.events({
     document.title = 'Settings Edit';
   },
   'click .login': function() {
-    Router.go('Projects')
-    setTimeout(function() {
-      lock.show();
-    }, 1200);
+    var text = $('.login').text().toLowerCase();
+    if (text.indexOf('sign')>-1) lock.show();
+    else Router.go('Projects');
   }
 
 });

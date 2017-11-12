@@ -73,7 +73,7 @@
                       </div>
                       <div class="w100">
                         <div class="c-title--h2">Donation</div>
-                        <div class="c-title--h5">Enter your donation amount and press "+" to engage</div>
+                        <div class="c-title--h5">enter your donation amount and press "+" to engage, then click the green button to verify donation amount</div>
                         <div class="c-add-to">
                           <div class="c-add-to__container">
                             <div class="c-add-to__cell">
@@ -104,8 +104,8 @@
                                   <div class="c-info__value c-info__value--total"><span id="total_usd">0</span> USD <span class="c-info__math" id="before_fees"></span></div>
                                 </div>
                                 <div class="c-info__row">
-                                  <div class="c-info__index">Transfer</div>
-                                  <div class="c-info__value" id="transfer_amt">0</div>
+                                  <div class="c-info__index">Fee</div>
+                                  <div class="c-info__value" id="transfer_amt">0 USD</div>
                                 </div>                    
                               </div>
                               
@@ -115,13 +115,13 @@
                                 
                                 <div class="c-total__row">
                                   <div class="c-total__col">Total raised to date</div>
-                                  <div class="c-total__col" id="proj_funds">{{project.funded}}</div>
+                                  <div class="c-total__col" id="proj_funds">${{project.funded}}</div>
                                   <!-- <div class="c-total__col">473.00 CHF</div> -->
                                 </div>
                                 
                                 <div class="c-total__row">
-                                  <div class="c-total__col">Per cent total</div>
-                                  <div class="c-total__col" id="percent_total">0</div>
+                                  <div class="c-total__col">Per cent contribution</div>
+                                  <div class="c-total__col" id="percent_total">0%</div>
                                   <!-- <div class="c-total__col">528.00 CHF</div> -->
                                 </div>
                                 
@@ -259,7 +259,7 @@
                               <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
                               {{/if}}
                               {{else}}
-                              <div class="c-prod-attr__value"><a class="button special login">sign in to view</a></div>
+                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
                               {{/if}}
                             </div>
 
@@ -336,7 +336,7 @@
                               <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
                               {{/if}}
                               {{else}}
-                              <div class="c-prod-attr__value"><a class="button special login">sign in to view</a></div>
+                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
                               {{/if}}
                             </div>
                             {{else}}
@@ -368,7 +368,7 @@
                               <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
                               {{/if}}
                               {{else}}
-                              <div class="c-prod-attr__value"><a class="button special login">sign in to view</a></div>
+                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
                               {{/if}}
                             </div>
                             {{else}}

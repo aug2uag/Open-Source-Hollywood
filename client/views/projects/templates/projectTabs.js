@@ -218,8 +218,13 @@ Template.projectTabs.rendered = function () {
         videoUrl = $(this).attr("data-video-src")
         $("#video").attr("src", videoUrl)
       });
+      $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;Sign In');
     });
 };
+
+Template.terms.rendered = function() {
+  $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;Sign In');
+}
 
 
 Template.userTabs.helpers({

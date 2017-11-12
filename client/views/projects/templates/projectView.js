@@ -180,9 +180,6 @@ Template.projectView.helpers({
 Template.projectView.events({
   'click .login': function() {
     Router.go('Projects');
-    setTimeout(function() {
-      lock.show();
-    }, 1200);
   },
   'click .accept': function(e) {
     e.preventDefault();
@@ -213,9 +210,9 @@ Template.projectView.events({
     donationObject = {};
     var amt = parseFloat($('#donation_amount').val());
     if (amt && typeof amt === 'number' && amt >= 5) {
-      $('#total_usd').text(amt);
-      $('#transfer_amt').text((amt*.05).toFixed(2));
-      var funds = parseFloat($('#proj_funds').text());
+      $('#total_usd').text('$'+amt);
+      $('#transfer_amt').text((amt*.05).toFixed(2)+' USD');
+      var funds = parseFloat($('#proj_funds').text().split['$'][1]);
       if (funds>1) $('#percent_total').text(((amt/funds)*100).toFixed(1)+'%');
       else $('#percent_total').text('infinity');
       donationObject.amount = amt;
@@ -545,6 +542,7 @@ Template.projectView.onRendered(function() {
      } else {
       $('#upvote').css('left', '7px');
      }
+     $('.login').html('<i class="fa fa-arrow-left"></i>&nbsp;&nbsp;&nbsp;GO BACK');
  });
 
 Template.applicants.helpers({

@@ -21,8 +21,7 @@ Router.route('/newproject', {
     layoutTemplate: 'StaticLayout',
     waitOn: function() {
       if (!Meteor.user()) {
-        Router.go('Home');
-        window.location.assign('/');
+        Router.go('Projects');
         return
       }
         return [

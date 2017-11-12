@@ -8,11 +8,13 @@
                 {{#if currentUser}}
                   {{#if producerReady}}
                     <li><a href="/newproject">Create Campaign</a></li>
+                  {{/if}}
+                  <li><a href="/projects">Campaigns</a></li>
+                  <li><a href="/dashboard">Dashboard</a></li>
+                  {{#if producerReady}}
                     <li><a href="/comms">Notifications</a></li>
                   {{/if}}
                   <li><a id="settings" href="/settings">Edit Profile</a></li>
-                  <li><a href="/projects">Campaigns</a></li>
-                  <li><a href="/dashboard">Dashboard</a></li>
                   <li><a id="signout">Sign out</a></li>
                 {{else}}
                   <li><a onclick="window.location.assign('https://opensourcehollywood.org')"><i class="fa fa-home"></i>&nbsp;&nbsp;&nbsp;Home</a></li>
