@@ -84,18 +84,10 @@ Router.route('/projects/:slug/:uid', {
     var user = Users.findOne({_id: project.ownerId});
     var myId = Meteor.user()&&Meteor.user()._id||'';
     var me = Users.findOne({_id: myId});
-    var uPrimaryRole = user.primaryRole ? user.primaryRole : user.iam&&user.iam&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
+    var uPrimaryRole = user&&user.primaryRole ? user.primaryRole : user.iam&&user.iam&&user.iam.length&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
     return {
         me: me,
         uid: project._id,
-        perCent: function() {
-          if (project.funded && project.budget) {
-            var v = (project.funded/project.budget * 100 > 100 ? 100 : project.funded/project.budget * 100).toFixed(2);
-            return v + ' %';
-          };
-
-          return 'not available';
-        },
         isOwner: function () {
           if (!Meteor.user()) return false;
           return project.ownerId === Meteor.user()._id;
@@ -123,41 +115,15 @@ Router.route('/projects/:slug/:uid', {
           };
           return numComments + ' comments';
         },
-        processedGenres: function() {
-          if (project.genres.length > 0) {
-            return project.genres.join(', ');
-          } else {
-            return 'no genres specified';
-          }
-        },
         _ownerStats: {
           score: user&&user.influenceScore||0,
           rating: user&&user.rating||0
         },
-        needs: project.needs || 'watch video for details',
-        videoURL: project.videoURL,
         _bid: board._id,
         _slug: board.slug,
         isLive: project.isLive,
         project: project,
-        ownerName: project.ownerName,
-        logline: project.logline,
-        ownerAvatar: project.ownerAvatar,
-        ownerId: project.ownerId,
-        details: project.details,
-        funded: project.funded,
-        count: project.count,
-        createdAt: project.createdAt,
         title: project.title,
-        gifts: project.gifts,
-        budget: function() {
-          if (project.budget) {
-            return '$ ' + project.budget
-          }
-          return 'none specified';
-        },
-        duration: project.duration,
-        applied: project.applied,
         uPrimaryRole: uPrimaryRole
       }
     }

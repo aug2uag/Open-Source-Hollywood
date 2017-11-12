@@ -190,6 +190,9 @@ function rejectUser(offer) {
 Template.projectView.helpers({
   foo: function() {
     me = this.me
+    currentSlug = this._slug || '';
+    currentTitle = this.project.title || '';
+    currentProject = this.project;
   },
   subtitle: function() {
     var numGifts = 0;
@@ -242,9 +245,6 @@ Template.projectView.helpers({
     return Meteor.user()._id === projectOwnerId || acceptedUsers&&acceptedUsers.indexOf(myId)>-1;
   },
   website: function() {
-    currentSlug = this._slug || '';
-    currentTitle = this.project.title || '';
-    currentProject = this.project;
     return this.project.website || 'not specified';
   },
   title: function() {
@@ -266,15 +266,6 @@ Template.projectView.helpers({
       if (this.archived) return ! false;
       return ! true;
     }
-  },
-  crowdsourced: function() {
-    return this.selectedSegment === 'Crowdsourced';
-  },
-  crowdfunded: function() {
-    return this.selectedSegment === 'Crowdfunded';
-  },
-  isBoth: function() {
-    return this.selectedSegment === 'Both' || this.selectedSegment !== 'Crowdsourced' && this.selectedSegment !== 'Crowdfunded';
   }
 })
 
