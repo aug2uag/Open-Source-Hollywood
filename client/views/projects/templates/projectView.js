@@ -99,6 +99,13 @@ function rejectUser(offer) {
 
 Template.projectView.helpers({
   shareData: function() {
+    ShareIt.configure({
+        sites: {
+            'facebook': {
+                'appId': '1790348544595983'
+            }
+        }
+    });
     me = this.me;
     currentSlug = this.project.slug || '';
     currentTitle = this.project.title || '';
