@@ -17,6 +17,7 @@ function makeStripeCharge(options) {
     amount: Math.abs(Math.floor(options.amount*100))<1?1:Math.abs(Math.floor(options.amount*100)),
     currency: 'usd',
     name: options.message,
+    bitcoin: true,
     description: options.description || 'opensourcehollywood.org',
     panelLabel: 'Pay Now',
     token: function(_token) {
@@ -97,11 +98,18 @@ function rejectUser(offer) {
 }
 
 Template.projectView.helpers({
-  foo: function() {
+  shareData: function() {
     me = this.me;
-    currentSlug = this._slug || '';
+    currentSlug = this.project.slug || '';
     currentTitle = this.project.title || '';
     currentProject = this.project;
+    return {
+      title: 'Check out "'+this.project.title+'" on Open Source Hollywood!',
+      author: this.project.ownerName,
+      description: this.project.description,
+      thumbnail: this.project.banner,
+      url: 'https://opensourcehollywood.org/campaign/'+this.project.slug
+    }
   },
   subtitle: function() {
     var numGifts = 0;
@@ -148,9 +156,10 @@ Template.projectView.helpers({
   isAllowed: function() {
     if (!Meteor.user()) return false;
     var projectOwnerId = this.project.ownerId;
-    var acceptedUsers = this.project.acceptedUsers;
+    var acceptedUsers = this.project.usersApproved;
     var myId = Meteor.user()&&Meteor.user()._id||'myId';
-    return Meteor.user()._id === projectOwnerId || acceptedUsers&&acceptedUsers.indexOf(myId)>-1;
+    if (myId === projectOwnerId) return true;
+    return acceptedUsers&&acceptedUsers.indexOf(myId)>-1;
   },
   website: function() {
     return this.project.website || 'not specified';

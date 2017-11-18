@@ -128,6 +128,76 @@ Router.route('/projects/:slug/:uid', {
       }
     }
 });
+Router.route('/campaign/:slug', {
+  name: 'campaignView',
+  template: 'projectView',
+  layoutTemplate: 'StaticLayout',
+  onBeforeAction: function() {
+    document.title = "Campaign";
+    this.next();
+  },
+  waitOn: function() {
+    return [
+      Meteor.subscribe('getProject', this.params.slug), 
+      Meteor.subscribe('gotoBoard', this.params.slug),
+      Meteor.subscribe('commentsList', this.params.slug),
+      Meteor.subscribe('stringId', this.params.uid),
+      Meteor.subscribe('getMe')
+    ];
+  },
+  data: function() {
+    var slug = this.params.slug;
+    var project = Projects.findOne({slug: slug});
+    var board = Boards.findOne({slug: slug});
+    if (!board || !project) return;
+    var user = Users.findOne({_id: project.ownerId});
+    var myId = Meteor.user()&&Meteor.user()._id||'';
+    var me = Users.findOne({_id: myId});
+    var role = user&&user.primaryRole ? user.primaryRole : user&&user.iam&&user.iam&&user.iam.length&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
+    return {
+        me: me,
+        uid: project._id,
+        isOwner: function () {
+          if (!Meteor.user()) return false;
+          return project.ownerId === Meteor.user()._id;
+        },
+        isMember: function() {
+          if (!Meteor.user()) return false;
+          if (project.ownerId === Meteor.user()._id) return true;
+          var falsy = false;
+          project.usersApproved.forEach(function(u) {
+            if (u.id === Meteor.user()._id) return falsy = true;
+          });
+          return falsy;
+        },
+        projectComments: function () {
+          return Comments.find({projectId: slug});
+        },
+        submittedAgo: moment(project.createTimeActual, moment.ISO_8601).fromNow(),
+        numComments: function() {
+          var numComments = Comments.find({projectId: slug}).count();
+          if (numComments === 0) {
+            return 'Be the first to comment!';
+          };
+          if (numComments === 1) {
+            return '1 comment';
+          };
+          return numComments + ' comments';
+        },
+        _ownerStats: {
+          score: user&&user.influenceScore||0,
+          rating: user&&user.rating||0
+        },
+        count: project.count,
+        _bid: board._id,
+        _slug: board.slug,
+        isLive: project.isLive,
+        project: project,
+        title: project.title,
+        role: role
+      }
+    }
+});
 
 Router.route('/edit/projects/:slug/edit', {
   name: 'EditProject',
