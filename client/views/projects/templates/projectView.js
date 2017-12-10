@@ -115,7 +115,7 @@ Template.projectView.helpers({
       author: this.project.ownerName,
       description: this.project.description,
       thumbnail: this.project.banner,
-      url: 'https://opensourcehollywood.org/campaign/'+this.project.slug
+      url: 'https://opensourcehollywood.org/projects/'+this.project.slug
     }
   },
   subtitle: function() {
