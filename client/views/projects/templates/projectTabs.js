@@ -42,11 +42,11 @@ Template.projectTabs.helpers({
     return !(x.primaryRole || (x.iam&&x.iam.length));
   },
   defaultQ: function() {
-    if (this.logline.length>101) return this.logline.substr(0, 98)+'..';
+    if (this.logline.length>95) return this.logline.substr(0, 95)+'..';
     return this.logline;
   },
   formattedTitle: function() {
-    if (this.title.length>24) return this.title.substr(0, 22)+'..';
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
     return this.title;
   },
   castLn: function() {
@@ -228,12 +228,16 @@ Template.projectTabs.rendered = function () {
         videoUrl = $(this).attr("data-video-src")
         $("#video").attr("src", videoUrl)
       });
-      $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;Sign In');
+      $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN');
     });
 };
 
 Template.terms.rendered = function() {
-  $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;Sign In');
+  $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN');
+}
+
+Template.about.rendered = function() {
+  $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN');
 }
 
 
