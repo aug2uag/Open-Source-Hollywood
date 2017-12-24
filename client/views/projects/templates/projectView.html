@@ -141,47 +141,73 @@
                         </div>
                       </div>
                       <div class="w100">
+                        <div class="c-prod-attr__section">
+                            <div class="c-prod-attr__title">logline</div>
+                            <div class="c-prod-attr__no-info"> {{project.logline}} </div>
+                          </div>
+
+                          <div class="c-prod-attr__section">
+                            <div class="c-prod-attr__title">website</div>
+                            <div class="c-prod-attr__no-info"> {{website}} </div>
+                          </div>
+
+                          <div class="c-prod-attr__section">
+                            <div class="c-prod-attr__title">Video Explainer</div>
+                            <div class="c-prod-attr__no-info">{{#if project.videoExplainer}}{{project.videoExplainer}}{{else}}N / A{{/if}}</div>
+                          </div>
+
                         <div class="c-title--h2">Description</div>
                         
                         <div class="c-desription">
                           {{ project.description }}
                         </div>
+
+                        <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">Links &amp; Social</div>
+
+                            {{#each project.social}}
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">{{this.name}}</div>
+                              <div class="c-prod-attr__value">{{this.address}}</div>
+                            </div>
+
+                            {{ else }}
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">N / A</div>
+                            </div>
+
+                            {{/each}}
+                                   
+                          </div>
+
+                          <div class="c-prod-attr__section">
+                            <div class="c-title--h2">Author</div>
+                            <div class="c-prod-attr__title">campaign creator</div>
+                            
+                            <div class="c-prod-attr__item" style="width:80%">
+                              <div class="c-prod-attr__name">{{project.ownerName}}</div>
+                              <div class="c-prod-attr__value"><a href="/profile/{{project.ownerId}}" class="button">VIEW PROFILE</a></div>
+                            </div>
+
+                            <div class="c-prod-attr__item" style="width:80%">
+                              <div class="c-prod-attr__name">score</div>
+                              <div class="c-prod-attr__value">{{_ownerStats.score}}</div>
+                            </div>
+
+                            <div class="c-prod-attr__item" style="width:80%">
+                              <div class="c-prod-attr__name">rating</div>
+                              <div class="c-prod-attr__value">{{_ownerStats.rating}}/5</div>
+                            </div>
+                            
+                            <div class="c-prod-attr__item" style="width:80%">
+                              <div class="c-prod-attr__name">role</div>
+                              <div class="c-prod-attr__value">{{role}}</div>
+                            </div>
+                          </div>
                       </div>
-                      <div class="w100">
-                        <h4>About the story</h4>
-                        
-                        <div class="c-desription">
-                          {{ project.storyInfo }}
-                        </div>
-                      </div>
-                      <div class="w100">
-                        <h4>Project history</h4>
-                        
-                        <div class="c-desription">
-                          {{ project.historyInfo }}
-                        </div>
-                      </div>
-                      <div class="w100">
-                        <h4>Project plans</h4>
-                        
-                        <div class="c-desription">
-                          {{ project.plansInfo }}
-                        </div>
-                      </div>
-                      <div class="w100">
-                        <h4>Explanation of needs</h4>
-                        
-                        <div class="c-desription">
-                          {{ project.needsInfo }}
-                        </div>
-                      </div>
-                      <div class="w100">
-                        <h4>Significance of work</h4>
-                        
-                        <div class="c-desription">
-                          {{ project.significanceInfo }}
-                        </div>
-                      </div>
+                      
               
               
                       <div class="c-title--h2">Gifts for Purchase</div>
@@ -229,100 +255,8 @@
                             <div class="c-title--h2 align-center" style="border-bottom: 1px solid #fff;padding-bottom:3px;width:80%">Campaign Opportunities</div>
                             <div class="c-prod-attr__no-info align-center" style="width:80%"><i class="fa fa-arrow-down"></i>&nbsp;&nbsp;&nbsp;view open opportunities below</div>
                           </div>
-                        
-                        <div class="c-prod-attr">
-                          <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">logline</div>
-                            <div class="c-prod-attr__no-info"> {{project.logline}} </div>
-                          </div>
 
-                          <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">website</div>
-                            <div class="c-prod-attr__no-info"> {{website}} </div>
-                          </div>
-
-
-                          <div class="c-title--h2">Request for Assets</div>
-                          <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">request for assets</div>
-
-                            {{#if project.needs.length}}
-                            {{#each project.needs}}
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{this.category}}</div>
-                              {{#if currentUser}}
-                              {{#if producerReady}}
-                              <div class="c-prod-attr__value"><a class="general_need-response button special" id="{{@index}}-need">offer</a></div>
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
-                              {{/if}}
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
-                              {{/if}}
-                            </div>
-
-                            {{/each}}
-                            {{else}}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">N / A</div>
-                            </div>
-                            {{/if}}         
-                          </div>
-                          
-                          
-                          
-                          
-                          <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">Links &amp; Social</div>
-
-                            {{#each project.social}}
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{this.name}}</div>
-                              <div class="c-prod-attr__value">{{this.address}}</div>
-                            </div>
-
-                            {{ else }}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">N / A</div>
-                            </div>
-
-                            {{/each}}
-                                   
-                          </div>
-                          
-                          <div class="c-prod-attr__section">
-                            <div class="c-title--h2">Author</div>
-                            <div class="c-prod-attr__title">campaign creator</div>
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{project.ownerName}}</div>
-                              <div class="c-prod-attr__value"><a href="/profile/{{project.ownerId}}" class="button">VIEW</a></div>
-                            </div>
-
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">score</div>
-                              <div class="c-prod-attr__value">{{_ownerStats.score}}</div>
-                            </div>
-
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">rating</div>
-                              <div class="c-prod-attr__value">{{_ownerStats.rating}}/5</div>
-                            </div>
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">role</div>
-                              <div class="c-prod-attr__value">{{role}}</div>
-                            </div>
-                          </div>
-
-                        
-                        </div>
-                        
-                        <div class="c-prod-attr">
+                          <div class="c-prod-attr">
                           <div class="c-title--h2">Project team</div>
                           <div class="c-prod-attr__section">
                             <div class="c-prod-attr__title">TEAM</div>
@@ -347,10 +281,7 @@
 
                           </div>
                           
-                          <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">Video Explainer</div>
-                            <div class="c-prod-attr__no-info">{{#if project.videoExplainer}}{{project.videoExplainer}}{{else}}N / A{{/if}}</div>
-                          </div>
+                          
                         </div>
                         <div class="c-prod-attr">
                           <div class="c-title--h2">Project roles</div>
@@ -393,6 +324,87 @@
                         </div>
                         
                       </div>
+                        
+                        <div class="c-prod-attr">
+                          
+
+
+                          <div class="c-title--h2">Request for Assets</div>
+                          <div class="c-prod-attr__section">
+                            
+                            <div class="c-prod-attr__title">request for assets</div>
+
+                            {{#if project.needs.length}}
+                            {{#each project.needs}}
+                            
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">{{this.category}}</div>
+                              {{#if currentUser}}
+                              {{#if producerReady}}
+                              <div class="c-prod-attr__value"><a class="general_need-response button special" id="{{@index}}-need">offer</a></div>
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
+                              {{/if}}
+                              {{else}}
+                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
+                              {{/if}}
+                            </div>
+
+                            {{/each}}
+                            {{else}}
+                            <div class="c-prod-attr__item">
+                              <div class="c-prod-attr__name">N / A</div>
+                            </div>
+                            {{/if}}         
+                          </div>
+                          
+                          
+                          
+                          
+                          
+
+                          <div class="w100">
+                            <h4>About the story</h4>
+                            
+                            <div class="c-desription">
+                              {{ project.storyInfo }}
+                            </div>
+                          </div>
+                          <div class="w100">
+                            <h4>Project history</h4>
+                            
+                            <div class="c-desription">
+                              {{ project.historyInfo }}
+                            </div>
+                          </div>
+                          <div class="w100">
+                            <h4>Project plans</h4>
+                            
+                            <div class="c-desription">
+                              {{ project.plansInfo }}
+                            </div>
+                          </div>
+                          <div class="w100">
+                            <h4>Explanation of needs</h4>
+                            
+                            <div class="c-desription">
+                              {{ project.needsInfo }}
+                            </div>
+                          </div>
+                          <div class="w100">
+                            <h4>Significance of work</h4>
+                            
+                            <div class="c-desription">
+                              {{ project.significanceInfo }}
+                            </div>
+                          </div>
+                              
+                              
+
+                        
+                        </div>
+                        
+                        
                     </aside>
 
                     {{#if isOwner}}

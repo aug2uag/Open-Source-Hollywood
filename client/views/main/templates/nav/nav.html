@@ -5,24 +5,28 @@
               <input class="trigger" type="checkbox" id="mainNavButton">
               <label id="navlabel" for="mainNavButton" onclick>Open Source Hollywood</label>
 
-          {{#if currentUser}}
+              {{#if currentUser}}
               <ul>
                 
-                  <li><a href="/new">Create Campaign</a></li>
+                  <li><a href="/newproject">Create Campaign</a></li>
                   <li><a href="/projects">Campaigns</a></li>
                   <li><a href="/dashboard">Dashboard</a></li>
                   <li><a href="/comms">Notifications</a></li>
                   <li><a id="settings" href="/settings">Edit Profile</a></li>
                   <li><a id="signout">Sign out</a></li>
               </ul>
-          {{else}}
-                  <a href="/terms" class="button small signin_nav" style='float: left;'>TERMS</a>
-                  <a href="/about" class="button small signin_nav" style='float: left;'>ABOUT</a>
-                  <a href="/" class="button small signin_nav" style='float: left;'><i class="glyphicon glyphicon-home"></i></a>
-                  <a class="button special small login signin_nav" style='float: right;'>SIGNIN</a>
-          {{/if}}
+                {{else}}
+                <ul>
+                
+                  <li><a href="/" class="" ><i class="glyphicon glyphicon-home"></i></a></li>
+                  <li><a href="/about" class="" >ABOUT</a></li>
+                  <li><a href="/terms" class="" >TERMS</a></li>
+                  <li><a class="login" >SIGNIN</a></li>
+              </ul>
+                  
+                {{/if}}
               
-      </nav>
+            </nav>
     </header>
 
 
@@ -72,9 +76,9 @@
         <li><a href="{{pathFor 'Projects'}}">Projects</a></li>
         <li role="separator" class="divider"></li>
         <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Create Project</p>
-        <li><a href="/new" role="button" aria-haspopup="false" aria-expanded="false"><strong>Produce</strong></a></li>
+        <li><a href="/newproject" role="button" aria-haspopup="false" aria-expanded="false"><strong>Produce</strong></a></li>
         <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Active Projects</p>
-        <li><a href="/active" role="button" aria-haspopup="false" aria-expanded="false"><strong>Manage</strong></a></li>
+        <li><a href="/activeprojects" role="button" aria-haspopup="false" aria-expanded="false"><strong>Manage</strong></a></li>
         <li role="separator" class="divider"></li>
         <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Dashboard</p>
         <li><a href="/dashboard">Dashboard</a></li>
