@@ -1,0 +1,109 @@
+<template name="projectHome">
+  <div id="page-wrapper">
+    <section id="banner_home">
+        
+        <div class="content">
+          <header>
+            <!-- <h2>The future has landed</h2>
+            <p>And there are no hoverboards or flying cars.<br />
+            Just apps. Lots of mother flipping apps.</p> -->
+          </header>
+          <!-- <span class="image"><img src="img/pic01.jpg" alt="" /></span> -->
+          <!-- <a href="#" class="button special login">Sign In</a> -->
+        </div>
+
+        <a href="#one" class="goto-next scrolly">Next</a>
+      </section>
+    <div id="main" class="wrapper style1">
+      <div class="container">
+      
+          <header class="major">
+              <h2>Live Campaigns</h2>
+              <p>Browse, view, and participate.</p>
+
+              <div class="btn-toolbar" role="toolbar">
+                {{#if counts3}}
+                    <div class="btn-group" role="group">
+                      {{>sortBar}}
+                    </div>
+                {{/if}}
+                {{#if counts30}}
+                    <div class="btn-group pull-right" role="group">
+                      {{>pager}}
+                    </div>
+                {{/if}}
+              </div>
+          </header>
+
+          <!-- Text -->
+          <section>
+            <div class="container">
+              <div class="c-related">
+                
+                  {{#each projects}}
+                    <div class="c-related__item projtab">
+                      <div class="c-related__figure">
+                        <a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a">
+                          <img class="c-related__img projtabimg" src="{{banner}}" />
+                        </a>
+                      </div>
+                      <div class="c-related__supplier proj__supplier">
+                        <h4 class="h10"><p class="align-center">{{title}}</p></h4>
+                        <p class="align-center defaultQ">{{defaultQ}}</p>
+
+                        
+                       <!--  <ul class="alt mod80 sm_li">
+
+                          <li class="tabs_projs">
+                            <div class="page-header">
+                              <div class="pull-left">
+                                <h1 class="sm_li">Roles Available:</h1>
+                              </div>
+                              <div class="pull-right">
+                                <h3 class="text-right">{{ castLn }}</h3>
+                              </div><div class="clearfix"></div></div>
+                          </li>
+                          
+                          <li class="tabs_projs">
+                            <div class="page-header">
+                              <div class="pull-left">
+                                <h1 class="sm_li">Positions Available:</h1>
+                              </div>
+                              <div class="pull-right">
+                                <h3 class="text-right">{{ crewLn }}</h3>
+                              </div><div class="clearfix"></div></div>
+                          </li>
+
+                          <li class="tabs_projs">
+                            <div class="page-header">
+                              <div class="pull-left">
+                                <h1 class="sm_li">Funds Raised:</h1>
+                              </div>
+                              <div class="pull-right">
+                                <h3 class="text-right">${{ funded }}</h3>
+                              </div><div class="clearfix"></div></div>
+                          </li>
+
+                        </ul>
+ -->
+
+                          {{#if currentUser}}
+                          <a class="c-related__a button quick_apply">QUICK APPLY</a>
+                          {{/if}}
+  
+                      </div>
+                    </div>
+                  {{else}}
+                    <div class="c-related__item mod80">
+                      <div class="c-related__title">
+                        <h3 class="h10"><p class="align-center">No campaigns, <a id="createnewproject">create one now</a></p></h3>
+                      </div>
+                    </div>
+                  {{/each}}
+              </div>
+            </div>
+          </section>
+      </div>
+    </div>
+  </div>
+</template>

@@ -14,7 +14,7 @@ Template.signin.events({
 	}
 });
 
-Template.splashPage.events({
+Template.about.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
     lock.show();

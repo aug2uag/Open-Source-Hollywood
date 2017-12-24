@@ -94,13 +94,3 @@ Template.StaticLayout.rendered = function() {
     loadcss('main.css');
 
 }
-
-
-Template.SplashLayout.rendered = function() {
-    /** if (hasCore()) clearcss(); */
-    /** if (!hasMain()) loadcss('main.css'); */
-    /** $('html').css('visibility', 'hidden'); */
-    /** setTimeout(function() { */
-    /**     $('html').css('visibility', 'visible'); */
-    /** }, 55); */
-}

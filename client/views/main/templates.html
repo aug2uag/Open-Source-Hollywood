@@ -11,10 +11,6 @@
 
 </template>
 
-<template name="SplashLayout">
-    {{ > splashPage }}
-</template>
-
 <template name='BoardsLayout'> 
 
     <div id="surface">
@@ -106,27 +102,8 @@
     {{/if}}
 </template>
 
-<template name="splashPage">
+<template name="about">
     <div id="page-wrapper">
-
-      {{>nav}}
-
-      <!-- Banner -->
-      <section id="banner">
-        
-        <div class="content">
-          <header>
-            <!-- <h2>The future has landed</h2>
-            <p>And there are no hoverboards or flying cars.<br />
-            Just apps. Lots of mother flipping apps.</p> -->
-          </header>
-          <!-- <span class="image"><img src="img/pic01.jpg" alt="" /></span> -->
-          <!-- <a href="#" class="button special login">Sign In</a> -->
-        </div>
-
-        <a href="#one" class="goto-next scrolly">Next</a>
-      </section>
-
       <!-- INTRO / ABOUT US -->
       <section id="zero" class="wrapper style1 special fade-up">
           <div class="container">
@@ -153,7 +130,7 @@
                 <section class="4u$ 6u(medium) 12u$(xsmall)">
                   <span class="icon alt major fa-copyright"></span>
                   <h3>Autonomy Plus</h3>
-                  <p>Your work is 100% yours, we may connect you with major streaming outlets.</p>
+                  <p>Your work is 100% yours, we can connect you with major outlets.</p>
                 </section>
                 <section class="4u 6u$(medium) 12u$(xsmall)">
                   <span class="icon alt major fa-gift"></span>
@@ -182,7 +159,6 @@
 
       <!-- One -->
       <section id="one" class="spotlight style1 bottom">
-        <span class="image fit main"><img src="../../img/pic03.jpg" alt="" /></span>
         <div class="content">
           <!-- <div class="container"> -->
           <header>
@@ -202,8 +178,7 @@
       </section>
 
       <!-- Two -->
-      <section id="two" class="spotlight style2 miniheight right">
-        <span class="image fit main"><img src="../../img/pic02.jpg" alt="" /></span>
+      <section id="two" class="spotlight style2 bottom">
         <div class="content">
           <header>
             <h2 class="align-center">EXPLORE</h2>
@@ -224,8 +199,7 @@
       </section>
 
       <!-- Three -->
-      <section id="three" class="spotlight style3 left">
-        <span class="image fit main bottom"><img src="../../img/pic04.jpg" alt="" /></span>
+      <section id="three" class="spotlight style3 bottom">
         <div class="content">
           <header>
             <h2 class="align-center">COMMUNITY</h2>
@@ -245,55 +219,6 @@
         <a href="#four" class="goto-next scrolly">Next</a>
       </section>
 
-      <!-- Four -->
-      <section id="four" class="wrapper style1 special fade-up">
-        <div class="container">
-          <header class="major">
-            <h2>FEATURED PROJECTS</h2>
-            <p>Coming Soon ..</p>
-          </header>
-          <div class="box alt">
-            <div class="row uniform">
-              <!-- <section class="4u 6u(medium) 12u$(xsmall)">
-                <span class="icon alt major fa-area-chart"></span>
-                <h3>Ipsum sed commodo</h3>
-                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-              </section>
-              <section class="4u 6u$(medium) 12u$(xsmall)">
-                <span class="icon alt major fa-comment"></span>
-                <h3>Eleifend lorem ornare</h3>
-                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-              </section>
-              <section class="4u$ 6u(medium) 12u$(xsmall)">
-                <span class="icon alt major fa-flask"></span>
-                <h3>Cubilia cep lobortis</h3>
-                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-              </section>
-              <section class="4u 6u$(medium) 12u$(xsmall)">
-                <span class="icon alt major fa-paper-plane"></span>
-                <h3>Non semper interdum</h3>
-                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-              </section>
-              <section class="4u 6u(medium) 12u$(xsmall)">
-                <span class="icon alt major fa-file"></span>
-                <h3>Odio laoreet accumsan</h3>
-                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-              </section>
-              <section class="4u$ 6u$(medium) 12u$(xsmall)">
-                <span class="icon alt major fa-lock"></span>
-                <h3>Massa arcu accumsan</h3>
-                <p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-              </section> -->
-            </div>
-          </div>
-          <footer class="major">
-            <ul class="actions">
-              <li><a href="#" class="button login">Register Today!</a></li>
-            </ul>
-          </footer>
-        </div>
-      </section>
-
       <!-- Five -->
       <section id="five" class="wrapper style2 special fade-up">
         <div class="container">
@@ -310,12 +235,9 @@
         </div>
       </section>
 
-      <!-- Footer -->
-      {{>footer}}
     </div>
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
-    <script type="text/javascript">$('.login').on('click', function(){lock.show()});</script>
 
 </template>

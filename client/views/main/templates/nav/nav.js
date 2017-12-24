@@ -16,13 +16,12 @@ Template.nav.helpers({
 Template.nav.events({
   'click #signout': function() {
     $('html').css('visibility', 'hidden');
+    Router.go('Home');
     setTimeout(function() {
         $('html').css('visibility', 'visible');
     }, 610);
     Meteor.logout();
     Meteor.logoutOtherClients();
-    Router.go('Home');
-    window.location.assign('/');
     document.title = "Open Source Hollywood";
   },
   'click #profile': function() {
