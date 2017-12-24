@@ -199,7 +199,7 @@ Template.projectView.helpers({
 
 Template.projectView.events({
   'click .login': function() {
-    Router.go('Home');
+    $('#gohome').click();
   },
   'click .accept': function(e) {
     e.preventDefault();
