@@ -31,7 +31,12 @@ Template.projectHome.helpers({
     return !(x.primaryRole || (x.iam&&x.iam.length));
   },
   defaultQ: function() {
-    return this.logline||this.description||'click <code>DETAILS</code> for more info';
+    if (this.logline.length>101) return this.logline.substr(0, 98)+'..';
+    return this.logline;
+  },
+  formattedTitle: function() {
+    if (this.title.length>24) return this.title.substr(0, 22)+'..';
+    return this.title;
   },
   castLn: function() {
     var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
