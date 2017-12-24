@@ -31,14 +31,7 @@
           <section>
             <div class="container">
               <div class="c-related">
-                
-                    <!--                     <div class="c-related__item mod80">
-                      <div class="c-related__title">
-                        <h3 class="h10"><p class="align-center" style="line-height: 1.5rem">Edit Profile to View, Create, and Join Campaigns</p></h3>
-                        <div class="c-related__supplier"><p class="align-center"><blockquote>select "Edit Profile" from the navigation menu above</blockquote></p></div>  
-                      </div>
-                    </div> -->
-               
+  
                   {{#each projects}}
                     <div class="c-related__item projtab">
                       <div class="c-related__figure">
@@ -46,13 +39,14 @@
                           <img class="c-related__img projtabimg" src="{{banner}}" />
                         </a>
                       </div>
-                      <div class="proj__supplier">
-                        <h4 class="h10">{{formattedTitle}}</h4>
-                        <div class="c-related__supplier"><p class="align-center defaultQ">{{defaultQ}}</p></div>
-                        {{#if currentUser}}
-                        <a class="c-related__a button quick_apply">QUICK APPLY</a>
-                        {{/if}}
-                        
+                      <div class="c-related__supplier proj__supplier">
+                        <h4 class="h10"><p class="align-center">{{formattedTitle}}</p></h4>
+                        <p class="align-center defaultQ">{{defaultQ}}</p>
+
+                          {{#if currentUser}}
+                          <a class="c-related__a button quick_apply">QUICK APPLY</a>
+                          {{/if}}
+  
                       </div>
                     </div>
                   {{else}}
