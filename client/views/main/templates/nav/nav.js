@@ -32,7 +32,10 @@ Template.nav.events({
   },
   'click .login': function() {
     var text = $('.login').text().toLowerCase();
-    if (text.indexOf('sign')>-1) lock.show();
+    if (text.indexOf('sign')>-1) {
+      window.history.pushState("", "", '/');
+      lock.show();
+    }
     else Router.go('Projects');
   }
 
