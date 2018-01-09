@@ -58,11 +58,20 @@
         <hr>
         <div class="board-widget board-widget-activity bottom clearfix">
             <div class="board-widget-title">
-                <h3 style="color:#333">{{_ 'activity'}}</h3>
+                <h3 style="color:#333">{{_ 'applicants'}}</h3>
             </div>
             <div class="board-widget-content">
-                <div class="activity-gradient-t"></div>
-                <div class="activity-gradient-b"></div>
+                {{#if areApplicants}}
+                <div class="activity-gradient-t">
+                    {{#if areApplicants}}
+                    {{# each applicants}}
+                        {{> applicantAvatar user=this draggable=false size="large"}}
+                    {{/ each}}
+                    {{else}}
+                    <h3 style="color:#333">There are no applicants</h3>
+                    {{/if}}
+                </div>
+                {{/if}}
                 <!-- <div class="board-actions-list fancy-scrollbar">
                     {{ > activities }}
                 </div> -->
@@ -74,6 +83,7 @@
 <template name="applicantsPopup">
     <div class="board-widgets-content-wrapper fancy-scrollbar">
         <div class="board-widgets-content">
+            {{# if currentUser.isBoardAdmin }}
             <h3 style="color:#333">{{_ 'applicants'}}</h3>
             <hr>
             <div class="board-backgrounds-list clearfix">
@@ -85,6 +95,7 @@
                     <h3 style="color:#333">There are no applicants</h3>
                 {{/if}}
             </div>
+            {{/if}}
 
         </div>
     </div>

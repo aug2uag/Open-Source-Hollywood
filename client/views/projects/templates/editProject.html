@@ -40,7 +40,7 @@
 
 
                         <div class="12u$">
-                            <label for="category">genre</label>
+                            <label for="category">category</label>
                             <div class="select-wrapper">
                               <select name="category" id="category">
                                 <option>- Format -</option>
@@ -63,9 +63,57 @@
                             <div class="select-wrapper">
                               <select name="purpose" id="purpose">
                                 <option>Unspecified</option>
-                                <option val="Print Media">Print Media</option>
-                                <option val="Motion Picture">Motion Picture</option>
+                                <option val="Mixed Media">Mixed Media</option>
+                                <option val="Audio">Audio</option>
                                 <option val="Performance">Performance</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="12u$">
+                            <label for="genre">genre</label>
+                            <div class="select-wrapper">
+                              <select name="genre" id="genre">
+                                <option>Unspecified</option>
+                                <optgroup label="Mixed Media">
+                                    <option val="Drama">Drama</option>
+                                    <option val="Comedy">Comedy</option>
+                                    <option val="Documentary">Documentary</option>
+                                    <option val="Educational">Educational</option>
+                                    <option val="Game Show">Game Show</option>
+                                    <option val="Musical">Musical</option>
+                                    <option val="Reality">Reality</option>
+                                    <option val="News">News</option>
+                                    <option val="Sports">Sports</option>
+                                    <option val="Variety">Variety</option>
+                                    <option val="Kids">Kids</option>
+                                    <option val="Cooking">Cooking</option>
+                                    <option val="Other">Other</option>
+                                </optgroup>
+                                
+                                <optgroup label="Audio">
+                                    <option val="Folk">Folk</option>
+                                    <option val="Classical">Classical</option>
+                                    <option val="Contemporary">Contemporary</option>
+                                    <option val="Soul">Soul</option>
+                                    <option val="Jazz">Jazz</option>
+                                    <option val="Rock">Rock</option>
+                                    <option val="Metal">Metal</option>
+                                    <option val="Pop">Pop</option>
+                                    <option val="Hip Hop">Hip Hop</option>
+                                    <option val="EDM">EDM</option>
+                                    <option val="Other">Other</option>
+                                </optgroup>
+                                
+                                <optgroup label="Performance">
+                                    <option val="Ballet">Ballet</option>
+                                    <option val="Opera">Opera</option>
+                                    <option val="Dance">Dance</option>
+                                    <option val="Theatre">Theatre</option>
+                                    <option val="Other">Other</option>
+                                </optgroup>
+                                
+
                               </select>
                             </div>
                         </div>

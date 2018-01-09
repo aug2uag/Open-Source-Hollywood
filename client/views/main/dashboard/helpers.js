@@ -1,5 +1,6 @@
 Template.dashboard.helpers({
 	foo: function() {
+		console.log(this)
 		var _id = Meteor.user()._id;
 		return Projects.find({
 	        archived: false,
@@ -31,6 +32,7 @@ Template.dashboard.helpers({
 		return Meteor.user()._id;
 	},
 	messagesLink: function() {
+		console.log(this)
 		return '/message/project/'+this.slug+'/'+Meteor.user()._id;
 	}
 });

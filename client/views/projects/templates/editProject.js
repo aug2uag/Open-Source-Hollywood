@@ -53,6 +53,7 @@ Template.editProject.events({
       o.logline = $('#logline').val() || 'nothing to see here';
       o.category = $('#category').find(":selected").text();
       if (o.category.toLowerCase().indexOf('format')>-1) return bootbox.alert('please select category or genre');
+      o.genre = $('#genre').find(":selected").text();
       o.purpose = $('#purpose').find(":selected").text();
       o._gifts = gifts;
       if (validateUrl($('#website').val())) o.website = $('#website').val();
@@ -206,9 +207,11 @@ Template.editProject.helpers({
     currentTitle = this.title;
     var category = this.category;
     var purpose = this.purpose;
+    var genre = this.genre;
     setTimeout(function() {
       $("#category").val(category);
       $("#purpose").val(purpose);
+      $("#genre").val(genre);
     }, 377);
   },
   neededCheck: function() {
