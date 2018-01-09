@@ -36,6 +36,11 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
 });
 
 Template.projectTabs.helpers({
+  sections: function() {
+    // split campaigns in to sections
+    // define section name
+    // group projects by sctions
+  },
   foo: function() {
     var x = Meteor.user();
     if (!x) return false;

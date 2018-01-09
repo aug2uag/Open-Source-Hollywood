@@ -217,10 +217,10 @@
             <div class="window-header clearfix">
                 <span class="window-header-icon icon-lg fa fa-calendar-o"></span>
                 <div class="window-title card-detail-title non-empty inline {{# if currentUser.isBoardMember }}editable{{/ if }}">
-                    <h2 class="window-title-text current hide-on-edit js-card-title">{{ card.title }}</h2>
+                    <h2 class="window-title-text current hide-on-edit js-card-title color333">{{ card.title }}</h2>
                     <div class="edit edit-heavy">
                         <form id="WindowTitleEdit">
-                            <textarea type="text" class="field single-line" id="title">{{ card.title }}</textarea>
+                            <textarea type="text" class="field single-line color333" id="title">{{ card.title }}</textarea>
                             <div class="edit-controls clearfix">
                                 <input type="submit" class="primary confirm js-title-save-edit" value="{{_ 'save'}}">
                                 <a href="#" class="icon-lg fa fa-times dark-hover cancel js-cancel-edit"></a>
@@ -230,7 +230,7 @@
                     <div class="quiet hide-on-edit window-header-inline-content js-current-list">
                         <p class="inline-block bottom">
                             {{_ 'in-list'}}
-                            <a href="#" class="{{# if currentUser.isBoardMember }}js-open-move-from-header{{else}}disabled{{/ if }}"><strong>{{ card.list.title }}</strong></a>
+                            <a href="#" class="{{# if currentUser.isBoardMember }}js-open-move-from-header{{else}}disabled{{/ if }}"><strong class="color333">{{ card.list.title }}</strong></a>
                         </p>
                     </div>
                 </div>
@@ -285,7 +285,7 @@
                             {{/ if }}
                             <div class="card-detail-edit edit">
                                 <form id="WindowDescEdit">
-                                    {{#editor class="field single-line2" id="desc"}}{{ card.description }}{{/editor}}
+                                    {{#editor class="field single-line2 placeholder333" id="desc"}}{{ card.description }}{{/editor}}
                                     <div class="edit-controls clearfix">
                                         <input type="submit" class="primary confirm js-title-save-edit" value="{{_ 'save'}}">
                                         <a href="#" class="icon-lg fa fa-times dark-hover cancel js-cancel-edit"></a>
@@ -319,7 +319,7 @@
     <div class="window-module">
         <div class="window-module-title window-module-title-no-divider">
             <span class="window-module-title-icon icon-lg fa fa-comments-o"></span>
-            <h3>{{ _ 'activity'}}</h3>
+            <h3 class="color333">{{ _ 'activity'}}</h3>
         </div>
         {{# if currentUser.isBoardMember }}
             <div class="new-comment js-new-comment">
@@ -393,7 +393,7 @@
 <template name="WindowSidebarModule">
     <div class="window-sidebar" style="position: relative;">
         <div class="window-module clearfix">
-            <h3>{{_ 'add'}}</h3>
+            <h3 style="color333">{{_ 'add'}}</h3>
             <div class="clearfix">
                 <a href="#" class="button-link js-change-card-members" title="{{_ 'members-title'}}">
                     <span class="icon-sm fa fa-user"></span> {{_ 'members'}}
@@ -407,7 +407,7 @@
             </div>
         </div>
         <div class="window-module other-actions clearfix">
-            <h3>{{_ 'actions'}}</h3>
+            <h3 style="color333">{{_ 'actions'}}</h3>
             <div class="clearfix">
                 <hr>
                 {{ #if card.archived }}
@@ -425,7 +425,7 @@
             </div>
         </div>
         <div class="window-module other-actions clearfix">
-            <h3>set due date</h3>
+            <h3 style="color333">set due date</h3>
             <div class="clearfix">
                 <hr>
                 <input type="date" id="datetimepicker" style="width: 100%;display: -webkit-inline-box;font-size: large;text-align: -webkit-center;" value="{{due}}">

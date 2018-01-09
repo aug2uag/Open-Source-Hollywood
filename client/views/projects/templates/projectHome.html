@@ -24,7 +24,11 @@
           <!-- Text -->
 
               <div class="c-related">
-                
+                  <div class="table-wrapper">
+                    <table>
+                      <caption style="position:  relative;width:  100vw;"><strong>ALL CAMPAIGNS</strong></caption>
+                    </table>
+                  </div>
                   {{#each projects}}
                     <div class="c-related__item projtab">
                       <div class="c-related__figure">
@@ -33,6 +37,22 @@
                         </a>
                       </div>
                       <div class="c-related__supplier proj__supplier">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <!-- title -->
+                            <small>{{purpose}}</small>
+                          </div>
+                          <div class="col-sm-6">
+                            <!-- location -->
+                            <small>{{category}}</small>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <!-- title -->
+                            <small>{{city}}, {{state}}&nbsp;&nbsp;&nbsp;&nbsp;{{zip}}</small>
+                          </div>
+                        </div>
                         <h4 class="h10"><p class="align-center">{{formattedTitle}}</p></h4>
                         <p class="align-center defaultQ">{{defaultQ}}</p>
 
