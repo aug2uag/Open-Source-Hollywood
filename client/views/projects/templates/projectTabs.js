@@ -47,7 +47,7 @@ Template.projectTabs.helpers({
     return !(x.primaryRole || (x.iam&&x.iam.length));
   },
   defaultQ: function() {
-    if (this.logline.length>10) {
+    if (this.logline&&this.logline.length>10&&this.logline.indexOf('nothing to see here')===-1) {
       if (this.logline.length>95) return this.logline.substr(0, 95)+'..';  
       return this.logline;
     };
@@ -55,7 +55,7 @@ Template.projectTabs.helpers({
       if (this.description.length>95) return this.description.substr(0, 95)+'..';  
       return this.description;
     };
-    return 'view details for more information'
+    return 'view details for more information';
   },
   formattedTitle: function() {
     if (this.title.length>25) return this.title.substr(0, 23)+'..';
