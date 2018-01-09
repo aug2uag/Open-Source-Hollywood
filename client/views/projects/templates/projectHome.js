@@ -31,8 +31,15 @@ Template.projectHome.helpers({
     return !(x.primaryRole || (x.iam&&x.iam.length));
   },
   defaultQ: function() {
-    if (this.logline.length>95) return this.logline.substr(0, 95)+'..';
-    return this.logline;
+    if (this.logline.length>10) {
+      if (this.logline.length>95) return this.logline.substr(0, 95)+'..';  
+      return this.logline;
+    };
+    if (this.description.length>10) {
+      if (this.description.length>95) return this.description.substr(0, 95)+'..';  
+      return this.description;
+    };
+    return 'view details for more information'
   },
   formattedTitle: function() {
     if (this.title.length>25) return this.title.substr(0, 23)+'..';
