@@ -59,17 +59,20 @@ Template.memberAvatar.helpers({
 });
 
 Template.applicantAvatar.helpers({
-    contribution: function() {
-        return this.user.contribution;
+    uid: function() {
+        return this.user.uid;
     },
-    username: function() {
-        return this.user.username;
+    otype: function() {
+        return this.user.type;
+    },
+    message: function() {
+        return this.user.message;
     },
     name: function() {
-        return this.user.name;
+        return this.user.name.trim() || 'this user\'s name is not available';
     },
-    thumbnailUrl: function() {
-        return this.user.thumbnailUrl;
+    avatar: function() {
+        return this.user.avatar;
     }
 });
 

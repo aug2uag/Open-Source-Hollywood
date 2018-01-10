@@ -96,6 +96,12 @@
                 {{this.title}}
             </a>
         </div>
+    {{else}}
+        <div class="list-group">
+            <a style="color:#333" class="list-group-item-info list-card-details clearfix show">
+                You have no tasks
+            </a>
+        </div>
     {{/each}}
 </template>
 
@@ -162,15 +168,16 @@
 </template>
 
 <template name="applicantAvatar">
+    <h4>{{otype}} applicant</h4>
     <div class="member {{size}}"
-         title="{{ name }} ({{ username }})">
+         title="{{ name }}">
         <div class="avatar avatar-{{size}} avatar-hide-image">
-            <img class="avatar-image" src="{{ thumbnailUrl }}" style="max-width:100%;max-height:100%;">
+            <img class="avatar-image" src="{{ avatar }}" style="max-width:100%;max-height:100%;">
         </div>
     </div>
     <div>
-        <a href="/profile/{{this.user.id}}"><p><u>{{name}}</u></p></a>
-        <p>{{_ 'contribution'}} ${{contribution}}</p>
+        <a href="/profile/{{uid}}"><p><u>{{name}}</u></p></a>
+        <p>{{ message }}</p>
     </div>  
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
       <div class="btn-group" role="group">

@@ -8,8 +8,8 @@ Template.modal.events({
         event.preventDefault();
     },
     'click .js-close-window': function(event) {
-        Utils.goBoardId(this.card.board()._id);
         $('html').css('visibility', 'hidden');
+        Utils.goBoardId(this.card.board()._id);
         setTimeout(function() {
             $('html').css('visibility', 'visible');
         }, 987);

@@ -53,6 +53,7 @@ function generateOfferMessage(offer){
 
 function acceptUser(offer) {
   offer.slug = currentSlug;
+  console.log(offer)
   bootbox.confirm({
       message: generateOfferMessage(offer),
       buttons: {

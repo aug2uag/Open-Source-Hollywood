@@ -1,11 +1,18 @@
 <template name="homeWidget">
     {{ > menuWidget }}
+    <div class="col-s-12">
+        
+    </div>
     {{ > membersWidget }}
-    {{ > activityWidget }}
+    <!-- uncomment HERE to add applicants to board -->
+    <!-- {{ > activityWidget }} -->
 </template>
 
 <template name="menuWidget">
     <div class="board-widget board-widget-nav clearfix{{#unless session 'menuWidgetIsOpen'}} collapsed{{/unless}}">
+        <h3 id="exit" class="dark-hover toggle-widget-nav"><strong style="color:#333">EXIT</strong>
+            <span class="icon-sm fa fa-close"></span>
+        </h3>
         <h3 class="dark-hover toggle-widget-nav js-toggle-widget-nav">{{_ 'menu'}}
             <span class="icon-sm fa fa-chevron-circle-down toggle-menu-icon"></span>
         </h3>
@@ -17,6 +24,37 @@
                     {{_ 'filter-cards'}}
                 </a>
             </li>
+            <li>
+                <a id="stats" class="nav-list-item">
+                    <span class="header-btn-text js-member-name"></span>
+                    {{_ 'stats'}}
+                </a>
+            </li>
+            <li>
+                <a id="cal" class="nav-list-item">
+                    <span class="header-btn-text js-member-name"></span>
+                    {{_ 'calendar'}}
+                </a>
+            </li>
+            <li>
+                <a id="tasks" class="nav-list-item">
+                    <span class="header-btn-text js-member-name"></span>
+                    {{_ 'tasks'}}
+                </a>
+            </li>
+            <li>
+                <a id="asss" class="nav-list-item">
+                    <span class="header-btn-text js-member-name"></span>
+                    {{_ 'assets'}}
+                </a>
+            </li>
+            <li>
+                <a id="mine" class="nav-list-item js-open-card-filter">
+                    <span class="header-btn-text js-member-name"></span>
+                    {{_ 'mine'}}
+                </a>
+            </li>
+            
 <!--             {{#if currentUser.isBoardAdmin}}
                 <hr>
                 <li>
@@ -55,14 +93,20 @@
 
 <template name="activityWidget">
     {{# if board.activities.count }}
+        <div class="col-s-12">
+            <a class="header-btn header-member js-open-header-member-menu" href="#">
+                <span class="header-btn-text js-member-name">{{_ 'settings'}}</span>
+            </a>
+        </div>
         <hr>
         <div class="board-widget board-widget-activity bottom clearfix">
             <div class="board-widget-title">
                 <h3 style="color:#333">{{_ 'applicants'}}</h3>
             </div>
             <div class="board-widget-content">
+                <hr>
                 {{#if areApplicants}}
-                <div class="activity-gradient-t">
+                <div style="overflow-y:auto;position:relative;max-height:400px">
                     {{#if areApplicants}}
                     {{# each applicants}}
                         {{> applicantAvatar user=this draggable=false size="large"}}
@@ -75,6 +119,7 @@
                 <!-- <div class="board-actions-list fancy-scrollbar">
                     {{ > activities }}
                 </div> -->
+
             </div>
         </div>
     {{/if}}
@@ -96,7 +141,6 @@
                 {{/if}}
             </div>
             {{/if}}
-
         </div>
     </div>
 </template>
