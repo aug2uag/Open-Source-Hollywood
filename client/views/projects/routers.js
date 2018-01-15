@@ -126,6 +126,27 @@ Router.route('/projects/:slug/:uid', {
         title: project.title,
         role: role
       }
+    },
+    onAfterAction: function() {
+      var post;
+      // The SEO object is only available on the client.
+      // Return if you define your routes on the server, too.
+      if (!Meteor.isClient) {
+        return;
+      }
+      post = this.data();
+      SEO.set({
+        title: post.title,
+        meta: {
+          'description': post.project.description||post.project.logline||'Campaign by '+post.project.ownerName
+        },
+        og: {
+          'title': post.title,
+          'description': post.project.description||post.project.logline||'Campaign by '+post.project.ownerName,
+          'image': [post.project.banner, post.project.ownerAvatar]
+
+        }
+      });
     }
 });
 Router.route('/campaign/:slug', {
@@ -265,4 +286,4 @@ Router.route('/message/project/:slug/:uid', {
       messages: messages
     }
   }
-})
+});
