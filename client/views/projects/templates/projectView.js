@@ -1,5 +1,5 @@
 const css = ['main.css', 'core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
-const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A';
+const StripePublicKey = 'pk_live_GZZIrMTVcHHwJDUni09o09sq';
 var donationObject = {};
 var currentSlug, currentTitle, currentProject, me;
 function loadcss(f){
