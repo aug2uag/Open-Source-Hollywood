@@ -10,6 +10,7 @@ Template.editor.events({
 Template.signin.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
+    window.scrollTo(0, 0);
     window.history.pushState("", "", '/');
 		lock.show();
 	}
@@ -18,6 +19,7 @@ Template.signin.events({
 Template.about.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
+    window.scrollTo(0, 0);
     window.history.pushState("", "", '/');
     lock.show();
   },

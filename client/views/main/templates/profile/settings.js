@@ -27,6 +27,33 @@ function guid() {
 }
 
 Template.settings.events({
+	'click #set-notifications': function(e) {
+		e.preventDefault();
+		/**
+			read & send email val, phone val
+			read & send checked preferences
+		  */
+
+		var o = {
+			email: $('#email_notify').val(),
+			phone: $('#phone_notify').val(),
+			donations: $('#checkbox-Donations').prop('checked') ? true : false,
+			applications: $('#checkbox-Applications').prop('checked') ? true : false,
+			summaries: $('#checkbox-Donations').prop('checked') ? true : false
+		}
+
+		Meteor.call('setNotificationPreferences', o, function(err, result) {
+			if (result) {
+				if (result.indexOf('verification code')>-1) {
+					/** show modal with verification code input */
+					bootbox.alert(result);
+				} else {
+					bootbox.alert(result);
+				}
+			};
+		});
+
+	},
 	'click #save_settings': function(e) {
 		e.preventDefault();
 
@@ -186,6 +213,40 @@ Template.settings.helpers({
 	},
 	routing_no: function() {
 		return Meteor.user().bank.routing_number;
+	},
+	emailConfig: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		var _email = configs.email || {};
+		return _email.verified || false;
+	},
+	emailValue: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		var _email = configs.email || {};
+		return _email.email || '';
+	},
+	emailConfigStatus: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		if (!configs.email) return 'N / A';
+		var _email = configs.email || {};
+		if (_email.verified) return 'verified';
+		return 'not verified';
+	},
+	phoneConfig: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		var _phone = configs.phone || {};
+		return _phone.verified || false
+	},
+	phoneValue: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		var _phone = configs.phone || {};
+		return _phone.email || '';
+	},
+	phoneConfigStatus: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		if (!configs.phone) return 'N / A';
+		var _phone = configs.phone || {};
+		if (_phone.verified) return 'verified';
+		return 'not verified';
 	},
 });
 

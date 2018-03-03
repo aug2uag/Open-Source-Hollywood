@@ -145,6 +145,71 @@
                         </div>
                     </div>
 
+                    <h2> Notification Settings </h2>
+                    <div class="table-wrapper">
+                      <table class="alt">
+                        <tbody>
+                          <tr>
+                            <td><span style="position:relative;top:-10px">Email</span></td>
+                            <td>
+                              <div class="row">
+                                <div class="10u">
+                                  <input type="text" name="email_notify" id="email_notify" value="{{emailValue}}" placeholder="enter email" />
+                                </div>
+                                {{#if emailConfig}}
+                                  <div>
+                                    <a id="remove_email_notify" class="button special">X</a>      
+                                  </div>
+                                {{/if}}
+                              </div>
+                            </td>
+                            <td><span id="email_verified" style="position:relative;top:-10px">{{ emailConfigStatus }}</span></td>
+                          </tr>
+                          <tr>
+                            <td><span style="position:relative;top:-10px">Phone</span></td>
+                            <td>
+                              <div class="row">
+                                <div class="10u">
+                                  <input type="text" name="phone_notify" id="phone_notify" value="{{phoneValue}}" placeholder="enter phone" />
+                                </div>
+                                {{#if phoneConfig}}
+                                  <div>
+                                    <a id="remove_phone_notify" class="button special">X</a>      
+                                  </div>
+                                {{/if}}
+                              </div>
+                            </td>
+                            <td><span id="phone_verified" style="position:relative;top:-10px">{{ phoneConfigStatus }}</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+                    </div>
+
+                    <div class="row uniform 50%">
+
+                      <div class="4u 8u$(medium)">
+                        <input class="user-role" type="checkbox" id="checkbox-Donations" name="Donations" checked>
+                        <label for="checkbox-Donations">Donations</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input class="user-role" type="checkbox" id="checkbox-Applications" name="Applications" checked>
+                        <label for="checkbox-Applications">Applications</label>
+                      </div>
+
+                      <div class="4u 8u$(medium)">
+                        <input class="user-role" type="checkbox" id="checkbox-Summaries" name="Summaries" checked>
+                        <label for="checkbox-Summaries">Summaries</label>
+                      </div>
+
+
+                    </div>
+                    <br>
+                    <a id="set-notifications" class="button special">Update Notification Settings</a>
+                    <br>
+                    <br>
+
                     <h2> Reels, Demos, &amp; Portfolios </h2>
                     <div class="row uniform 50%">
                         <div class="6u 12u$(xsmall)">

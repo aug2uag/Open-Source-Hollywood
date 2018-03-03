@@ -111,7 +111,7 @@ Template.projectView.helpers({
     currentSlug = this.project.slug || '';
     currentTitle = this.project.title || '';
     currentProject = this.project;
-    var backupURL = 'https://opensourcehollywood.org/projects/'+this.project.slug+'/'+this.project.ownerId;
+    var backupURL = 'https://app.opensourcehollywood.org/projects/'+this.project.slug+'/'+this.project.ownerId;
     return {
       title: 'Check out "'+this.project.title+'" on Open Source Hollywood! <opensourcehollywood.org>',
       author: this.project.ownerName,
