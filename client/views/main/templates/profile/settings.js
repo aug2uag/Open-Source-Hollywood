@@ -27,6 +27,16 @@ function guid() {
 }
 
 Template.settings.events({
+	'click #remove_phone_notify': function(e) {
+		Meteor.call('removeNotificationRT', 'phone', function(err, msg) {
+			bootbox.alert(msg);
+		});
+	},
+	'click #remove_email_notify': function(e) {
+		Meteor.call('removeNotificationRT', 'email', function(err, msg) {
+			bootbox.alert(msg);
+		});
+	},
 	'click #set-notifications': function(e) {
 		e.preventDefault();
 		/**
@@ -46,13 +56,65 @@ Template.settings.events({
 			if (result) {
 				if (result.indexOf('verification code')>-1) {
 					/** show modal with verification code input */
-					bootbox.alert(result);
+					var innermodal = bootbox.dialog({
+			            title: result,
+			            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Enter 4 digit PIN to verify:</p></h3> <input type="number" id="four_digits" style="width: 100%;color:  black;"/></div>',
+			            buttons: {
+			              danger:  {
+			                label: 'Cancel',
+			                className: "btn-danger",
+			                callback: function() { innermodal.modal('hide') }
+			              }, 
+			              success: {
+			                label: "PROCEED",
+			                className: "btn-success",
+			                callback: function() {
+			                  var pin = $('#four_digits').val();
+			                  Meteor.call('verifyPhonePIN', pin, function(err, msg) {
+			                  	bootbox.alert(msg);
+			                  });
+			                }
+			              }
+			            }
+		          	});
 				} else {
 					bootbox.alert(result);
 				}
 			};
 		});
 
+	},
+	'click #resend_email_notify': function(e) {
+		/** resend email verification */
+		Meteor.call('resendVerification', 'email', function(err, msg) {
+			bootbox.alert(msg);
+		});
+	},
+	'click #resend_phone_notify': function(e) {
+		/** resend phone verification */
+		Meteor.call('resendVerification', 'phone', function(err, msg) {
+			var innermodal = bootbox.dialog({
+	            title: 'VERIFY PHONE NUMBER',
+	            message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Enter 4 digit PIN to verify:</p></h3> <input type="number" id="four_digits" style="width: 100%;color:  black;"/></div>',
+	            buttons: {
+	              danger:  {
+	                label: 'Cancel',
+	                className: "btn-danger",
+	                callback: function() { innermodal.modal('hide') }
+	              }, 
+	              success: {
+	                label: "PROCEED",
+	                className: "btn-success",
+	                callback: function() {
+	                  var pin = $('#four_digits').val();
+	                  Meteor.call('verifyPhonePIN', pin, function(err, msg) {
+	                  	bootbox.alert(msg);
+	                  });
+	                }
+	              }
+	            }
+          	});
+		});
 	},
 	'click #save_settings': function(e) {
 		e.preventDefault();
@@ -217,7 +279,15 @@ Template.settings.helpers({
 	emailConfig: function() {
 		var configs = Meteor.user().notification_preferences  || {};
 		var _email = configs.email || {};
-		return _email.verified || false;
+		return _email.verification || false;
+	},
+	emailReverify: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		var _email = configs.email || {};
+		if (_email.email&&_email.verification===false) {
+			return true;
+		};
+		return false;
 	},
 	emailValue: function() {
 		var configs = Meteor.user().notification_preferences  || {};
@@ -228,24 +298,32 @@ Template.settings.helpers({
 		var configs = Meteor.user().notification_preferences  || {};
 		if (!configs.email) return 'N / A';
 		var _email = configs.email || {};
-		if (_email.verified) return 'verified';
+		if (_email.verification) return 'verified';
 		return 'not verified';
 	},
 	phoneConfig: function() {
 		var configs = Meteor.user().notification_preferences  || {};
 		var _phone = configs.phone || {};
-		return _phone.verified || false
+		return _phone.verification || false
+	},
+	phoneReverify: function() {
+		var configs = Meteor.user().notification_preferences  || {};
+		var _phone = configs.phone || {};
+		if (_phone.phone&&_phone.verification===false) {
+			return true;
+		};
+		return false;
 	},
 	phoneValue: function() {
 		var configs = Meteor.user().notification_preferences  || {};
 		var _phone = configs.phone || {};
-		return _phone.email || '';
+		return _phone.phone || '';
 	},
 	phoneConfigStatus: function() {
 		var configs = Meteor.user().notification_preferences  || {};
 		if (!configs.phone) return 'N / A';
 		var _phone = configs.phone || {};
-		if (_phone.verified) return 'verified';
+		if (_phone.verification) return 'verified';
 		return 'not verified';
 	},
 });
