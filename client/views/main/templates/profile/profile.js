@@ -130,6 +130,12 @@ Template.profile.onRendered(function() {
 })
 
 
+Template.profile.events({
+	'click #goback': function() {
+		window.history.back();
+	}
+})
+
 Template.settings.helpers({
 	avatar: function() {
 		return Meteor.user().avatar;

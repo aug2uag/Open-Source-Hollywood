@@ -23,12 +23,12 @@
           </header>
           <section>
             {{#if isOwner}}
-                <a class="btn btn-danger closeProj">Close and mark project as Finished</a>
-                <a class="btn btn-success" href="/edit/projects/{{_slug}}/edit">Edit Details</a>
+                <a class="btn btn-danger closeProj major_proj_action_buttons">Close and mark project as Finished</a>
+                <a class="btn btn-success major_proj_action_buttons" href="/edit/projects/{{_slug}}/edit">Edit Details</a>
             {{/if}}
 
             {{#if isAllowed}}
-                <a id="boardButton" class="btn btn-primary" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
+                <a id="boardButton" class="btn btn-primary major_proj_action_buttons" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
             {{/if}}
             
             <div class="page">
@@ -73,7 +73,7 @@
                       </div>
                       <div class="w100">
                         <div class="c-title--h2">Donation</div>
-                        <div class="c-title--h5">enter donation amount and press "+", then click green button to verify donation amount</div>
+                        <div class="c-title--h5"><ol><li>enter donation amount and select "ENTER"</li><li>then select "Donate to Campaign!" when it appears</li></ol></div>
                         <div class="c-add-to">
                           <div class="c-add-to__container">
                             <div class="c-add-to__cell">
@@ -85,7 +85,7 @@
                                   </div>
                                   <br>
                                   <div class="c-amount__item">
-                                    <button class="btn btn-primary c-amount__control" id="donation_add_to">+</button>
+                                    <button class="btn btn-primary c-amount__control" id="donation_add_to">ENTER</button>
                                   </div>
 
                               </form>
@@ -93,7 +93,7 @@
                             
                             <div class="c-add-to__cell c-add-to__cell--end">
                               <div class="basket-button">
-                                <button class="btn btn-primary basket-button__btn" id="donation_btn" disabled>Click '+' to Add</button>
+                                <button class="btn btn-primary basket-button__btn" id="donation_btn" disabled>Input Amount &amp; Select 'ENTER' First</button>
                               </div>
                             </div>
                             
@@ -213,7 +213,7 @@
                       <div class="c-title--h2">Gifts for Purchase</div>
                       <div class="c-related">
                         {{#each project.gifts}}
-                          <div>
+                          <div class="c-related__div">
                             <div class="c-related__figure">
                               <a class="c-related__a purchase_gift">
                                 <img class="c-related__img" src="{{this.url}}" />

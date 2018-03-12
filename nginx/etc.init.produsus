@@ -35,5 +35,5 @@ script
     # commented out will default to no email being sent
     # you must register with MailGun to have a username and password there
     export MAIL_URL=smtp://postmaster@produs.us:fca79b9b4b26063efe85b9eccf884b9a@smtp.mailgun.org
-    exec node /home/produsus/bundle/main.js >> /home/produsus.log
+    exec n use 0.10.43 /home/produsus/bundle/main.js >> /home/produsus.log
 end script

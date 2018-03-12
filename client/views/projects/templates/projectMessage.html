@@ -18,11 +18,11 @@
                             <tbody>
                                 {{#each offers}}
                                 <tr>
-                                    <td>{{message}}</td>
+                                    <td>{{message}} ({{formattedOfferDate}})</td>
                                 </tr>
                                 {{else}}
                                 <tr>
-                                    <td>N / A</td>
+                                    <td>There are no offers to show.</td>
                                 </tr>
                                 {{/each}}
                             </tbody>

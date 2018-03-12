@@ -11,6 +11,10 @@ Template.projectMessage.helpers({
 		if (!this.messages.length) return 'There is no history of communication between the two of you regarding the ' + this.project.title + ' campaign.';
 		if (this.messages.length===1) return 'There is only one message.';
 		return 'There are ' + this.messages.length + ' messages regarding the ' + this.project.title + ' campaign.';
+	},
+	formattedOfferDate: function() {
+		var d = new Date(this.created);
+		return d.toLocaleDateString();
 	}
 })
 
