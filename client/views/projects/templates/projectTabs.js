@@ -1,4 +1,4 @@
-const StripePublicKey = 'pk_live_GZZIrMTVcHHwJDUni09o09sq';
+const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A' //'pk_live_GZZIrMTVcHHwJDUni09o09sq';
 
 function makeStripeCharge(options) {
   StripeCheckout.open({

@@ -1,4 +1,4 @@
-var StripePublicKey = 'pk_live_GZZIrMTVcHHwJDUni09o09sq';
+var StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHHwJDUni09o09sq';
 var gifts = [];
 var osettings = {};
 

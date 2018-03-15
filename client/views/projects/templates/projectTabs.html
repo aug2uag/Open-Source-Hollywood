@@ -43,29 +43,37 @@
                         </a>
                       </div>
                       <div class="c-related__supplier proj__supplier">
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <!-- title -->
-                            <small style="color: #94ffa1;">{{purpose}}</small>
-                          </div>
-                          <div class="col-sm-6">
-                            <!-- location -->
-                            <small style="color: #73ffff;">{{category}}</small>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <!-- title -->
-                            <small style="color: #fa94fa;">{{city}}, {{state}}&nbsp;&nbsp;&nbsp;&nbsp;{{zip}}</small>
-                          </div>
-                        </div>
-                        <h4 class="h10"><p class="align-center">{{formattedTitle}}</p></h4>
-                        <p class="align-center defaultQ">{{defaultQ}}</p>
 
-                          {{#if currentUser}}
-                          <a class="c-related__a button quick_apply">QUICK APPLY</a>
-                          {{/if}}
-  
+
+                        <div class="camp-profile">
+                          <img class="avatar" src="{{ownerAvatar}}" alt="Ash" />
+                            <div class="projnamet">{{formattedTitle}}</div>
+                          <div class="projdet">
+                            by: {{ownerName}} ({{city}}, {{state}} {{zip}})
+                          </div>
+                          <div class="projdet" style="top: -10px;position: relative;">
+                            {{purpose}} || {{category}}
+                          </div>
+                            <div class="description">
+                              {{defaultQ}}
+                          </div>
+                          <ul class="data">
+                            <li>
+                              <span class="entypo-heart">{{cast.length}} cast</span>
+                            </li>
+                            <li>
+                              <span class="entypo-eye">{{crew.length}} crew</span>
+                            </li>
+                            <li>
+                              {{#if currentUser}}
+                              <a class="c-related__a button quick_apply">QUICK APPLY</a>
+                              {{/if}}
+                            </li>
+                         </ul>
+                        </div>
+
+                          
+
                       </div>
                     </div>
                   {{else}}
