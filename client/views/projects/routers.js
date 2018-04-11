@@ -57,11 +57,11 @@ Router.route('/projects/:slug/:uid', {
     this.next();
   },
   waitOn: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      window.location.assign('/');
-      return
-    }
+    // if (!Meteor.user()) {
+    //   Router.go('Home');
+    //   window.location.assign('/');
+    //   return
+    // }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
