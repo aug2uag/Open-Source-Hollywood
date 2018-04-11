@@ -1,4 +1,10 @@
 Template.profile.helpers({
+	formattedBio: function() {
+		var that =  this;
+		setTimeout(function() {
+		  $('#formatted_desc').html(that.bio);
+		}, 800);
+	},
 	userProjects: function() {
 		return Projects.find({ownerId: this._id});
 	},
