@@ -1,3 +1,5 @@
+var wasUser = false;
+
 Router.route('/discover', {
     name: 'Projects',
     template: 'projectTabs',
@@ -32,14 +34,13 @@ Router.route('/create', {
     layoutTemplate: 'StaticLayout',
     waitOn: function() {
       if (!Meteor.user()) {
-        Router.go('Home');
         window.location.assign('/');
         return
       }
-        return [
-          Meteor.subscribe('getMe'), 
-          Meteor.subscribe('connectUser')
-        ];
+      return [
+        Meteor.subscribe('getMe'), 
+        Meteor.subscribe('connectUser')
+      ];
     },
     onBeforeAction: function() {
       var u = Users.findOne({_id: Meteor.user()._id});
@@ -54,14 +55,24 @@ Router.route('/projects/:slug/:uid', {
   layoutTemplate: 'StaticLayout',
   onBeforeAction: function() {
     document.title = "Campaign";
+    if (!Meteor.user()) {
+      if (wasUser) return window.location.assign('/');
+      localStorage.setItem('redirectURL', '/projects/' + this.params.slug + '/' + this.params.uid);
+      vex.dialog.alert({
+          message: 'Please login from home page to access this Campaign.',
+          callback: function (value) {
+              setTimeout(function() {
+                window.location.assign('/');
+              }, 700);
+          }
+      });
+      return;
+    } else {
+      wasUser = true;
+    }
     this.next();
   },
   waitOn: function() {
-    // if (!Meteor.user()) {
-    //   Router.go('Home');
-    //   window.location.assign('/');
-    //   return
-    // }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
@@ -86,9 +97,11 @@ Router.route('/projects/:slug/:uid', {
           return 'not available';
         },
         isOwner: function () {
+          if (!Meteor.user()) return false;
           return project.ownerId === Meteor.user()._id;
         },
         isMember: function() {
+          if (!Meteor.user()) return false;
           if (project.ownerId === Meteor.user()._id) return true;
           var falsy = false;
           project.usersApproved.forEach(function(u) {

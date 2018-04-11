@@ -26,7 +26,6 @@ Template.nav.events({
     document.title = 'Settings Edit';
   },
   'click .login': function() {
-    localStorage.setItem('redirectURL', '');
     lock.show();
     Router.go('Projects');
   }
