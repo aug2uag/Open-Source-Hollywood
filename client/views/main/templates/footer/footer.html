@@ -1,15 +1,100 @@
 <template name="footer">
-  <footer id="footer">
-    <ul class="icons">
-      <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
-      <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
-      <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-      <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
-      <li><a href="https://www.meetup.com/Open-Source-Hollywood/" class="icon alt fa-meetup"><span class="label">Meetup</span></a></li>
-      <li><a href="#" class="icon alt fa-snapchat"><span class="label">Snapchat</span></a></li>
-    </ul>
-    <ul class="copyright">
-      <li>{{year}} &copy; Open Source Hollywood.</li><li>All rights reserved.</li>
-    </ul>
-  </footer>
+      <!-- Footer #1 Wrapper Start -->
+    <footer id="footer1" class="footer clearfix">
+
+        <div class="krown-column-row wrapper clearfix">
+
+            <div class="krown-column-container span3">
+<!--                 <section id="nav_menu-2" class="widget widget_nav_menu clearfix">
+                    <h4 class="widget-title">Campaign</h4>
+                    <div class="menu-footer-menu-2-container">
+                        <ul id="menu-footer-menu-2" class="menu">
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#">Start Your Campaign</a></li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#">Pricing Campaign</a></li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#">Campaign Support</a></li>
+                        </ul>
+                    </div>
+                </section> -->
+                <section id="nav_menu-3" class="widget widget_nav_menu clearfix">
+                    <h4 class="widget-title">About Us</h4>
+                    <div class="menu-footer-menu-1-container">
+                        <ul id="menu-footer-menu-1" class="menu">
+                            <!-- <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/blog">Blog</a></li> -->
+                            <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about-us">About Us</a></li>
+                            <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <div class="krown-column-container span3 clearfix">
+            </div>
+
+            <div class="krown-column-container span3 clearfix">
+                <section id="nav_menu-4" class="widget widget_nav_menu clearfix">
+                    <h4 class="widget-title">Help</h4>
+                    <div class="menu-footer-menu-3-container">
+                        <ul id="menu-footer-menu-3" class="menu">
+                            <!-- <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/faq">FAQ</a></li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/rules">Our Rules</a></li> -->
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/contact">Support</a></li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/terms">Terms of Use</a></li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/privacy">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            {{#unless currentUser}}
+            <div class="krown-column-container span3">
+                <section id="text-10" class="widget widget_text clearfix">
+                    <h4 class="widget-title">Newsletter</h4>
+                    <div class="textwidget">
+                        <form class="widget_wysija" id="form-wysija-2">
+                            <p class="wysija-paragraph">
+                                <input id="email" type="text" value="" placeholder="enter your email" title="enter your email" class="wysija-input">
+                            </p>
+                            <input id="subscribe" type="submit" class="wysija-submit wysija-submit-field" value="GO"> Subscribe to keep in touch and follow the latest and most exciting campaigns.
+                        </form>
+                    </div>
+                </section>
+            </div>
+            {{/unless}}
+
+        </div>
+
+    </footer>
+
+    <!-- Footer #1 Wrapper End -->
+
+    <!-- Footer #2 Wrapper Start -->
+
+    <footer id="footer2" class="footer clearfix">
+
+        <div class="wrapper clearfix">
+
+            <div class="left clearfix">
+                <div id="text-11" class="widget left widget_text">
+                    <div class="textwidget">Open Source Hollywood © {{year}}</div>
+                </div>
+            </div>
+
+            <div class="right clearfix">
+                <div id="text-12" class="widget right widget_text">
+                    <div class="textwidget">
+                        <div class="krown-social clearfix">
+                            <ul>
+                                <!-- <li class="fa fa-twitter"><a target="_self" href="#">#</a></li>
+                                <li class="fa fa-facebook"><a target="_self" href="#">#</a></li> -->
+                                <li class="fa fa-meetup"><a target="_self" href="https://www.meetup.com/Open-Source-Hollywood/">#</a></li>
+                                <!-- <li class="fa fa-google-plus-g"><a target="_self" href="#">#</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </footer>
+    <!-- Footer End -->
 </template>

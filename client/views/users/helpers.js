@@ -21,32 +21,32 @@ Template.userAvatar.helpers({
     username: function() {
         if (!this.user || !this.user._id) return;
         var user = Users.findOne({_id: this.user._id});
-        if (user && user.services && user instanceof Object) {return user.services.auth0.name;}
+        if (user && user.services && user instanceof Object) {return user.firstName + ' ' + user.lastName;}
     },
     name: function() {
         if (!this.user || !this.user._id) return;
         var user = Users.findOne({_id: this.user._id})
-        if (user && user.services && user instanceof Object) {return user.services.auth0.nickname;}
+        if (user && user.services && user instanceof Object) {return user.firstName.toLowerCase() + user.lastName.toLowerCase();}
     },
     thumbnailUrl: function() {
         if (!this.user || !this.user._id) return;
         var user = Users.findOne({_id: this.user._id})
-        if (user && user.services && user instanceof Object) {return user.services.auth0.picture;}
+        if (user && user.services && user instanceof Object) {return user.avatar;}
     }
 });
 
 Template.memberAvatar.helpers({
     username: function() {
         var user = Users.findOne({'_id': this.user})
-        if (user && user.services && user.services.auth0) return user.services.auth0.name;
+        if (user && user.services && user.services.auth0) return user.firstName + ' ' + user.lastName;
     },
     name: function() {
         var user = Users.findOne({'_id': this.user})
-        if (user && user.services && user.services.auth0) return user.services.auth0.name;
+        if (user && user.services && user.services.auth0) return user.firstName + ' ' + user.lastName;
     },
     thumbnailUrl: function() {
         var user = Users.findOne({'_id': this.user})
-        if (user && user.services && user.services.auth0) return user.services.auth0.picture;
+        if (user && user.services && user.services.auth0) return user.avatar;
     },
     status: function() {
         var user = Users.findOne({'_id': this.user})
@@ -59,20 +59,17 @@ Template.memberAvatar.helpers({
 });
 
 Template.applicantAvatar.helpers({
-    uid: function() {
-        return this.user.uid;
+    contribution: function() {
+        return this.user.contribution;
     },
-    otype: function() {
-        return this.user.type;
-    },
-    message: function() {
-        return this.user.message;
+    username: function() {
+        return this.user.username;
     },
     name: function() {
-        return this.user.name.trim() || 'this user\'s name is not available';
+        return this.user.name;
     },
-    avatar: function() {
-        return this.user.avatar;
+    thumbnailUrl: function() {
+        return this.user.thumbnailUrl;
     }
 });
 
@@ -170,29 +167,24 @@ Template.calPopup.helpers({
                 if (e.dueDate) {
                     var url = '/boards/' + board._id + '/' + board.slug + '/' + e._id;
                     // http://fullcalendar.io/docs/event_data/Event_Object/
-                    console.log(e);
                     events_array.push({
                         start: e.dueDate,
                         title: e.title,
+                        allDay: true,
                         url: url
                     });
                 };
             });
 
             $('#cali').fullCalendar({
-                defaultView: 'basicWeek',
+                defaultView: 'agendaWeek',
                 events: events_array
             });
             setTimeout(function() {
                 $('.fc-prev-button').empty().append('<i class="fa fa-caret-left"></i>');
                 $('.fc-next-button').empty().append('<i class="fa fa-caret-right"></i>');
                 $('.fc-day-header').css('color', '#333');
-                if($('fc-left').child)$($('fc-left').child()).css('color', '#333');
-                $('.fc-day-header').css('color', '#333');
-                $('.fc-today-button').css('display', 'none');
-                $('.fc-button').on('click', function() {
-                    $('.fc-day-header').css('color', '#333');
-                });
+                $($('fc-left').child()).css('color', '#333');
             }, 10);
         }, 100);
     }

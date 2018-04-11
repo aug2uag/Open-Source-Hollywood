@@ -1,8 +1,13 @@
-Router.route('/projects', {
+Router.route('/discover', {
     name: 'Projects',
     template: 'projectTabs',
     layoutTemplate: 'StaticLayout',
     waitOn: function() {
+      if (Meteor.user() === null) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
       return [
         Meteor.subscribe('projectsList'), 
         Meteor.subscribe('connectUser'),
@@ -10,18 +15,25 @@ Router.route('/projects', {
       ];
     },
     onBeforeAction: function() {
+      var x = localStorage.getItem('redirectURL');
+      if (x&&x!=='null'&&x.indexOf('/')>-1) {
+        Router.go(x);
+        localStorage.setItem('redirectURL', '');
+        return;
+      };
       document.title = "Campaigns";
       this.next();
     }
 });
 
-Router.route('/newproject', {
+Router.route('/create', {
     name: 'Create Project',
     template: 'newProject',
     layoutTemplate: 'StaticLayout',
     waitOn: function() {
       if (!Meteor.user()) {
-        Router.go('Projects');
+        Router.go('Home');
+        window.location.assign('/');
         return
       }
         return [
@@ -36,28 +48,6 @@ Router.route('/newproject', {
     }
 });
 
-Router.route('/activeprojects', {
-    name: 'Actives',
-    template: 'projectTabs',
-    layoutTemplate: 'StaticLayout',
-    waitOn: function() {
-      if (!Meteor.user()) {
-        Router.go('Home');
-        window.location.assign('/');
-        return
-      }
-        return [
-          Meteor.subscribe('getMe'),
-          Meteor.subscribe('activeProjects'), 
-          Meteor.subscribe('connectUser')
-        ];
-    },
-    onBeforeAction: function() {
-      document.title = "Active Campaigns";
-      this.next();
-    }
-});
-
 Router.route('/projects/:slug/:uid', {
   name: 'projectView',
   template: 'projectView',
@@ -67,103 +57,16 @@ Router.route('/projects/:slug/:uid', {
     this.next();
   },
   waitOn: function() {
-    return [
-      Meteor.subscribe('getProject', this.params.slug), 
-      Meteor.subscribe('gotoBoard', this.params.slug),
-      Meteor.subscribe('commentsList', this.params.slug),
-      Meteor.subscribe('stringId', this.params.uid),
-      Meteor.subscribe('getMe')
-    ];
-  },
-  data: function() {
-    var slug = this.params.slug;
-    var project = Projects.findOne({slug: slug});
-    var board = Boards.findOne({slug: slug});
-    if (!board || !project) return;
-    var user = Users.findOne({_id: project.ownerId});
-    var myId = Meteor.user()&&Meteor.user()._id||'';
-    var me = Users.findOne({_id: myId});
-    var role = user&&user.primaryRole ? user.primaryRole : user&&user.iam&&user.iam&&user.iam.length&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
-    return {
-        me: me,
-        uid: project._id,
-        isOwner: function () {
-          if (!Meteor.user()) return false;
-          return project.ownerId === Meteor.user()._id;
-        },
-        isMember: function() {
-          if (!Meteor.user()) return false;
-          if (project.ownerId === Meteor.user()._id) return true;
-          var falsy = false;
-          project.usersApproved.forEach(function(u) {
-            if (u.id === Meteor.user()._id) return falsy = true;
-          });
-          return falsy;
-        },
-        projectComments: function () {
-          return Comments.find({projectId: slug});
-        },
-        submittedAgo: moment(project.createTimeActual, moment.ISO_8601).fromNow(),
-        numComments: function() {
-          var numComments = Comments.find({projectId: slug}).count();
-          if (numComments === 0) {
-            return 'Be the first to comment!';
-          };
-          if (numComments === 1) {
-            return '1 comment';
-          };
-          return numComments + ' comments';
-        },
-        _ownerStats: {
-          score: user&&user.influenceScore||0,
-          rating: user&&user.rating||0
-        },
-        count: project.count,
-        _bid: board._id,
-        _slug: board.slug,
-        isLive: project.isLive,
-        project: project,
-        title: project.title,
-        role: role
-      }
-    },
-    onAfterAction: function() {
-      var post;
-      // The SEO object is only available on the client.
-      // Return if you define your routes on the server, too.
-      if (!Meteor.isClient) {
-        return;
-      }
-      post = this.data();
-      SEO.set({
-        title: post.title,
-        meta: {
-          'description': post.project.description||post.project.logline||'Campaign by '+post.project.ownerName
-        },
-        og: {
-          'title': post.title,
-          'description': post.project.description||post.project.logline||'Campaign by '+post.project.ownerName,
-          'image': [post.project.banner, post.project.ownerAvatar]
-
-        }
-      });
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
     }
-});
-Router.route('/campaign/:slug', {
-  name: 'campaignView',
-  template: 'projectView',
-  layoutTemplate: 'StaticLayout',
-  onBeforeAction: function() {
-    document.title = "Campaign";
-    this.next();
-  },
-  waitOn: function() {
     return [
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
       Meteor.subscribe('commentsList', this.params.slug),
-      Meteor.subscribe('stringId', this.params.uid),
-      Meteor.subscribe('getMe')
+      Meteor.subscribe('stringId', this.params.uid)
     ];
   },
   data: function() {
@@ -172,18 +75,20 @@ Router.route('/campaign/:slug', {
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
     var user = Users.findOne({_id: project.ownerId});
-    var myId = Meteor.user()&&Meteor.user()._id||'';
-    var me = Users.findOne({_id: myId});
-    var role = user&&user.primaryRole ? user.primaryRole : user&&user.iam&&user.iam&&user.iam.length&&user.iam.join ? user.iam.join(' / ') : 'view profile for more info';
     return {
-        me: me,
         uid: project._id,
+        perCent: function() {
+          if (project.funded && project.budget) {
+            var v = (project.funded/project.budget * 100 > 100 ? 100 : project.funded/project.budget * 100).toFixed(2);
+            return v + ' %';
+          };
+
+          return 'not available';
+        },
         isOwner: function () {
-          if (!Meteor.user()) return false;
           return project.ownerId === Meteor.user()._id;
         },
         isMember: function() {
-          if (!Meteor.user()) return false;
           if (project.ownerId === Meteor.user()._id) return true;
           var falsy = false;
           project.usersApproved.forEach(function(u) {
@@ -205,17 +110,41 @@ Router.route('/campaign/:slug', {
           };
           return numComments + ' comments';
         },
-        _ownerStats: {
-          score: user&&user.influenceScore||0,
-          rating: user&&user.rating||0
+        processedGenres: function() {
+          if (project.genres.length > 0) {
+            return project.genres.join(', ');
+          } else {
+            return 'no genres specified';
+          }
         },
-        count: project.count,
+        _ownerStats: {
+          score: user.influenceScore,
+          rating: user.rating
+        },
+        needs: project.needs || 'watch video for details',
+        videoURL: project.videoURL,
         _bid: board._id,
         _slug: board.slug,
         isLive: project.isLive,
         project: project,
+        ownerName: project.ownerName,
+        logline: project.logline,
+        ownerAvatar: project.ownerAvatar,
+        ownerId: project.ownerId,
+        details: project.details,
+        funded: project.funded,
+        count: project.count,
+        createdAt: project.createdAt,
         title: project.title,
-        role: role
+        gifts: project.gifts,
+        budget: function() {
+          if (project.budget) {
+            return '$ ' + project.budget
+          }
+          return 'none specified';
+        },
+        duration: project.duration,
+        applied: project.applied
       }
     }
 });
@@ -275,9 +204,9 @@ Router.route('/message/project/:slug/:uid', {
     var slug = this.params.slug;
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
-    var offers = Offers.find({uid: user._id, slug: project.slug}).fetch();
+    var offers = Offers.find({uid: user._id, slug: project.slug});
     var receipts = Receipts.find({user: user._id, slug: project.slug});
-    var messages = ProjectMessages.find({user: user._id, project: project._id}).fetch();
+    var messages = ProjectMessages.find({user: user._id, project: project._id});
     return {
       project: project,
       user: user,
@@ -286,4 +215,4 @@ Router.route('/message/project/:slug/:uid', {
       messages: messages
     }
   }
-});
+})

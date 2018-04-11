@@ -1,439 +1,403 @@
 <template name="projectView">
-  <div id="page-wrapper">
-    {{> shareit shareData}}
-    <script type="text/javascript">$('.share-buttons').css('text-align','center')</script>
-  <div id="main" class="wrapper style1">
-    <style type="text/css">
-      .panel {
-        background-color:transparent
-      }
-      .panel-default {
-        border-color:transparent
-      }
-    </style>
-      <div class="container">
-        {{#if projectRemovedNotBoard}}
-          <header class="major">
-              <h2 class="page-header">This Campaign is not available !</h2>
-          </header>
-          {{else}}
-          <header class="major">
-              <h2>Details for "<strong>{{project.title}}</strong>"</h2>
-              <p>{{subtitle}}</p>
-          </header>
-          <section>
-            {{#if isOwner}}
-                <a class="btn btn-danger closeProj major_proj_action_buttons">Close and mark project as Finished</a>
-                <a class="btn btn-success major_proj_action_buttons" href="/edit/projects/{{_slug}}/edit">Edit Details</a>
-            {{/if}}
 
-            {{#if isAllowed}}
-                <a id="boardButton" class="btn btn-primary major_proj_action_buttons" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
-            {{/if}}
-            
-            <div class="page">
-              <div class="modal-container">
-                <div class="l-product">
-                  <div class="l-product__container">
-                    <div class="l-product__title">{{project.title}}</div>
-                    {{#if currentUser}}
-                    {{> actionBar}}
+  <div id="content" class="clearfix ">
+
+    <div class="clearfix wrapper">
+
+        <header id="page-title" style="padding-top: 0px;">
+            <h1 class="title">{{project.title}}</h1>
+            <h2 class="subtitle">{{project.logline}}</h2>
+        </header>
+
+        <div class="normal-content ">
+
+            <div id="project-container" class="krown-tabs responsive-on clearfix">
+
+                <ul class="titles clearfix">
+                  {{#if isOwner}}
+                      <li class="opened">
+                          <h5>Description</h5></li>
+                      <li class="">
+                          <h5>Updates</h5></li>
+                      <li class="">
+                          <h5>Comments</h5></li>
+                      <li class="">
+                          <h5>Backers</h5></li>
+                      <li class="">
+                          <h5>Manage</h5></li>
+                      <li class="">
+                          <h5>Edit</h5></li>
+                      <div class="tabs-select">
+                        <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
+                          <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
+                            <option>Description</option>
+                            <option>Updates</option>
+                            <option>Comments</option>
+                            <option>Backers</option>
+                            <option>Manage</option>
+                            <option>Edit</option>
+                          </select>
+                          <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
+                        </span> 
+                      </div>
+                  {{else}}
+                    {{#if isAllowed}}
+                        <li class="opened">
+                            <h5>Description</h5></li>
+                        <li class="">
+                            <h5>Updates</h5></li>
+                        <li class="">
+                            <h5>Comments</h5></li>
+                        <li class="">
+                            <h5>Backers</h5></li>
+                        <li class="">
+                            <h5>Manage</h5></li>
+                        <div class="tabs-select">
+                          <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
+                            <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
+                              <option>Description</option>
+                              <option>Updates</option>
+                              <option>Comments</option>
+                              <option>Backers</option>
+                              <option>Manage</option>
+                            </select>
+                            <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
+                          </span> 
+                        </div>
+                    {{else}}
+                        <li class="opened">
+                            <h5>Description</h5></li>
+                        <li class="">
+                            <h5>Updates</h5></li>
+                        <li class="">
+                            <h5>Comments</h5></li>
+                        <li class="">
+                            <h5>Backers</h5></li>
+                        <div class="tabs-select">
+                          <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
+                            <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
+                              <option>Description</option>
+                              <option>Updates</option>
+                              <option>Comments</option>
+                              <option>Backers</option>
+                            </select>
+                            <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
+                          </span> 
+                        </div>
                     {{/if}}
-                    <!-- LEFT -->
-                    <main class="l-product__main">
-                      <div class="l-product__image">
-                        <img src="{{project.banner}}"  style="width: 100%;"/>
-                      </div>
-                      <div class="l-product__price">
-                        <div class="c-price">
-                          
-                          <div class="c-price__row">
-                            <div class="c-price__index c-price__index--xl">{{project.city}}, {{project.state}}
-                              <div class="c-price__date">{{project.purpose}} <br /> since {{project.createdAt}}</div>
+                  {{/if}}     
+                </ul>
+
+                <div class="contents clearfix">
+                    <div id="description" style="display: block;">
+                        <div class="project-header">
+
+                            {{#if project.videoExplainer}}
+                            <div class="video-container">
+                                <div class="fluid-width-video-wrapper" style="padding-top: 56.2278%;">
+                                    <iframe src="{{project.videoExplainer}}" frameborder="0" title="{{project.title}}" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+                                </div>
                             </div>
-                            <div class="c-price__value c-price__value--xl c-price__value--b">{{project.category}}</div>
-                          </div>
-                          
-                          <div class="c-price__row">
-                            <div class="c-price__index"> active applications </div>
-                            <div class="c-price__value c-price__value--green">{{usersApplied}}</div>
-                          </div>
-                          
-                          <div class="c-price__row">
-                            <div class="c-price__index"> equity distributed </div>
-                            <div class="c-price__value c-price__value--green">{{equityDistributed}}%</div>
-                          </div>        
-                          
-                          <div class="c-price__row">
-                            <div class="c-price__index c-price__index--m"> funds raised </div>
-                            <div class="c-price__value c-price__value--green">${{project.funded}}</div>
-                          </div>
+                            {{else}}
+                            <div class="mini">
+                                <ul class="slides">
 
-                        </div>              
-                      </div>
-                      <div class="w100">
-                        <div class="c-title--h2">Donation</div>
-                        <div class="c-title--h5"><ol><li>enter donation amount and select "ENTER"</li><li>then select "Donate to Campaign!" when it appears</li></ol></div>
-                        <div class="c-add-to">
-                          <div class="c-add-to__container">
-                            <div class="c-add-to__cell">
-                              <form action="/" class="c-amount">
+                                    <li class="slide"><img src="{{project.banner}}" width="845" height="573" alt=""></li>
+                                </ul>
+                            </div>
+                            {{/if}}
+                        </div>
+                        <div class="project-content">
+                            <aside class="share-buttons clearfix">
+                                <p>Share this project</p>
+                                <div class="holder clearfix">
+                                    {{> shareit shareData}}
+                                </div>
+                            </aside>
+                            <div id="formatted_desc">{{formattedDescription}}</div>
+                            <p>&nbsp;</p>
+                            <div data-opened="0" class="krown-accordion accordion large clearfix">
+                              {{#if project.creatorsInfo}}
+                                  <section>
+                                      <h5>ABOUT THE CREATORS</h5>
+                                      <div>
+                                          <p>{{project.creatorsInfo}}</p>
+                                      </div>
+                                  </section>
+                              {{/if}}
 
-                                  <div class="c-amount__item c-amount__item--input">
-                                    <label for="amount" class="control-label c-amount__label">Donation Amount</label>
-                                    <input min="5" type="number" class="form-control c-amount__input" id="donation_amount">
+
+                              {{#if project.historyInfo}}
+                                  <section>
+                                      <h5>PROJECT HISTORY</h5>
+                                      <div>
+                                          <p>{{project.historyInfo}}</p>
+                                      </div>
+                                  </section>
+                              {{/if}}
+
+
+                              {{#if project.plansInfo}}
+                                  <section>
+                                      <h5>PROJECT PLANS</h5>
+                                      <div>
+                                          <p>{{project.plansInfo}}</p>
+                                      </div>
+                                  </section>
+                              {{/if}}
+
+
+                              {{#if project.needsInfo}}
+                                  <section>
+                                      <h5>EXPLANATION OF NEEDS</h5>
+                                      <div>
+                                          <p>{{project.needsInfo}}</p>
+                                      </div>
+                                  </section>
+                              {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="updates" class="project-content container" style="display: none;width: 100%;">
+
+                      {{#each project.updates}}
+                          <div class="row">
+                            <div class="col-sm-12">
+                                <p><span style="color: #000000;"><strong>Update {{inc @index}}<br></strong></span></p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p>{{this.text}}</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <p>{{formattedUpdateDate}}</p>
+                            </div>
+                          </div>
+                      {{else}}
+                        <p><span style="color: #000000;"><strong>There are no project updates.<br></strong></span></p>
+                      {{/each}}
+                    </div>
+
+                    <div id="comments" class="project-content" style="display: none;">
+
+                        <aside id="comments">
+
+                            <h3 id="comments-title">Comments ({{numComments}})</h3>
+
+                            <ol id="comments-list">
+                              {{#each projectComments}}
+                                {{>comment}}
+                              {{/each}}
+                            </ol>
+
+                            {{> commentBox}}
+
+                            
+                            <!-- #respond -->
+
+                        </aside>
+                    </div>
+
+                    <div id="backers" class="project-content" style="display: none;">
+
+                        <h3 id="comments_title">Backers ({{backers}})</h3>
+                        <ol id="comments-list">
+
+                            {{#each this.project.donations}}
+          
+                                <li class="comment clearfix">
+
+                                    <div class="comment-content">
+
+                                        <div class="comment-meta clearfix">
+
+                                            <h6 class="comment-title">{{user.name}}</h6>
+                                            <div class="comment-avatar">
+                                                <img alt="" src="{{user.avatar}}" class="avatar avatar-65 photo" height="65" width="65"> 
+                                            </div>
+
+                                        </div>
+
+                                        <strong class="comment-price">${{amount}}</strong>
+
+                                    </div>
+
+                                </li>
+                                <tr>
+
+                              </tr>
+                            {{/each}}
+
+                        </ol>
+                    </div>
+
+                    <div id="manage" class="project-content" style="display: none;">
+                        <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
+                        {{#if isOwner}}
+                            <div id="respond" class="comment-respond">
+                              <h3 id="reply-title" class="comment-reply-title">Announce Update</h3>
+                              <form class="comment-form">
+                                  <div class="krown-column-container span12 last" style="margin-left:0">
+                                      <label for="update">Your update</label>
+                                      <textarea id="update-box" name="update" rows="8" style="height: 133px;"></textarea>
                                   </div>
-                                  <br>
-                                  <div class="c-amount__item">
-                                    <button class="btn btn-primary c-amount__control" id="donation_add_to">ENTER</button>
-                                  </div>
-
+                                  <p class="form-submit">
+                                      <input name="submit" type="submit" id="submit-update" class="submit" value="Post Update">
+                                  </p>
+                                  <p style="display: none;">
+                                      <input type="hidden" >
+                                  </p>
+                                  <p style="display: none;"></p>
                               </form>
-                            </div>
-                            
-                            <div class="c-add-to__cell c-add-to__cell--end">
-                              <div class="basket-button">
-                                <button class="btn btn-primary basket-button__btn" id="donation_btn" disabled>Input Amount &amp; Select 'ENTER' First</button>
-                              </div>
-                            </div>
-                            
-                            <div class="c-add-to__cell">
-                              <div class="c-info c-info--total">
-                                <div class="c-info__row">
-                                  <div class="c-info__index">Total</div>
-                                  <div class="c-info__value c-info__value--total"><span id="total_usd">0</span> USD <span class="c-info__math" id="before_fees"></span></div>
-                                </div>
-                                <div class="c-info__row">
-                                  <div class="c-info__index">Fee</div>
-                                  <div class="c-info__value" id="transfer_amt">0 USD</div>
-                                </div>                    
-                              </div>
-                              
-                            </div>
-                            <div class="c-add-to__cell">
-                              <div class="c-total">
-                                
-                                <div class="c-total__row">
-                                  <div class="c-total__col">Total raised to date</div>
-                                  <div class="c-total__col" id="proj_funds">${{project.funded}}</div>
-                                  <!-- <div class="c-total__col">473.00 CHF</div> -->
-                                </div>
-                                
-                                <div class="c-total__row">
-                                  <div class="c-total__col">Per cent contribution</div>
-                                  <div class="c-total__col" id="percent_total">0%</div>
-                                  <!-- <div class="c-total__col">528.00 CHF</div> -->
-                                </div>
-                                
-                                <hr class="c-total__hr" />
-                                
-                                <div class="c-total__row">
-                                  <div class="c-total__col c-total__col--half">All information is up-to-date data</div>
-                                  <div class="c-total__col c-total__col--half">in Real-Time</div>
-                                </div>
-                              
-                              </div>
-                            
-                            
-                            </div>
                           </div>
+                        {{> applicants}}
+                        {{/if}}
+                    </div>
+
+                    <div id="edit" class="project-content" style="display: none;">
+                      {{> editProject}}
                         
-                        </div>
-                      </div>
-                      <div class="w100">
-                        <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">logline</div>
-                            <div class="c-prod-attr__no-info"> {{project.logline}} </div>
-                          </div>
-
-                          <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">website</div>
-                            <div class="c-prod-attr__no-info"> {{website}} </div>
-                          </div>
-
-                          <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">Video Explainer</div>
-                            <div class="c-prod-attr__no-info">{{#if project.videoExplainer}}{{project.videoExplainer}}{{else}}N / A{{/if}}</div>
-                          </div>
-
-                        <div class="c-title--h2">Description</div>
-                        
-                        <div class="c-desription">
-                          {{ project.description }}
-                        </div>
-
-                        <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">Links &amp; Social</div>
-
-                            {{#each project.social}}
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{this.name}}</div>
-                              <div class="c-prod-attr__value">{{this.address}}</div>
-                            </div>
-
-                            {{ else }}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">N / A</div>
-                            </div>
-
-                            {{/each}}
-                                   
-                          </div>
-
-                          <div class="c-prod-attr__section">
-                            <div class="c-title--h2">Author</div>
-                            <div class="c-prod-attr__title">campaign creator</div>
-                            
-                            <div class="c-prod-attr__item" style="width:80%">
-                              <div class="c-prod-attr__name">{{project.ownerName}}</div>
-                              <div class="c-prod-attr__value"><a href="/profile/{{project.ownerId}}" class="button">VIEW PROFILE</a></div>
-                            </div>
-
-                            <div class="c-prod-attr__item" style="width:80%">
-                              <div class="c-prod-attr__name">score</div>
-                              <div class="c-prod-attr__value">{{_ownerStats.score}}</div>
-                            </div>
-
-                            <div class="c-prod-attr__item" style="width:80%">
-                              <div class="c-prod-attr__name">rating</div>
-                              <div class="c-prod-attr__value">{{_ownerStats.rating}}/5</div>
-                            </div>
-                            
-                            <div class="c-prod-attr__item" style="width:80%">
-                              <div class="c-prod-attr__name">role</div>
-                              <div class="c-prod-attr__value">{{role}}</div>
-                            </div>
-                          </div>
-                      </div>
-                      
-              
-              
-                      <div class="c-title--h2">Gifts for Purchase</div>
-                      <div class="c-related">
-                        {{#each project.gifts}}
-                          <div class="c-related__div">
-                            <div class="c-related__figure">
-                              <a class="c-related__a purchase_gift">
-                                <img class="c-related__img" src="{{this.url}}" />
-                              </a>
-                            </div>
-                            <div class="c-related__title">
-                              <p class="c-related__a align-center">{{this.name}}<br>price: ${{this.msrp}}</p>
-                              <div class="c-related__supplier"><p class="align-center">quantity available ({{this.quantity}})</p></div>
-                              <p class="align-center"><a class="c-related__a button special purchase_gift">PURCHASE NOW</a></p>
-                            </div>
-                          </div>
-                        {{else}}
-                          <div class="c-related__title">
-                            <a class="c-related__a button">N / A</a>
-                          </div>
-                        {{/each}}
-                      </div>
-
-                      {{#if currentUser}}
-                      <div class="w100">
-                        <div style="position:relative;padding-top:20px;width:80%">
-                          <h4>{{numComments}}</h4>
-                          {{#if currentUser}}
-                          <br>
-                          {{#each projectComments}}
-                          {{>comment}}
-                          {{/each}}
-                          {{> commentBox}}
-                          {{/if}}
-                        </div>
-                      </div>
-                      {{/if}}
-                    </main>
-                    <!-- RIGHT -->
-                    <aside class="l-product__aside">
-                      <div class="l-product__attr">
-
-                        <div class="c-prod-attr__section" style="color: chartreuse;">
-                            <div class="c-title--h2 align-center" style="border-bottom: 1px solid #fff;padding-bottom:3px;width:80%">Campaign Opportunities</div>
-                            <div class="c-prod-attr__no-info align-center" style="width:80%"><i class="fa fa-arrow-down"></i>&nbsp;&nbsp;&nbsp;view open opportunities below</div>
-                          </div>
-
-                          <div class="c-prod-attr">
-                          <div class="c-title--h2">Project team</div>
-                          <div class="c-prod-attr__section">
-                            <div class="c-prod-attr__title">TEAM</div>
-                            {{#each project.crew}}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{this.title}}</div>
-                              {{#if currentUser}}
-                              {{#if producerReady}}
-                              <div class="c-prod-attr__value"><a class="crew_detail button special" id="{{@index}}-team">DETAILS</a></div>
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
-                              {{/if}}
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
-                              {{/if}}
-                            </div>
-                            {{else}}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">N / A</div>
-                            </div>
-                            {{/each}}
-
-                          </div>
-                          
-                          
-                        </div>
-                        <div class="c-prod-attr">
-                          <div class="c-title--h2">Project roles</div>
-                          <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">ROLES</div>
-
-                            {{#each project.cast}}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{this.role}}</div>
-                              {{#if currentUser}}
-                              {{#if producerReady}}
-                              <div class="c-prod-attr__value"><a class="role_detail button special" id="{{@index}}-role">DETAILS</a></div>
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
-                              {{/if}}
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
-                              {{/if}}
-                            </div>
-                            {{else}}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">N / A</div>
-                            </div>
-                            {{/each}}           
-                          </div>
-                          
-                          <!-- <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">Further information</div>
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">country</div>
-                              <div class="c-prod-attr__value">Spain</div>
-                            </div>
-                            
-                          </div> -->
-
-                        
-                        </div>
-                        
-                      </div>
-                        
-                        <div class="c-prod-attr">
-                          
-
-
-                          <div class="c-title--h2">Request for Assets</div>
-                          <div class="c-prod-attr__section">
-                            
-                            <div class="c-prod-attr__title">request for assets</div>
-
-                            {{#if project.needs.length}}
-                            {{#each project.needs}}
-                            
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">{{this.category}}</div>
-                              {{#if currentUser}}
-                              {{#if producerReady}}
-                              <div class="c-prod-attr__value"><a class="general_need-response button special" id="{{@index}}-need">offer</a></div>
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special" href="/settings">update your profile to apply</a></div>
-                              {{/if}}
-                              {{else}}
-                              <div class="c-prod-attr__value"><a class="button special">sign in to view</a></div>
-                              {{/if}}
-                            </div>
-
-                            {{/each}}
-                            {{else}}
-                            <div class="c-prod-attr__item">
-                              <div class="c-prod-attr__name">N / A</div>
-                            </div>
-                            {{/if}}         
-                          </div>
-                          
-                          
-                          
-                          
-                          
-
-                          <div class="w100">
-                            <h4>About the story</h4>
-                            
-                            <div class="c-desription">
-                              {{ project.storyInfo }}
-                            </div>
-                          </div>
-                          <div class="w100">
-                            <h4>Project history</h4>
-                            
-                            <div class="c-desription">
-                              {{ project.historyInfo }}
-                            </div>
-                          </div>
-                          <div class="w100">
-                            <h4>Project plans</h4>
-                            
-                            <div class="c-desription">
-                              {{ project.plansInfo }}
-                            </div>
-                          </div>
-                          <div class="w100">
-                            <h4>Explanation of needs</h4>
-                            
-                            <div class="c-desription">
-                              {{ project.needsInfo }}
-                            </div>
-                          </div>
-                          <div class="w100">
-                            <h4>Significance of work</h4>
-                            
-                            <div class="c-desription">
-                              {{ project.significanceInfo }}
-                            </div>
-                          </div>
-                              
-                              
-
-                        
-                        </div>
-                        
-                        
-                    </aside>
-
-                    {{#if isOwner}}
-                      <div class="w100">{{> applicants}}</div>
-                    {{/if}}
-                    
-                  </div>
+                    </div>
                 </div>
 
-              </div>
-            </div>
+                <aside id="project-sidebar" style="padding-bottom: 0px; height: auto;position: relative;">
 
-          </section>
-          {{/if}}
-      </div>
+                    <div class="id-widget-wrap nofloat">
+                        <div class="id-widget id-full">
+                            <div class="id-product-infobox">
+                                <div class="panel clearfix">
+                                    <div class="product-wrapper clearfix">
+                                        <div class="clearing"></div>
+                                        <div class="rholder">
+                                          <div class="rpdata">
+                                                <p class="form-submit">
+                                                    <input name="submit" type="submit" id="offer-donation" class="submit applicant-button-red" value="donate" style="width:100%!important;background:green!important">
+                                                </p>
+                                            </div>
+                                            <div class="rpdata">
+                                                <div class="id-progress-raised"> ${{project.funded}} </div>
+                                                <div class="id-product-funding">funds raised</div>
+                                            </div>
+                                            <div class="rpdata">
+                                                {{#if castLN}}
+                                                <p class="form-submit">
+                                                    <div class="id-product-total"><a href="#!" id="view-cast-positions">{{castLN}}</a></div>
+                                                    <div class="id-product-pledges">cast positions available</div>
+                                                </p>
+                                                {{else}}
+                                                <div class="id-product-total">{{castLN}}</div>
+                                                <div class="id-product-pledges">cast positions available</div>
+                                                {{/if}}
+                                            </div>
+                                            <div class="rpdata">
+                                                {{#if crewLN}}
+                                                <p class="form-submit">
+                                                    <div class="id-product-total"><a href="#!" id="view-crew-positions">{{crewLN}}</a></div>
+                                                    <div class="id-product-pledges">crew positions available</div>
+                                                </p>
+                                                {{else}}
+                                                <div class="id-product-total">{{crewLN}}</div>
+                                                <div class="id-product-pledges">crew positions available</div>
+                                                {{/if}}
+                                            </div>
+                                            <div class="rpdata">
+                                                {{#if needLN}}
+                                                <p class="form-submit">
+                                                    <div class="id-product-total"><a href="#!" id="view-need-positions">{{needLN}}</a></div>
+                                                    <div class="id-product-pledges">resources needed</div>
+                                                </p>
+                                                {{else}}
+                                                <div class="id-product-total">{{needLN}}</div>
+                                                <div class="id-product-pledges">resources needed</div>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="id-product-proposed-end">Created
+                                        <div class="id-widget-date">
+                                            <div class="id-widget-month">{{project.createdAt}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-container" style="display: block;">
+                                    </div>
+                                </div>
+
+                                <!-- end product-wrapper -->
+
+                                <div class="separator">&nbsp;
+                                    <div id="project-p-author" class="panel clearfix">
+
+                                        <div class="comment-avatar">
+                                            <img alt="" src="{{project.ownerAvatar}}" class="avatar avatar-65 photo" height="65" width="65"> 
+                                        </div>
+
+                                        <div class="comment-content">
+
+                                            <span>Project by</span>
+
+                                            <h6>{{project.ownerName}}</h6>
+
+                                            <ul class="author-meta">
+
+                                                <li><a href="/profile/{{project.ownerId}}">View Profile</a></li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- GIFTS -->
+                                <div class="id-product-description">Campaign items for sale.</div>
+                                <!--Product Levels-->
+                                <div class="id-product-levels">
+                                  {{#each project.gifts}}
+                                    <a class="level-binding">
+                                        <div class="level-group">
+                                            <div class="id-level-title"><span>{{this.name}}:</span> ${{this.msrp}}</div>
+                                            <div class="id-level-desc">
+                                                <p>{{this.description}}</p>
+                                                <p class="code">quantity available ({{this.quantity}})</p>
+                                            </div>
+                                        </div>
+                                        <p class="align-center"><a class="c-related__a button special purchase_gift">PURCHASE NOW</a></p>
+                                    </a>
+                                  {{/each}}
+                                </div>
+                                <!-- end product levels -->
+                            </div>
+                            <!-- end product-infobox -->                       
+                        </div>
+                        <!-- end id-widget -->
+                    </div>
+                    <!--if show author -->
+
+                    <div class="poweredbyID"><span><a href="https://opensourcehollywood.org" title="Crowdfunding and Crowdsourcing by Open Source Hollywood">Powered By Open Source Hollywood</a></span></div>
+                </aside>
+            </div>
+        </div>
+
+        <!-- Inner Wrapper End -->
+    </div>
+
+    <!-- Main Wrapper End -->
   </div>
-  </div>
+  <script type="text/javascript" src="/js/scripts.min.js"></script>
 </template>
 
+
+
+
+
+
+
+
+
 <template name="applicants">
-  <br>
-  <br>
-  <header class="major">
-      <h2>Campaign Management</h2>
-      <p>approve or decline applicants || fulfillment info of gift sales</p>
-  </header>
   <h3>Applicants for Roles</h3>
-  <div class="table-wrapper">
-    <table>
+  <div class="table-responsive">
+    <table class="table">
       <thead>
         <tr>
           <th><p class="align-center">Role</p></th>
@@ -441,22 +405,22 @@
           <th><p class="align-center">Offer</p></th>
           <th><p class="align-center">ACCEPT</p></th>
           <th><p class="align-center">REJECT</p></th>
-          <th><p class="align-center"><i class="glyphicon glyphicon-envelope"></i></p></th>
+          <th><p class="align-center">Message&nbsp;&nbsp;<i class="glyphicon glyphicon-envelope"></i></p></th>
         </tr>
       </thead>
       <tbody>
         {{#each this.project.roleApplicants}}
           <tr>
             <td><p class="align-center">{{appliedFor}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
-            <td><a style="width:100%" class="button view_offer">VIEW OFFER</a></td>
-            <td><a style="width:100%" class="button special accept"><p class="align-center">ACCEPT</p></a></td>
-            <td><a style="width:100%" class="button special_reject reject"><p class="align-center">REJECT</p></a></td>
-            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO TO CHAT</a></td>
+            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
+            <td><a style="width:100%" class="btn btn-mini btn-info view_offer">VIEW OFFER</a></td>
+            <td><a style="width:100%" class="btn btn-mini btn-success accept">ACCEPT</a></td>
+            <td><a style="width:100%" class="btn btn-mini btn-danger reject">REJECT</a></td>
+            <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
           </tr>
         {{else}}
         <tr>
-          <td colspan="6">N / A</td>
+          <td colspan="6">None Applied</td>
         </tr>
         {{/each}} 
       </tbody>
@@ -464,8 +428,8 @@
   </div>
   <br>
   <h3>Applicants for Team</h3>
-  <div class="table-wrapper">
-    <table>
+  <div class="table-responsive">
+    <table class="table">
       <thead>
         <tr>
           <th><p class="align-center">Role</p></th>
@@ -473,22 +437,22 @@
           <th><p class="align-center">Offer</p></th>
           <th><p class="align-center">ACCEPT</p></th>
           <th><p class="align-center">REJECT</p></th>
-          <th><p class="align-center"><i class="glyphicon glyphicon-envelope"></i></p></th>
+          <th><p class="align-center">Message&nbsp;&nbsp;<i class="glyphicon glyphicon-envelope"></i></p></th>
         </tr>
       </thead>
       <tbody>
         {{#each this.project.crewApplicants}}
           <tr>
             <td><p class="align-center">{{appliedFor}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
-            <td><a style="width:100%" class="button view_offer">VIEW OFFER</a></td>
-            <td><a style="width:100%" class="button special accept"><p class="align-center">ACCEPT</p></a></td>
-            <td><a style="width:100%" class="button special_reject reject"><p class="align-center">REJECT</p></a></td>
-            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO TO CHAT</a></td>
+            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
+            <td><a style="width:100%" class="btn btn-mini btn-info view_offer">VIEW OFFER</a></td>
+            <td><a style="width:100%" class="btn btn-mini btn-success accept">ACCEPT</a></td>
+            <td><a style="width:100%" class="btn btn-mini btn-danger reject">REJECT</a></td>
+            <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
           </tr>
         {{else}}
         <tr>
-          <td colspan="6">N / A</td>
+          <td colspan="6">None Applied</td>
         </tr>
         {{/each}}
       </tbody>
@@ -496,11 +460,12 @@
   </div>
   <br>
   <h3>Offered Resources</h3>
-  <div class="table-wrapper">
-    <table>
+  <div class="table-responsive">
+    <table class="table">
       <thead>
         <tr>
           <th><p class="align-center">Asset</p></th>
+          <th><p class="align-center">Offer</p></th>
           <th><p class="align-center">User</p></th>
           <th><p class="align-center">Message&nbsp;&nbsp;<i class="glyphicon glyphicon-envelope"></i></p></th>
         </tr>
@@ -509,12 +474,13 @@
         {{#each this.project.offeredResources}}
           <tr>
             <td><p class="align-center">{{asset}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a></td>
-            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO TO CHAT</a></td>
+            <td><p class="align-center">requesting ${{offer}}</p></td>
+            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
+            <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
           </tr>
         {{else}}
         <tr>
-          <td colspan="3">N / A</td>
+          <td colspan="3">None Offered</td>
         </tr>
         {{/each}}
       </tbody>
@@ -522,60 +488,29 @@
   </div>
   <br>
   <h3>Sold Gifts</h3>
-  <div class="table-wrapper">
-    <table>
+  <div class="table-responsive">
+    <table class="table">
       <thead>
         <tr>
           <th><p class="align-center">Name</p></th>
           <th><p class="align-center">Purchaser</p></th>
-          <th><p class="align-center">Amount</p></th>
           <th><p class="align-center">FULFILL</p></th>
-          <th><p class="align-center">Message</p></th>
         </tr>
       </thead>
       <tbody>
         {{#each this.project.giftPurchases}}
           <tr>
             <td><p class="align-center">{{gift.name}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="attachment-image-preview m40">&nbsp;&nbsp;{{user.name}}</p>{{#unless anon}}<a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="small button">PROFILE</a>{{/unless}}</td>
-            <td><p class="align-center">${{amount}}</p></td>
-            <td><a class="button special fulfill_gift" style="width: 100%;">FULFILL</a></td>
-            {{#unless anon}}
-            <td><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="button go">GO TO CHAT</a></td>
-            {{else}}
-            <td><a style="width:100%" class="button">N / A</a></td>
-            {{/unless}}
+            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
+            <td><a class="btn btn-mini btn-warning fulfill_gift" style="width: 100%;">FULFILL</a></td>
           </tr>
         {{else}}
         <tr>
-          <td colspan="5">N / A</td>
+          <td colspan="5">None Sold</td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
   <br>
-  <h3>Donations</h3>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th><p class="align-center">Donee</p></th>
-          <th><p class="align-center">Donation Amount</p></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each this.project.donations}}
-          <tr>
-            <td><p class="align-center_min">{{#unless anon}}{{donationObject.user.first}} {{donationObject.user.last}}{{else}}Anonymous Patron{{/unless}}</p></td>
-            <td><p class="align-center_min">${{amount}}</p></td>
-          </tr>
-        {{else}}
-          <tr>
-            <td colspan="2">N / A</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
 </template>

@@ -56,29 +56,3 @@ Router.configure({
         this.next();
     }
 });
-
-Router.route('/dashboard', {
-    name: 'Dashboard',
-    template: 'dashboard',
-    layoutTemplate: 'StaticLayout',
-    bodyClass: '.col-xs-12,.col-sm-12,.col-md-12,.col-lg-12{margin-bottom: 20px;}',
-    waitOn: function() {
-        if (!Meteor.user()) Router.go('Home');
-        var _id = Meteor.user()._id;
-        return [
-            Meteor.subscribe('usersList'),
-            Meteor.subscribe('userActiveProjects', _id),
-            Meteor.subscribe('activeProjectsApplied', _id),
-            Meteor.subscribe('activeProjectsApproved', _id)
-        ];
-    },
-    onBeforeAction: function() {
-        if (!Meteor.user()) {
-            Router.go('Home');
-            window.location.assign('/');
-            return;
-        }
-        document.title = "Dashboard";
-        this.next();
-    }
-});

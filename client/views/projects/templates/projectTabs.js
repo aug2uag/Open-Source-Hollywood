@@ -1,4 +1,4 @@
-const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A' //'pk_live_GZZIrMTVcHHwJDUni09o09sq';
+const StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
 
 function makeStripeCharge(options) {
   StripeCheckout.open({
@@ -36,46 +36,20 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
 });
 
 Template.projectTabs.helpers({
-  sections: function() {
-    // split campaigns in to sections
-    // define section name
-    // group projects by sctions
-  },
-  foo: function() {
-    var x = Meteor.user();
-    if (!x) return false;
-    return !(x.primaryRole || (x.iam&&x.iam.length));
-  },
   defaultQ: function() {
-    if (this.logline&&this.logline.length>10&&this.logline.indexOf('nothing to see here')===-1) {
-      if (this.logline.length>95) return this.logline.substr(0, 95)+'..';  
-      return this.logline;
-    };
-    if (this.description.length>10) {
-      if (this.description.length>95) return this.description.substr(0, 95)+'..';  
-      return this.description;
-    };
-    return 'view details for more information';
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  producerReady: function() {
+    return !(Meteor.user() && Meteor.user().didSetProfile);
   },
   formattedTitle: function() {
     if (this.title.length>25) return this.title.substr(0, 23)+'..';
     return this.title;
-  },
-  castLn: function() {
-    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
-    var msg_;
-    if (x===0) msg_=' none';
-    if (x===1) msg_=' role';
-    else msg_ = ' roles';
-    return (x + msg_);
-  },
-  crewLn: function() {
-    var x = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
-    var msg_;
-    if (x===0) msg_=' none';
-    if (x===1) msg_=' position';
-    else msg_ = ' positions';
-    return (x + msg_);
   },
   counts3: function() {
     var x = Session.get('pCount');
@@ -85,51 +59,148 @@ Template.projectTabs.helpers({
   counts30: function() {
     var x = Session.get('pCount');
     x = x || 0;
-    return x > 30;
+    return x > 20;
   },
   projects: function () {
     var pLimit = Session.get('pLimit') || 30;
     Session.set('pLimit', pLimit);
     if (Session.equals('order', 'hot')) {
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'top')){
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'newest')) {
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'alphabetical')) {
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'film')) {
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}, purpose: "Motion Pictures/Theatrical"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Motion Pictures/Theatrical"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'music')) {
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}, purpose: "Music/Score"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Music/Score"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'books')) {
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}, purpose: "Writing/Novel"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Writing/Novel"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else { /*by default the tab is on hot, in hot order */
-      var p = Projects.find({isApproved:true, archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
+  }
+});
+Template.projectTab.helpers({
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  producerReady: function() {
+    return !(Meteor.user() && Meteor.user().didSetProfile);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  },
+  counts3: function() {
+    var x = Session.get('pCount');
+    x = x || 0;
+    return x > 3 && Meteor.user();
+  },
+  counts30: function() {
+    var x = Session.get('pCount');
+    x = x || 0;
+    return x > 20;
+  },
+  projects: function () {
+    var pLimit = Session.get('pLimit') || 30;
+    Session.set('pLimit', pLimit);
+    if (Session.equals('order', 'hot')) {
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else if (Session.equals('order', 'top')){
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else if (Session.equals('order', 'newest')) {
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else if (Session.equals('order', 'alphabetical')) {
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else if (Session.equals('order', 'film')) {
+      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Motion Pictures/Theatrical"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else if (Session.equals('order', 'music')) {
+      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Music/Score"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else if (Session.equals('order', 'books')) {
+      var p = Projects.find({archived: false, isLive: {$ne: true}, purpose: "Writing/Novel"}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+    else { /*by default the tab is on hot, in hot order */
+      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      Session.set('pCount', p.count());
+      return p;
+    }
+  }
+});
+Template.projTab.helpers({
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  producerReady: function() {
+    return !(Meteor.user() && Meteor.user().didSetProfile);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  }
+});
+
+Template.projTab.events({
+  'click .toProj': function(e) {
+    e.preventDefault();
+    var proj = $(this)[0];
+    localStorage.setItem('redirectURL', '/projects/' + proj.slug + '/' + proj.ownerId);
+    lock.show();
   }
 });
 
@@ -181,7 +252,7 @@ Template.projectTabs.events({
     var was = this;
     var innermodal = bootbox.dialog({
       title: 'Apply for a position',
-      message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">Please define your application offer terms:</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">REQUEST PAY </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">OFFER DONATION </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">select for paid gigs or donation offer to apply</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">How much money and/or equity do you request for the job?</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <label for="apply-pay">dollar request amount</label> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"></div></div><div class="col-md-6"> <label for="apply-equity">equity request amount</label> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"></div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h5> <p class="align-center bootbox bootpadded">If not selected your donation will be returned in full on or before the <strong style="color:green">expiration date</strong> that you set below.<br><br>Please view <a style="color:red" href="/terms">TERMS</a> for more details. Expiration date on your offer defaults to 30 days from today unless you set a valid date that is at least one day in the future below.</p></h5> </div><div class="col-md-6"> <label for="apply-gratis">donation offer amount</label> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <label for="apply-gratis-exp">expiration date of your offer</label> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
+      message: '<div class="container" style=" position: relative; width: 100%;"> <h3> <p class="align-center bootbox">Thanks for applying</p></h3> <h5> <p class="align-center bootbox">what are your terms?</p></h5> <div class="btn-group btn-group-apply-modal col-md-12" data-toggle="buttons"> <div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="hired" value="hired">HIRED </label> </div><div class="col-md-6"> <label class="btn btn-default" style=" display: block;"> <input type="radio" name="apply_type" id="sourced" value="sourced">SOURCED </label> </div></div><div id="apply_instruct" class="col-md-12"> <h5> <p class="align-center bootbox">choose <code>HIRED</code> for paid gigs and <code>SOURCED</code> for others</p></h5> </div><div class="row" id="forhired" hidden> <div id="apply_instruct" class="col-md-8 col-md-offset-2"> <h5> <p class="align-center bootbox bootpadded">define how much money and/or equity you request for the job</p></h5> </div><div class="col-md-12"> <div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount ($)" min="1" id="apply-pay"> <span class="input-group-addon">for payment</span> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">%</span> <input type="number" class="form-control contrastback" placeholder="Amount (%)" min="1" max="100" id="apply-equity"> <span class="input-group-addon">for equity</span> </div></div></div></div><div class="row" id="forsourced" hidden> <div class="col-md-12"> <div class="input-group input-group-sm col-md-10 col-md-offset-1"> <h5> <p class="align-center bootbox bootpadded">offer a donation with an expiration, your donation is conditioned by your acceptance to the project based on the project owner\'s decision before the expiration date</p></h5> </div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon">$</span> <input type="number" class="form-control contrastback" placeholder="Amount (in US Dollars)" min="1" id="apply-gratis"> </div></div><div class="col-md-6"> <div class="input-group input-group-sm"> <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> <input type="date" class="form-control contrastback" placeholder="select expiration" id="apply-gratis-exp"> </div></div></div></div></div>',
       buttons: {
         danger:  {
           label: 'Cancel',
@@ -207,13 +278,14 @@ Template.projectTabs.events({
             }
             if (!o.pay) o.type='hired';
             if (o.pay) o.amount = o.pay;
-            o.message = 'APPLY: "'+was.title+'"';
+            o.message = was.title + ' application';
+            o.destination = was.account.id;
             o.route = 'applyToProject';
             o.slug = was.slug;
             o.appliedFor = 'any cast or crew position that is the best fit';
             if (o.pay&&o.type!=='hired') makeStripeCharge(o);
             else Meteor.call(o.route, o, function(err, result) {
-              bootbox.alert(result||'your application was successful pending your payment');
+              bootbox.alert(err||result);
             });
           }
         }
@@ -234,24 +306,14 @@ Template.projectTabs.events({
   }
 })
 
-Template.projectTabs.rendered = function () {
-   $(document).ready(function(){
-      $("#loadVideo").bind("click", function(){
-        videoUrl = $(this).attr("data-video-src")
-        $("#video").attr("src", videoUrl)
-      });
-      $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN');
+Template.projectTabs.rendered = function() {
+  $(document).ready(function(){
+    $("#loadVideo").bind("click", function(){
+      videoUrl = $(this).attr("data-video-src")
+      $("#video").attr("src", videoUrl)
     });
+  });
 };
-
-Template.terms.rendered = function() {
-  $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN');
-}
-
-Template.about.rendered = function() {
-  $('.login').html('<i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN');
-}
-
 
 Template.userTabs.helpers({
   counts3: function() {

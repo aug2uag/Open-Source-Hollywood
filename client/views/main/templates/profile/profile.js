@@ -2,20 +2,25 @@ Template.profile.helpers({
 	userProjects: function() {
 		return Projects.find({ownerId: this._id});
 	},
+	isVideo: function() {
+		var falsy = false;
+		if (this.url.indexOf('vimeo')>-1||this.url.indexOf('youtube')>-1) falsy = true;
+		return falsy;
+	},
+	userReels: function() {
+		return this.reels.reverse();
+	},
 	avatar: function() {
 		return this.avatar;
 	},
-	role: function() {
-		return this.primaryRole || (this.iam&&this.iam.split&&this.iam.split(' || ')) || 'this user likes to keep an air of mystery about them';
-	},
 	bio: function() {
-		return this.bio || 'no bio available';
+		return this.bio || 'apparently this user likes to keep an air of mystery about them';
 	},
 	name: function() {
 		return this.firstName + ' ' + this.lastName;
 	},
 	createdAt: function() {
-		return moment(this.createdAt).format();
+		return moment(this.createdAt).format('MM-DD-YYYY');
 	},
 	hasLinks: function() {
 		return this.socialLinks && this.socialLinks.length > 0;
@@ -35,8 +40,11 @@ Template.profile.helpers({
 	hasInterests: function() {
 		return this.interests && this.interests.length > 0;	
 	},
-	iam: function() {
-		return this.iam || [];	
+	iams: function() {
+		if (!this.iam.length) {
+			return 'this user has not specified any specialties or interests'
+		};
+		return this.iam.join(', ');	
 	},
 	interests: function() {
 		return this.interests || [];	
@@ -58,83 +66,6 @@ Template.profile.helpers({
 	}
 });
 
-Template.profile.onRendered(function() {
-	var was = this;
-	var url = 'url(' + was.data.avatar + ')';
-	$('.banner').css("background-image", url); 
-	var colors = {
-		secondary: '#ed4e7c',
-		primary: '#36e2be'
-	}
-	
-	function ready(fn) {
-		if (document.readyState != 'loading'){
-			fn();
-		} else {
-			document.addEventListener('DOMContentLoaded', fn);
-		}
-	}
-
-	ready(function() {
-		var counts = [90, 70, 50, 45, 80, 60, 40, 65, 55, 85, 60, 70];
-		var interests = was.data.iam.map(function(i) {
-			return i.toUpperCase();
-		});
-		var icounts = counts.splice(0, interests.length);
-		var data = {
-			labels: interests,
-			datasets: [
-				{
-					data: icounts,
-					fillColor: 'transparent',
-					strokeColor: colors.secondary,
-					pointColor: colors.secondary
-				}
-			]
-		};
-
-		var radarOpts = {
-			pointLabelFontFamily: "'Roboto Condensed', 'Roboto', sans-serif",
-			pointLabelFontStyle: '200',
-			pointLabelFontSize: 12,
-			pointLabelFontColor: '#333',
-			pointDotRadius: 4,
-			angleLineColor: 'rgba(255,255,255,0.1)',
-			scaleLineColor: 'rgba(255,255,255,0.1)',
-			scaleOverride: true,
-			scaleSteps: 2,
-			scaleStepWidth: 50,
-			showTooltips: false
-		};
-
-		// var ctx = document.getElementById("skills-radar").getContext("2d");
-		// var radar = new Chart(ctx).Radar(data, radarOpts);
-	});
-
-
-		$(document).ready(function(){
-		  $("img").click(function(){
-		  var t = $(this).attr("src");
-		  $(".modal-body").html("<img src='"+t+"' class='modal-img'>");
-		  $("#myModal").modal();
-		});
-
-		$("video").click(function(){
-		  var v = $("video > source");
-		  var t = v.attr("src");
-		  $(".modal-body").html("<video class='model-vid' controls><source src='"+t+"' type='video/mp4'></source></video>");
-		  $("#myModal").modal();  
-		});
-		});//EOF Document.ready
-
-})
-
-
-Template.profile.events({
-	'click #goback': function() {
-		window.history.back();
-	}
-})
 
 Template.settings.helpers({
 	avatar: function() {

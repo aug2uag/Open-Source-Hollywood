@@ -1,89 +1,45 @@
 <template name="nav">
+    <header id="header" class="clearfix" style="height:100px">
+        <div class=" clearfix">
+            <div class="wrapper clearfix">
 
-  <header id="header">
-      <nav role="navigation" id="nav">
-              <input class="trigger" type="checkbox" id="mainNavButton">
-              <label id="navlabel" for="mainNavButton" onclick>Open Source Hollywood</label>
+              <!-- Logo Start -->
 
-              {{#if currentUser}}
-              <ul>
-                
-                  <li><a href="/newproject">Create Campaign</a></li>
-                  <li><a href="/projects">Campaigns</a></li>
-                  <li><a href="/dashboard">Dashboard</a></li>
-                  <li><a href="/comms">Notifications</a></li>
-                  <li><a id="settings" href="/settings">Edit Profile</a></li>
-                  <li><a id="signout">Sign out</a></li>
-              </ul>
-                {{else}}
-                <ul>
-                
-                  <li><a id="gohome" href="/" class="" ><i class="glyphicon glyphicon-home"></i></a></li>
-                  <li><a href="/about" class="" >ABOUT</a></li>
-                  <li><a href="/terms" class="" >TERMS</a></li>
-                  <li><a class="login" ><i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;SIGNIN</a></li>
-              </ul>
-                  
-                {{/if}}
-              
-            </nav>
+                <a id="logo" href="https://opensourcehollywood.org" style="width:117px;height:23px;position:relative;top:20px;">
+                    <img class="default" src="/img/logo.png" alt="Open Source Hollywood">
+                    <img class="retina" src="/img/logo@2x.png" alt="Open Source Hollywood">
+                </a>
+                <!-- Logo End -->
+
+                <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color:transparent;border-color:transparent">
+                  <div class="container-fluid">
+                      <div class="navbar-header">
+                          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-main" id="navbutton">
+                              <span class="sr-only">Toggle navigation</span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                          </button>
+                      </div>
+                      <div class="collapse navbar-collapse" id="navbar-collapse-main" style="border-color: transparent;">
+                          <ul class="nav navbar-nav navbar-right" style="background-color:white;">
+                              {{#if currentUser}}
+                                <li class="selected parent menu-item"><a href="/create">Create Project</a></li>
+                                <li class="menu-item"><a href="/settings">Settings</a></li>
+                                <li class="menu-item"><a href="/discover">Discover</a></li>
+                                <li class="red"><a id="signout" href="#!">Sign Out</a></li>
+                              
+                              {{else}}
+                                  <li class="green"><a href="#!" class="login">Log In / Register</a></li>
+                              {{/if}}
+                          </ul>
+                      </div>
+                  </div>
+                </nav>
+            </div>
+        </div>
     </header>
-
-
-</template>
-
-<template name="user_options"> 
-  <ul>
-      <!--
-
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About Us</a>
-              <ul>
-                <li><a href="#">Sub Nav Item</a></li>
-                <li><a href="#">Sub Nav Item</a>
-                  <ul>
-                    <li><a href="#">Sub Sub Nav Item</a></li>
-                    <li><a href="#">Sub Sub Nav Item</a></li>
-                    <li><a href="#">Sub Sub Nav Item</a></li>
-                    <li><a href="#">Sub Sub Nav Item</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Sub Nav Item</a></li>
-                <li><a href="#">Sub Nav Item</a></li>
-              </ul>
-          </li>
-          <li><a href="#">Products</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Specials</a></li>
-          <li><a href="#">Contact Us</a></li>
-
-      -->
-      
-  </ul>
-
 </template>
 
 
 
-
-
-<!-- <a role="presentation" class="pull-right">
-      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list"></i></a>
-      <ul id="profile-dropdown-menu" class="dropdown-menu">
-        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Pages</p>
-        <li><a id="profile" href="/profile/{{currentUser._id}}">Profile</a></li>
-        <li><a id="settings" href="/settings">Edit Profile</a></li>
-        <li><a href="{{pathFor 'Projects'}}">Projects</a></li>
-        <li role="separator" class="divider"></li>
-        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Create Project</p>
-        <li><a href="/newproject" role="button" aria-haspopup="false" aria-expanded="false"><strong>Produce</strong></a></li>
-        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Active Projects</p>
-        <li><a href="/activeprojects" role="button" aria-haspopup="false" aria-expanded="false"><strong>Manage</strong></a></li>
-        <li role="separator" class="divider"></li>
-        <p style="padding-left: 10px; color: Gainsboro;opacity: 0.6;">Dashboard</p>
-        <li><a href="/dashboard">Dashboard</a></li>
-        <hr>
-        <li><a id="signout">Sign out</a></li>
-      </ul>
-    </a>
-    -->

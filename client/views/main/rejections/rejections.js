@@ -33,13 +33,14 @@ Template.receipts.helpers({
         return moment(this.created).format('MMMM Do YYYY, h:mm:ss a');
     },
     formatTitle: function() {
-        return this.title;
+        return this.projTitle||this.projectTitle||this.title||'undefined';
     },
     formatAmount: function() {
         return '$' + this.amount.toFixed(2);
     },
     formatRefund: function() {
-        if (this.purpose==='transfer') return 'TRANSFERRED';
+        if (this.refunded) return 'REFUNDED';
+        if (this.error) return 'REFUND ERROR, CONTACT US';
         return 'PAID';
     }
 });
@@ -50,8 +51,5 @@ Template.comms.helpers({
         return Notifications.find({
             user: Meteor.user()._id
         });
-    },
-    anon: function() {
-        return this.from==='anon';
     }
 });

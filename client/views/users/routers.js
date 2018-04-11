@@ -4,6 +4,11 @@ Router.route('/profile/:_id', {
   layoutTemplate: 'StaticLayout',
   bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   waitOn: function() {
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
+    }
     return [
       Meteor.subscribe('getUser', this.params._id), 
       Meteor.subscribe('projectsList'), 
@@ -36,7 +41,10 @@ Router.route('/settings', {
       }
       return [
         Meteor.subscribe('getMe'), 
-        Meteor.subscribe('connectUser')
+        Meteor.subscribe('connectUser'),
+        Meteor.subscribe('getProjectMessages'),
+        Meteor.subscribe('userActiveProjects', Meteor.user()._id),
+        Meteor.subscribe('activeProjectsApproved', Meteor.user()._id)
       ];
     },
     onBeforeAction: function() {

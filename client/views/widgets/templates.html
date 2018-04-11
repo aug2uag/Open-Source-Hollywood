@@ -1,18 +1,11 @@
 <template name="homeWidget">
     {{ > menuWidget }}
-    <div class="col-s-12">
-        
-    </div>
     {{ > membersWidget }}
-    <!-- uncomment HERE to add applicants to board -->
-    <!-- {{ > activityWidget }} -->
+    {{ > activityWidget }}
 </template>
 
 <template name="menuWidget">
     <div class="board-widget board-widget-nav clearfix{{#unless session 'menuWidgetIsOpen'}} collapsed{{/unless}}">
-        <h3 id="exit" class="dark-hover toggle-widget-nav"><strong style="color:#333">EXIT</strong>
-            <span class="icon-sm fa fa-close"></span>
-        </h3>
         <h3 class="dark-hover toggle-widget-nav js-toggle-widget-nav">{{_ 'menu'}}
             <span class="icon-sm fa fa-chevron-circle-down toggle-menu-icon"></span>
         </h3>
@@ -24,37 +17,6 @@
                     {{_ 'filter-cards'}}
                 </a>
             </li>
-            <li>
-                <a id="stats" class="nav-list-item">
-                    <span class="header-btn-text js-member-name"></span>
-                    {{_ 'stats'}}
-                </a>
-            </li>
-            <li>
-                <a id="cal" class="nav-list-item">
-                    <span class="header-btn-text js-member-name"></span>
-                    {{_ 'calendar'}}
-                </a>
-            </li>
-            <li>
-                <a id="tasks" class="nav-list-item">
-                    <span class="header-btn-text js-member-name"></span>
-                    {{_ 'tasks'}}
-                </a>
-            </li>
-            <li>
-                <a id="asss" class="nav-list-item">
-                    <span class="header-btn-text js-member-name"></span>
-                    {{_ 'assets'}}
-                </a>
-            </li>
-            <li>
-                <a id="mine" class="nav-list-item js-open-card-filter">
-                    <span class="header-btn-text js-member-name"></span>
-                    {{_ 'mine'}}
-                </a>
-            </li>
-            
 <!--             {{#if currentUser.isBoardAdmin}}
                 <hr>
                 <li>
@@ -93,33 +55,17 @@
 
 <template name="activityWidget">
     {{# if board.activities.count }}
-        <div class="col-s-12">
-            <a class="header-btn header-member js-open-header-member-menu" href="#">
-                <span class="header-btn-text js-member-name">{{_ 'settings'}}</span>
-            </a>
-        </div>
         <hr>
         <div class="board-widget board-widget-activity bottom clearfix">
             <div class="board-widget-title">
-                <h3 style="color:#333">{{_ 'applicants'}}</h3>
+                <h3 style="color:#333">{{_ 'activity'}}</h3>
             </div>
             <div class="board-widget-content">
-                <hr>
-                {{#if areApplicants}}
-                <div style="overflow-y:auto;position:relative;max-height:400px">
-                    {{#if areApplicants}}
-                    {{# each applicants}}
-                        {{> applicantAvatar user=this draggable=false size="large"}}
-                    {{/ each}}
-                    {{else}}
-                    <h3 style="color:#333">There are no applicants</h3>
-                    {{/if}}
-                </div>
-                {{/if}}
-                <!-- <div class="board-actions-list fancy-scrollbar">
+                <div class="activity-gradient-t"></div>
+                <div class="activity-gradient-b"></div>
+                <div class="board-actions-list fancy-scrollbar">
                     {{ > activities }}
-                </div> -->
-
+                </div>
             </div>
         </div>
     {{/if}}
@@ -128,7 +74,6 @@
 <template name="applicantsPopup">
     <div class="board-widgets-content-wrapper fancy-scrollbar">
         <div class="board-widgets-content">
-            {{# if currentUser.isBoardAdmin }}
             <h3 style="color:#333">{{_ 'applicants'}}</h3>
             <hr>
             <div class="board-backgrounds-list clearfix">
@@ -140,7 +85,7 @@
                     <h3 style="color:#333">There are no applicants</h3>
                 {{/if}}
             </div>
-            {{/if}}
+
         </div>
     </div>
 </template>
@@ -179,7 +124,7 @@
             {{> userAvatar user=user}}
             <div class="info">
                 <h3 class="bottom" style="margin-right: 40px;">
-                    <a class="js-profile" href="{{ pathFor route='Profile' username=user.services.auth0.nickname }}">{{ user.services.auth0.name }}</a>
+                    <a class="js-profile" href="{{ pathFor route='Profile' username=user.services.auth0.nickname }}">{{ user.firstName }} {{ user.lastName }}</a>
                 </h3>
                 <p class="quiet bottom">@{{ user.services.auth0.nickname }}</p>
             </div>
@@ -236,7 +181,7 @@
                     <a href="#" class="name js-toogle-member-filter">
                         {{> userAvatar user=this size="small" }}
                         <span class="full-name">
-                            {{ services.auth0.name }}
+                            {{ firstName }} {{ lastName }}
                             (<span class="username">{{ services.auth0.nickname }}</span>)
                         </span>
                         {{#if Filter.members.isSelected _id}}
@@ -248,7 +193,7 @@
         {{/each}}
     </ul>
     <hr/>
-    <h1>By Due Date(s)</h1>
+<!--     <h1>By Due Date(s)</h1>
     <ul class="pop-over-member-list checkable">
         {{#each foo}}
             <li class="item js-member-item {{#if Filter.dueDates.isSelected _id}}active{{/if}}">
@@ -262,7 +207,7 @@
                 </a>
             </li>
         {{/each}}
-    </ul>
+    </ul> -->
     
     <hr>
     <ul class="pop-over-list inset normal-weight">

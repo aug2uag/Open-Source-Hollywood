@@ -1,107 +1,148 @@
 <template name="profile">
-	<div id="page-wrapper">
-	  <div id="main" class="wrapper style1">
-	      <div class="container">
-	          <header class="major">
-	          	  <a id="goback" href="#" style="position: absolute; left: 0; top: 0"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp;&nbsp;GO BACK</a>
-	              <h2><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{name}}</h2>
-	              <p>{{role}}</p>
-	          </header>
-	          <section>
-		      {{ #if hasIAM }}
-		      <div class="table_hul">
-			    <ul style="display: -webkit-box;list-style: cjk-ideographic;position: relative;">
-			      {{ #each iam }}
-			      <li style="padding-right: 40px;position: relative;left: 30px;">{{ this }}</li>
-			      {{ /each }}
-			    </ul>
-			  </div>
-			  {{ /if }}
-				<div class="content">
-			      	<div class="col-md-6">
-						<img src="{{ avatar }}" width="50%" alt="user avatar" />
-						<div class="post-text">
-							<h5>Score: {{influenceScore}}</h5>
-							<h5>Rating: {{rating}}/5</h5>
-							<p>Joined: {{createdAt}} </p>
-							{{ #if hasWebsite }}
-							<p><a href="{{ website }}" target="_blank">Website</a></p>
-							{{ /if }}
-						</div>
-					</div>
-				</div>
-				<h2>Bio</h2>
-				<p class="makeroom">{{bio}}</p>
-				<hr>
-				<h2>Previous Campaigns</h2>
-				<div class="table-wrapper">
-					<table>
-					  <tbody>
-					  	{{#each userProjects}}
-						  	<tr>
-					          <td><a href="/projects/{{slug}}/{{ownerId}}" style="font-size: 1.5em;">{{title}}</a></td>
-					        </tr>
-					    {{ else }}
-					        <tr>
-					          <td><p class="align-center">N / A</p></td>
-					        </tr>
-					    {{ /each }}
-					  </tbody>
-					</table>
-				</div>
-				<h2>Reels, Headshots, and Previous Work</h2>
-				<div class="table-wrapper">
-					<table>
-					  <tbody>
-					  	{{ #each reels }}
-					        <tr>
-					          <td><p class="align-center">{{this.name}}</p></td>
-					          <td><p class="align-center">{{this.address}}</p></td>
-					        </tr>
-					    {{ else }}
-					        <tr>
-					          <td><p class="align-center">N / A</p></td>
-					        </tr>
-					    {{ /each }}
-					  </tbody>
-					</table>
-				</div>
-				<h2>Social Media &amp; Links</h2>
-				<div class="table-wrapper">
-					<table>
-					  <tbody>
-					  	{{ #each social }}
-					        <tr>
-					          <td><p class="align-center">{{this.name}}</p></td>
-					          <td><p class="align-center">{{this.address}}</p></td>
-					        </tr>
-					    {{ else }}
-					        <tr>
-					          <td><p class="align-center">N / A</p></td>
-					        </tr>
-					    {{ /each }}
-					  </tbody>
-					</table>
-				</div>
-				<h2>User Owned Assets</h2>
-				<div class="table-wrapper">
-					<table>
-					  <tbody>
-					  	{{ #each assets }}
-					        <tr>
-					          <td><p class="align-center">{{this.name}}</p></td>
-					          <td><p class="align-center">{{this.address}}</p></td>
-					        </tr>
-					    {{ else }}
-					        <tr>
-					          <td><p class="align-center">N / A</p></td>
-					        </tr>
-					    {{ /each }}
-					  </tbody>
-					</table>
-				</div>
-	          </section>
-	      </div>
-	  </div>
-	</div>
+	<div id="content" class="clearfix ">
+
+    <div class="clearfix wrapper">
+
+        <header id="page-title" style="padding-top: 0px;">
+            <h1 class="title">{{name}}</h1>
+            <h2 class="subtitle">{{iams}}</h2>
+        </header>
+
+        <div class="normal-content ">
+
+            <div id="project-container" class="krown-tabs responsive-on clearfix">
+
+                <div class="contents clearfix" style="width: 100%;">
+
+                    <div id="description" style="display: block;">
+
+                        <div class="project-header">
+
+                            <div class="flexslider mini">
+
+                                <div class="flex-viewport" style="overflow: hidden; position: relative;">
+                                    <ul class="slides" style="width: 1200%; transition-duration: 0s; transform: translate3d(-1690px, 0px, 0px); opacity: 1;">
+                                    	{{ #each userReels }}
+	                                    	{{#if isVideo}}
+	                                    		<li>
+	                                    			<iframe id="player_1" src="{{this.url}}" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+	                                    		</li>
+	                                    	{{else}}
+		                                    	<li>
+		                                    		<img src="{{this.url}}" width="845" height="" alt="" draggable="false">
+		                                    	</li>
+	                                    	{{/if}}
+                                    	{{/each}}
+                                    </ul>
+                                </div>
+                                <ul class="flex-direction-nav">
+                                    <li>
+                                        <a href="#" style="z-index: 999;" ></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" style="z-index: 999;" class="flex-next" ></a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="project-content">
+
+                        	<div class="content">
+	                    		<div class="row margin_bottom40" style="max-height:80px;margin-left:10px;margin-top:10px;">
+	                    			<div class="col-xs-3">
+										<img src="{{avatar}}" height="100%" alt="avatar" style="max-height:110px;" />
+									</div>
+									<div class="col-xs-3">
+										<div class="post-text">
+											<h5>Score: {{influenceScore}}</h5>
+											<p>Joined: {{createdAt}} </p>
+										</div>
+									</div>
+									<div class="col-xs-3">
+										{{ #if hasWebsite }}
+											<p><a href="{{ website }}" target="_blank">{{website}}</a></p>
+										{{ /if }}
+									</div>
+	                    		</div>
+							</div>
+							<p>&nbsp;</p>
+							<hr>
+
+                            {{bio}}
+                            <p>&nbsp;</p>
+                            <div data-opened="0" class="krown-accordion accordion large clearfix">
+                                <section>
+                                    <h5>Social Media &amp; Links</h5>
+                                    <div>
+                                        <div class="table-responsive">
+											<table class="table">
+												<thead>
+		                                            <tr>
+		                                                <th>Link Title</th>
+		                                                <th>URL or username</th>
+		                                            </tr>
+		                                        </thead>
+											  <tbody>
+											  	{{ #each social }}
+											        <tr>
+											          <td><p class="align-center">{{this.name}}</p></td>
+											          <td><p class="align-center">{{this.address}}</p></td>
+											        </tr>
+											    {{ else }}
+											        <tr>
+											          <td><p class="align-center">No links provided</p></td>
+											        </tr>
+											    {{ /each }}
+											  </tbody>
+											</table>
+										</div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <h5>User Owned Assets</h5>
+                                    <div>
+                                        <div class="table-responsive">
+											<table class="table">
+											  <thead>
+											    <tr>
+											        <th>Category</th>
+											        <th>Description</th>
+											    </tr>
+											  </thead>
+											  <tbody>
+											  	{{ #each assets }}
+											        <tr>
+											          <td><p class="align-center">{{this.category}}</p></td>
+											          <td><p class="align-center">{{this.description}}</p></td>
+											        </tr>
+											    {{ else }}
+											        <tr>
+											          <td><p class="align-center">No assets listed</p></td>
+											        </tr>
+											    {{ /each }}
+											  </tbody>
+											</table>
+										</div>
+                                    </div>
+                                </section>
+                            </div>
+                            <p>&nbsp;</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Inner Wrapper End -->
+    </div>
+
+    <!-- Main Wrapper End -->
+  </div>
+  <script type="text/javascript" src="/js/scripts.min.js"></script>
 </template>

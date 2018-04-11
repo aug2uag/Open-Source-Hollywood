@@ -1,24 +1,20 @@
 <template name="commentBox">
-  <br>
-  <div class="col-sm-1" style="padding-left:0px !important">
+  <div id="respond" class="comment-respond">
     {{#if currentUser}}
-      <img class="user-photo" src="{{avatar}}" style="width:50px">
+      <h3 id="reply-title" class="comment-reply-title">Write a comment</h3>
+      <form class="comment-form">
+          <div class="krown-column-container span12 last" style="margin-left:0">
+              <label for="comment">Your Comment</label>
+              <textarea id="comment-box" name="comment" rows="8"></textarea>
+          </div>
+          <p class="form-submit">
+              <input name="submit" type="submit" id="submit-comment" class="submit" value="Post Comment">
+          </p>
+      </form>
+    {{else}}
+      <h3 id="reply-title" class="comment-reply-title">Sign-in to comment</h3>
     {{/if}}
   </div>
-  {{#if currentUser}}
-    <div class="col-sm-11" style="padding-right:0px !important">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          Write a comment
-          <p class='pull-right'><span class="text-muted">Markdown Supported</span>&nbsp;<a href='/markdown' target="_blank"><span class='glyphicon glyphicon-info-sign'></span></a></p>
-        </div>
-      <div class="panel-body">
-    <textarea type="text" id="comment-box" placeholder="What do you think?"></textarea><br>
-    <button id="submit-comment" type="submit" class="btn btn-primary pull-right">Comment</button>
-    </div><!-- /panel-body -->
-    </div><!-- /panel panel-default -->
-    </div>
-  {{/if}}
 </template>
 
 <template name="messageBox">
@@ -38,24 +34,16 @@
 </template>
 
 <template name="comment">
-  <div class="animated fadeIn">
-    <div class="col-sm-1" style="padding-left:0px !important">
-      <center>
-        <a href="/profile/{{ownerId}}"><img class="user-photo" src="{{ownerAvatar}}" style="width:50px"></a>
-      </center>
-    </div>
-
-    <div class="col-sm-11" style="padding-right:0px !important" >
-      <div class="panel panel-default" style="background-color:transparent">
-        <div class="panel-heading">
-
-          <a href="/profile/{{ownerId}}"><strong style="color:#333">{{ownerName}} </strong></a><span class="text-muted">commented on {{createdAt}}</span>
-
-        </div>
-        <div class="panel-body">
-          {{#markdown}}{{text}}{{/markdown}}
-        </div>
+  <li class="comment clearfix">
+      <div class="comment-avatar custom-shape hexagon-small"><img alt="" src="{{ownerAvatar}}" class="avatar avatar-65 photo" height="65" width="65"></div>
+      <div class="comment-content">
+          <div class="comment-meta clearfix">
+              <h6 class="comment-title"><a href="/profile/{{ownerId}}">{{ownerName}}</a></h6>
+              <span class="comment-date">{{createdAt}}</span>
+          </div>
+          <div class="comment-text">
+              {{#markdown}}{{text}}{{/markdown}}
+          </div>
       </div>
-    </div>
-  </div>
+  </li>
 </template>

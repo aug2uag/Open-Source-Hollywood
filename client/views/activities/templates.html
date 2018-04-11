@@ -86,7 +86,7 @@
 </template>
 
 <template name="cardActivities">
-        <div class="js-list-actions">
+        <div class="js-list-actions" style="display: grid;">
             {{# each card.comments }}
                 <div class="phenom phenom-action clearfix phenom-comment" >
                     {{> userAvatar user=user size="small" class="creator js-show-mem-menu" }}

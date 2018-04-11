@@ -1,13 +1,3 @@
-const css = ['core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
-
-function clearcss() {
-    return css.forEach(function(f) {
-        var href = '/css/' + f;
-        var _id = 'link[rel=stylesheet][href~="' + href + '"]';
-        $(_id).remove();
-    });
-}
-
 Template.boardWidgets.events({
     'click .js-show-sidebar': function(event, t) {
         Session.set('sidebarIsOpen', true);
@@ -31,23 +21,6 @@ Template.menuWidget.events({
     'click .js-language': Popup.open('setLanguage'),
     'click .js-toggle-widget-nav': function(event, t) {
         Session.set('menuWidgetIsOpen', ! Session.get('menuWidgetIsOpen'));
-    }
-});
-
-Template.homeWidget.events({
-    'click .js-open-header-member-menu': Popup.open('memberMenu'),
-    'click #stats': Popup.open('stats'),
-    'click #cal': Popup.open('cal'),
-    'click #tasks': Popup.open('tasks'),
-    'click #asss': Popup.open('asss'),
-    'click #mine': Popup.open('mine'),
-    'click #exit': function() {
-        $('html').css('visibility', 'hidden');
-        setTimeout(function() {
-            $('html').css('visibility', 'visible');
-        }, 800);
-        Router.go('Dashboard');
-        clearcss();
     }
 });
 

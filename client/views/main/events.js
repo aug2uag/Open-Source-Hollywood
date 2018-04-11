@@ -10,27 +10,52 @@ Template.editor.events({
 Template.signin.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
-    window.scrollTo(0, 0);
-    window.history.pushState("", "", '/');
 		lock.show();
 	}
 });
 
-Template.about.events({
+Template.splashPage.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
-    window.scrollTo(0, 0);
-    window.history.pushState("", "", '/');
+    localStorage.setItem('redirectURL', '');
     lock.show();
   },
-  'click #subscribe': function(e) {
-    e.preventDefault();
-    var email = $('#email').val();
-    if (email) {
-      Session.set('subscriptionEmail', email);
-      Meteor.call("subscribeEmail", email);
-      $('#email').val('');
-      swal('Thank you for subscribing!');
-    }
+
+  'click #create': function() {
+    localStorage.setItem('redirectURL', '/create');
+    lock.show();
   }
 });
+
+Template.splashPage.helpers({
+  projects: function() {
+    return Projects.find({
+        archived: false
+    }).fetch().map(function(i) {
+      return {
+        slug: i.slug,
+        title: i.title,
+        ownerId: i.ownerId,
+        banner: i.banner,
+        purpose: i.purpose,
+        category: i.category,
+        logline: i.logline,
+        ownerName: i.ownerName,
+        cast: i.cast,
+        crew: i.crew
+      }
+    });
+  },
+  ifProjs: function() {
+    return Projects.find({
+        archived: false
+    }).count();
+  },
+  blogs: function() {
+    // get blogs
+  },
+  ifBlogs: function() {
+    // blogs count
+    return false;
+  }
+})

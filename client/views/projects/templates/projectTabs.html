@@ -1,92 +1,128 @@
 <template name="projectTabs">
-  <div id="page-wrapper">
-    {{#if foo}}
-    <div class="alert alert-danger col-md-12" role="alert">
-      <strong>Missing Roles!</strong>
-      " Select one or more primary and secondary roles in <a href="/settings">Edit Profile</a>. "
-    </div>
-    {{/if}}
-    <div id="main" class="wrapper style1">
-      <div class="container">
-      
-          <header class="major">
-              <h2>Live Campaigns</h2>
-              <p>Browse, view, and participate.</p>
+    <div id="content" class="clearfix layout-right-sidebar">
 
-              <div class="btn-toolbar" role="toolbar">
-                {{#if counts3}}
-                    <div class="btn-group" role="group">
-                      {{>sortBar}}
-                    </div>
-                {{/if}}
+        <div class="clearfix wrapper">
+
+
+            <header id="page-title">
+                <h1 class="title">Discover</h1>
+                <h2 class="subtitle">A full list of all campaigns</h2>
+            </header>
+
+            <div class="sidebar-content no-boxed">
+
+                <div class="krown-id-grid default clearfix" id="ign-4129" style="position: relative; height: 3913px;">
+                    {{#each projects}}
+
+                        {{> projectTab}}
+                        
+                    {{else}}
+                        <h3 class="subtitle" style="margin-top: 20px;">No Campaigns, Create One Now!</h3>
+                    {{/each}}
+                    
+                    
+                </div>
+
+            </div>
+
+            <aside id="sidebar">
                 {{#if counts30}}
-                    <div class="btn-group pull-right" role="group">
-                      {{>pager}}
-                    </div>
-                {{/if}}
-              </div>
-          </header>
+                    <div class="sidebar-item">
+                        <div class="w-title">Search Campaigns</div>
+                        <div class="w-content">
+                            <form action="projects.html">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label for="categories"><strong>Categories</strong></label>
+                                        <select id="categories" class="form-control arrow-down" sb="60839008">
+                                            <option value="">All Categories</option>
+                                            <option value="Animals">Animals</option>
+                                            <option value="Community">Community</option>
+                                            <option value="Education">Education</option>
+                                            <option value="Environment">Environment</option>
+                                            <option value="Food">Food</option>
+                                            <option value="Health">Health</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="city"><strong>Search by Location</strong></label>
+                                        <input type="text" class="form-control" id="city" placeholder="Zip Code">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="country"><strong>Country</strong></label>
+                                        <select id="country" class="form-control arrow-down" sb="64915644" style="display: none;">
+                                            <option value="">All Countries</option>
+                                            <option value="Australia">Australia</option>
+                                            <option value="Canada">Canada</option>
+                                            <option value="United Kingdom">United Kingdom</option>
+                                            <option value="United States">United States</option>
+                                        </select> -->
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label><strong>Percent Funded</strong></label>
+                                    </div>
+                                    <div class="radio-inputs">
 
-          <!-- Text -->
-
-              <div class="c-related">
-                  <div class="table-wrapper">
-                    <table>
-                      <caption style="position:  relative;width:  100vw;"><strong>ALL CAMPAIGNS</strong></caption>
-                    </table>
-                  </div>
-                  {{#each projects}}
-                    <div class="c-related__item projtab">
-                      <div class="c-related__figure">
-                        <a href="/projects/{{slug}}/{{ownerId}}" class="c-related__a">
-                          <img class="c-related__img projtabimg" src="{{banner}}" />
-                        </a>
-                      </div>
-                      <div class="c-related__supplier proj__supplier">
-
-
-                        <div class="camp-profile">
-                          <img class="avatar" src="{{ownerAvatar}}" alt="Ash" />
-                            <div class="projnamet">{{formattedTitle}}</div>
-                          <div class="projdet">
-                            by: {{ownerName}} ({{city}}, {{state}} {{zip}})
-                          </div>
-                          <div class="projdet" style="top: -10px;position: relative;">
-                            {{purpose}} || {{category}}
-                          </div>
-                            <div class="description">
-                              {{defaultQ}}
-                          </div>
-                          <ul class="data">
-                            <li>
-                              <span class="entypo-heart">{{cast.length}} cast</span>
-                            </li>
-                            <li>
-                              <span class="entypo-eye">{{crew.length}} crew</span>
-                            </li>
-                            <li>
-                              {{#if currentUser}}
-                              <a class="c-related__a button quick_apply">QUICK APPLY</a>
-                              {{/if}}
-                            </li>
-                         </ul>
+                                        <div class="form-group radio-cnt">
+                                            <div class="iradio_minimal-blue checked" style="position: relative;">
+                                                <div class="iradio_minimal-blue checked" style="position: relative;">
+                                                    <input type="radio" value="all" name="percent-funded" id="all" checked="checked" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                                            <label for="all">All</label>
+                                        </div>
+                                        <div class="form-group radio-cnt">
+                                            <div class="iradio_minimal-blue" style="position: relative;">
+                                                <div class="iradio_minimal-blue" style="position: relative;">
+                                                    <input type="radio" value="50-75" name="percent-funded" id="5075" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                                            <label for="5075">50% - 75%</label>
+                                        </div>
+                                        <div class="form-group radio-cnt">
+                                            <div class="iradio_minimal-blue" style="position: relative;">
+                                                <div class="iradio_minimal-blue" style="position: relative;">
+                                                    <input type="radio" value="75-100" name="percent-funded" id="75100" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                                            <label for="75100">75% - 100%</label>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <button type="button" class="btn btn-4 green submit-filters">Submit</button> -->
+                                </fieldset>
+                            </form>
                         </div>
-
-                          
-
-                      </div>
                     </div>
-                  {{else}}
-                    <div class="c-related__item mod80">
-                      <div class="c-related__title">
-                        <h3 class="h10"><p class="align-center">No campaigns, <a id="createnewproject">create one now</a></p></h3>
-                      </div>
-                    </div>
-                  {{/each}}
-              </div>
 
-      </div>
-    </div>
+                    <div class="sidebar-item">
+                        <div class="w-title">Popular Categories</div>
+                        <div class="w-content popular-categories">
+                            <ul>
+                                <li><a href="#"><span><i class="icon-animals"></i></span>Animals</a></li>
+                                <li><a href="#"><span><i class="icon-art"></i></span>Art</a></li>
+                                <li><a href="#"><span><i class="icon-community"></i></span>Community</a></li>
+                                <li><a href="#"><span><i class="icon-dance"></i></span>Dance</a></li>
+                                <li><a href="#"><span><i class="icon-design"></i></span>Design</a></li>
+                                <li><a href="#"><span><i class="icon-education"></i></span>Education</a></li>
+                                <li><a href="#"><span><i class="icon-environment"></i></span>Environment</a></li>
+                                <li><a href="#"><span><i class="icon-fashion"></i></span>Fashion</a></li>
+                                <li><a href="#"><span><i class="icon-film"></i></span>Film</a></li>
+                                <li><a href="#"><span><i class="icon-food"></i></span>Food</a></li>
+                                <li><a href="#"><span><i class="icon-gaming"></i></span>Gaming</a></li>
+                                <li><a href="#"><span><i class="icon-health"></i></span>Health</a></li>
+                                <li><a href="#"><span><i class="icon-music"></i></span>Music</a></li>
+                                <li><a href="#"><span><i class="icon-politics"></i></span>Politics</a></li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                {{else}}
+                    <section id="text-9" class="widget widget_text clearfix">
+                        <h4 class="widget-title">About</h4>
+                        <div class="textwidget">Campaigns are made by independent producers worldwide. Select one to view the details, including how to donate and apply for roles. Once there are more than 20 campaigns, this message will be replaced by search filters.</div>
+                    </section>
+                {{/if}}
+
+            </aside>
+            <!-- Inner Wrapper End -->
+        </div>
+        <script type="text/javascript" src="/js/scripts.min.js"></script>
+        <!-- Main Wrapper End -->
   </div>
 </template>
 
@@ -144,4 +180,60 @@
       }, 800);
     });
   </script>
+</template>
+
+
+<template name="projectTab">
+    <article class="krown-id-item">
+
+        <a class="fancybox-thumb" href="/projects/{{slug}}/{{ownerId}}">
+            <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}"></figure><span></span></a>
+        <div class="container">
+
+            <a href="/projects/{{slug}}/{{ownerId}}"><h3 class="title">{{formattedTitle}}</h3></a>
+
+            <div class="cats">{{purpose}}, {{category}}</div>
+
+            <section class="content">{{defaultQ}}</section>
+
+            <aside class="meta">
+
+                <ul>
+                    <li><span>{{applicantLN}}</span> roles</li>
+                    <li><span>{{ownerName}}</span></li>
+                </ul>
+
+            </aside>
+
+        </div>
+
+    </article>
+</template>
+
+
+
+<template name="projTab">
+    <article class="krown-id-item">
+
+        <a class="fancybox-thumb toProj" href="#!">
+            <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}"></figure><span></span></a>
+        <div class="container">
+
+            <h3 class="title">{{formattedTitle}}</h3>
+
+            <div class="cats">{{purpose}}, {{category}}</div>
+
+            <section class="content">{{defaultQ}}</section>
+
+            <aside class="meta">
+                <ul>
+                    <li><span>{{applicantLN}}</span> roles</li>
+                    <li><span>{{ownerName}}</span></li>
+                </ul>
+
+            </aside>
+
+        </div>
+
+    </article>
 </template>

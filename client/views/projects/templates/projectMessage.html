@@ -1,51 +1,24 @@
 <template name="projectMessage">
-    
-  <div id="page-wrapper">
-        <!-- Main -->
-        <div id="main" class="wrapper style1">
-            <div class="container">
-                <header class="major">
-                    <h2>{{title}}</h2>
-                    <p>Enter the details of your vision below.</p>
-                </header>
-
-                <section>
-                    
-                    <h3>The following are actions made by Rex for the {{project.title}} campaign</h3>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <tbody>
-                                {{#each offers}}
-                                <tr>
-                                    <td>{{message}} ({{formattedOfferDate}})</td>
-                                </tr>
-                                {{else}}
-                                <tr>
-                                    <td>There are no offers to show.</td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                </section>
-
-                <section>
-                    <div class="w100">
-                        <div style="position:relative;padding-top:20px;width:80%">
-                          <h4>{{numMessages}}</h4>
-                          <br>
-                          {{#each messages}}
-                          {{> comment}}
-                          {{/each}}
-                          {{> messageBox}}
-                        </div>
-                      </div>    
-                </section>
-                
-            </div>
+  <div id="content" class="clearfix layout-fixed-width">
+    <div class="clearfix wrapper">
+        <header id="page-title">
+            <h1 class="title">Messages</h1>
+            <h2 class="subtitle">relating to campaign {{project.title}}</h2>
+        </header>
+        <div class="normal-content no-boxed">
+          <div class="krown-column-row clearfix">
+            {{#each messages}}
+              <div class="krown-column-container clearfix first span12 clearfix">
+                  <section class="krown-box light-1 clearfix">
+                    {{> comment}}
+                  </section>
+              </div>
+            {{/each}}
+          </div>
+          <div class="krown-column-row clearfix">
+            {{> messageBox}}
+          </div>
         </div>
+    </div>
   </div>
-
 </template>

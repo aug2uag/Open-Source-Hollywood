@@ -51,16 +51,15 @@
     <div class="board-member-menu">
         <div class="mini-profile-info">
             <div class="member {{size}} {{ class }} {{# if draggable }}js-member{{else}}js-member-on-card-menu{{/ if}}"
-                 title="{{ user.services.auth0.name }} ({{ user.services.auth0.nickname }})">
+                 title="{{ user.firstName }} {{ user.lastName }}">
                 <div class="avatar avatar-{{size}} avatar-hide-image">
-                    <img class="avatar-image" src="{{ user.services.auth0.picture }}"/>
+                    <img class="avatar-image" src="{{ user.avatar }}"/>
                 </div>
             </div>
             <div class="info">
                 <h3 class="bottom" style="margin-right: 40px;">
-                    <a class="js-profile" href="{{ pathFor route='Profile' username=user.services.auth0.nickname }}">{{ user.services.auth0.name }}</a>
+                    <a class="js-profile" href="{{ pathFor route='Profile'}}">{{ user.firstName }} {{ user.lastName }}</a>
                 </h3>
-                <p class="quiet bottom">@{{ user.services.auth0.nickname }}</p>
             </div>
         </div>
         {{# if currentUser.isBoardMember }}
@@ -82,8 +81,7 @@
                     <a href="#" class="name js-select-member">
                         {{> userAvatar user=user size="small" }}
                         <span class="full-name">
-                            {{ user.services.auth0.name }}
-                            (<span class="username">{{ user.services.auth0.nickname }}</span>)
+                            {{ user.firstName }} {{ user.lastName }}
                         </span>
                         {{#if isCardMember}}
                             <span class="icon-sm fa fa-check checked-icon"></span>
@@ -138,6 +136,18 @@
             </li>
         </ul>
     </div>
+</template>
+
+<template name="dueDatePopup">
+    <div style="position:relative;height:440px;overflow:auto;">
+    <div style="height:40px"></div>
+    <div class="input-group datetimepicker">
+        <span class="input-group-addon" id="glwiz"><i class="glyphicon glyphicon-calendar"></i></span>
+        <input class="set-due-date form-control" id="task-due-date" type="text"/>
+    </div>
+    </div>
+    <input class="col-xs-12 js-due-date-submit" type="submit" value="set due date"/>
+    {{ datecal }}
 </template>
 
 <template name="formLabel">
@@ -217,10 +227,10 @@
             <div class="window-header clearfix">
                 <span class="window-header-icon icon-lg fa fa-calendar-o"></span>
                 <div class="window-title card-detail-title non-empty inline {{# if currentUser.isBoardMember }}editable{{/ if }}">
-                    <h2 class="window-title-text current hide-on-edit js-card-title color333">{{ card.title }}</h2>
+                    <h2 class="window-title-text current hide-on-edit js-card-title">{{ card.title }}</h2>
                     <div class="edit edit-heavy">
                         <form id="WindowTitleEdit">
-                            <textarea type="text" class="field single-line color333" id="title">{{ card.title }}</textarea>
+                            <textarea type="text" class="field single-line" id="title">{{ card.title }}</textarea>
                             <div class="edit-controls clearfix">
                                 <input type="submit" class="primary confirm js-title-save-edit" value="{{_ 'save'}}">
                                 <a href="#" class="icon-lg fa fa-times dark-hover cancel js-cancel-edit"></a>
@@ -230,14 +240,14 @@
                     <div class="quiet hide-on-edit window-header-inline-content js-current-list">
                         <p class="inline-block bottom">
                             {{_ 'in-list'}}
-                            <a href="#" class="{{# if currentUser.isBoardMember }}js-open-move-from-header{{else}}disabled{{/ if }}"><strong class="color333">{{ card.list.title }}</strong></a>
+                            <a href="#" class="{{# if currentUser.isBoardMember }}js-open-move-from-header{{else}}disabled{{/ if }}"><strong>{{ card.list.title }}</strong></a>
                         </p>
                     </div>
                 </div>
             </div>
             <div class="window-main-col clearfix">
                 <div class="card-detail-data gutter clearfix">
-                    <div class="card-detail-item card-detail-item-block clear clearfix editable">
+                    <div class="card-detail-item card-detail-item-block clear clearfix editable" style="display: table;margin-top: 20px;">
                         {{# if card.members }}
                             <div class="card-detail-item card-detail-item-members clearfix js-card-detail-members">
                                 <h3 class="card-detail-item-header">{{_ 'members'}}</h3>
@@ -285,7 +295,7 @@
                             {{/ if }}
                             <div class="card-detail-edit edit">
                                 <form id="WindowDescEdit">
-                                    {{#editor class="field single-line2 placeholder333" id="desc"}}{{ card.description }}{{/editor}}
+                                    <textarea class="field single-line2" placeholder="enter description ..." id="desc" tabindex="1">{{ card.description }}</textarea>
                                     <div class="edit-controls clearfix">
                                         <input type="submit" class="primary confirm js-title-save-edit" value="{{_ 'save'}}">
                                         <a href="#" class="icon-lg fa fa-times dark-hover cancel js-cancel-edit"></a>
@@ -308,9 +318,9 @@
 
 <template name="membersThumbnail">
     <div class="member {{size}} {{ class }} {{# if draggable }}js-member{{else}}js-member-on-card-menu{{/ if}}"
-         title="{{ user.services.auth0.name }} ({{ user.services.auth0.nickname }})">
+         title="{{ user.firstName }} {{ user.lastName }}">
         <div class="avatar avatar-{{size}} avatar-hide-image">
-            <img class="avatar-image" src="{{ user.services.auth0.picture }}"/>
+            <img class="avatar-image" src="{{ user.avatar }}"/>
         </div>
     </div>
 </template>
@@ -319,7 +329,7 @@
     <div class="window-module">
         <div class="window-module-title window-module-title-no-divider">
             <span class="window-module-title-icon icon-lg fa fa-comments-o"></span>
-            <h3 class="color333">{{ _ 'activity'}}</h3>
+            <h3>{{ _ 'activity'}}</h3>
         </div>
         {{# if currentUser.isBoardMember }}
             <div class="new-comment js-new-comment">
@@ -393,48 +403,44 @@
 <template name="WindowSidebarModule">
     <div class="window-sidebar" style="position: relative;">
         <div class="window-module clearfix">
-            <h3 style="color333">{{_ 'add'}}</h3>
-            <div class="clearfix">
-                <a href="#" class="button-link js-change-card-members" title="{{_ 'members-title'}}">
-                    <span class="icon-sm fa fa-user"></span> {{_ 'members'}}
+            <h3>{{_ 'add'}}</h3>
+            <div class="clearfix" style="display: grid;justify-items: left;">
+                <a href="#" class="button-link js-change-card-members" title="{{_ 'members-title'}}" style="margin-bottom: 10px;">
+                    <span class="fa fa-user"></span> {{_ 'members'}}
                 </a>
-                <a href="#" class="button-link js-edit-labels" title="{{_ 'labels-title'}}">
-                    <span class="icon-sm fa fa-tags"></span> {{_ 'labels'}}
+                <a href="#" class="button-link js-edit-labels" title="{{_ 'labels-title'}}" style="margin-bottom: 10px;">
+                    <span class="fa fa-tags"></span> {{_ 'labels'}}
                 </a>
-                <a href="#" class="button-link js-attach" title="{{_ 'attachment-title'}}">
-                    <span class="icon-sm fa fa-paperclip"></span> {{_ 'attachment'}}
+                <a href="#" class="button-link js-attach" title="{{_ 'attachment-title'}}" style="margin-bottom: 10px;">
+                    <span class="fa fa-paperclip"></span> {{_ 'attachment'}}
                 </a>
+                <!-- <a href="#" class="button-link js-due-date" title="{{_ 'due-date-title'}}">
+                    <span class="fa fa-calendar"></span> {{_ 'due_date'}}
+                </a> -->
             </div>
         </div>
         <div class="window-module other-actions clearfix">
-            <h3 style="color333">{{_ 'actions'}}</h3>
+            <h3>{{_ 'actions'}}</h3>
             <div class="clearfix">
                 <hr>
                 {{ #if card.archived }}
                     <a href="#" class="button-link js-unarchive-card" title="{{_ 'send-to-board-title'}}">
-                        <span class="icon-sm fa fa-recycle"></span> {{_ 'send-to-board'}}
+                        <span class="fa fa-recycle"></span> {{_ 'send-to-board'}}
                     </a>
                     <a href="#" class="button-link negate js-delete-card" title="{{_ 'delete-title'}}">
-                        <span class="icon-sm fa fa-trash-o"></span> {{_ 'delete'}}
+                        <span class="fa fa-trash-o"></span> {{_ 'delete'}}
                     </a>
                 {{ else }}
                     <a href="#" class="button-link js-archive-card" title="{{_ 'archive-title'}}">
-                        <span class="icon-sm fa fa-archive"></span> {{_ 'archive'}}
+                        <span class="fa fa-archive"></span> {{_ 'archive'}}
                     </a>
                 {{ /if }}
             </div>
         </div>
-        <div class="window-module other-actions clearfix">
-            <h3 style="color333">set due date</h3>
-            <div class="clearfix">
-                <hr>
-                <input type="date" id="datetimepicker" style="width: 100%;display: -webkit-inline-box;font-size: large;text-align: -webkit-center;" value="{{due}}">
-            </div>
-        </div>
-        <div class="window-module clearfix">
+        <!-- <div class="window-module clearfix">
             <p class="quiet bottom">
                 <a href="#" class="quiet-button js-more-menu" title="{{_ 'share-and-more-title'}}">{{_ 'share-and-more'}}</a>
             </p>
-        </div>
+        </div> -->
     </div>
 </template>

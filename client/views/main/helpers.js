@@ -59,7 +59,7 @@ Blaze.Template.registerHelper('mentions', new Template('mentions', function() {
     var currentBoard = Boards.findOne(Router.current().params.boardId);
     var knowedUsers = _.map(currentBoard.members, function(member) {
         var user = Users.findOne({'_id': member.userId});
-        if (user && user.services  && user.services.auth0) member.username = user.services.auth0.name;
+        if (user && user.services  && user.services.auth0) member.username = user.firstName + ' ' + user.lastName;
         return member;
     });
 

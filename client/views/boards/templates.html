@@ -1,9 +1,9 @@
 <template name="board">
     {{# if this }}
-        <div id="page-wrapper-board" class="board-wrapper {{# unless session 'sidebarIsOpen' }}disabled-all-widgets{{/ unless }}" style="background: transparent;">
+        <div id="page-wrapper" class="board-wrapper {{# unless session 'sidebarIsOpen' }}disabled-all-widgets{{/ unless }}" style="background: transparent;">
             <div class="board-header clearfix js-board-header">
                 <p class="board-header-btn board-header-btn-name">
-                    CAMPAIGN TITLE:  <span class="board-header-btn-text">{{ title }}</span>
+                    <span class="alignright board-header-btn-text h3"> {{ title }} </span>
                 </p>
                 <div class="board-header-btns right">
                     {{#if Filter.isActive}}

@@ -4,180 +4,27 @@
 
   <div id="page-wrapper">
         <!-- Main -->
-        <div id="main" class="wrapper style1">
-            <div class="container">
-                <header class="major">
-                    <h2>{{title}}</h2>
-                    <p>Edit fields below as needed.</p>
-                </header>
-
-                <!-- Text -->
+        <div id="main" class="style1">
+            <div class="container" style="width: 100%;">
                 <section>
-                    <h3>Basic Information</h3>
-                    <hr />
-                    <div class="row uniform 50%">
-                        <div class="6u 12u$(xsmall)">
-                            <label for="title">title</label>
-                            <input type="text" name="title" id="title" placeholder="{{title}}" value="{{title}}" />
+                    <h2>Crew</h2>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <input type="text" name="title" id="crew-title" placeholder="Title" />
                         </div>
-                        <div class="6u$ 12u$(xsmall)">
-                            <label for="logline">logline (max length 100 characters)</label>
-                            <input type="text" name="logline" id="logline" placeholder="{{logline}}" value="{{logline}}" maxlength="101" />
+                        <div class="col-sm-12 col-md-4">
+                            <input type="text" name="title" id="crew-description" placeholder="Description" />
                         </div>
-                        <div class="6u 12u$(xsmall)">
-                            <label for="location">location</label>
-                            <input type="text" name="location" id="location" placeholder="{{zip}}" value="{{zip}}" />
-                        </div>
-                        <div class="6u$ 12u$(xsmall)">
-                            <label for="website">website</label>
-                            <input type="email" name="website" id="website" placeholder="{{website}}" value="{{website}}" />
-                        </div>
-
-                        <div class="12u$">
-                            <label for="description">description</label>
-                            <textarea name="description" id="description" placeholder="{{description}}" value="{{description}}" rows="6"></textarea>
-                        </div>
-
-
-                        <div class="12u$">
-                            <label for="category">category</label>
-                            <div class="select-wrapper">
-                              <select name="category" id="category">
-                                <option>- Format -</option>
-                                <option vla="Feature">Feature</option>
-                                <option vla="Short Film">Short Film</option>
-                                <option vla="Series">Series</option>
-                                <option vla="Sketch">Sketch</option>
-                                <option vla="Animations">Animations</option>
-                                <option vla="Theater">Theater</option>
-                                <option vla="Ensemble">Ensemble</option>
-                                <option vla="Live Performance">Live Performance</option>
-                                <option vla="Music Video">Music Video</option>
-                                <option vla="Other">Other</option>
-                              </select>
+                        <div class="col-sm-12 col-md-4 margin_bottom20">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="crew-radio-needed" name="crew-radio" value="needed" checked>
+                                <label for="crew-radio-needed">Needed</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="crew-radio-fulfilled" name="crew-radio" value="fulfilled">
+                                <label for="crew-radio-fulfilled">Fulfilled</label>
                             </div>
                         </div>
-
-                        <div class="12u$">
-                            <label for="purpose">purpose</label>
-                            <div class="select-wrapper">
-                              <select name="purpose" id="purpose">
-                                <option>Unspecified</option>
-                                <option val="Mixed Media">Mixed Media</option>
-                                <option val="Audio">Audio</option>
-                                <option val="Performance">Performance</option>
-                              </select>
-                            </div>
-                        </div>
-
-                        <div class="12u$">
-                            <label for="genre">genre</label>
-                            <div class="select-wrapper">
-                              <select name="genre" id="genre">
-                                <option>Unspecified</option>
-                                <optgroup label="Mixed Media">
-                                    <option val="Drama">Drama</option>
-                                    <option val="Comedy">Comedy</option>
-                                    <option val="Documentary">Documentary</option>
-                                    <option val="Educational">Educational</option>
-                                    <option val="Game Show">Game Show</option>
-                                    <option val="Musical">Musical</option>
-                                    <option val="Reality">Reality</option>
-                                    <option val="News">News</option>
-                                    <option val="Sports">Sports</option>
-                                    <option val="Variety">Variety</option>
-                                    <option val="Kids">Kids</option>
-                                    <option val="Cooking">Cooking</option>
-                                    <option val="Other">Other</option>
-                                </optgroup>
-                                
-                                <optgroup label="Audio">
-                                    <option val="Folk">Folk</option>
-                                    <option val="Classical">Classical</option>
-                                    <option val="Contemporary">Contemporary</option>
-                                    <option val="Soul">Soul</option>
-                                    <option val="Jazz">Jazz</option>
-                                    <option val="Rock">Rock</option>
-                                    <option val="Metal">Metal</option>
-                                    <option val="Pop">Pop</option>
-                                    <option val="Hip Hop">Hip Hop</option>
-                                    <option val="EDM">EDM</option>
-                                    <option val="Other">Other</option>
-                                </optgroup>
-                                
-                                <optgroup label="Performance">
-                                    <option val="Ballet">Ballet</option>
-                                    <option val="Opera">Opera</option>
-                                    <option val="Dance">Dance</option>
-                                    <option val="Theatre">Theatre</option>
-                                    <option val="Other">Other</option>
-                                </optgroup>
-                                
-
-                              </select>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                    <br>
-                    <br>
-                    <h2>Background Information</h2>
-                    <hr />
-
-
-                    <div class="row uniform 50%">
-                        <h4>About the creators</h4>
-                        <div class="12u$">
-                            <textarea name="creators_info" id="creators_info" placeholder="{{creatorsInfo}}" value="{{creatorsInfo}}" rows="6"></textarea>
-                        </div>
-                        <h4>About the story</h4>
-                        <div class="12u$">
-                            <textarea name="story_info" id="story_info" placeholder="{{storyInfo}}" value="{{storyInfo}}" rows="6"></textarea>
-                        </div>
-                        <h4>Project history</h4>
-                        <div class="12u$">
-                            <textarea name="history_info" id="history_info" placeholder="{{historyInfo}}" value="{{historyInfo}}" rows="6"></textarea>
-                        </div>
-                        <h4>Project plans</h4>
-                        <div class="12u$">
-                            <textarea name="plans_info" id="plans_info" placeholder="{{plansInfo}}" value="{{plansInfo}}" rows="6"></textarea>
-                        </div>
-                        <h4>Explanation of needs</h4>
-                        <div class="12u$">
-                            <textarea name="needs_info" id="needs_info" placeholder="{{needsInfo}}" value="{{needsInfo}}" rows="6"></textarea>
-                        </div>
-                        <h4>Significance of work</h4>
-                        <div class="12u$">
-                            <textarea name="significance_info" id="significance_info" placeholder="{{significanceInfo}}" value="{{significanceInfo}}" rows="6"></textarea>
-                        </div>
-
-                    </div>
-
-
-                    <br>
-                    <hr />
-
-
-                    <h2>Team</h2>
-                    <br />
-                    <div class="table-wrapper">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="title" id="crew-title" placeholder="Title" /></td>
-                                    <td><input type="text" name="title" id="crew-description" placeholder="Description" /></td>
-                                    <td>
-                                        <input type="radio" id="crew-radio-needed" name="crew-radio" value="needed" checked>
-                                        <label for="crew-radio-needed">Needed</label>
-                                        <input type="radio" id="crew-radio-fulfilled" name="crew-radio" value="fulfilled">
-                                        <label for="crew-radio-fulfilled">Fulfilled</label>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                     <a id="add-crew" class="button special">Add Crew</a>
                     <br>
@@ -193,15 +40,21 @@
                                 </tr>
                             </thead>
                             <tbody id="crew-table">
-                              {{#each crew}}
+                              {{#each project.crew}}
                                 <tr class="crew-val">
                                   <td>{{title}}</td>
                                   <td>{{description}}</td>
                                   <td>
-                                        <input type="radio" id="crew-radio-needed{{@index}}" name="crew-radio{{@index}}" value="needed" {{neededCheck}}>
-                                        <label for="crew-radio-needed{{@index}}">Needed</label>
-                                        <input type="radio" id="crew-radio-fulfilled{{@index}}" name="crew-radio{{@index}}" value="fulfilled"  {{fulfilledCheck}}>
-                                        <label for="crew-radio-fulfilled{{@index}}">Fulfilled</label>
+                                    <div class="col-sm-12 col-md-4 margin_bottom20">
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="crew-radio-needed{{@index}}" name="crew-radio{{@index}}" value="needed" {{neededCheck}}>
+                                            <label for="crew-radio-needed">Needed</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="crew-radio-fulfilled{{@index}}" name="crew-radio{{@index}}" value="fulfilled"  {{fulfilledCheck}}>
+                                            <label for="crew-radio-fulfilled">Fulfilled</label>
+                                        </div>
+                                    </div>
                                   </td>
                                   <td><button class="deleteRow button small">X</button></td>
                                 </tr>
@@ -211,27 +64,28 @@
                     </div>
 
                     <br>
-                    <hr />
+                    <br>
+                    <hr class="thickhr">
 
 
                     <h2>Cast</h2>
-                    <br />
-                    <div class="table-wrapper">
-                        <table>
-
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="cast-title" id="cast-title" placeholder="Role" /></td>
-                                    <td><input type="text" name="cast-description" id="cast-description" placeholder="Description" /></td>
-                                    <td>
-                                        <input type="radio" id="cast-radio-needed" name="cast-radio" value="needed" checked>
-                                        <label for="cast-radio-needed">Needed</label>
-                                        <input type="radio" id="cast-radio-fulfilled" name="cast-radio" value="fulfilled">
-                                        <label for="cast-radio-fulfilled">Fulfilled</label>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <input type="text" name="cast-title" id="cast-title" placeholder="Role" />
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <input type="text" name="cast-description" id="cast-description" placeholder="Description" />
+                        </div>
+                        <div class="col-sm-12 col-md-4 margin_bottom20">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="cast-radio-needed" name="cast-radio" value="needed" checked>
+                                <label for="cast-radio-needed">Needed</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="cast-radio-fulfilled" name="cast-radio" value="fulfilled">
+                                <label for="cast-radio-fulfilled">Fulfilled</label>
+                            </div>
+                        </div>
                     </div>
                     <a id="add-cast" class="button special">Add Role</a>
                     <br>
@@ -247,15 +101,21 @@
                                 </tr>
                             </thead>
                             <tbody id="cast-table">
-                              {{#each cast}}
+                              {{#each project.cast}}
                                 <tr class="cast-val">
                                   <td>{{role}}</td>
                                   <td>{{description}}</td>
                                   <td>
-                                        <input type="radio" id="cast-radio-needed{{@index}}" name="cast-radio{{@index}}" value="needed" {{neededCheck}}>
-                                        <label for="cast-radio-needed{{@index}}">Needed</label>
-                                        <input type="radio" id="cast-radio-fulfilled{{@index}}" name="cast-radio{{@index}}" value="fulfilled" {{fulfilledCheck}}>
-                                        <label for="cast-radio-fulfilled{{@index}}">Fulfilled</label>
+                                    <div class="col-sm-12 col-md-4 margin_bottom20">
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="cast-radio-needed{{@index}}" name="cast-radio{{@index}}" value="needed" {{neededCheck}}>
+                                            <label for="cast-radio-needed">Needed</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="cast-radio-fulfilled{{@index}}" name="cast-radio{{@index}}" value="fulfilled" {{fulfilledCheck}}>
+                                            <label for="cast-radio-fulfilled">Fulfilled</label>
+                                        </div>
+                                    </div>
                                    </td>
                                   <td><button class="deleteRow button small">X</button></td>
                                 </tr>
@@ -266,35 +126,29 @@
 
 
                     <br>
-                    <hr />
+                    <br>
+                    <hr class="thickhr">
 
 
                     <h2>Production Needs</h2>
-                    <br />
-                    <div class="table-wrapper">
-                        <table>
-
-                            <tbody>
-                                <tr>
-                                    <td>
-                                      <div class="select-wrapper">
-                                        <select name="category" id="needs-category">
-                                          <option>- Category -</option>
-                                          <option value="Equipment">Equipment</option>
-                                          <option value="Labor">Labor</option>
-                                          <option value="Location">Location</option>
-                                          <option value="Construction">Construction</option>
-                                          <option value="Legal">Legal</option>
-                                          <option value="Sales">Sales / Marketing</option>
-                                          <option value="Miscellaneous">Miscellaneous</option>
-                                        </select>
-                                      </div>
-                                    </td>
-                                    <td><input type="text" name="title" id="needs-description" placeholder="Description" /></td>
-                                    <td><input type="text" name="title" id="needs-quantity" placeholder="Quantity" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <select name="category" id="needs-category" class="form-control">
+                                  <option>- Type -</option>
+                                  <option value="Equipment">Equipment</option>
+                                  <option value="Labor">Labor</option>
+                                  <option value="Location">Location</option>
+                                  <option value="Construction">Construction</option>
+                                  <option value="Legal">Legal</option>
+                                  <option value="Sales">Sales / Marketing</option>
+                                  <option value="Miscellaneous">Miscellaneous</option>
+                                </select>
+                              </div>
+                        </div>
+                        <div class="col-sm-12 col-md-8">
+                            <input type="text" name="title" id="needs-description" placeholder="Description" />
+                        </div>
                     </div>
                     <a id="add-needs" class="button special">Add Need</a>
                     <br>
@@ -305,16 +159,14 @@
                                 <tr>
                                     <th>Category</th>
                                     <th>Description</th>
-                                    <th>Quantity</th>
                                     <th>DELETE</th>
                                 </tr>
                             </thead>
                             <tbody id="needs-table">
-                              {{#each needs}}
+                              {{#each project.needs}}
                                 <tr class="needs-val">
                                   <td>{{category}}</td>
                                   <td>{{description}}</td>
-                                  <td><input type="text" id="needs-quant{{@index}}" value="{{quantity}}" /></td>
                                   <td><button class="deleteRow button small">X</button></td>
                                 </tr>
                               {{/each}}
@@ -322,47 +174,21 @@
                         </table>
                     </div>
 
-                </section>
-                <hr />
-
-                <!-- Image -->
-                <section>
-                    <h2>Image</h2>
-                    <p>Upload 1280 x 720 pixels for best resolutions.</p>
-                    <br />
-                    <div class="box alt">
-                        <div class="row 100% uniform">
-                          <div class="4u  6u$(xsmall)"><span class="image fit"><img src="{{ banner }}" alt=""></span></div>
-                          <div class="4u  6u$(xsmall)"><label class="custom-file">
-                              <input type="file" id="banner_file">
-                            </label>
-                          </div>
-                            
-                        </div>
-                    </div>
-                    <hr />
-                    <h2>Video Explainer</h2>
-                    <br />
-                    <div class="box alt">
-                        <div class="row 100% uniform">
-                            <div class="6u 12u$(xsmall)">
-                                <input type="text" name="video_explainer" id="video_explainer" placeholder="{{videoExplainer}}" value="{{videoExplainer}}" />
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
+                    <br>
+                    <br>
+                    <hr class="thickhr">
+                
                     <h2> Social &amp; Web Links</h2>
-                    <br />
-                    <div class="row uniform 50%">
-                        <div class="6u 12u$(xsmall)">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
                             <input type="text" name="title" id="social-title" placeholder="Name" />
                         </div>
-                        <div class="6u$ 12u$(xsmall)">
+                        <div class="col-sm-12 col-md-6">
                             <input type="email" name="subtitle" id="social-url" placeholder="URL or username" />
                         </div>
                     </div>
                     <br>
-                    <a id="add-social" class="button special">+</a>
+                    <a id="add-social" class="button special">Add Link</a>
                     <br>
                     <br>
                     <div class="table-wrapper">
@@ -375,7 +201,7 @@
                               </tr>
                             </thead>
                             <tbody id="social-table">
-                              {{#each social}}
+                              {{#each project.social}}
                                 <tr class="social-val">
                                   <td>{{name}}</td>
                                   <td>{{address}}</td>
@@ -388,27 +214,35 @@
 
 
                     <br>
-                    <hr />
+                    <br>
+                    <hr class="thickhr">
 
                     <h2>Gifts for Supporters</h2>
-                    <br />
-                    <div class="table-wrapper">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="title" id="gift-title" placeholder="Name" /></td>
-                                    <td><input type="text" name="title" id="gift-description" placeholder="Description" /></td>
-                                    <td><input type="text" name="title" id="gift-quantity" placeholder="Quantity" /></td>
-                                    <td><input type="text" name="title" id="gift-msrp" placeholder="MSRP" /></td>
-                                    <td>
-                                      <div class="4u  6u$(xsmall)"><label class="custom-file">
-                                          <input type="file" id="gift_file">
-                                        </label>
-                                      </div>
-                                  </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <hr />
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <label for="title">name</label>
+                            <input type="text" name="title" id="gift-title" placeholder="" />
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <label for="description">description</label>
+                            <input type="text" name="description" id="gift-description" placeholder="" />
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <label for="quantity">quantity</label>
+                            <input type="text" name="quantity" id="gift-quantity" placeholder="" />
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <label for="msrp">price</label>
+                            <input type="text" name="msrp" id="gift-msrp" placeholder="" />
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
+                                <i class="fa fa-cloud-upload"></i> Upload Image
+                            </label>
+                            <input class="noshow-file-upload" id="gift_file" type="file"/>
+                            <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
+                        </div>
                     </div>
                     <a id="add-gift" class="button special">Add Gift</a>
                     <br>
@@ -425,7 +259,7 @@
                               </tr>
                             </thead>
                             <tbody id="gift-table">
-                              {{#each gifts}}
+                              {{#each project.gifts}}
                                 <tr class="gift-val">
                                   <td>{{name}}</td>
                                   <td>{{description}}</td>
@@ -437,15 +271,17 @@
                             </tbody>
                         </table>
                     </div>
-                </section>
-                <br>
-                <hr />
+
+                    <br>
+                    <br>
+                    <hr class="hrpill">
+
+                </section> 
+
                 <section>
                     <div class="row">
-                      <div class="12u 24u$(xsmall)">
-                        <ul class="actions fit">
-                          <li><a id="update_campaign" class="button special fit big">CLICK TO SAVE CHANGES</a></li>
-                        </ul>
+                      <div class="col-sm-12">
+                        <a id="update_campaign" class="button" style="width: 100%;">CLICK TO SAVE CHANGES</a>
                       </div>
                     </div>
                 </section>

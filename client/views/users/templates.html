@@ -1,6 +1,6 @@
 <template name="memberHeader">
     <div class="col-xs-6">
-        <a id="stats" class="header-btn header-member moveupmember">
+<!--         <a id="stats" class="header-btn header-member moveupmember">
             <span class="header-btn-text js-member-name">{{_ 'stats'}}</span>
         </a>
         <a id="cal" class="header-btn header-member moveupmember">
@@ -14,7 +14,7 @@
         </a>
         <a id="mine" class="header-btn header-member moveupmember">
             <span class="header-btn-text js-member-name">{{_ 'mine'}}</span>
-        </a>
+        </a> -->
     </div>
     <div class="header-user">
         <a class="header-btn header-member js-open-header-member-menu" href="#">
@@ -96,12 +96,6 @@
                 {{this.title}}
             </a>
         </div>
-    {{else}}
-        <div class="list-group">
-            <a style="color:#333" class="list-group-item-info list-card-details clearfix show">
-                You have no tasks
-            </a>
-        </div>
     {{/each}}
 </template>
 
@@ -142,8 +136,7 @@
 
 <template name="memberName">
     <a class="inline-object js-show-mem-menu" href="/profile/{{ user._id }}">
-        {{ user.services.auth0.name }}
-        (@{{ user.services.auth0.nickname }})
+        {{ user.firstName }} {{ user.lastName }}
     </a>
 </template>
 
@@ -168,16 +161,15 @@
 </template>
 
 <template name="applicantAvatar">
-    <h4>{{otype}} applicant</h4>
     <div class="member {{size}}"
-         title="{{ name }}">
+         title="{{ name }} ({{ username }})">
         <div class="avatar avatar-{{size}} avatar-hide-image">
-            <img class="avatar-image" src="{{ avatar }}" style="max-width:100%;max-height:100%;">
+            <img class="avatar-image" src="{{ thumbnailUrl }}" style="max-width:100%;max-height:100%;">
         </div>
     </div>
     <div>
-        <a href="/profile/{{uid}}"><p><u>{{name}}</u></p></a>
-        <p>{{ message }}</p>
+        <a href="/profile/{{this.user.id}}"><p><u>{{name}}</u></p></a>
+        <p>{{_ 'contribution'}} ${{contribution}}</p>
     </div>  
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
       <div class="btn-group" role="group">
