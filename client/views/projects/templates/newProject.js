@@ -272,6 +272,20 @@ Template.newProject.events({
   'click #file_gift': function(e) {
     $('#gift_file').click();
   },
+  'click #vidurl': function(e) {
+      e.preventDefault();
+      vex.dialog.open({
+        message: 'How to link YouTube and Vimeo URLs',
+        input: [
+        '<div class="embed-responsive embed-responsive-4by3">',
+        '<iframe class="embed-responsive-item" src="/img/vidurls.mp4"></iframe>',
+        '</div>',
+        ].join(''),
+        buttons: [
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+        ]
+    });
+  },
   'click #create_campaign': function(e) {
     e.preventDefault();
     var o = {};

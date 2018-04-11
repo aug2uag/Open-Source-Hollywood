@@ -266,7 +266,7 @@ Template.settings.events({
     'click #add-social': function(e) { 
       e.preventDefault();
       var title = $('#social-title').val(), url = $('#social-url').val();
-      if (title && url && validateUrl(url)) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+      if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
       $('.deleteRow').on('click', deleteRow);
       $('#social-title').val(''), $('#social-url').val('');
     },
@@ -278,6 +278,20 @@ Template.settings.events({
 	      $('.deleteRow').on('click', deleteRow);
 	      $('#reel-url').val('');
 	  }
+    },
+    'click #vidurl': function(e) {
+    	e.preventDefault();
+    	vex.dialog.open({
+		    message: 'How to link YouTube and Vimeo URLs',
+		    input: [
+				'<div class="embed-responsive embed-responsive-4by3">',
+				'<iframe class="embed-responsive-item" src="/img/vidurls.mp4"></iframe>',
+				'</div>',
+		    ].join(''),
+		    buttons: [
+		        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+		    ]
+		});
     }
 });
 
@@ -385,10 +399,6 @@ Template.settings.helpers({
 	messages: function() {
 		var messages = ProjectMessages.find({user: Meteor.user()._id}, {sort: {createTimeActual: -1}});
 		return messages;
-	},
-	logMsg: function() {
-		console.log('fooboaba')
-		console.log(this)
 	}
 });
 
@@ -663,7 +673,11 @@ Template.settings.rendered = function () {
     });
 
     setTimeout(function() {
-      $('#textBox').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste HTML from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+    	if (Meteor.user().bio) {
+    		$('#textBox').html(Meteor.user().bio)
+    	} else {
+      		$('#textBox').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste HTML from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');    		
+    	}
     }, 800);
 
 };
