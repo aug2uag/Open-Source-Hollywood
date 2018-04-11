@@ -16,6 +16,9 @@ Template.profile.helpers({
 	userReels: function() {
 		return this.reels.reverse();
 	},
+	influenceScore: function() {
+		return this.influenceScore;
+	},
 	avatar: function() {
 		return this.avatar;
 	},
