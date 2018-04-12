@@ -4,7 +4,7 @@
             {{# each board.lists }}
                 <div class="list">
                     <div class="list-header js-list-header non-empty clearfix {{# if currentUser.isBoardMember }}editable{{/ if }}">
-                        <h2 class="list-header-name js-list-name current {{# if currentUser.isBoardMember }}hide-on-edit{{/ if }}">{{ title }}</h2>
+                        <h2 class="h2b list-header-name js-list-name current {{# if currentUser.isBoardMember }}hide-on-edit{{/ if }}">{{ title }}</h2>
                         {{ > listTitleEditForm list=this }}
                         {{# if currentUser.isBoardMember }}
                             <a href="#" class="list-header-menu-icon icon-sm fa fa-bars dark-hover js-open-list-menu"></a>

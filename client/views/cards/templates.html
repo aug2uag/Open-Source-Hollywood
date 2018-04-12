@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="info">
-                <h3 class="bottom" style="margin-right: 40px;">
+                <h3 class="bottom h3b" style="margin-right: 40px;">
                     <a class="js-profile" href="{{ pathFor route='Profile'}}">{{ user.firstName }} {{ user.lastName }}</a>
                 </h3>
             </div>
@@ -227,7 +227,7 @@
             <div class="window-header clearfix">
                 <span class="window-header-icon icon-lg fa fa-calendar-o"></span>
                 <div class="window-title card-detail-title non-empty inline {{# if currentUser.isBoardMember }}editable{{/ if }}">
-                    <h2 class="window-title-text current hide-on-edit js-card-title">{{ card.title }}</h2>
+                    <h2 class="h2b window-title-text current hide-on-edit js-card-title">{{ card.title }}</h2>
                     <div class="edit edit-heavy">
                         <form id="WindowTitleEdit">
                             <textarea type="text" class="field single-line" id="title">{{ card.title }}</textarea>
@@ -250,7 +250,7 @@
                     <div class="card-detail-item card-detail-item-block clear clearfix editable" style="display: table;margin-top: 20px;">
                         {{# if card.members }}
                             <div class="card-detail-item card-detail-item-members clearfix js-card-detail-members">
-                                <h3 class="card-detail-item-header">{{_ 'members'}}</h3>
+                                <h3 class="card-detail-item-header h3b">{{_ 'members'}}</h3>
                                 <div class="js-card-detail-members-list clearfix">
                                     {{# each card.members }}
                                         {{> membersThumbnail userId=this size="small" cardId=../card._id }}
@@ -263,7 +263,7 @@
                         {{/ if }}
                         {{# if card.labels }}
                             <div class="card-detail-item card-detail-item-labels clearfix js-card-detail-labels">
-                                <h3 class="card-detail-item-header">{{_ 'labels'}}</h3>
+                                <h3 class="card-detail-item-header h3b">{{_ 'labels'}}</h3>
                                 <div class="js-card-detail-labels-list clearfix editable-labels js-edit-label">
                                     {{# each card.labels }}
                                         <span class="card-label card-label-{{color}}" title="{{name}}">{{ name }}</span>
@@ -276,7 +276,7 @@
                         {{/ if }}
                         <div class="card-detail-item card-detail-item-block clear clearfix editable" attr="desc">
                             {{# if card.description }}
-                                <h3 class="card-detail-item-header js-show-with-desc">{{_ 'description'}}</h3>
+                                <h3 class="card-detail-item-header js-show-with-desc h3b">{{_ 'description'}}</h3>
                                 {{# if currentUser.isBoardMember }}
                                     <a href="#" class="card-detail-item-header-edit hide-on-edit js-show-with-desc js-edit-desc">{{_ 'edit'}}</a>
                                 {{/ if }}
@@ -329,7 +329,7 @@
     <div class="window-module">
         <div class="window-module-title window-module-title-no-divider">
             <span class="window-module-title-icon icon-lg fa fa-comments-o"></span>
-            <h3>{{ _ 'activity'}}</h3>
+            <h3 class="h3b">{{ _ 'activity'}}</h3>
         </div>
         {{# if currentUser.isBoardMember }}
             <div class="new-comment js-new-comment">
@@ -350,7 +350,7 @@
     <div class="window-module js-attachments-section clearfix">
         <div class="window-module-title window-module-title-no-divider">
             <span class="window-module-title-icon icon-lg fa fa-paperclip"></span>
-            <h3 class="inline-block">{{_ 'attachments'}}</h3>
+            <h3 class="inline-block h3b">{{_ 'attachments'}}</h3>
         </div>
         <div class="gutter">
             <div class="clearfix js-attachment-list">
@@ -395,7 +395,7 @@
     <div class="window-module js-attachments-section clearfix">
         <div class="window-module-title window-module-title-no-divider">
             <span class="window-module-title-icon icon-lg fa fa-paperclip"></span>
-            <h3 class="inline-block">{{_ 'due_date'}}</h3>
+            <h3 class="inline-block h3b">{{_ 'due_date'}}</h3>
         </div>
     </div>
 </template>
@@ -403,7 +403,7 @@
 <template name="WindowSidebarModule">
     <div class="window-sidebar" style="position: relative;">
         <div class="window-module clearfix">
-            <h3>{{_ 'add'}}</h3>
+            <h3 class="h3b">{{_ 'add'}}</h3>
             <div class="clearfix" style="display: grid;justify-items: left;">
                 <a href="#" class="button-link js-change-card-members" title="{{_ 'members-title'}}" style="margin-bottom: 10px;">
                     <span class="fa fa-user"></span> {{_ 'members'}}
@@ -420,7 +420,7 @@
             </div>
         </div>
         <div class="window-module other-actions clearfix">
-            <h3>{{_ 'actions'}}</h3>
+            <h3 class="h3b">{{_ 'actions'}}</h3>
             <div class="clearfix">
                 <hr>
                 {{ #if card.archived }}

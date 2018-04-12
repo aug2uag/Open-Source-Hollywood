@@ -232,7 +232,9 @@
                     </div>
 
                     <div id="manage" class="project-content" style="display: none;">
+                        {{#if isWidth}}
                         <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
+                        {{/if}}
                         {{#if isOwner}}
                             <div id="respond" class="comment-respond">
                               <h3 id="reply-title" class="comment-reply-title">Announce Update</h3>
@@ -251,6 +253,8 @@
                               </form>
                           </div>
                         {{> applicants}}
+                        <p>&nbsp;</p>
+                        <a id="closeProj" class="btn btn-danger btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="#!">DELETE CAMPAIGN</a>
                         {{/if}}
                     </div>
 

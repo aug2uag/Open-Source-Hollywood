@@ -1,13 +1,3 @@
-const css = ['core.css', 'images.css', 'forms.css', 'calendar.css', 'sticker.css', 'aging.import.css', 'print.css', 'temp.css', 'datepicker.import.css', 'icons.css', 'body.css', 'header.css', 'attachment.css', 'list.css', 'labels.css', 'member.css', 'fullcalendar.css'];
-
-function clearcss() {
-    return css.forEach(function(f) {
-        var href = '/css/' + f;
-        var _id = 'link[rel=stylesheet][href~="' + href + '"]';
-        $(_id).remove();
-    });
-}
-
 Template.memberHeader.events({
     'click .js-open-header-member-menu': Popup.open('memberMenu'),
     'click #stats': Popup.open('stats'),
@@ -16,12 +6,7 @@ Template.memberHeader.events({
     'click #asss': Popup.open('asss'),
     'click #mine': Popup.open('mine'),
     'click #exit': function() {
-        $('html').css('visibility', 'hidden');
-        setTimeout(function() {
-            $('html').css('visibility', 'visible');
-        }, 800);
         Router.go('Projects');
-        clearcss();
     }
 });
 
