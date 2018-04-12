@@ -51,6 +51,11 @@ Template.splashPage.helpers({
         archived: false
     }).count();
   },
+  hotLN: function() {
+    return Projects.find({
+        archived: false
+    }).count() > 20;
+  },
   blogs: function() {
     // get blogs
   },
