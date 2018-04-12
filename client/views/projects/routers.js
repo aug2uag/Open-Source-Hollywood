@@ -130,10 +130,6 @@ Router.route('/projects/:slug/:uid', {
             return 'no genres specified';
           }
         },
-        _ownerStats: {
-          score: user.influenceScore,
-          rating: user.rating
-        },
         needs: project.needs || 'watch video for details',
         videoURL: project.videoURL,
         _bid: board._id,
