@@ -2,7 +2,8 @@ Template.profile.helpers({
 	formattedBio: function() {
 		var that =  this;
 		setTimeout(function() {
-		  $('#formatted_desc').html(that.bio);
+		  if (that.bio) $('#formatted_desc').html(that.bio);
+		  else $('#formatted_desc').text('apparently this user likes to keep an air of mystery about them');
 		}, 800);
 	},
 	userProjects: function() {
@@ -21,9 +22,6 @@ Template.profile.helpers({
 	},
 	avatar: function() {
 		return this.avatar;
-	},
-	bio: function() {
-		return this.bio || 'apparently this user likes to keep an air of mystery about them';
 	},
 	name: function() {
 		return this.firstName + ' ' + this.lastName;
