@@ -38,6 +38,7 @@ Template.splashPage.helpers({
         ownerId: i.ownerId,
         banner: i.banner,
         purpose: i.purpose,
+        genre: i.genre, 
         category: i.category,
         logline: i.logline,
         ownerName: i.ownerName,
