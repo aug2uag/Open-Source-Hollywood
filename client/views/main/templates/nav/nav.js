@@ -17,7 +17,6 @@ Template.nav.events({
   'click #signout': function() {
     Meteor.logout();
     Meteor.logoutOtherClients();
-    Router.go('Home');
   },
   'click #profile': function() {
     document.title = 'Profile View';
@@ -27,7 +26,6 @@ Template.nav.events({
   },
   'click .login': function() {
     lock.show();
-    Router.go('Projects');
   }
 
 });

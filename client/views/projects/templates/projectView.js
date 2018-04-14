@@ -597,7 +597,7 @@ Template.projectView.events({
       title: 'Gift Fulfillment',
       input: '<div class="container" style="width:100%"> <h2>'+this.message+'</h2> <div class="row margin_bottom20"> <div class="col-xs-6"><label>Buyer Name</label> <h4>'+user_name+'</h4> </div><div class="col-xs-6"><label>Purchase Item</label> <h4>'+this.gift.name+'</h4> </div></div><div class="row margin_bottom40"> <div class="col-xs-6"> <label>Email</label> <h4>'+this.email+'</h4> </div><div class="col-xs-6"> <label>Phone</label> <h4>'+this.phone+'</h4> </div></div><div class="row"> <div class="col-xs-12" style="text-align:center"><label>SHIPPING INFO</label> <p class="align-center">'+this.address+'</p><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></div></div></div>',
       buttons: [
-        $.extend({}, vex.dialog.buttons.YES, { text: 'Mark as Fulfilled' }),
+        // $.extend({}, vex.dialog.buttons.YES, { text: 'Mark as Fulfilled' }),
         $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
       ],
       callback: function (data) {

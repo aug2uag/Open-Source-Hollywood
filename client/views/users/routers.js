@@ -12,7 +12,7 @@ Router.route('/profile/:_id', {
     return [
       Meteor.subscribe('getUser', this.params._id), 
       Meteor.subscribe('projectsList'), 
-      Meteor.subscribe('connectUser')
+      // Meteor.subscribe('connectUser')
     ];
   },
   action: function() {
@@ -41,7 +41,7 @@ Router.route('/settings', {
       }
       return [
         Meteor.subscribe('getMe'), 
-        Meteor.subscribe('connectUser'),
+        // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getProjectMessages'),
         Meteor.subscribe('userActiveProjects', Meteor.user()._id),
         Meteor.subscribe('activeProjectsApproved', Meteor.user()._id)
@@ -62,7 +62,7 @@ Router.route('/gallery', {
     waitOn: function() {
       return [
         Meteor.subscribe('getUsers'), 
-        Meteor.subscribe('connectUser'),
+        // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getMe')
       ];
     },

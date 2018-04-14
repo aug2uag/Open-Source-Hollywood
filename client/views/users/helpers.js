@@ -152,44 +152,6 @@ Template.statsPopup.onRendered(function() {
     });
 });
 
-Template.calPopup.helpers({
-    calendarOptions: function() {
-        setTimeout(function() {
-            var date = new Date();
-            var d = date.getDate();
-            var m = date.getMonth();
-            var y = date.getFullYear();
-
-            var board = currentBoard();
-            var cards = Cards.find({boardId: board._id}).fetch();
-            var events_array = [];
-            cards.forEach(function(e) {
-                if (e.dueDate) {
-                    var url = '/boards/' + board._id + '/' + board.slug + '/' + e._id;
-                    // http://fullcalendar.io/docs/event_data/Event_Object/
-                    events_array.push({
-                        start: e.dueDate,
-                        title: e.title,
-                        allDay: true,
-                        url: url
-                    });
-                };
-            });
-
-            $('#cali').fullCalendar({
-                defaultView: 'agendaWeek',
-                events: events_array
-            });
-            setTimeout(function() {
-                $('.fc-prev-button').empty().append('<i class="fa fa-caret-left"></i>');
-                $('.fc-next-button').empty().append('<i class="fa fa-caret-right"></i>');
-                $('.fc-day-header').css('color', '#333');
-                $($('fc-left').child()).css('color', '#333');
-            }, 10);
-        }, 100);
-    }
-});
-
 Template.tasksPopup.helpers({
     tasks: function() {
         var x = Cards.find({boardId: this._id}).fetch();

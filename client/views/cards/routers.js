@@ -5,7 +5,7 @@ Router.route('/boards/:boardId/:slug/:cardId', {
         var params = this.params;
         return [ 
             // Update currentUser profile status
-            Meteor.subscribe('connectUser'),
+            // Meteor.subscribe('connectUser'),
             Meteor.subscribe('getUsers'),
             // Board page list, cards members vs
             Meteor.subscribe('board', params.boardId, params.slug)

@@ -12,7 +12,7 @@ Router.route('/discover', {
       }
       return [
         Meteor.subscribe('projectsList'), 
-        Meteor.subscribe('connectUser'),
+        // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getMe')
       ];
     },
@@ -39,7 +39,7 @@ Router.route('/create', {
       }
       return [
         Meteor.subscribe('getMe'), 
-        Meteor.subscribe('connectUser')
+        // Meteor.subscribe('connectUser')
       ];
     },
     onBeforeAction: function() {
@@ -173,7 +173,7 @@ Router.route('/edit/projects/:slug/edit', {
     }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
-      Meteor.subscribe('connectUser'),
+      // Meteor.subscribe('connectUser'),
       Meteor.subscribe('getMe')
     ];
   },

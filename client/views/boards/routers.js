@@ -20,7 +20,7 @@ Router.route('/boards/:boardId/:slug', {
         return [
 
             // Update currentUser profile status
-            Meteor.subscribe('connectUser'),
+            // Meteor.subscribe('connectUser'),
 
             Meteor.subscribe('getUsers'),
 
