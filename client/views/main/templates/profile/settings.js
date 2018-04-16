@@ -168,7 +168,7 @@ Template.settings.events({
 		o.firstName = $('#first_name').val();
 		o.lastName = $('#last_name').val();
 		var bioText = $('#textBox').text().trim();
-		if (bioText&&bioText!=='Enter your biography and self-description here.You can copy / paste HTML from another source here or use the menu above to format text and insert images from a valid URL.') {
+		if (bioText&&bioText!=='Enter your biography and self-description here.You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
 			o.bio = $('#textBox').html();
 		} else {
 			o.bio = '';
@@ -484,10 +484,6 @@ Template.settings.rendered = function () {
             '<i class="fa fa-align-center"></i>' + '</a>' +
             '<a href="javascript:void(0);" class="intLink formatBlock" title="Right align"  data-fn="justifyright">' +
             '<i class="fa fa-align-right">' + '</i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Numbered list"  data-fn="insertorderedList">' +
-            '<i class="fa fa-list-ol"></i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Dotted list"  data-fn="insertunorderedList">' +
-            '<i class="fa fa-list-ul"></i></a>' +
             '<a href="javascript:void(0);" class="intLink" title="Quote"  id="quote" data-fn="blockquote">' +
             '<i class="fa fa-quote-left"></i></a>' +
             '<a href="javascript:void(0);" class="intLink formatBlock" title="Add indentation"  data-fn="indent">' +
@@ -676,7 +672,7 @@ Template.settings.rendered = function () {
     	if (Meteor.user().bio) {
     		$('#textBox').html(Meteor.user().bio)
     	} else {
-      		$('#textBox').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste HTML from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');    		
+      		$('#textBox').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');    		
     	}
     }, 800);
 

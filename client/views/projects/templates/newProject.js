@@ -12,11 +12,13 @@ var selectOptionsGenre = {
     Ensemble: 'audio',
     Performance: 'performance',
     'Music Video': 'audio',
+    Podcast: 'podcast',
     Other: 'mixed'
   },
   mixed: '<option val="Drama">Drama</option><option val="Comedy">Comedy</option><option val="Documentary">Documentary</option><option val="Educational">Educational</option><option val="Game Show">Game Show</option><option val="Musical">Musical</option><option val="Reality">Reality</option><option val="News">News</option><option val="Sports">Sports</option><option val="Variety">Variety</option><option val="Kids">Kids</option><option val="Cooking">Cooking</option><option val="Other">Other</option>',
   audio: '<option val="Folk">Folk</option><option val="Classical">Classical</option><option val="Contemporary">Contemporary</option><option val="Soul">Soul</option><option val="Jazz">Jazz</option><option val="Rock">Rock</option><option val="Metal">Metal</option><option val="Pop">Pop</option><option val="Hip Hop">Hip Hop</option><option val="EDM">EDM</option><option val="Other">Other</option>',
-  performance: '<option val="Ballet">Ballet</option><option val="Opera">Opera</option><option val="Dance">Dance</option><option val="Theatre">Theatre</option><option val="Other">Other</option>'
+  performance: '<option val="Ballet">Ballet</option><option val="Opera">Opera</option><option val="Dance">Dance</option><option val="Theatre">Theatre</option><option val="Other">Other</option>',
+  podcast: '<option val="Comedy">Comedy</option><option val="Culture">Culture</option><option val="Politics">Politics</option><option val="Arts">Arts</option><option val="Technology">Technology</option><option val="Other">Other</option>'
 }
 
 function validateUrl(value) {
@@ -75,10 +77,6 @@ Template.newProject.onRendered(function() {
             '<i class="fa fa-align-center"></i>' + '</a>' +
             '<a href="javascript:void(0);" class="intLink formatBlock" title="Right align"  data-fn="justifyright">' +
             '<i class="fa fa-align-right">' + '</i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Numbered list"  data-fn="insertorderedList">' +
-            '<i class="fa fa-list-ol"></i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Dotted list"  data-fn="insertunorderedList">' +
-            '<i class="fa fa-list-ul"></i></a>' +
             '<a href="javascript:void(0);" class="intLink" title="Quote"  id="quote" data-fn="blockquote">' +
             '<i class="fa fa-quote-left"></i></a>' +
             '<a href="javascript:void(0);" class="intLink formatBlock" title="Add indentation"  data-fn="indent">' +
@@ -264,7 +262,7 @@ Template.newProject.onRendered(function() {
     });
 
     setTimeout(function() {
-      $('#textBox').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste HTML from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+      $('#textBox').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
     }, 800);
 });
 
@@ -356,7 +354,7 @@ Template.newProject.events({
       o._gifts = gifts;
       if (validateUrl($('#website').val())) o.website = $('#website').val();
       var descriptionText = $('#textBox').text().trim();
-      if (descriptionText&&descriptionText!=='Enter your campaign description here.You can copy / paste HTML from another source here or use the menu above to format text and insert images from a valid URL.') {
+      if (descriptionText&&descriptionText!=='Enter your campaign description here.You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
         o.description = $('#textBox').html();
         o.descriptionText = descriptionText;
       } else {
