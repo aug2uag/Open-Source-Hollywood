@@ -296,6 +296,9 @@ Template.settings.events({
 });
 
 Template.settings.helpers({
+	createAccount: function() {
+		Meteor.call('createBankingAccount');
+	},
 	foo: function() {
 		var x = Meteor.user();
 		return !(x.primaryRole || (x.iam && x.iam.length));

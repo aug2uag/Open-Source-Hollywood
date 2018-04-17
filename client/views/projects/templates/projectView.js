@@ -144,13 +144,14 @@ Template.projectView.helpers({
     currentProject = this.project;
     var backupURL = 'https://app.opensourcehollywood.org/projects/'+this.project.slug+'/'+this.project.ownerId;
     return {
-      title: 'Check out "'+this.project.title+'" on Open Source Hollywood! <opensourcehollywood.org>',
+      title: this.project.title+'" on Open Source Hollywood! <opensourcehollywood.org>',
       author: this.project.ownerName,
-      excerpt: this.project.logline,
-      summary: this.project.descriptionText,
-      description: this.project.descriptionText,
+      excerpt: this.project.logline||this.project.descriptionText,
+      summary: this.project.logline||this.project.descriptionText,
+      description: this.project.logline||this.project.descriptionText,
       thumbnail: this.project.banner,
       image: this.project.banner,
+      video: this.project.videoExplainer,
       url: this.project.urlLink || backupURL
     }
   },
