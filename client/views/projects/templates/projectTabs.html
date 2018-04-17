@@ -188,6 +188,7 @@
 
         <a class="fancybox-thumb" href="/projects/{{slug}}/{{ownerId}}">
             <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}"></figure><span></span></a>
+            <div class="fundstatus board-canvas empty">{{ projectDonated }}</div>
         <div class="container">
 
             <a href="/projects/{{slug}}/{{ownerId}}"><h3 class="title">{{formattedTitle}}</h3></a>
@@ -200,7 +201,7 @@
 
                 <ul>
                     <li><span>{{applicantLN}}</span> roles</li>
-                    <li><span>{{ownerName}}</span></li>
+                    <li><a href="/profile/{{ownerId}}"><span>{{ownerName}}</span></a></li>
                 </ul>
 
             </aside>
@@ -228,7 +229,7 @@
             <aside class="meta">
                 <ul>
                     <li><span>{{applicantLN}}</span> roles</li>
-                    <li><span>{{ownerName}}</span></li>
+                    <li><a href="/profile/{{ownerId}}"><span>{{ownerName}}</span></a></li>
                 </ul>
 
             </aside>

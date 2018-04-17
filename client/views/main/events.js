@@ -39,6 +39,7 @@ Template.splashPage.helpers({
         banner: i.banner,
         purpose: i.purpose,
         genre: i.genre, 
+        funded: i.funded||0,
         category: i.category,
         logline: i.logline,
         ownerName: i.ownerName,

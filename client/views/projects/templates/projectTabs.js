@@ -107,6 +107,9 @@ Template.projectTabs.helpers({
   }
 });
 Template.projectTab.helpers({
+  projectDonated: function() {
+    return '$'+this.funded+' RAISED';
+  },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
   },
