@@ -567,7 +567,6 @@ Template.projectView.events({
           // validate email
           if (!data.email) return;
         };
-        if (!data.email) return;
         var amt = Math.abs(parseInt(data.donation));
         if (amt>0) {
           var donationObject = {};
