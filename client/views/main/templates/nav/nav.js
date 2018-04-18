@@ -32,16 +32,14 @@ Template.nav.events({
   },
   'click .login': function() {
     var url = window.location.href;
-    if (!url) lock.show();
-    if (url.indexOf('/terms')===-1&&url.indexOf('/privacy')===-1&&url.indexOf('/contact')===-1) {
+    if (!url||url.match(/\//g).length===3) return lock.show();
+    if ((url.indexOf('/terms')===-1&&url.indexOf('/privacy')===-1&&url.indexOf('/contact')===-1)&&url.match(/\//g).length<=4) {
       localStorage.setItem('doShowLock', true);
       setTimeout(function() {
         window.location.assign('/');
       }, 800);
       return;
     };
-    lock.show();
-
   }
 
 });
