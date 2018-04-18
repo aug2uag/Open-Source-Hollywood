@@ -16,7 +16,6 @@ Router.route('/profile/:_id', {
     ];
   },
   action: function() {
-    document.title = "Member";
     this.render('profile', {
       data: function(){
         return Meteor.users.findOne({_id: this.params._id});
@@ -25,6 +24,7 @@ Router.route('/profile/:_id', {
   },
   onBeforeAction: function() {
     this.next();
+    document.title = "Member Profile";
   }
 });
 
@@ -48,7 +48,7 @@ Router.route('/settings', {
       ];
     },
     onBeforeAction: function() {
-      document.title = "Settings";
+      document.title = "Account Settings";
       this.next();
     }
 });

@@ -237,9 +237,12 @@ Template.projectView.events({
   'click #view-cast-positions': function(e) {
     /** display all cast positions */
     var castPositions = this.project.cast;
+    var isMeteorUser = Meteor.user&&Meteor.user()||false;
     var inputHTML = castPositions.map(function(c, idx) {
       var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.role + '</h3><p>' + c.description + '</p><div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a><a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a></div></div></div></div></div>';
+      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.role + '</h3><p>' + c.description + '</p>';
+      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a><a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a></div>';
+      _html += '</div></div></div></div>';
       _html += '</div>';
       return _html;
     });
@@ -346,9 +349,12 @@ Template.projectView.events({
   'click #view-crew-positions': function(e) {
     /** display all cast positions */
     var crewPositions = this.project.crew;
+    var isMeteorUser = Meteor.user&&Meteor.user()||false;
     var inputHTML = crewPositions.map(function(c, idx) {
       var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.title + '</h3><p>' + c.description + '</p><div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a><a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a></div></div></div></div></div>';
+      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.title + '</h3><p>' + c.description + '</p>';
+      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a><a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a></div>'
+      _html += '</div></div></div></div>';
       _html += '</div>';
       return _html;
     });
@@ -455,9 +461,12 @@ Template.projectView.events({
   'click #view-need-positions': function(e) {
     /** display all cast positions */
     var projectNeeds = this.project.needs;
+    var isMeteorUser = Meteor.user&&Meteor.user()||false;
     var inputHTML = projectNeeds.map(function(c, idx) {
       var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p><div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a></div></div></div></div></div>';
+      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p>';
+      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a></div>'
+      _html += '</div></div></div></div>';
       _html += '</div>';
       return _html;
     });
@@ -518,42 +527,72 @@ Template.projectView.events({
   'click #offer-donation': function(e) {
     e.preventDefault();
     /** prompt enter donation amount */
+    var dialogInput = [
+        '<style>',
+            '.vex-custom-field-wrapper {',
+                'margin: 1em 0;',
+            '}',
+            '.vex-custom-field-wrapper > label {',
+                'display: inline-block;',
+                'margin-bottom: .2em;',
+            '}',
+        '</style>',
+        '<div class="vex-custom-field-wrapper">',
+            '<label for="date">Amount to donate (USD).</label>',
+            '<div class="vex-custom-input-wrapper">',
+                '<input name="donation" type="number" />',
+            '</div>',
+        '</div>'
+    ]
+    if (!Meteor.user()) {
+      var getEmail = [
+        '<div class="vex-custom-field-wrapper">',
+            '<label for="date">Your email (required).</label>',
+            '<div class="vex-custom-input-wrapper">',
+                '<input name="email" type="text" />',
+            '</div>',
+        '</div>'
+      ]
+      dialogInput = dialogInput.concat(getEmail);
+    };
     vex.dialog.open({
       message: 'Enter donation amount.',
-      input: [
-          '<style>',
-              '.vex-custom-field-wrapper {',
-                  'margin: 1em 0;',
-              '}',
-              '.vex-custom-field-wrapper > label {',
-                  'display: inline-block;',
-                  'margin-bottom: .2em;',
-              '}',
-          '</style>',
-          '<div class="vex-custom-field-wrapper">',
-              '<label for="date">Amount to donate (USD).</label>',
-              '<div class="vex-custom-input-wrapper">',
-                  '<input name="donation" type="number" />',
-              '</div>',
-          '</div>'
-      ].join(''),
+      input: dialogInput.join(''),
       callback: function (data) {
         if (!data) {
             return console.log('Cancelled')
         }
+        if (!data.donation) return;
+        if (!Meteor.user||!Meteor.user()) {
+          // validate email
+          if (!data.email) return;
+        };
+        if (!data.email) return;
         var amt = Math.abs(parseInt(data.donation));
         if (amt>0) {
-          makeStripeCharge({
-            amount: amt,
-            message: 'Donation to ' + currentTitle,
-            description: '$' + amt + ' donated',
-            donationObject: {
+          var donationObject = {};
+          if (Meteor.user()) {
+            donationObject = {
               first: Meteor.user().firstName,
               last: Meteor.user().lastName,
               email: Meteor.user().email,
               id: Meteor.user()._id,
               amount: amt
-            },
+            }
+          } else {
+            donationObject = {
+              first: 'anonymous',
+              last: 'patron',
+              email: data.email,
+              id: 'anon_donation',
+              amount: amt
+            }
+          }
+          makeStripeCharge({
+            amount: amt,
+            message: 'Donation to ' + currentTitle,
+            description: '$' + amt + ' donated',
+            donationObject: donationObject,
             route: 'donateToProject',
             slug: currentSlug
           });
