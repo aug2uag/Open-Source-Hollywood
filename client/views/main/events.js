@@ -24,6 +24,18 @@ Template.splashPage.events({
   'click #create': function() {
     localStorage.setItem('redirectURL', '/create');
     lock.show();
+  },
+  'click #sendMsg': function() {
+    /** get message and subject / email, and send email */
+    var o = {
+      name: $('#msg_name').val(),
+      email: $('#msg_email').val(),
+      subject: $('#msg_subject').val(),
+      message: $('#message').val()
+    };
+    if (!o.name||!o.email||!o.subject||!o.message) return vex.dialog.alert('please fill out all fields of the contact form to proceed');
+    Meteor.call('splashMessage', o);
+    $('#sendmessage').show();
   }
 });
 
