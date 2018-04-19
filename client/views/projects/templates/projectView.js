@@ -817,6 +817,11 @@ Template.projectView.events({
 });
 
 Template.projectView.onRendered(function() {
+  if ($(window).width()<580) {
+    setTimeout(function() {
+      $($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
+    }, 800);
+  }
      setTimeout(function() {
         $('.fb-share').html('<li class="fa fa-facebook"></li>');
         $('.tw-share').html('<li class="fa fa-twitter"></li>');

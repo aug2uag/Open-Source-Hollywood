@@ -406,6 +406,11 @@ Template.settings.helpers({
 });
 
 Template.settings.rendered = function () {
+  if ($(window).width()<580) {
+  	setTimeout(function() {
+  		$($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
+  	}, 800);
+  }
   $(".iam").each(function(){
     var val = $(this).attr('value');
     if (Meteor.user().iam.indexOf(val) > -1) {
