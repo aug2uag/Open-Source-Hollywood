@@ -42,6 +42,9 @@ Template.nav.events({
       return;
     };
     if (url.match(/\//g).length<=4) lock.show();
+  },
+  'click .ls0': function() {
+    localStorage.removeItem('redirectURL');
   }
 
 });

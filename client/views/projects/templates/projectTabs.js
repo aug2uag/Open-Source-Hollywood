@@ -35,10 +35,6 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
   return buffer;
 });
 
-Template.projectTabs.onRendered(function() {
-  localStorage.removeItem('redirectURL');
-});
-
 Template.projectTabs.helpers({
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
