@@ -552,10 +552,6 @@ Template.projectView.events({
             return console.log('Cancelled')
         }
         if (!data.donation) return;
-        if (!Meteor.user||!Meteor.user()) {
-          // validate email
-          if (!data.email) return;
-        };
         var amt = Math.abs(parseInt(data.donation));
         if (amt>0) {
           var donationObject = {};
@@ -810,12 +806,15 @@ Template.projectView.onRendered(function() {
       $($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
     }, 610);
   }
-     setTimeout(function() {
-        $('.fb-share').html('<li class="fa fa-facebook"></li>');
-        $('.tw-share').html('<li class="fa fa-twitter"></li>');
-        $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
-        $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
-     }, 133);
+  if (!Meteor.user()) {
+      localStorage.setItem('redirectURL', '/projects/' + this.data.project.slug + '/' + this.data.project.ownerId);
+  } 
+   setTimeout(function() {
+      $('.fb-share').html('<li class="fa fa-facebook"></li>');
+      $('.tw-share').html('<li class="fa fa-twitter"></li>');
+      $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
+      $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
+   }, 133);
  });
 
 Template.applicants.helpers({

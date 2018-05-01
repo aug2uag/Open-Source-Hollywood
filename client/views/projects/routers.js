@@ -15,7 +15,7 @@ Router.route('/discover', {
       var x = localStorage.getItem('redirectURL');
       if (x&&x!=='null'&&x.indexOf('/')>-1) {
         Router.go(x);
-        localStorage.setItem('redirectURL', '');
+        localStorage.removeItem('redirectURL');
         return;
       };
       document.title = "Campaigns";
@@ -50,21 +50,6 @@ Router.route('/projects/:slug/:uid', {
   layoutTemplate: 'StaticLayout',
   onBeforeAction: function() {
     document.title = "Campaign";
-    // if (!Meteor.user()) {
-    //   if (wasUser) return window.location.assign('/');
-    //   localStorage.setItem('redirectURL', '/projects/' + this.params.slug + '/' + this.params.uid);
-    //   vex.dialog.alert({
-    //       message: 'Please login from home page to access this Campaign.',
-    //       callback: function (value) {
-    //           setTimeout(function() {
-    //             window.location.assign('/');
-    //           }, 700);
-    //       }
-    //   });
-    //   return;
-    // } else {
-    //   wasUser = true;
-    // }
     this.next();
   },
   waitOn: function() {

@@ -21,6 +21,7 @@ Template.nav.events({
     if ($(window).width()<=692) $('#navbutton').click();
   },
   'click #signout': function() {
+    localStorage.clear();
     Meteor.logout();
     Meteor.logoutOtherClients();
   },
