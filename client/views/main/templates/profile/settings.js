@@ -321,6 +321,22 @@ Template.settings.helpers({
 	        ]
 	    }).fetch();
 	},
+	hasCreatedCamps: function() {
+		return Projects.find({
+	        $and: [
+	          {archived: false},
+	          {ownerId: Meteor.user()._id}
+	        ]
+	    }).fetch().length>0;
+	},
+	hasApprovedCamps: function() {
+		return Projects.find({
+	        $and: [
+	          {archived: false},
+	          {usersApproved: {$elemMatch: {id: Meteor.user()._id}}}
+	        ]
+	    }).fetch().length>0;
+	},
 	bio: function() {
 		return Meteor.user().bio || 'describe yourself and your experiences'
 	},
@@ -400,7 +416,23 @@ Template.settings.helpers({
 		return 'not verified';
 	},
 	messages: function() {
-		var messages = ProjectMessages.find({user: Meteor.user()._id}, {sort: {createTimeActual: -1}});
+		var projects = Projects.find({
+	        $and: [
+	          {archived: false},
+	          {ownerId: Meteor.user()._id}
+	        ]
+	    }).fetch().map(function(p) {
+	    	return p._id;
+	    });
+		var messages = ProjectMessages.find({ 
+			$or: [
+				{ user: Meteor.user()._id } , 
+				{ project: { $in: projects } }
+			] 
+		}, { 
+				sort: { createTimeActual: -1 } 
+		});
+
 		return messages;
 	}
 });
@@ -409,7 +441,7 @@ Template.settings.rendered = function () {
   if ($(window).width()<580) {
   	setTimeout(function() {
   		$($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
-  	}, 800);
+  	}, 610);
   }
   $(".iam").each(function(){
     var val = $(this).attr('value');

@@ -5,6 +5,10 @@ Template.projectMessage.helpers({
 	title: function() {
 		return 'Conversation w ' + this.user.firstName + ' ' + this.user.lastName + ' campaign: ' + this.project.title;
 	},
+	messages: function() {
+		var messages = ProjectMessages.find({user: this.user._id, project: this.project._id}, {sort: {createTimeActual: -1}});
+		return messages;
+	},
 	messagesHeader: function() {
 		if (!this.offers.length) return 'There have been no actions made by this user for the ' + this.project.title + ' campaign.';
 		if (this.offers.length===1) return 'There is one action this user has taken.';
@@ -18,9 +22,10 @@ Template.projectMessage.helpers({
 })
 
 Template.projectMessage.events({
-	'click #submit-message': function() {
-		var text = document.getElementById('message-box').value;
-		document.getElementById('message-box').innerHTML = '';
+	'click #submit-message': function(e) {
+		e.preventDefault();
+		var text = $('#message-box').val();
+		$('#message-box').val('');
 		Meteor.call('addProjectMessage', {
 			user: this.user._id,
 			project: this.project._id,

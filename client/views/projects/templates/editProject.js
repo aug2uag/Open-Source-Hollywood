@@ -73,6 +73,11 @@ Template.editProject.events({
     Meteor.call('editProject', o);
     vex.dialog.alert("Project updated!");
     $('.after-the-fact').remove();
+    try {
+      glowToClick();
+    } catch(e) {
+      console.log(e)
+    }
   },
   'change #gift_file': function (e, template) {
       if (e.currentTarget.files && e.currentTarget.files[0]) {
@@ -110,10 +115,9 @@ Template.editProject.events({
 
   'click #add-needs': function(e) {
     e.preventDefault();
-    var cat = $('#needs-category').val(), description = $('#needs-description').val(), quantity = parseInt($('#needs-quantity').val());
+    var cat = $('#needs-category').val(), description = $('#needs-description').val();
     if (cat.toLowerCase().indexOf('category')>-1) return;
-    if (typeof quantity !== 'number' || quantity<1) return;
-    if (cat && description && quantity) $('#needs-table').append('<tr class="needs-val after-the-fact"><td>'+cat+'</td><td>'+description+'</td><td>'+quantity+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button small">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
     $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
   },

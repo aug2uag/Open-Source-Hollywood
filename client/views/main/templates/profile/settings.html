@@ -438,7 +438,7 @@
                     </div>
 
                     <div id="active" class="project-content" style="display: none;">
-
+                      {{#if hasCreatedCamps}}
                       <h3 id="comments-title">Campaigns Created</h3>
                       <div class="krown-id-grid default clearfix" style="position: relative;">
                         {{#each createdCamps}}
@@ -447,15 +447,15 @@
                           <h5 class="list-group-item-info" style="margin-top:60px;width:80%;">None</h5>
                         {{/each}}
                       </div>
-
+                      {{/if}}
+                      {{#if hasApprovedCamps}}
                       <h3 id="comments-title" style="margin-top: 100px;">Campaigns Approved</h3>
                       <div class="krown-id-grid default clearfix" style="position: relative;">
                         {{#each approvedCamps}}
                           {{> projectTab}}
-                        {{else}}
-                          <h5 class="list-group-item-info" style="margin-top:60px;width:80%;">None</h5>
                         {{/each}}
                       </div>
+                      {{/if}}
 
                     </div>
 

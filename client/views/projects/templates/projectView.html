@@ -294,7 +294,7 @@
                                             <div class="rpdata">
                                                 {{#if castLN}}
                                                 <p class="form-submit">
-                                                    <div class="id-product-total"><a href="#!" id="view-cast-positions">{{castLN}}</a></div>
+                                                    <div class="id-product-total glow-offer" ><a href="#!" id="view-cast-positions" style="color:red!important">{{castLN}}</a></div>
                                                     <div class="id-product-pledges">cast positions available</div>
                                                 </p>
                                                 {{else}}
@@ -305,7 +305,7 @@
                                             <div class="rpdata">
                                                 {{#if crewLN}}
                                                 <p class="form-submit">
-                                                    <div class="id-product-total"><a href="#!" id="view-crew-positions">{{crewLN}}</a></div>
+                                                    <div class="id-product-total glow-offer" ><a href="#!" id="view-crew-positions" style="color:red!important">{{crewLN}}</a></div>
                                                     <div class="id-product-pledges">crew positions available</div>
                                                 </p>
                                                 {{else}}
@@ -316,7 +316,7 @@
                                             <div class="rpdata">
                                                 {{#if needLN}}
                                                 <p class="form-submit">
-                                                    <div class="id-product-total"><a href="#!" id="view-need-positions">{{needLN}}</a></div>
+                                                    <div class="id-product-total glow-offer" ><a href="#!" id="view-need-positions" style="color:red!important">{{needLN}}</a></div>
                                                     <div class="id-product-pledges">resources needed</div>
                                                 </p>
                                                 {{else}}
@@ -398,6 +398,16 @@
     <!-- Main Wrapper End -->
   </div>
   <script type="text/javascript" src="/js/scripts.min.js"></script>
+  <script type="text/javascript">
+    var myInterval;
+    function glowToClick() {
+      try { clearInterval(myInterval); } catch(e) {};
+      myInterval = setInterval(function(){
+          $('.glow-offer').toggleClass('glow');
+      }, 1000);
+    }
+    glowToClick();
+  </script>
 </template>
 
 

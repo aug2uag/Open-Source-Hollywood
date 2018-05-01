@@ -213,15 +213,17 @@ Router.route('/message/project/:slug/:uid', {
     var slug = this.params.slug;
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
-    var offers = Offers.find({uid: user._id, slug: project.slug});
-    var receipts = Receipts.find({user: user._id, slug: project.slug});
-    var messages = ProjectMessages.find({user: user._id, project: project._id});
-    return {
-      project: project,
-      user: user,
-      offers: offers,
-      receipts: receipts,
-      messages: messages
-    }
+    if (user) {
+      var offers = Offers.find({uid: user._id, slug: project.slug});
+      var receipts = Receipts.find({user: user._id, slug: project.slug});
+      var messages = ProjectMessages.find({user: this.params.uid, project: project._id}).fetch();
+      return {
+        project: project,
+        user: user,
+        offers: offers,
+        receipts: receipts,
+        messages: messages
+      }
+    };
   }
 })
