@@ -5,11 +5,6 @@ Router.route('/discover', {
     template: 'projectTabs',
     layoutTemplate: 'StaticLayout',
     waitOn: function() {
-      if (Meteor.user() === null) {
-        Router.go('Home');
-        window.location.assign('/');
-        return
-      }
       return [
         Meteor.subscribe('projectsList'), 
         // Meteor.subscribe('connectUser'),

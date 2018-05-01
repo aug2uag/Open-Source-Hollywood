@@ -25,12 +25,12 @@
                                     	{{ #each userReels }}
 	                                    	{{#if isVideo}}
 	                                    		<li>
-	                                    			<iframe id="player_1" src="{{this.url}}" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+	                                    			<iframe id="player_1" src="{{this.url}}" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen style="max-height:530px!important"></iframe>
 
 	                                    		</li>
 	                                    	{{else}}
 		                                    	<li>
-		                                    		<img src="{{this.url}}" width="845" height="" alt="" draggable="false">
+		                                    		<img src="{{this.url}}" width="845" height="" alt="" draggable="false" style="max-height:530px!important">
 		                                    	</li>
 	                                    	{{/if}}
                                     	{{/each}}
