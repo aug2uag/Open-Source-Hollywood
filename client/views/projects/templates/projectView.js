@@ -544,17 +544,6 @@ Template.projectView.events({
             '</div>',
         '</div>'
     ]
-    if (!Meteor.user()) {
-      var getEmail = [
-        '<div class="vex-custom-field-wrapper">',
-            '<label for="date">Your email (required).</label>',
-            '<div class="vex-custom-input-wrapper">',
-                '<input name="email" type="text" />',
-            '</div>',
-        '</div>'
-      ]
-      dialogInput = dialogInput.concat(getEmail);
-    };
     vex.dialog.open({
       message: 'Enter donation amount.',
       input: dialogInput.join(''),
@@ -582,7 +571,6 @@ Template.projectView.events({
             donationObject = {
               first: 'anonymous',
               last: 'patron',
-              email: data.email,
               id: 'anon_donation',
               amount: amt
             }
