@@ -278,53 +278,57 @@
                     <div class="id-widget-wrap nofloat">
                         <div class="id-widget id-full">
                             <div class="id-product-infobox">
-                                <div class="panel clearfix">
+                                <div class="panel clearfix" style="padding-top:10px!important">
                                     <div class="product-wrapper clearfix">
                                         <div class="clearing"></div>
                                         <div class="rholder">
-                                            <div class="rpdata">
-                                                <p class="form-submit">
-                                                    <input name="submit" type="submit" id="offer-donation" class="submit applicant-button-red" value="donate" style="width:100%!important;background:green!important">
-                                                </p>
+                                          <div class="rpdata">
+                                                <div class="id-progress-raised"> ${{projectBudgetIfExists}}&nbsp;&nbsp;<span style=" font-size: 13px;line-height: 13px;color: #949494;margin: 0;">{{showNeeded}}</span></div>
+                                                <div class="id-product-funding">{{projectFundedIfExists}}</div>
                                             </div>
-                                            <div class="rpdata">
-                                                <div class="id-progress-raised"> ${{project.funded}} </div>
-                                                <div class="id-product-funding">funds raised</div>
+                                            <p>&nbsp;</p>
+                                            <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
+                                              <a href="#" id="offer-donation" class="btn btn-success" role="button">DONATE</a> 
+                                              <a href="#" id="join-roles" class="btn btn-danger" role="button">OFFER</a> 
                                             </div>
-                                            <div class="rpdata">
-                                                {{#if castLN}}
-                                                <p class="form-submit">
-                                                    <div class="id-product-total glow-offer" ><a href="#!" id="view-cast-positions" style="color:red!important">{{castLN}}</a></div>
-                                                    <div class="id-product-pledges">cast positions available</div>
-                                                </p>
-                                                {{else}}
-                                                <div class="id-product-total">{{castLN}}</div>
-                                                <div class="id-product-pledges">cast positions available</div>
-                                                {{/if}}
-                                            </div>
-                                            <div class="rpdata">
-                                                {{#if crewLN}}
-                                                <p class="form-submit">
-                                                    <div class="id-product-total glow-offer" ><a href="#!" id="view-crew-positions" style="color:red!important">{{crewLN}}</a></div>
-                                                    <div class="id-product-pledges">crew positions available</div>
-                                                </p>
-                                                {{else}}
-                                                <div class="id-product-total">{{crewLN}}</div>
-                                                <div class="id-product-pledges">crew positions available</div>
-                                                {{/if}}
-                                            </div>
-                                            <div class="rpdata">
-                                                {{#if needLN}}
-                                                <p class="form-submit">
-                                                    <div class="id-product-total glow-offer" ><a href="#!" id="view-need-positions" style="color:red!important">{{needLN}}</a></div>
-                                                    <div class="id-product-pledges">resources needed</div>
-                                                </p>
-                                                {{else}}
-                                                <div class="id-product-total">{{needLN}}</div>
-                                                <div class="id-product-pledges">resources needed</div>
-                                                {{/if}}
-                                            </div>
+                                            
+                                            <p>&nbsp;</p>
                                         </div>
+                                    </div>
+
+                                    <div class="krown-accordion accordion large clearfix">
+                                        <section>
+                                            <h5>Project Needs</h5>
+                                            <div>
+                                              {{#if castLN}}
+                                              <div class="rpdata">
+                                                  <p class="form-submit">
+                                                      <div class="id-product-total glow-offer" ><a href="#!" id="view-cast-positions" style="color:red!important">{{castLN}}</a></div>
+                                                      <div class="id-product-pledges">cast positions available</div>
+                                                  </p>
+                                              </div>
+                                              {{/if}}
+
+                                              {{#if crewLN}}
+                                              <div class="rpdata">
+                                                  <p class="form-submit">
+                                                      <div class="id-product-total glow-offer" ><a href="#!" id="view-crew-positions" style="color:red!important">{{crewLN}}</a></div>
+                                                      <div class="id-product-pledges">crew positions available</div>
+                                                  </p>
+                                              </div>
+                                              {{/if}}
+
+                                              {{#if needLN}}
+                                              <div class="rpdata">
+                                                  <p class="form-submit">
+                                                      <div class="id-product-total glow-offer" ><a href="#!" id="view-need-positions" style="color:red!important">{{needLN}}</a></div>
+                                                      <div class="id-product-pledges">resources needed</div>
+                                                  </p>
+                                              </div>
+                                              {{/if}}
+                                              <p>&nbsp;</p>
+                                            </div>
+                                        </section>
                                     </div>
                                     <div class="id-product-proposed-end">Created
                                         <div class="id-widget-date">

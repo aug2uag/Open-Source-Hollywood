@@ -109,6 +109,23 @@ function innerVexApply(options, cb) {
 }
 
 Template.projectView.helpers({
+  projectBudgetIfExists: function() {
+    if (this.project.budget) {
+      return this.project.budget;
+    } else {
+      return this.project.funded;
+    }
+  },
+  projectFundedIfExists: function() {
+    if (this.project.budget) {
+      return '$'+this.project.funded+' raised';
+    } else {
+      return 'funds raised';
+    }
+  },
+  showNeeded: function() {
+    if (this.project.budget) return 'needed';
+  },
   formattedUpdateDate: function() {
     return moment(this.date).format('MM-DD-YYYY');
   },
@@ -804,6 +821,7 @@ Template.projectView.onRendered(function() {
   if ($(window).width()<580) {
     setTimeout(function() {
       $($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
+      $('#genreclick2').click();
     }, 610);
   }
   if (!Meteor.user()) {
@@ -814,6 +832,7 @@ Template.projectView.onRendered(function() {
       $('.tw-share').html('<li class="fa fa-twitter"></li>');
       $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
       $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
+      $('#genreclick1').click();
    }, 133);
  });
 

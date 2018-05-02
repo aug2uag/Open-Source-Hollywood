@@ -360,6 +360,7 @@ Template.newProject.events({
       } else {
         o.description = '';
       };
+      o.budget = $('#budget').val();
       o.creatorsInfo = $('#creators_info').val();
       o.historyInfo = $('#history_info').val();
       o.plansInfo = $('#plans_info').val();
