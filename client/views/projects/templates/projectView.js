@@ -114,7 +114,7 @@ function displayRoleTypeDialog(list, options) {
   var isMeteorUser = Meteor.user&&Meteor.user()||false;
   var inputHTML = list.map(function(c, idx) {
     var _html = '<div class="vex-custom-field-wrapper" id="displayroles">';
-    _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.title + '</h3><p>' + c.description + '</p>';
+    _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + (c.title||c.role||c.category) + '</h3><p>' + c.description + '</p>';
     if (isMeteorUser) {
       _html += '<div class="btn-toolbar">';
       if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a>'
