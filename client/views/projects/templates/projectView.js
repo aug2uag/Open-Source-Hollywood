@@ -108,6 +108,128 @@ function innerVexApply(options, cb) {
     });
 }
 
+/** show roles dialog */
+function displayRoleTypeDialog(list, options) {
+  vex.closeTop();
+  var isMeteorUser = Meteor.user&&Meteor.user()||false;
+  var inputHTML = list.map(function(c, idx) {
+    var _html = '<div class="vex-custom-field-wrapper" id="displayroles">';
+    _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.title + '</h3><p>' + c.description + '</p>';
+    if (isMeteorUser) {
+      _html += '<div class="btn-toolbar">';
+      if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a>'
+      if (options.apply_time) _html+='<a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a>'
+      if (options.apply_donate) _html+='<a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a>'
+      _html+='</div>';
+    }
+    _html += '</div></div></div></div>';
+    _html += '</div>';
+    return _html;
+  });
+  if (list.length===0) inputHTML='<p>&nbsp;</p>&nbsp;&nbsp;<h3>There are no roles available.</h3>';
+  vex.dialog.alert({
+      message: options.title,
+      input: [
+          '<style>',
+              '.vex-custom-field-wrapper {',
+                  'margin: 1em 0;',
+              '}',
+              '.vex-custom-field-wrapper > label {',
+                  'display: inline-block;',
+                  'margin-bottom: .2em;',
+              '}',
+          '</style>',
+          inputHTML
+      ].join(''),
+      callback: function (data) {
+        if (!data) {
+            return console.log('Cancelled')
+        }
+      },
+      afterOpen: function() {
+        $('.vex-dialog-form').animate({
+            scrollTop: $('.vex-dialog-form').offset().top - 20
+        }, 'slow');
+        $('.apply-pay').on('click', function(e) {
+          var position = list[parseInt($(this).attr('idx'))];
+          vex.closeAll();
+          /** ask user to define how much pay for resource */
+          innerVexApply({
+            message: 'How much for your participation.',
+            label: 'Amount of money (USD).',
+          }, function(data) {
+            var amt = data.donation || 0;
+            amt = Math.abs(parseInt(amt));
+            if (amt) {
+              /** send offer to user, email user */
+              var o = {
+                ctx:'crew', 
+                position: position.title,
+                type: 'hired',
+                pay: amt,
+                amount: amt,
+                message: currentTitle + ' crew offer',
+                route: 'applyToProject',
+                slug: currentSlug,
+                appliedFor: position.title
+              };
+              Meteor.call(o.route, o, function(err, result) {
+                vex.dialog.alert(err||result);
+              });
+            };
+          });
+        });
+
+        $('.apply-time').on('click', function(e) {
+          var position = list[parseInt($(this).attr('idx'))];
+          vex.closeAll();
+          var o = {
+            ctx:'crew', 
+            position: position.title,
+            type: 'hired',
+            pay: 0,
+            amount: 0,
+            message: currentTitle + ' crew offer (time donation)',
+            route: 'applyToProject',
+            slug: currentSlug,
+            appliedFor: position.title
+          };
+          Meteor.call(o.route, o, function(err, result) {
+            vex.dialog.alert(err||result);
+          });
+        });
+
+        $('.apply-donate').on('click', function(e) {
+          var position = list[parseInt($(this).attr('idx'))];
+          vex.closeAll();
+          /** ask user to define how much pay for resource */
+          innerVexApply({
+            message: 'How much will you donate for this role.',
+            label: 'Money amount (USD), refunded in 5 business days unless accepted.',
+          }, function(data) {
+            var amt = data.donation || 0;
+            amt = Math.abs(parseInt(amt));
+            if (amt) {
+              /** send offer to user, email user */
+              var o = {
+                ctx:'crew', 
+                position: position.title,
+                type: 'sourced',
+                pay: amt,
+                amount: amt,
+                message: currentTitle + ' crew offer (money and time donation)',
+                route: 'applyToProject',
+                slug: currentSlug,
+                appliedFor: position.title
+              };
+              makeStripeCharge(o);
+            };
+          });
+        });
+      }
+  })
+}
+
 Template.projectView.helpers({
   projectBudgetIfExists: function() {
     if (this.project.budget) {
@@ -140,6 +262,9 @@ Template.projectView.helpers({
   },
   needLN: function() {
     return this.project.needs.length;
+  },
+  anyRoles: function() {
+    return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
   },
   formattedDescription: function() {
     var that =  this;
@@ -339,7 +464,7 @@ Template.projectView.events({
             /** ask user to define how much pay for resource */
             innerVexApply({
               message: 'How much will you donate for this role.',
-              label: 'Money amount (USD), refunded in 3 days unless accepted.',
+              label: 'Money amount (USD), refunded in 5 business days unless accepted.',
             }, function(data) {
               var amt = data.donation || 0;
               amt = Math.abs(parseInt(amt));
@@ -451,7 +576,7 @@ Template.projectView.events({
             /** ask user to define how much pay for resource */
             innerVexApply({
               message: 'How much will you donate for this role.',
-              label: 'Money amount (USD), refunded in 3 days unless accepted.',
+              label: 'Money amount (USD), refunded in 5 business days unless accepted.',
             }, function(data) {
               var amt = data.donation || 0;
               amt = Math.abs(parseInt(amt));
@@ -541,10 +666,221 @@ Template.projectView.events({
         }
     })
   },
+  'click #join-roles': function(e) {
+    e.preventDefault();
+    /**
+
+      cast crew or resource
+      cast / crew => select role
+      resource => select resource
+
+     */
+
+    displayRoleTypeDialog( ((this.project.crew||[]).concat((this.project.cast||[]))).concat((this.project.needs||[])) , {
+      title: 'Select Role',
+      apply_pay: true
+    });
+  },
   'click #offer-donation': function(e) {
     e.preventDefault();
     /** prompt enter donation amount */
-    var dialogInput = [
+    /**
+
+      donate time or money
+      time => choose cast crew resource, choose item
+      money => express or conditional
+      express => enter amount
+      conditional => select role (show cast and crew roles)
+
+     */
+
+    var was = this;
+
+    function moneyDonationTypeHelper() {
+      /** show help dialog on top */
+      var dialogInput = [
+        '<style>',
+            '.vex-custom-field-wrapper {',
+                'margin: 1em 0;',
+            '}',
+            '.vex-custom-field-wrapper > label {',
+                'display: inline-block;',
+                'margin-bottom: .2em;',
+            '}',
+        '</style>',
+        '<div class="vex-custom-field-wrapper">',
+          '<p>1) EXPRESS DONATIONS are traditional money donations where you transfer a specified amount of money directly to the campaign.</p>',
+          '<p>2) CONDITIONAL DONATIONS are donations that are given in return for consideration and approval to a role. These are refunded within 5 days unless you were considered and accepted to the role. In order to make a conditional donation, you must specify a role you are donating towards.</p>',
+        '</div>'
+      ]
+      vex.dialog.alert({
+        message: 'There are two types of money donations you can make.',
+        input: dialogInput.join('')
+      });
+    }
+
+    function expressOrConditionalMoneyConfig() {
+      $('.dty').on('click', function(e) {
+        if ($(this).attr('id').indexOf('express')>-1) {
+          displayExpressDonationDialog();
+        } else {
+          displayRoleTypeDialog((was.project.crew||[]).concat((was.project.cast||[])), {
+            title: 'Select Role',
+            apply_donate: true
+          });
+        }
+      });
+      $('#helpmedonate').on('click', function(e) {
+        moneyDonationTypeHelper();
+      });
+    }
+
+    /** express v conditional dialog */
+    function displayMoneyTypeDialog() {
+      vex.closeTop();
+      var dialogInput = [
+        '<style>',
+            '.vex-custom-field-wrapper {',
+                'margin: 1em 0;',
+            '}',
+            '.vex-custom-field-wrapper > label {',
+                'display: inline-block;',
+                'margin-bottom: .2em;',
+            '}',
+        '</style>',
+        '<div class="vex-custom-field-wrapper">',
+          '<div class="bs-example" data-example-id="simple-justified-button-group">',
+            '<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">',
+              '<a href="#" id="dexpress" class="btn btn-default dty" role="button">Express</a>',
+              '<a href="#" id="dconditional" class="btn btn-default dty" role="button">Conditional</a>',
+            '</div>',
+            '<br>',
+            '<a id="helpmedonate" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&nbsp;&nbsp;<small>HELP</small></a>',
+            '<p>&nbsp;</p>',
+            '</div>',
+          '</div>',
+        '</div>'
+      ]
+      vex.dialog.alert({
+        message: 'Choose Money Donation Type',
+        input: dialogInput.join(''),
+        buttons: [
+          $.extend({}, vex.dialog.buttons.NO, { text: 'CLOSE' })
+        ],
+        callback: function(){},
+        afterOpen: expressOrConditionalMoneyConfig
+      });
+    }
+
+    /** express donation dialog (0a) */
+    function displayExpressDonationDialog() {
+      vex.closeTop();
+      var dialogInput = [
+          '<style>',
+              '.vex-custom-field-wrapper {',
+                  'margin: 1em 0;',
+              '}',
+              '.vex-custom-field-wrapper > label {',
+                  'display: inline-block;',
+                  'margin-bottom: .2em;',
+              '}',
+          '</style>',
+          '<div class="vex-custom-field-wrapper">',
+              '<label for="date">Amount to donate (USD).</label>',
+              '<div class="vex-custom-input-wrapper">',
+                  '<input name="donation" type="number" />',
+              '</div>',
+          '</div>'
+      ]
+      vex.dialog.open({
+        message: 'Enter donation amount.',
+        input: dialogInput.join(''),
+        callback: expressDonationHandler
+      });
+    }
+
+    /** express donation final handler (0b) */
+    function expressDonationHandler(data) {
+      if (!data||!data.donation) return;
+      var amt = Math.abs(parseInt(data.donation));
+      if (amt>0) {
+        var donationObject = {};
+        if (Meteor.user()) {
+          donationObject = {
+            first: Meteor.user().firstName,
+            last: Meteor.user().lastName,
+            email: Meteor.user().email,
+            id: Meteor.user()._id,
+            amount: amt
+          }
+        } else {
+          donationObject = {
+            first: 'anonymous',
+            last: 'patron',
+            id: 'anon_donation',
+            amount: amt
+          }
+        }
+        makeStripeCharge({
+          amount: amt,
+          message: 'Donation to ' + currentTitle,
+          description: '$' + amt + ' donated',
+          donationObject: donationObject,
+          route: 'donateToProject',
+          slug: currentSlug
+        });
+      }
+    }
+
+    function timeDateDonateConfig() {
+      $('.dtm').on('click', function(e) {
+        e.preventDefault();
+        if ($(this).attr('id').indexOf('time')>-1) {
+          // donate time options
+          console.log('time')
+          displayRoleTypeDialog( ((was.project.crew||[]).concat((was.project.cast||[]))).concat((was.project.needs||[])) , {
+            title: 'Select Role',
+            apply_time: true
+          });
+        } else {
+          // donate money options
+          console.log('money')
+          displayMoneyTypeDialog();
+        }
+
+      })
+    }
+
+    // return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0)
+    var anyRoles = (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
+    if (!anyRoles) {
+      // express donation only
+      return displayExpressDonationDialog();
+    };
+
+    var msg1 = Meteor.user() ? 'Would you like to donate money or time?' : 'Enter donation amount.';
+
+    var dialogInput = Meteor.user() ? [
+        '<style>',
+            '.vex-custom-field-wrapper {',
+                'margin: 1em 0;',
+            '}',
+            '.vex-custom-field-wrapper > label {',
+                'display: inline-block;',
+                'margin-bottom: .2em;',
+            '}',
+        '</style>',
+        '<div class="vex-custom-field-wrapper">',
+          '<div class="bs-example" data-example-id="simple-justified-button-group">',
+            '<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">',
+              '<a href="#" id="dmoney" class="btn btn-default dtm" role="button">Donate Money</a>',
+              '<a href="#" id="dtime" class="btn btn-default dtm" role="button">Donate Time</a>',
+            '</div>',
+            '<p>&nbsp;</p>',
+            '</div>',
+          '</div>',
+        '</div>'
+    ] : [
         '<style>',
             '.vex-custom-field-wrapper {',
                 'margin: 1em 0;',
@@ -561,43 +897,15 @@ Template.projectView.events({
             '</div>',
         '</div>'
     ]
-    vex.dialog.open({
-      message: 'Enter donation amount.',
+
+    vex.dialog.alert({
+      message: msg1,
       input: dialogInput.join(''),
-      callback: function (data) {
-        if (!data) {
-            return console.log('Cancelled')
-        }
-        if (!data.donation) return;
-        var amt = Math.abs(parseInt(data.donation));
-        if (amt>0) {
-          var donationObject = {};
-          if (Meteor.user()) {
-            donationObject = {
-              first: Meteor.user().firstName,
-              last: Meteor.user().lastName,
-              email: Meteor.user().email,
-              id: Meteor.user()._id,
-              amount: amt
-            }
-          } else {
-            donationObject = {
-              first: 'anonymous',
-              last: 'patron',
-              id: 'anon_donation',
-              amount: amt
-            }
-          }
-          makeStripeCharge({
-            amount: amt,
-            message: 'Donation to ' + currentTitle,
-            description: '$' + amt + ' donated',
-            donationObject: donationObject,
-            route: 'donateToProject',
-            slug: currentSlug
-          });
-        };
-      }
+      buttons: [
+        $.extend({}, vex.dialog.buttons.NO, { text: 'CLOSE' })
+      ],
+      callback: Meteor.user()?function(){}:expressDonationHandler,
+      afterOpen: Meteor.user()?timeDateDonateConfig:null
     });
   },
   'click #submit-update': function(e) {

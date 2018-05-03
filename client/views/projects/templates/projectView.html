@@ -283,19 +283,22 @@
                                         <div class="clearing"></div>
                                         <div class="rholder">
                                           <div class="rpdata">
-                                                <div class="id-progress-raised"> ${{projectBudgetIfExists}}&nbsp;&nbsp;<span style=" font-size: 13px;line-height: 13px;color: #949494;margin: 0;">{{showNeeded}}</span></div>
+                                                <div class="id-progress-raised"> ${{projectBudgetIfExists}}&nbsp;<span style=" font-size: 13px;line-height: 13px;color: #949494;margin: 0;">{{showNeeded}}</span></div>
                                                 <div class="id-product-funding">{{projectFundedIfExists}}</div>
                                             </div>
                                             <p>&nbsp;</p>
                                             <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
                                               <a href="#" id="offer-donation" class="btn btn-success" role="button">DONATE</a> 
-                                              <a href="#" id="join-roles" class="btn btn-danger" role="button">OFFER</a> 
+                                              {{#if anyRoles}}
+                                              <a href="#" id="join-roles" class="btn btn-danger" role="button">CONNECT</a> 
+                                              {{/if}}
                                             </div>
                                             
                                             <p>&nbsp;</p>
                                         </div>
                                     </div>
 
+                                    {{#if anyRoles}}
                                     <div class="krown-accordion accordion large clearfix">
                                         <section>
                                             <h5>Project Needs</h5>
@@ -330,6 +333,9 @@
                                             </div>
                                         </section>
                                     </div>
+                                    {{/if}}
+
+
                                     <div class="id-product-proposed-end">Created
                                         <div class="id-widget-date">
                                             <div class="id-widget-month">{{project.createdAt}}</div>
