@@ -264,7 +264,7 @@ Template.projectView.helpers({
     return this.project.needs.length;
   },
   anyRoles: function() {
-    return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
+    return Meteor.user()&&(this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
   },
   formattedDescription: function() {
     var that =  this;
