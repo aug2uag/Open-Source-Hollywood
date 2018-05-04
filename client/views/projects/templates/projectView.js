@@ -1109,6 +1109,15 @@ Template.projectView.events({
                 }
               });
             };
+        },
+        afterOpen: function() {
+          var was = this;
+          setTimeout(function() {
+              // Either of these lines will do the trick, depending on what browsers you need to support.
+              was.rootEl.scrollTop = 0;
+              was.contentEl.scrollIntoView(true);
+              $(was.$vex).scrollTop(0)
+          }, 0)
         }
     });
   },
