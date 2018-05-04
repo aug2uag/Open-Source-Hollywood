@@ -878,14 +878,14 @@ Template.projectView.events({
 
     // return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0)
     var anyRoles = (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
-    if (!anyRoles) {
+    if (!anyRoles||!Meteor.user()) {
       // express donation only
       return displayExpressDonationDialog();
     };
 
     var msg1 = Meteor.user() ? 'Would you like to donate money or time?' : 'Enter donation amount.';
 
-    var dialogInput = Meteor.user() ? [
+    var dialogInput = [
         '<style>',
             '.vex-custom-field-wrapper {',
                 'margin: 1em 0;',
@@ -904,22 +904,6 @@ Template.projectView.events({
             '</div>',
           '</div>',
         '</div>'
-    ] : [
-        '<style>',
-            '.vex-custom-field-wrapper {',
-                'margin: 1em 0;',
-            '}',
-            '.vex-custom-field-wrapper > label {',
-                'display: inline-block;',
-                'margin-bottom: .2em;',
-            '}',
-        '</style>',
-        '<div class="vex-custom-field-wrapper">',
-            '<label for="date">Amount to donate (USD).</label>',
-            '<div class="vex-custom-input-wrapper">',
-                '<input name="donation" type="number" />',
-            '</div>',
-        '</div>'
     ]
 
     vex.dialog.alert({
@@ -928,8 +912,8 @@ Template.projectView.events({
       buttons: [
         $.extend({}, vex.dialog.buttons.NO, { text: 'CLOSE' })
       ],
-      callback: Meteor.user()?function(){}:expressDonationHandler,
-      afterOpen: Meteor.user()?timeDateDonateConfig:null
+      callback: function(){},
+      afterOpen: timeDateDonateConfig
     });
   },
   'click #submit-update': function(e) {
