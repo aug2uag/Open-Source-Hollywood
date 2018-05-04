@@ -98,7 +98,7 @@ Template.editProject.events({
   'click #add-crew': function(e) {
     e.preventDefault();
     var countRows = $('.crew-val').length||0;
-    var title = $('#crew-title').val(), description = $('#crew-description').val(), status = $('input[name=crew-radio]:checked').val();
+    var title = $('#crew-title').val(), description = $('#crew-description').val(), status = 'needed';
     if (title && description && status) $('#crew-table').append('<tr class="crew-val after-the-fact"><td>'+title+'</td><td>'+description+'</td><td><div class="col-sm-12 col-md-4 margin_bottom20"><div class="form-check form-check-inline"><input type="radio" id="crew-radio-needed'+countRows+'" name="crew-radio'+countRows+'" value="needed" '+(status==='needed'?'checked':'')+'><label for="crew-radio-needed'+countRows+'">Needed</label></div><div class="form-check form-check-inline"><input type="radio" id="crew-radio-fulfilled'+countRows+'" name="crew-radio'+countRows+'" value="fulfilled"  '+(status==='fulfilled'?'checked':'')+'><label for="crew-radio-fulfilled'+countRows+'">Fulfilled</label></div></div></td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
     $('#crew-title').val(''), $('#crew-description').val(''), $("#crew-radio-needed").prop("checked", true);
@@ -107,7 +107,7 @@ Template.editProject.events({
   'click #add-cast': function(e) {
     e.preventDefault();
     var countRows = $('.cast-val').length||0;
-    var title = $('#cast-title').val(), description = $('#cast-description').val(), status = $('input[name=cast-radio]:checked').val();
+    var title = $('#cast-title').val(), description = $('#cast-description').val(), status = 'needed';
     if (title && description && status) $('#cast-table').append('<tr class="cast-val after-the-fact"><td>'+title+'</td><td>'+description+'</td><td><div class="col-sm-12 col-md-4 margin_bottom20"><div class="form-check form-check-inline"><input type="radio" id="cast-radio-needed'+countRows+'" name="cast-radio'+countRows+'" value="needed" '+(status==='needed'?'checked':'')+'><label for="cast-radio-needed'+countRows+'">Needed</label></div><div class="form-check form-check-inline"><input type="radio" id="cast-radio-fulfilled'+countRows+'" name="cast-radio'+countRows+'" value="fulfilled"  '+(status==='fulfilled'?'checked':'')+'><label for="cast-radio-fulfilled'+countRows+'">Fulfilled</label></div></div></td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
     $('#cast-title').val(''), description = $('#cast-description').val(''), $("#cast-radio-needed").prop("checked", true);

@@ -113,8 +113,9 @@ function displayRoleTypeDialog(list, options) {
   vex.closeTop();
   var isMeteorUser = Meteor.user&&Meteor.user()||false;
   var inputHTML = list.map(function(c, idx) {
+    var typeofRole = c.title ? 'a crew position' : c.role ? 'a cast position' : 'a resource needed';
     var _html = '<div class="vex-custom-field-wrapper" id="displayroles">';
-    _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + (c.title||c.role||c.category) + '</h3><p>' + c.description + '</p>';
+    _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3 style="margin-bottom: 10px;">' + (c.title||c.role||c.category) + '</h3><p style="margin-bottom: 13px;font-weight:200">'+ typeofRole +'</p><p style="margin-bottom: 5px">' + c.description + '</p>';
     if (isMeteorUser) {
       _html += '<div class="btn-toolbar">';
       if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a>'
@@ -125,8 +126,8 @@ function displayRoleTypeDialog(list, options) {
     _html += '</div></div></div></div>';
     _html += '</div>';
     return _html;
-  });
-  if (list.length===0) inputHTML='<p>&nbsp;</p>&nbsp;&nbsp;<h3>There are no roles available.</h3>';
+  }).join('');
+  if (list.length===0) inputHTML='<p>&nbsp;</p><h3>&nbsp;&nbsp;There are no roles available.</h3>';
   vex.dialog.alert({
       message: options.title,
       input: [
@@ -147,9 +148,13 @@ function displayRoleTypeDialog(list, options) {
         }
       },
       afterOpen: function() {
-        $('.vex-dialog-form').animate({
-            scrollTop: $('.vex-dialog-form').offset().top - 20
-        }, 'slow');
+        var was = this;
+        setTimeout(function() {
+            // Either of these lines will do the trick, depending on what browsers you need to support.
+            was.rootEl.scrollTop = 0;
+            was.contentEl.scrollIntoView(true);
+            $(was.$vex).scrollTop(0)
+        }, 0)
         $('.apply-pay').on('click', function(e) {
           var position = list[parseInt($(this).attr('idx'))];
           vex.closeAll();
@@ -387,8 +392,8 @@ Template.projectView.events({
       _html += '</div></div></div></div>';
       _html += '</div>';
       return _html;
-    });
-    vex.dialog.open({
+    }).join('');
+    vex.dialog.alert({
         message: 'View and apply CAST positions:',
         contentCSS: { width: '100%', overflow: 'auto' },
         input: [
@@ -409,6 +414,13 @@ Template.projectView.events({
           }
         },
         afterOpen: function() {
+          var was = this;
+          setTimeout(function() {
+              // Either of these lines will do the trick, depending on what browsers you need to support.
+              was.rootEl.scrollTop = 0;
+              was.contentEl.scrollIntoView(true);
+              $(was.$vex).scrollTop(0)
+          }, 0)
           $('.apply-pay').on('click', function(e) {
             var position = castPositions[parseInt($(this).attr('idx'))];
             vex.closeAll();
@@ -499,8 +511,8 @@ Template.projectView.events({
       _html += '</div></div></div></div>';
       _html += '</div>';
       return _html;
-    });
-    vex.dialog.open({
+    }).join('');
+    vex.dialog.alert({
         message: 'View and apply CREW positions:',
         contentCSS: { width: '100%', overflow: 'auto' },
         input: [
@@ -521,6 +533,13 @@ Template.projectView.events({
           }
         },
         afterOpen: function() {
+          var was = this;
+          setTimeout(function() {
+              // Either of these lines will do the trick, depending on what browsers you need to support.
+              was.rootEl.scrollTop = 0;
+              was.contentEl.scrollIntoView(true);
+              $(was.$vex).scrollTop(0)
+          }, 0)
           $('.apply-pay').on('click', function(e) {
             var position = crewPositions[parseInt($(this).attr('idx'))];
             vex.closeAll();
@@ -611,8 +630,8 @@ Template.projectView.events({
       _html += '</div></div></div></div>';
       _html += '</div>';
       return _html;
-    });
-    vex.dialog.open({
+    }).join('');
+    vex.dialog.alert({
         message: 'View and offer resources for project NEEDS:',
         contentCSS: { width: '100%', overflow: 'auto' },
         input: [
@@ -629,6 +648,13 @@ Template.projectView.events({
         ].join(''),
         callback: function () { },
         afterOpen: function() {
+          var was = this;
+          setTimeout(function() {
+              // Either of these lines will do the trick, depending on what browsers you need to support.
+              was.rootEl.scrollTop = 0;
+              was.contentEl.scrollIntoView(true);
+              $(was.$vex).scrollTop(0)
+          }, 0)
           $('.apply-pay').on('click', function(e) {
             var needItem = projectNeeds[parseInt($(this).attr('idx'))];
             vex.closeAll();
@@ -756,7 +782,6 @@ Template.projectView.events({
             '</div>',
             '<br>',
             '<a id="helpmedonate" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&nbsp;&nbsp;<small>HELP</small></a>',
-            '<p>&nbsp;</p>',
             '</div>',
           '</div>',
         '</div>'
@@ -876,7 +901,6 @@ Template.projectView.events({
               '<a href="#" id="dmoney" class="btn btn-default dtm" role="button">Donate Money</a>',
               '<a href="#" id="dtime" class="btn btn-default dtm" role="button">Donate Time</a>',
             '</div>',
-            '<p>&nbsp;</p>',
             '</div>',
           '</div>',
         '</div>'
