@@ -1003,25 +1003,31 @@ Template.projectView.events({
     var was = this, o={gift:was};
     var vex1Open = true, vex2Open = true;
     var vex1 = vex.dialog.open({
-        message: was.name,
+        message: ['   Details of ',was.name,'. Purchase below.'].join(''),
         buttons: [
           $.extend({}, vex.dialog.buttons.YES, { text: 'PURCHASE' }),
           $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
         ],
         input: [
-            '<div class="container" style="width:100%;">',
-                '<div class="row">',
-                    '<div class="col-xs-5">',
-                        '<img class="img-responsive img-thumbnail margin_bottom20" src="'+was.url+'" style="max-height: 120px;max-width: 120px;">',
-                    '</div>',
-                    '<div class="col-xs-7">',
-                        '<h4>$'+was.msrp+' ( ' + was.quantity+ ' units left )</h4>',
-                    '</div>',
-                    '<div class="col-xs-12">',
-                        '<textarea readonly>' + was.description + '</textarea>',
-                    '</div>',
-                '</div>',
-            '</div>'
+
+                        '<figure class="snip1165 red">',
+                          '<img src="',
+                          was.url,
+                          '" alt="sample63"/>',
+                          '<figcaption>',
+                            '<h3>',
+                            was.name,
+                            '</h3>',
+                            '<p>',
+                              was.description,
+                            '</p>',
+                            '<hr>',
+                            '<h3 style="margin-top:8px;margin-bottom:0px">$',
+                            was.msrp,
+                            '</h3>',
+                          '</figcaption>',
+                        '</figure>',
+
 
         ].join(''),
         callback: function (data) {

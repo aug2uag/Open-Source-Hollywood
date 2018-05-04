@@ -371,20 +371,21 @@
                                     </div>
                                 </div>
                                 <!-- GIFTS -->
-                                <div class="id-product-description">Campaign items for sale.</div>
-                                <!--Product Levels-->
                                 <div class="id-product-levels">
+                                  <h4 id="purchaselabel" class="avatar-option await btn-lg">PURCHASE GIFTS</h4>
                                   {{#each project.gifts}}
                                     <a class="level-binding purchase_gift">
                                         <div class="level-group">
                                             <div class="id-level-title"><span>{{this.name}}:</span> ${{this.msrp}}</div>
                                             <div class="id-level-desc">
                                                 <p>{{this.description}}</p>
-                                                <p class="code">quantity available ({{this.quantity}})</p>
+                                                <!-- <p class="code">quantity available ({{this.quantity}})</p> -->
                                             </div>
                                         </div>
                                         <p class="align-center"><a class="c-related__a button special">PURCHASE NOW</a></p>
                                     </a>
+                                    {{else}}
+                                    <script type="text/javascript">document.getElementById('purchaselabel').style.display = 'none';</script>
                                   {{/each}}
                                 </div>
                                 <!-- end product levels -->
