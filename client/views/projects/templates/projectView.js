@@ -23,10 +23,53 @@ function makeStripeCharge(options) {
     token: function(_token) {
       if (_token) {
         options.token = _token;
-        Meteor.call(options.route, options, function(err, result) {
-          if (err) return vex.dialog.alert('your payment failed');
-          vex.dialog.alert(result)
-        });
+        if (Meteor.user()) {
+          Meteor.call(options.route, options, function(err, result) {
+            if (err) return vex.dialog.alert('your payment failed');
+            vex.dialog.alert(result)
+          });
+        } else {
+          // confirm dialog
+          vex.dialog.alert({
+            message: 'Please confirm the following to make payment.',
+            input: [
+              '<ul>',
+                '<li class="wcheckbox">',
+                    '<label class="with-square-checkbox">',
+                        '<input id="ageverify" name="ageverify" type="checkbox">',
+                        '<span>I am 18 years of age or older.</span>',
+                    '</label>',
+                '</li>',
+                '<li class="wcheckbox">',
+                    '<label class="with-square-checkbox">',
+                        '<input id="payverify" name="payverify" type="checkbox">',
+                        '<span>I am authorized to make payments with the payment method I selected.</span>',
+                    '</label>',
+                '</li>',
+                '<li class="wcheckbox">',
+                    '<label class="with-square-checkbox">',
+                        '<input id="refverify" name="refverify" type="checkbox">',
+                        '<span>I understand my payment is non-refundable and will be immediately applied to the campaign\'s budget.</span>',
+                    '</label>',
+                '</li>',
+              '</ul>',
+              '<div class="form-group">',
+                  '<label for="signature">Sign Your Name</label>',
+                  '<input type="text" class="form-control" name="signature" id="signature" placeholder="enter your name here">',
+              '</div>',
+            ].join(''),
+            callback: function(data) {
+              if (!data.ageverify||!data.payverify||!data.refverify||!data.signature) return
+              data.date = new Date();
+              options.anonymous_verification = data;
+              Meteor.call(options.route, options, function(err, result) {
+                if (err) return vex.dialog.alert('your payment failed');
+                vex.dialog.alert(result)
+              });
+            }
+          });
+        }
+        
       } else {
         vex.dialog.alert('your payment did not succeed');
       }
