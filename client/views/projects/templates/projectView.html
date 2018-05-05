@@ -6,6 +6,13 @@
 
         <header id="page-title" style="padding-top: 0px;">
             <h1 class="title">{{project.title}}</h1>
+            {{#if currentUser}}
+            <button type="button" id="thumbsup" class="{{thumbsupactive}}">
+              <i class="fa fa-thumbs-up"></i>
+              Like
+            </button>
+
+            {{/if}}
             <h2 class="subtitle">{{project.logline}}</h2>
         </header>
 

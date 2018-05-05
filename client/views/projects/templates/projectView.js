@@ -291,6 +291,10 @@ function displayRoleTypeDialog(list, options) {
 }
 
 Template.projectView.helpers({
+  thumbsupactive: function() {
+    // if me in upvote 'active' : null
+    if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
+  },
   projectBudgetIfExists: function() {
     if (this.project.budget) {
       return this.project.budget;
@@ -1195,11 +1199,14 @@ Template.projectView.events({
     document.getElementById('comment-box').innerHTML = '';
     Meteor.call('addProjectComment', this._slug, 0, text);
   },
-  'click #upvote': function() {
-    Meteor.call('upvoteProject', this._slug);
-  },
-  'click #downvote': function() {
-    Meteor.call('downvoteProject', this._slug);
+  'click #thumbsup': function() {
+    if ($('#thumbsup').hasClass('active')) {
+      Meteor.call('downvoteProject', this._slug);
+      $('#thumbsup').removeClass('active');
+    } else {
+      Meteor.call('upvoteProject', this._slug);
+      $('#thumbsup').addClass('active');
+    }
   }
 });
 
