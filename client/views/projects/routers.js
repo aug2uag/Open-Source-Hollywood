@@ -193,7 +193,7 @@ Router.route('/message/project/:slug/:uid', {
     var slug = this.params.slug;
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
-    if (user) {
+    if (user&&project) {
       var offers = Offers.find({uid: user._id, slug: project.slug});
       var receipts = Receipts.find({user: user._id, slug: project.slug});
       var messages = ProjectMessages.find({user: this.params.uid, project: project._id}).fetch();

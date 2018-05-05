@@ -431,9 +431,11 @@ Template.settings.helpers({
 			] 
 		}, { 
 				sort: { createTimeActual: -1 } 
-		});
+		}).fetch();
 
-		return messages;
+		return messages.filter(function(m) {
+			if (Meteor.user()._id!==m.ownerId) return m;
+		});
 	}
 });
 
