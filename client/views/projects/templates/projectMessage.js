@@ -1,6 +1,6 @@
 Template.projectMessage.helpers({
 	foo: function() {
-		console.log(this)
+		// console.log(this)
 	},
 	title: function() {
 		return 'Conversation w ' + this.user.firstName + ' ' + this.user.lastName + ' campaign: ' + this.project.title;

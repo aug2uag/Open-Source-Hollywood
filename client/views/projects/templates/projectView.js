@@ -737,8 +737,6 @@ Template.projectView.events({
           });
 
           $('.apply-time').on('click', function(e) {
-            console.log('apply for time')
-            console.log($(this).attr('idx')) // ==> idx
             var needItem = projectNeeds[parseInt($(this).attr('idx'))];
             Meteor.call("lendResource", {
               slug: currentSlug,
@@ -921,14 +919,12 @@ Template.projectView.events({
         e.preventDefault();
         if ($(this).attr('id').indexOf('time')>-1) {
           // donate time options
-          console.log('time')
           displayRoleTypeDialog( ((was.project.crew||[]).concat((was.project.cast||[]))).concat((was.project.needs||[])) , {
             title: 'Select Role',
             apply_time: true
           });
         } else {
           // donate money options
-          console.log('money')
           displayMoneyTypeDialog();
         }
 

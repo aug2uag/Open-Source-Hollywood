@@ -87,7 +87,7 @@ Template.profile.helpers({
 
 	    var backupURL = 'https://app.opensourcehollywood.org/profile/'+this._id;
 	    return {
-	      title: [this.firstName, this.lastName,'"on Open Source Hollywood! <opensourcehollywood.org>'].join(' '),
+	      title: [this.firstName, this.lastName,'on Open Source Hollywood! <opensourcehollywood.org>'].join(' '),
 	      author: 'Open Source Hollywood',
 	      excerpt: roles,
 	      summary: roles,

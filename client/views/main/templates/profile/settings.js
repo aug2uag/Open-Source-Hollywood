@@ -42,12 +42,9 @@ function guid() {
 
 function phoneVerifyVexCB(data, _vex) {
 	// vex.closeAll();
-	console.log('baz')
     if (data) {
-    	console.log(data)
     	$('osh_loader').show();
         Meteor.call('verifyPhonePIN', data.pin, function(err, msg) {
-        	console.log('fosososjoj')
         	$('osh_loader').hide();
         	vex.dialog.alert(msg);
         });
@@ -66,7 +63,6 @@ function phoneVerifyVex() {
 	        $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
 	    ],
 	    callback: function (data) {
-	    	console.log('bar');
 	    	return phoneVerifyVexCB(data, _vex);
 	    }
 	});
@@ -140,7 +136,6 @@ Template.settings.events({
 	},
 	'click #resend_phone_notify': function(e) {
 		/** resend phone verification */
-		console.log('foo')
 		Meteor.call('resendVerification', 'phone', phoneVerifyVex);
 	},
 	'click #avatar_init': function(e) {
@@ -518,7 +513,6 @@ Template.settings.rendered = function () {
         tooltip: false,
         callbacks: {
           onInit: function() {
-          	console.log(Meteor.user())
             $('.note-editable').html(Meteor.user&&Meteor.user().bio||'<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
           }
         }
