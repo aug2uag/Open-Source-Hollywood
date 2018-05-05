@@ -70,6 +70,32 @@ Template.profile.helpers({
 			i.url = 'https://s3-us-west-2.amazonaws.com/producehour/headshots/' + i.url;
 			return i;
 		});	
+	},
+	shareData: function() {
+	    ShareIt.configure({
+	        sites: {
+	            'facebook': {
+	                'appId': '1790348544595983'
+	            }
+	        }
+	    });
+	    var roles;
+	    if (!this.iam.length) {
+			roles = 'Amazing talent available on O . S . H . (https://opensourcehollywood.org).';
+		};
+		roles = this.iam.join(', ');	
+
+	    var backupURL = 'https://app.opensourcehollywood.org/profile/'+this._id;
+	    return {
+	      title: [this.project.firstName, this.project.lastName,'"on Open Source Hollywood! <opensourcehollywood.org>'].join(' '),
+	      author: 'Open Source Hollywood',
+	      excerpt: roles,
+	      summary: roles,
+	      description: roles,
+	      thumbnail: this.avatar,
+	      image: this.avatar,
+	      url: this.avatar
+	    }
 	}
 });
 
@@ -89,3 +115,14 @@ Template.settings.helpers({
 		};
 	}
 });
+
+
+Template.profile.onRendered(function() {
+   setTimeout(function() {
+      $('.fb-share').html('<li class="fa fa-facebook"></li>');
+      $('.tw-share').html('<li class="fa fa-twitter"></li>');
+      $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
+      $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
+      $('#genreclick1').click();
+   }, 133);
+ });
