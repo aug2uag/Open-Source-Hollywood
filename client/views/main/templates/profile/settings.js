@@ -449,9 +449,6 @@ Template.settings.helpers({
 });
 
 Template.settings.rendered = function () {
-  $('meta[name=description]').remove();
-  $('head').append( '<meta name="description" content="Profile settings and account management on Open Source Hollywood">' );
-  document.title = 'Account Settings';
   if ($(window).width()<580) {
   	setTimeout(function() {
   		$($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');

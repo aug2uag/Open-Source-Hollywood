@@ -1217,9 +1217,6 @@ Template.projectView.onRendered(function() {
       $('#genreclick2').click();
     }, 610);
   }
-  $('meta[name=description]').remove();
-  $('head').append( '<meta name="description" content="'+(this.data.descriptionText||this.data.logline||'Amazing campaign on O . S . H . (https://opensourcehollywood.org)')+'">' );
-  document.title = this.data.title ? this.data.title : 'Campaign Details';
   if (!Meteor.user()) {
       localStorage.setItem('redirectURL', '/projects/' + this.data.project.slug + '/' + this.data.project.ownerId);
   } 

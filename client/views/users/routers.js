@@ -16,15 +16,15 @@ Router.route('/profile/:_id', {
     ];
   },
   action: function() {
+    var user = Meteor.users.findOne({_id: this.params._id});
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="'+(user.bio_plaintext||(user.iam.length&&user.iam.join(', '))||'Amazing talent on O . S . H . (https://opensourcehollywood.org)')+'">' );
+    document.title = (user.firstName&&user.lastName) ? [user.firstName, user.lastName, 'on O . S . H . (opensourcehollywood.org)'].join(' ') : 'Member Profile';
     this.render('profile', {
       data: function(){
-        return Meteor.users.findOne({_id: this.params._id});
+        return user;
       }
     });
-  },
-  onBeforeAction: function() {
-    this.next();
-    document.title = "Member Profile";
   }
 });
 
@@ -48,31 +48,33 @@ Router.route('/settings', {
       ];
     },
     onBeforeAction: function() {
-      document.title = "Account Settings";
+      $('meta[name=description]').remove();
+      $('head').append( '<meta name="description" content="Profile settings and account management on Open Source Hollywood">' );
+      document.title = 'Account Settings';
       this.next();
     }
 });
 
 
-Router.route('/gallery', {
-    name: 'Gallery',
-    template: 'userTabs',
-    layoutTemplate: 'StaticLayout',
-    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
-    waitOn: function() {
-      return [
-        Meteor.subscribe('getUsers'), 
-        // Meteor.subscribe('connectUser'),
-        Meteor.subscribe('getMe')
-      ];
-    },
-    onBeforeAction: function() {
-      if (!Meteor.user()) {
-        Router.go('Home');
-        window.location.assign('/');
-        return
-      }
-      document.title = "Members Gallery";
-      this.next();
-    }
-});
+// Router.route('/gallery', {
+//     name: 'Gallery',
+//     template: 'userTabs',
+//     layoutTemplate: 'StaticLayout',
+//     bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
+//     waitOn: function() {
+//       return [
+//         Meteor.subscribe('getUsers'), 
+//         // Meteor.subscribe('connectUser'),
+//         Meteor.subscribe('getMe')
+//       ];
+//     },
+//     onBeforeAction: function() {
+//       if (!Meteor.user()) {
+//         Router.go('Home');
+//         window.location.assign('/');
+//         return
+//       }
+//       document.title = "Members Gallery";
+//       this.next();
+//     }
+// });

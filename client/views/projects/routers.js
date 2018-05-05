@@ -40,7 +40,6 @@ Router.route('/create', {
       ];
     },
     onBeforeAction: function() {
-      var u = Users.findOne({_id: Meteor.user()._id});
       $('meta[name=description]').remove();
       $('head').append( '<meta name="description" content="Free crowdsourcing campaign creation on Open Source Hollywood.' );
       document.title = 'Create Campaign';
@@ -66,6 +65,9 @@ Router.route('/projects/:slug/:uid', {
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
     var user = Users.findOne({_id: project.ownerId});
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="'+(project.descriptionText||project.logline||'Amazing campaign on O . S . H . (https://opensourcehollywood.org)')+'">' );
+    document.title = project.title ? [project.title, 'on O . S . H . (opensourcehollywood.org).'].join(' ') : 'Campaign Details';
     return {
         uid: project._id,
         perCent: function() {
