@@ -94,7 +94,7 @@ Template.profile.helpers({
 	      description: roles,
 	      thumbnail: this.avatar,
 	      image: this.avatar,
-	      url: this.avatar
+	      url: backupURL
 	    }
 	}
 });
