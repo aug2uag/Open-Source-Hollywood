@@ -167,9 +167,16 @@ Template.settings.events({
 		var o = {};
 		o.firstName = $('#first_name').val();
 		o.lastName = $('#last_name').val();
-		var bioText = $('#textBox').text().trim();
-		if (bioText&&bioText!=='Enter your biography and self-description here.You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
-			o.bio = $('#textBox').html();
+		var descriptionText = $('#summernote').summernote('code');
+      	var plainText = $("#summernote").summernote('code')
+            .replace(/<\/p>/gi, " ")
+            .replace(/<br\/?>/gi, " ")
+            .replace(/<\/?[^>]+(>|$)/g, "")
+            .replace(/&nbsp;|<br>/g, " ")
+            .trim();
+		if (plainText&&plainText!=='Enter your biography and self-description here.You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+			o.bio = descriptionText;
+			o.bio_plaintext = plainText;
 		} else {
 			o.bio = '';
 		};
@@ -211,8 +218,6 @@ Template.settings.events({
 			_o.url = $(arr[0]).text();
 			o.reels.push(_o);
 		});
-
-		console.log(o)
 
 		Meteor.call('upgradeProfile', o);
 
@@ -492,230 +497,19 @@ Template.settings.rendered = function () {
   var wbs = Meteor.user().website && Meteor.user().website.length > 0 ? Meteor.user().website : 'http://yoursite';
   $('#website').attr('placeholder', wbs);
 
-  /**
-     *  Plugin name:SWEDitor
-     *  Author: Moncho Varela / nakome
-     *  Date: 20/10/2013 ten day for my birthday LOL
-     *  @nakome on twitter
-     */
-    (function(window) {
-      
-      'use strict';
-      
-      
-      function getTemplate(el) {
-        // Template html
-        var html = '<div class="box-editor">' +
-            '<div id="thisForm">' +
-            '<input type="hidden" name="myDoc">' +
-            '<div id="toolBar2">' +
-            '<label class="custom-select fontSi">' +
-            '<select class="selectThis" data-chg="fontsize">' +
-            '<option class="heading" selected>:: Size</option>' +
-            '<option value="1">Very small</option>' +
-            '<option value="2">A bit small</option>' +
-            '<option value="3">Normal</option>' +
-            '<option value="4">Medium-large</option>' +
-            '<option value="5">Big</option>' +
-            '<option value="6">Very big</option>' +
-            '<option value="7">Maximum</option>' +
-            '</select></label>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Left align"  data-fn="justifyleft">' +
-            '<i class="fa fa-align-left"></i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Center align"  data-fn="justifycenter">' +
-            '<i class="fa fa-align-center"></i>' + '</a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Right align"  data-fn="justifyright">' +
-            '<i class="fa fa-align-right">' + '</i></a>' +
-            '<a href="javascript:void(0);" class="intLink" title="Quote"  id="quote" data-fn="blockquote">' +
-            '<i class="fa fa-quote-left"></i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Add indentation"  data-fn="indent">' +
-            '<i class="fa fa-indent"></i></a>' +
-            '<a href="javascript:void(0);" class="intLink formatBlock" title="Get hr"  data-fn="inserthorizontalrule">' +
-            'HR </a>' +
-            ' <a href="javascript:void(0);" class="intLink" title="Get img" id="getImg" data-fn="insertImage">' +
-            '<i class="fa fa-image">' + '</i></a>' +
-            ' </div>' +
-            '<div id="textBox" contenteditable="true">' +
-            '</div></div></div>';
-        // render html
-        el.innerHTML = html;
-      }
-      
-      function initDoc(fm, bx) {
-        var elem = bx,
-            sDefTxt;
-        sDefTxt = bx.innerHTML;
-        if (fm.checked) {
-          setDocMode(true);
-        }
-      }
-      
-      function formatDoc(obj, val) {
-        if (validateMode()) {
-          document.execCommand(obj, false, val);
-        }
-      }
-      
-      
-      function validateMode() {
-        var thisForm = document.querySelector('#thisForm');
-        if (!thisForm.checked) {
-          return true;
-        }
-        alert("Uncheck \"Show HTML\".");
-        return false;
-      }
-      
-      function setDocMode(source, oDoc) {
-        var sDefTxt = oDoc.innerHTML;
-        var oContent;
-        if (source) {
-          oContent = document.createTextNode(sDefTxt);
-          oDoc.innerHTML = "";
-          var oPre = document.createElement("pre");
-          oDoc.contentEditable = false;
-          oPre.id = "sourceText";
-          oPre.contentEditable = true;
-          oPre.appendChild(oContent);
-          oDoc.appendChild(oPre);
-        } else {
-          if (document.all) {
-            sDefTxt = oDoc.innerText;
-          } else {
-            oContent = document.createRange();
-            oContent.selectNodeContents(oDoc.firstChild);
-            oDoc.innerHTML = oContent.toString();
-          }
-          oDoc.contentEditable = true;
-        }
-      }
-      
-      // extend options
-      
-      function extend(a, b) {
-        for (var key in b) {
-          if (b.hasOwnProperty(key)) {
-            a[key] = b[key];
+  $(document).ready(function() {
+      $('#summernote').summernote({
+        height: 300,
+        minHeight: null,
+        maxHeight: null,
+        focus: true,
+        tooltip: false,
+        callbacks: {
+          onInit: function() {
+            $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
           }
         }
-        return a;
-      }
-      
-      function sweDitor(elem, options) {
-        // The div of editor
-        this.elem = elem;
-        // The options  ex. this.options.type = hello
-        this.options = extend(this.defaults, options);
-        // Get Template
-        getTemplate(elem);
-        // Start init
-        this._init();
-      }
-      
-      sweDitor.prototype = {
-        // this.options.type
-        defaults: {
-          textArea: 'editor_area',
-          showTextarea: true
-        },
-        
-        // this._init();
-        _init: function() {
-          var self = this;
-          // Div of content
-          this.box = document.querySelector('#textBox');
-          // array for change event
-          this.selects = Array.prototype.slice.call(this.elem.querySelectorAll('.selectThis'));
-          // array for click event
-          this.formats = Array.prototype.slice.call(this.elem.querySelectorAll('.formatBlock'));
-          // get print id
-          this.getPrint = document.getElementById('getPrint');
-          // The textarea
-          this.textArea = document.getElementById(this.options.textArea);
-          // get clean id
-          this.getClean = document.getElementById('getClean');
-          // get img id 
-          this.getImg = document.getElementById('getImg');
-          // get switchbox
-          this.quote = document.getElementById('quote');
-          // get switchbox
-          this.switchBox = document.getElementById('switchBox');
-          // Init Doc function
-          initDoc(this, this.textArea);
-          this._initEvents();
-        },
-        
-        // this._initEvents();
-        _initEvents: function() {
-          
-          var self = this;
-          
-          //Show or hide textarea
-          if (this.options.showTextarea === true) {
-            self.textArea.style.display = 'block';
-          } else {
-            self.textArea.style.display = 'none';
-          }
-          
-          // On ready copy text of text area
-          this.box.innerHTML = this.textArea.textContent;
-          // On keyup copy text on textarea
-          this.box.addEventListener('keyup', function() {
-            self.textArea.textContent = self.box.innerHTML;
-          }, false);
-          // On keydown copy text on textarea
-          this.box.addEventListener('keydown', function() {
-            self.textArea.textContent = self.box.innerHTML;
-          }, false);
-          // add event on change for  all selects 
-          this.selects.forEach(function(el, i) {
-            el.addEventListener('change', function() {
-              formatDoc(this.getAttribute('data-chg'), this.value);
-              self.textArea.textContent = self.box.innerHTML;
-            }, false);
-          });
-          // img listener
-          this.getImg.addEventListener('click', function() {
-            var simg = prompt('Write the URL of image here', 'http:\/\/');
-            if (simg && simg !== '') {
-              formatDoc(this.getAttribute('data-fn'), simg);
-              self.textArea.textContent = self.box.innerHTML;
-            }
-          }, false);
-          
-          // all other formats  
-          this.formats.forEach(function(el, i) {
-            el.addEventListener('click', function() {
-              formatDoc(this.getAttribute('data-fn'));
-              self.textArea.textContent = self.box.innerHTML;
-            }, false);
-          });
-          // blockquote
-          this.quote.addEventListener('click', function() {
-            formatDoc('formatblock', this.getAttribute('data-fn'));
-            self.textArea.textContent = self.box.innerHTML;
-          }, false);
-        }
-        
-      };
-      
-      // add to global namespace
-      window.sweDitor = sweDitor;
-      
-    })(window);
-
-    // Init editor
-    new sweDitor(document.getElementById('editor_panel'),{
-      textArea: 'editor_area', //id of textarea
-      showTextarea: false // if true show hidden text area
-    });
-
-    setTimeout(function() {
-    	if (Meteor.user().bio) {
-    		$('#textBox').html(Meteor.user().bio)
-    	} else {
-      		$('#textBox').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');    		
-    	}
-    }, 800);
+      });
+  });
 
 };
