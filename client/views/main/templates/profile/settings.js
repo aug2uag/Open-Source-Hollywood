@@ -187,6 +187,7 @@ Template.settings.events({
 		o.social = [];
 		o.reels = [];
 		o.avatar = osettings.avatar;
+		if ($('#website').val().trim()&&$('#website').val()!=='enter http://www.your.site') o.website = $('#website').val();
 
 		var userRoles = $('.user-role');
 		userRoles.each(function(idx, el) {
@@ -351,6 +352,9 @@ Template.settings.helpers({
 	last_name: function() {
 		return Meteor.user().lastName || 'Last name';
 	},
+	website: function() {
+		return Meteor.user().website || 'enter http://www.your.site'
+	},
 	avatar: function() {
 		return Meteor.user().avatar;
 	},
@@ -494,7 +498,7 @@ Template.settings.rendered = function () {
   	$('.deleteRow').on('click', deleteRow);
   });
 
-  var wbs = Meteor.user().website && Meteor.user().website.length > 0 ? Meteor.user().website : 'http://yoursite';
+  var wbs = Meteor.user().website && Meteor.user().website.length > 0 ? Meteor.user().website : 'enter http://www.your.site';
   $('#website').attr('placeholder', wbs);
 
   $(document).ready(function() {

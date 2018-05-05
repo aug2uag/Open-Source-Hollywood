@@ -3,7 +3,7 @@
 
     <div class="clearfix wrapper">
 
-        <header id="page-title" style="padding-top: 0px;">
+        <header id="page-title" style="padding-top: 0px;margin-bottom: 0px!important;">
             <h1 class="title">{{name}}</h1>
             <h2 class="subtitle">{{iams}}</h2>
         </header>
@@ -16,58 +16,61 @@
 
                     <div id="description" style="display: block;">
 
-                        <div class="project-header">
+                    	<div class="project-header">
+                    		<div class="row margin_bottom40" style="max-height:80px;margin-left:10px;margin-top:13px;">
+                    			<div style="display: inline-block;margin-left:  8px;">
+									<img src="{{avatar}}" height="100%" alt="avatar" style="max-height:110px;width:  auto;" />
+								</div>
+								<div style="display: inline-block;margin-left: 20px;">
+									<div class="post-text">
+										<h5>Score: {{influenceScore}}</h5>
+										<p>Joined: {{createdAt}} </p>
+									</div>
+								</div>
+								<div style="display: inline-block;margin-left: 20px;">
+									{{ #if hasWebsite }}
+										<p><a href="{{ website }}" target="_blank">{{website}}</a></p>
+									{{ /if }}
+								</div>
+                    		</div>
+						</div>
 
-                            <div class="flexslider mini">
-
-                                <div class="flex-viewport" style="overflow: hidden; position: relative;">
-                                    <ul class="slides" style="width: 1200%; transition-duration: 0s; transform: translate3d(-1690px, 0px, 0px); opacity: 1;">
-                                    	{{ #each userReels }}
-	                                    	{{#if isVideo}}
-	                                    		<li>
-	                                    			<iframe id="player_1" src="{{this.url}}" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen style="max-height:530px!important"></iframe>
-
-	                                    		</li>
-	                                    	{{else}}
-		                                    	<li>
-		                                    		<img src="{{this.url}}" width="845" height="" alt="" draggable="false" style="max-height:530px!important">
-		                                    	</li>
-	                                    	{{/if}}
-                                    	{{/each}}
-                                    </ul>
-                                </div>
-                                <ul class="flex-direction-nav">
-                                    <li>
-                                        <a href="#" style="z-index: 999;" ></a>
-                                    </li>
-                                    <li>
-                                        <a href="#" style="z-index: 999;" class="flex-next" ></a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                        </div>
+                        <hr>
 
                         <div class="project-content">
 
                         	<div class="content">
-	                    		<div class="row margin_bottom40" style="max-height:80px;margin-left:10px;margin-top:10px;">
-	                    			<div class="col-xs-3">
-										<img src="{{avatar}}" height="100%" alt="avatar" style="max-height:110px;" />
-									</div>
-									<div class="col-xs-3">
-										<div class="post-text">
-											<h5>Score: {{influenceScore}}</h5>
-											<p>Joined: {{createdAt}} </p>
-										</div>
-									</div>
-									<div class="col-xs-3">
-										{{ #if hasWebsite }}
-											<p><a href="{{ website }}" target="_blank">{{website}}</a></p>
-										{{ /if }}
-									</div>
-	                    		</div>
-							</div>
+
+	                            <div class="flexslider mini">
+
+	                                <div class="flex-viewport" style="overflow: hidden; position: relative;">
+	                                    <ul class="slides" style="width: 1200%; transition-duration: 0s; transform: translate3d(-1690px, 0px, 0px); opacity: 1;">
+	                                    	{{ #each userReels }}
+		                                    	{{#if isVideo}}
+		                                    		<li>
+		                                    			<iframe id="player_1" src="{{this.url}}" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen style="max-height:530px!important"></iframe>
+
+		                                    		</li>
+		                                    	{{else}}
+			                                    	<li>
+			                                    		<img src="{{this.url}}" width="845" height="" alt="" draggable="false" style="max-height:530px!important">
+			                                    	</li>
+		                                    	{{/if}}
+	                                    	{{/each}}
+	                                    </ul>
+	                                </div>
+	                                <ul class="flex-direction-nav">
+	                                    <li>
+	                                        <a href="#" style="z-index: 999;" ></a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#" style="z-index: 999;" class="flex-next" ></a>
+	                                    </li>
+	                                </ul>
+	                            </div>
+
+	                        </div>
+                        	
 							<p>&nbsp;</p>
 							<hr>
 
