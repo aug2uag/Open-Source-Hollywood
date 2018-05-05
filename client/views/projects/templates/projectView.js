@@ -31,7 +31,7 @@ function makeStripeCharge(options) {
         } else {
           // confirm dialog
           vex.dialog.alert({
-            message: 'Please confirm the following to make payment.',
+            message: 'Please confirm the following to finalize payment.',
             input: [
               '<ul>',
                 '<li class="wcheckbox">',
