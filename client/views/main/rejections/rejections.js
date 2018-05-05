@@ -8,6 +8,12 @@ Router.route('/receipts', {
         return [
             Meteor.subscribe('getReceipts')
         ];
+    },
+    onBeforeAction: function() {
+      $('meta[name=description]').remove();
+      $('head').append( '<meta name="description" content="Open Source Hollywood payment and transfer receipts on campaigns.">' );
+      document.title = 'Transaction Records';
+      this.next();
     }
 });
 

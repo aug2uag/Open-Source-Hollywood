@@ -18,7 +18,9 @@ Router.route('/discover', {
         localStorage.removeItem('redirectURL');
         return;
       };
-      document.title = "Campaigns";
+      $('meta[name=description]').remove();
+      $('head').append( '<meta name="description" content="Campaigns on O . S . H . (https://opensourcehollywood.org)">' );
+      document.title = 'Active Campaigns';
       this.next();
     }
 });
@@ -39,7 +41,9 @@ Router.route('/create', {
     },
     onBeforeAction: function() {
       var u = Users.findOne({_id: Meteor.user()._id});
-      document.title = "New Campaign";
+      $('meta[name=description]').remove();
+      $('head').append( '<meta name="description" content="Free crowdsourcing campaign creation on Open Source Hollywood.' );
+      document.title = 'Create Campaign';
       this.next();
     }
 });
@@ -48,10 +52,6 @@ Router.route('/projects/:slug/:uid', {
   name: 'projectView',
   template: 'projectView',
   layoutTemplate: 'StaticLayout',
-  onBeforeAction: function() {
-    document.title = "Campaign";
-    this.next();
-  },
   waitOn: function() {
     return [
       Meteor.subscribe('getProject', this.params.slug), 
@@ -143,6 +143,9 @@ Router.route('/edit/projects/:slug/edit', {
   template: 'editProject',
   layoutTemplate: 'StaticLayout',
   onBeforeAction: function() {
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="Open Source Hollywood edit campaign mode.">' );
+    document.title = 'Edit Campaign';
     this.next();
   },
   waitOn: function() {
@@ -158,7 +161,6 @@ Router.route('/edit/projects/:slug/edit', {
     ];
   },
   action: function() {
-    document.title = "Edit Campaign"
     this.render('editProject', {
       data: function(){
         return Projects.findOne({slug: this.params.slug});
@@ -172,6 +174,9 @@ Router.route('/message/project/:slug/:uid', {
   template: 'projectMessage',
   layoutTemplate: 'StaticLayout',
   onBeforeAction: function() {
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="Open Source Hollywood member correspondence channel.">' );
+    document.title = 'Member Correspondence';
     this.next();
   },
   waitOn: function() {

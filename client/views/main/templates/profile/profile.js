@@ -118,6 +118,11 @@ Template.settings.helpers({
 
 
 Template.profile.onRendered(function() {
+	console.log(2132323123)
+	console.log(this)
+	$('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="'+(this.data.bio_plaintext||(this.iam.length&&this.iam.join(', '))||'Amazing talent on O . S . H . (https://opensourcehollywood.org)')+'">' );
+    document.title = (this.data.firstName&&this.data.lastName) ? [this.data.firstName, this.data.lastName, 'on O . S . H . (opensourcehollywood.org)'].join(' ') : 'Member Profile';
    setTimeout(function() {
       $('.fb-share').html('<li class="fa fa-facebook"></li>');
       $('.tw-share').html('<li class="fa fa-twitter"></li>');
