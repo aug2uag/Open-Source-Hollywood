@@ -59,7 +59,19 @@ function makeStripeCharge(options) {
               '</div>',
             ].join(''),
             callback: function(data) {
-              if (!data.ageverify||!data.payverify||!data.refverify||!data.signature) return
+              if (!data.ageverify) {
+                vex.dialog.alert('you must be 18 or older to continue, your payment was cancelled');
+                return
+              } else if (!data.payverify) {
+                vex.dialog.alert('you must be authorized for the transaction, your payment was cancelled');
+                return
+              } else if (!data.refverify) {
+                vex.dialog.alert('you must agree to our terms to continue, your payment was cancelled');
+                return
+              } else if (!data.signature) {
+                vex.dialog.alert('you must provide a signature, your payment was cancelled');
+                return
+              } 
               data.date = new Date();
               options.anonymous_verification = data;
               Meteor.call(options.route, options, function(err, result) {
