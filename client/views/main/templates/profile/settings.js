@@ -499,6 +499,14 @@ Template.settings.rendered = function () {
 
   $(document).ready(function() {
       $('#summernote').summernote({
+      	toolbar: [
+		    // [groupName, [list of button]]
+		    ['style', ['bold', 'underline', 'clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+		    ['para', ['ul', 'ol', 'paragraph', 'style']],
+		    ['height', ['height']],
+		    ['misc', ['undo', 'redo']],
+		    ['insert', ['picture', 'video', 'table', 'hr']]
+		],
         height: 300,
         minHeight: null,
         maxHeight: null,
@@ -506,7 +514,7 @@ Template.settings.rendered = function () {
         tooltip: false,
         callbacks: {
           onInit: function() {
-            $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+            $('.note-editable').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
           }
         }
       });
