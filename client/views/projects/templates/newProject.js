@@ -56,7 +56,7 @@ Template.newProject.onRendered(function() {
       height: 300,
       minHeight: null,
       maxHeight: null,
-      focus: true,
+      focus: false,
       tooltip: false,
       callbacks: {
         onInit: function() {

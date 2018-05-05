@@ -510,11 +510,12 @@ Template.settings.rendered = function () {
         height: 300,
         minHeight: null,
         maxHeight: null,
-        focus: true,
+        focus: false,
         tooltip: false,
         callbacks: {
           onInit: function() {
-            $('.note-editable').html('<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+          	console.log(Meteor.user())
+            $('.note-editable').html(Meteor.user&&Meteor.user().bio||'<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
           }
         }
       });
