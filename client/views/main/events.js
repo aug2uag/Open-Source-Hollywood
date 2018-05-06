@@ -1,3 +1,4 @@
+var blogSettings = {};
 Template.editor.events({
   // Pressing Ctrl+Enter should submit the form.
   'keydown textarea': function(event, t) {
@@ -78,3 +79,53 @@ Template.splashPage.helpers({
     return false;
   }
 })
+
+Template.newBlog.events({
+  'change #banner_file': function (e, template) {
+    if (e.currentTarget.files && e.currentTarget.files[0]) {
+      blogSettings.banner = {};
+      var reader = new FileReader();
+      var files = e.target.files;
+      var file = files[0];
+      if (file.type.indexOf("image")==-1) {
+        vex.dialog.alert('Invalid File, you can only upload a static image for your profile picture');
+        return;
+      };
+      reader.onload = function(readerEvt) {
+          blogSettings.banner.data = readerEvt.target.result;
+          /** set file.name to span of inner el */
+          $('#banner_file_name').text(file.name);
+          $('#hidden_banner_name').show();
+        }; 
+      reader.readAsDataURL(file);
+    }
+  },
+
+})
+
+Template.newBlog.onRendered(function() {
+  blogSettings = {};
+  blogSettings.banner = {};
+  $(document).ready(function() {
+    $('#summernote').summernote({
+      toolbar: [
+        // [groupName, [list of button]]
+        ['style', ['bold', 'underline', 'clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+        ['para', ['ul', 'ol', 'paragraph', 'style']],
+        ['height', ['height']],
+        ['misc', ['undo', 'redo']],
+        ['insert', ['picture', 'video', 'table', 'hr']]
+      ],
+      height: 300,
+      minHeight: null,
+      maxHeight: null,
+      focus: false,
+      tooltip: false,
+      callbacks: {
+        onInit: function() {
+          $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+        }
+      }
+    });
+  });
+});

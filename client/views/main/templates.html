@@ -13,8 +13,8 @@
     <meta name="googlebot" content="index,follow">
     <meta name="google" content="nositelinkssearchbox">
     <meta name="google" content="notranslate">
-    <meta name="description" content="Open Source Hollywood is for media producers to build teams, raise funds, and manage projects.">
-    <meta name="subject" content="Open Source Hollywood is for media producers to build teams, raise funds, and manage projects.">
+    <meta name="description" content="The Premiere Platform for Story Development and Production Optimization">
+    <meta name="subject" content="The Premiere Platform for Story Development and Production Optimization">
     <meta name="rating" content="General">
     <meta name="referrer" content="no-referrer">
     <meta name="msvalidate.01" content="15A13964654AEE87B3AA6638A50914DA" />
@@ -193,6 +193,11 @@
         <div class="clearfix wrapper">
 
             <div class="normal-content no-boxed">
+                <div class="center">
+                  <h1>The Premiere Platform for Story Development and Production Optimization</h1>
+                  <h4>CREATE NEW MEDIA WITH THE POWER OF CROWDSOURCING BACKED BY MACHINE LEARNING &amp; ARTIFICIAL INTELLIGENCE</h4>
+                </div>
+                <p>&nbsp;</p>
                 {{#if ifProjs}}
                 <h3>New Projects</h3>
                 <div class="krown-id-grid carousel clearfix" id="ign-8534" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
@@ -275,10 +280,10 @@
 
                   <div class="krown-column-row clearfix">
                       <div class="krown-column-container clearfix first span12 clearfix">
-                          <h3>Production has never been so easy.</h3>
-                          <div class="center h1b krown-alert info"> Build Teams! </div>
-                          <div class="center h1b krown-alert success"> Fundraising! </div>
-                          <div class="center h1b krown-alert error"> Team &amp; Project Management! </div>
+                          <h3 class="h1">OUR TECH IS GENERATIVE !!</h3>
+                          <div class="center h1b krown-alert info"> Team &amp; Community Building </div>
+                          <div class="center h1b krown-alert success"> Fundraising </div>
+                          <div class="center h1b krown-alert error"> Team &amp; Project Management </div>
                           <div class="center h1b krown-alert notice"> The Open Source Hollywood Community </div>
                           <a class="krown-button large color" href="https://youtu.be/x6oAU6iaIDk" target="_blank">Learn More</a>
                       </div>
@@ -304,7 +309,7 @@
                       <div class="service-info">
                         <div class="icon-info">
                           <h4><i class="fa fa-shield"></i>&nbsp;&nbsp;Secure</h4>
-                          <p>Build your agreements with us and avoid disputes from the start. High quality enforceable agreements are available when your projects begin.</p>
+                          <p>Manage your digital assets, securely assign and follow-up goals, and build your agreements to avoid disputes from the start and in one location. Open Source Hollywood security and encryption standards are specifically designed for reliable data management.</p>
                         </div>
                       </div>
                       <p>&nbsp;</p>
@@ -313,6 +318,7 @@
                       <div class="service-info">
                         <div class="icon-info">
                           <h4><i class="fa fa-braille"></i>&nbsp;&nbsp;Automations &amp; Intelligence</h4>
+                          <p>The entire experience on the Open Source Hollywood platform is driven by artificial intelligence. Every option, action, and item is handled on your behalf giving you the freedom to move and act as freely as you want.</p>
                           <p>Automated payouts, configurable transfers, instant notifications, and more at <strong>no cost</strong>.</p>
                         </div>
                       </div>
@@ -379,7 +385,7 @@
                         <img src="img/rex.jpeg" alt="Rex" class="team-img">
                         <div class="caption">
                           <h3>Rex Fatahi</h3>
-                          <p>Engineer, Historian, Wannabe Producer</p>
+                          <p>Developer, Wannabe Producer</p>
                           <ul class="list-inline">
                             <li><a href="https://linkedin.com/in/fatahi"><i class="fa fa-linkedin"></i></a></li>
                             <li><a href="https://twitter.com/aug2uag"><i class="fa fa-twitter"></i></a></li>
@@ -479,41 +485,17 @@
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <script src="/js/scripts.min.js" defer></script>
             <script type="text/javascript">
-              var t = null;
-              $("#custom-header .cta").click(function() {
-                  $(this).hasClass("hover") ? (t = null, $(this).removeClass("hover")) : (null != t && t.removeClass("hover"), t = $(this), t.addClass("hover"))
+              $( document ).ready(function() {
+                setTimeout(function() {
+                  var t = null;
+                  $("#custom-header .cta").click(function() {
+                      $(this).hasClass("hover") ? (t = null, $(this).removeClass("hover")) : (null != t && t.removeClass("hover"), t = $(this), t.addClass("hover"))
+                  })
+                },0)
               })
+              
             </script>
 
             <!-- Inner Wrapper End -->
@@ -522,5 +504,83 @@
         <!-- Main Wrapper End -->
     </div>
 
+
+</template>
+
+
+<template name="newBlog">
+
+  <!-- IMAGE UPLOAD, TITLE SET, WYSIWYG -->
+  <div id="content" class="clearfix layout-fixed-width">
+        <div class="clearfix wrapper">
+
+            <header id="page-title">
+                <h1 class="title">Bob's Corner</h1>
+                <h2 class="subtitle">Where our great articles happen</h2>
+            </header>
+
+            <div class="container">
+                <section>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="title">title</label>
+                            <input type="text" name="title" id="title" placeholder="your great title here" />
+                        </div>
+                        
+
+                        <div class="form-group">
+                          <label for="category">Select Category</label>
+                          <select name="category" id="category" class="form-control">
+                            <option>- Article Applies to -</option>
+                            <option>Feature</option>
+                            <option>Indie</option>
+                            <option>Series</option>
+                            <option>Sketch</option>
+                            <option>Animations</option>
+                            <option>Theater</option>
+                            <option>Ensemble</option>
+                            <option>Performance</option>
+                            <option>Music Video</option>
+                            <option>Podcast</option>
+                            <option>All</option>
+                          </select>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label for="website">article</label>
+                            <div id="summernote"></div>
+                            <div id="inner_summer" style="display:none"></div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 margin_bottom40">
+                            <label for="tags">tags</label>
+                            <input type="text" name="tags" id="tags" placeholder="comma separated tags" />
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 margin_bottom40">
+                            <label for="banner image">banner image (720x490 for best resolution)</label>
+                            <label for="banner_file" class="custom-file-upload">
+                                <i class="fa fa-cloud-upload"></i> Upload Image
+                            </label>
+                            <input class="noshow-file-upload" id="banner_file" type="file"/>
+                            <br>
+                            <div id="hidden_banner_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="banner_file_name">This is the name of the file uploaded</span></div>
+                        </div>
+
+                        
+
+                        <div class="col-sm-12">
+                        
+                          <a id="create_campaign" class="button" style="display: block;">CREATE ARTICLE !</a>
+                          
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+
+               
+        </div>
+    </div>
 
 </template>
