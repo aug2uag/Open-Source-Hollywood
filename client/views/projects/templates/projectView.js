@@ -295,8 +295,15 @@ Template.projectView.helpers({
     // if me in upvote 'active' : null
     if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
   },
+  numBackers: function() {
+    return this.project.donations.length||0;
+  },
+  numUpdates: function() {
+    var updates = this.project.updates||[];
+    return updates.length;
+  },
   numLikes: function() {
-    return this.project.upvotedUsers.length;
+    return this.project.upvotedUsers.length||0;
   },
   projectBudgetIfExists: function() {
     if (this.project.budget) {

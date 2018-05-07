@@ -91,20 +91,13 @@ Router.route('/projects/:slug/:uid', {
           });
           return falsy;
         },
+        numComments: function() {
+          return Comments.find({projectId: slug}).count();
+        },
         projectComments: function () {
           return Comments.find({projectId: slug});
         },
         submittedAgo: moment(project.createTimeActual, moment.ISO_8601).fromNow(),
-        numComments: function() {
-          var numComments = Comments.find({projectId: slug}).count();
-          if (numComments === 0) {
-            return 'Be the first to comment!';
-          };
-          if (numComments === 1) {
-            return '1 comment';
-          };
-          return numComments + ' comments';
-        },
         processedGenres: function() {
           if (project.genres.length > 0) {
             return project.genres.join(', ');
