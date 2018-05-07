@@ -7,11 +7,17 @@
         <header id="page-title" style="padding-top: 0px;">
             <h1 class="title">{{project.title}}</h1>
             {{#if currentUser}}
+            {{#unless isOwner}}
             <button type="button" id="thumbsup" class="{{thumbsupactive}}">
               <i class="fa fa-thumbs-up"></i>
               Like
             </button>
-
+            {{else}}
+            <button type="button" id="thumbsup" style="background:transparent;box-shadow:none;" disabled>
+              <i class="fa fa-thumbs-up"></i>
+              {{numLikes}} Likes
+            </button>
+            {{/unless}}
             {{/if}}
             <h2 class="subtitle">{{project.logline}}</h2>
         </header>
@@ -279,9 +285,9 @@
                         
                     </div>
                 </div>
-
+                
                 <aside id="project-sidebar" style="padding-bottom: 0px; height: auto;position: relative;">
-
+                    {{#unless isOwner}}
                     <div class="id-widget-wrap nofloat">
                         <div class="id-widget id-full">
                             <div class="id-product-infobox">
@@ -402,9 +408,32 @@
                         <!-- end id-widget -->
                     </div>
                     <!--if show author -->
+                    {{else}}
+                    <div class="id-widget-wrap nofloat">
+                        <div class="id-widget id-full">
+                            <div class="id-product-infobox">
+                                <div class="panel clearfix" style="padding-top:10px!important">
+                                    <div class="product-wrapper clearfix">
+                                        <div class="clearing"></div>
+                                        <div class="rholder">
+                                          <div class="rpdata">
+                                                <div class="id-progress-raised"> ${{this.project.funded}}</div>
+                                                <div class="id-product-funding">funds raised</div>
+                                            </div>
+                                            <p>&nbsp;</p>
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end product-infobox -->                       
+                        </div>
+                        <!-- end id-widget -->
+                    </div>
+                    {{/unless}}
                     <div class="poweredbyID"><span><a href="https://opensourcehollywood.org" title="Crowdfunding and Crowdsourcing by Open Source Hollywood">Powered By Open Source Hollywood</a></span></div>
                 </aside>
+                
             </div>
         </div>
 

@@ -295,6 +295,9 @@ Template.projectView.helpers({
     // if me in upvote 'active' : null
     if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
   },
+  numLikes: function() {
+    return this.project.upvotedUsers.length;
+  },
   projectBudgetIfExists: function() {
     if (this.project.budget) {
       return this.project.budget;
