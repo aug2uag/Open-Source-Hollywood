@@ -96,6 +96,9 @@ Template.profile.helpers({
 	      image: this.avatar,
 	      url: backupURL
 	    }
+	},
+	profileHasMedia: function() {
+		return this.reels.length>0;
 	}
 });
 
