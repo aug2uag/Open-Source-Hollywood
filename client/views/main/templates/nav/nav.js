@@ -22,6 +22,11 @@ Template.nav.events({
   },
   'click #signout': function() {
     localStorage.clear();
+    Session.set('order', 'hot');
+    Session.set('needsResetOption', false);
+    Session.set('locationFilter', null);
+    Session.set('selectedCategory', null);
+    Session.set('selectedGenre', null);
     Meteor.logout();
     Meteor.logoutOtherClients();
   },

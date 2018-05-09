@@ -44,7 +44,7 @@ Template.splashPage.helpers({
   projects: function() {
     return Projects.find({
         archived: false
-    }).fetch().map(function(i) {
+    }, {limit: 16}).fetch().map(function(i) {
       return {
         slug: i.slug,
         title: i.title,

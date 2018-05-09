@@ -455,7 +455,7 @@ Template.projectTabs.helpers({
     return Session.get('needsResetOption') || false;
   },
   projects: function () {
-    var myId = Meteor.user&&Meteor.user()._id||'aaa';
+    var myId = Meteor.user&&Meteor.user()&&Meteor.user()._id||'aaa';
     var pLimit = Session.get('pLimit') || 30;
     Session.set('pLimit', pLimit);
     if (Session.equals('order', 'hot')) {
