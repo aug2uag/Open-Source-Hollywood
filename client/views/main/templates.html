@@ -201,7 +201,7 @@
                 {{#if ifProjs}}
                 <h3>New Projects</h3>
                 <div class="krown-id-grid carousel clearfix" id="ign-8534" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-                    <div class="holder" style="height: 500px;">
+                    <div class="holder" style="height: 550px;">
                         <div class="carousel-holder clearfix" data-visible="4" style="position: absolute;">
 
                               {{#each projects}}
@@ -215,7 +215,7 @@
                 {{#if hotLN}}
                 <h3><strong>Hot Projects</strong></h3>
                 <div class="krown-id-grid carousel clearfix" id="ign-6970" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-                    <div class="holder" style="height: 500px;">
+                    <div class="holder" style="height: 550px;">
                         <div class="carousel-holder clearfix" data-visible="4" style="position: absolute;">
                               {{#each projects}}
 
@@ -226,6 +226,7 @@
                         </div>
                     </div><a href="#" class="btn btn-prev disabled"><i class="fa fa-arrow-left"></i></a><a href="#" class="btn btn-next"><i class="fa fa-arrow-right"></i></a></div>
                 {{/if}}
+                <p>&nbsp;</p>
                 {{/if}}
                 <div class="krown-column-row clearfix">
                     <div class="krown-column-container clearfix first last span12 kill-space clearfix margin_bottom20">
@@ -289,7 +290,7 @@
                 </div>
 
                   <div class="krown-column-row clearfix">
-                      <div class="krown-column-container clearfix first span12 clearfix">
+                      <div class="krown-column-container clearfix first span12 clearfix bold">
                           <h3 style="text-align: center;" class="margin_bottom40">OUR TECH IS GENERATIVE !!</h3>
                           <div class="center h1b"> Build Teams &amp; Build Communities </div>
                           <div class="center h1b"> Raise Funds, Sell Merch, Lease Resources </div>
@@ -353,6 +354,7 @@
                       <div style="visibility: visible;" class="col-sm-9 more-features-box">
                         <div class="more-features-box-text">
                           <div class="more-features-box-text-icon"> <i class="fa fa-angle-right" aria-hidden="true"></i> </div>
+                          <h6 class="jumbotron" style="margin-bottom: 0px;">IT COSTS NOTHING TO CROWDSOURCE &amp; BENEFIT WITH US.</h6>
                           <div class="more-features-box-text-description">
                             <p class="await h4" style="text-transform:lowecase!important">why you need to do it</p>
                             <ul class="list-card-cover">
@@ -360,10 +362,10 @@
                                 <li class="h4">BUILD CREW</li>
                                 <li class="h4">BUILD RESOURCES</li>
                                 <li class="h4">BUILD COMMUNITY</li>
+                                <li class="h4">BUILD EXPERIENCE</li>
                                 <li class="h4">BUILD ENGAGEMENTS</li>
                             </ul>
                           </div>
-                          <h6 class="jumbotron" style="margin-bottom: 0px;">IT COSTS NOTHING TO CROWDSOURCE WITH US.</h6>
                         </div>
                       </div>
                     </div>
@@ -557,6 +559,11 @@
                             <label for="excerpt">excerpt</label>
                             <input type="text" name="excerpt" id="excerpt" placeholder="max 150 character teaser text" maxlength="151" />
                         </div>
+
+                        <div class="col-sm-12">
+                            <label for="summary">summary</label>
+                            <input type="text" name="summary" id="summary" placeholder="max 500 character summary" maxlength="500" />
+                        </div>
                         
 
                         <div class="form-group">
@@ -573,7 +580,7 @@
                             <option>Performance</option>
                             <option>Music Video</option>
                             <option>Podcast</option>
-                            <option>All</option>
+                            <option>Other</option>
                           </select>
                         </div>
 

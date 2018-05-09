@@ -129,6 +129,15 @@ Template.newBlog.events({
       return;
     };
     options.teaser = $('#excerpt').val();
+    if (!options.teaser) {
+      vex.dialog.alert('please enter a short teaser');
+      return;
+    };
+    options.summary = $('#summary').val();
+    if (!options.summary) {
+      vex.dialog.alert('please enter a summary');
+      return;
+    };
     options.tags = $('#tags').val().toLowerCase().split(',').map(function(t) { return t.trim(); });
     if (!options.tags.length) {
       vex.dialog.alert('please include at least one meaningful tag');
@@ -141,13 +150,14 @@ Template.newBlog.events({
     }
     options.image = blogSettings.banner;
 
-    console.log(new Array(100).join('#'))
-    console.log(options)
+    Meteor.call('createBlog', options);
 
-    Meteor.call('createBlog', options, function(msg) {
-      console.log(msg);
-    });
-
+    $('#title').val('');
+    $('#excerpt').val('');
+    $('#summary').val('');
+    $('#tags').val('');
+    $('#category').val('Select Category');
+    $('.note-editable').html('<p><span class="large">Enter or paste writing here.</span><br>Use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
   }
 });
 
@@ -177,3 +187,9 @@ Template.newBlog.onRendered(function() {
     });
   });
 });
+
+Template.blog.helpers({
+  foo: function() {
+    console.log(this)
+  }
+})
