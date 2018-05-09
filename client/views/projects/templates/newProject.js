@@ -119,112 +119,89 @@ Template.newProject.events({
 
     // (3) check location and continue
     o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
+    o.title = $('#title').val() || 'untitled';
+    o.logline = $('#logline').val() || 'nothing to see here';
+    o.purpose = $('#genre').find(":selected").text();
+    o.genre = $('#genre').find(":selected").text();
+    o._gifts = gifts;
+    if (validateUrl($('#website').val())) o.website = $('#website').val();
 
-    if (o.zip.match(/\d{5}/)) {
-      var url = 'https://api.zippopotam.us/us/' + o.zip;
-      var client = new XMLHttpRequest();
-      client.open("GET", url, true);
-      client.onreadystatechange = function() {
-        if(client.readyState == 4) {
-          try {
-            var data = JSON.parse(client.responseText);
-            if (Object.keys(data).length === 0) return vex.dialog.alert('please enter location zip code to continue');
-            if (data.country === 'United States') {
-              var _o = data.places[0];
-              o.city = _o['place name'];
-              o.state = _o.state;
-              campcallback();
-            };
-          } catch (e) {
-            console.log(e)
-            vex.dialog.alert('your location zip code could not be verified, please contact us or try again')
-          }
-        };
-      };
+    var descriptionText = $('#summernote').summernote('code');
+    var plainText = $("#summernote").summernote('code')
+              .replace(/<\/p>/gi, " ")
+              .replace(/<br\/?>/gi, " ")
+              .replace(/<\/?[^>]+(>|$)/g, "")
+              .replace(/&nbsp;|<br>/g, " ")
+              .trim();
 
-      client.send();
+    if (plainText&&plainText!=='Enter your campaign description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+      o.description = descriptionText;
+      o.descriptionText = plainText;
     } else {
-      return vex.dialog.alert('an invalid zip code was detected, please try again');
-    }
+      o.description = '';
+    };
+    o.budget = $('#budget').val();
+    o.creatorsInfo = $('#creators_info').val();
+    o.historyInfo = $('#history_info').val();
+    o.plansInfo = $('#plans_info').val();
+    o.needsInfo = $('#needs_info').val();
+    o.significanceInfo = $('#significance_info').val();
+    if (osettings.banner.data) o._banner = osettings.banner.data;
+    else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
+    var crew = $('.crew-val'); 
+    o.crew = [];
+    crew.each(function(i, el) {
+      var _o = {};
+      var arr = $(el).children('td');
+      _o.title = $(arr[0]).text();
+      _o.description = $(arr[1]).text();
+      _o.status = $(arr[2]).text();
+      o.crew.push(_o);
+    });
 
-    function campcallback() {
-      o.title = $('#title').val() || 'untitled';
-      o.logline = $('#logline').val() || 'nothing to see here';
-      o.purpose = $('#genre').find(":selected").text();
-      o.genre = $('#genre').find(":selected").text();
-      o._gifts = gifts;
-      if (validateUrl($('#website').val())) o.website = $('#website').val();
+    var cast = $('.cast-val');
+    o.cast = [];
+    cast.each(function(i, el) {
+      var _o = {};
+      var arr = $(el).children('td');
+      _o.role = $(arr[0]).text();
+      _o.description = $(arr[1]).text();
+      _o.status = $(arr[2]).text();
+      o.cast.push(_o);
+    });
 
-      var descriptionText = $('#summernote').summernote('code');
-      var plainText = $("#summernote").summernote('code')
-                .replace(/<\/p>/gi, " ")
-                .replace(/<br\/?>/gi, " ")
-                .replace(/<\/?[^>]+(>|$)/g, "")
-                .replace(/&nbsp;|<br>/g, " ")
-                .trim();
+    var needs = $('.needs-val');
+    o.needs = [];
+    needs.each(function(i, el) {
+      var _o = {};
+      var arr = $(el).children('td');
+      _o.category = $(arr[0]).text();
+      _o.description = $(arr[1]).text();
+      _o.quantity = $(arr[2]).text();
+      o.needs.push(_o);
+    });
 
-      if (descriptionText&&descriptionText!=='Enter your campaign description here.You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
-        o.description = descriptionText;
-        o.descriptionText = plainText;
-      } else {
-        o.description = '';
+    var social = $('.social-val');
+    o.social = [];
+    social.each(function(i, el) {
+      var _o = {};
+      var arr = $(el).children('td');
+      _o.name = $(arr[0]).text();
+      _o.address = $(arr[1]).text();
+      o.social.push(_o);
+    });
+
+    // create virtual account for project
+    // add funds to virtual account, non-refundable
+
+    Meteor.call('addProject', o, function(err, res) {
+      vex.dialog.alert(err||res);
+      if (!err) {
+        setTimeout(function() {
+          Router.go('Home');
+        }, 987);
       };
-      o.budget = $('#budget').val();
-      o.creatorsInfo = $('#creators_info').val();
-      o.historyInfo = $('#history_info').val();
-      o.plansInfo = $('#plans_info').val();
-      o.needsInfo = $('#needs_info').val();
-      o.significanceInfo = $('#significance_info').val();
-      if (osettings.banner.data) o._banner = osettings.banner.data;
-      else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
-      var crew = $('.crew-val'); 
-      o.crew = [];
-      crew.each(function(i, el) {
-        var _o = {};
-        var arr = $(el).children('td');
-        _o.title = $(arr[0]).text();
-        _o.description = $(arr[1]).text();
-        _o.status = $(arr[2]).text();
-        o.crew.push(_o);
-      });
-
-      var cast = $('.cast-val');
-      o.cast = [];
-      cast.each(function(i, el) {
-        var _o = {};
-        var arr = $(el).children('td');
-        _o.role = $(arr[0]).text();
-        _o.description = $(arr[1]).text();
-        _o.status = $(arr[2]).text();
-        o.cast.push(_o);
-      });
-
-      var needs = $('.needs-val');
-      o.needs = [];
-      needs.each(function(i, el) {
-        var _o = {};
-        var arr = $(el).children('td');
-        _o.category = $(arr[0]).text();
-        _o.description = $(arr[1]).text();
-        _o.quantity = $(arr[2]).text();
-        o.needs.push(_o);
-      });
-
-      var social = $('.social-val');
-      o.social = [];
-      social.each(function(i, el) {
-        var _o = {};
-        var arr = $(el).children('td');
-        _o.name = $(arr[0]).text();
-        _o.address = $(arr[1]).text();
-        o.social.push(_o);
-      });
-
-      // create virtual account for project
-      // add funds to virtual account, non-refundable
-
-      Meteor.call('addProject', o);
-    }
+    });
   },
   'change #banner_file': function (e, template) {
       if (e.currentTarget.files && e.currentTarget.files[0]) {

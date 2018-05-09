@@ -296,7 +296,7 @@ Template.projectView.helpers({
     if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
   },
   numBackers: function() {
-    return this.project.donations.length||0;
+    return this.project.donations&&this.project.donations.length||0;
   },
   numUpdates: function() {
     var updates = this.project.updates||[];

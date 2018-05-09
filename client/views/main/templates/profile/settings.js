@@ -169,7 +169,7 @@ Template.settings.events({
             .replace(/<\/?[^>]+(>|$)/g, "")
             .replace(/&nbsp;|<br>/g, " ")
             .trim();
-		if (plainText&&plainText!=='Enter your biography and self-description here.You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+		if (plainText&&plainText!=='Enter your biography and self-description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
 			o.bio = descriptionText;
 			o.bio_plaintext = plainText;
 		} else {
