@@ -455,30 +455,30 @@ Template.projectTabs.helpers({
     return Session.get('needsResetOption') || false;
   },
   projects: function () {
-
+    var myId = Meteor.user&&Meteor.user()._id||'aaa';
     var pLimit = Session.get('pLimit') || 30;
     Session.set('pLimit', pLimit);
     if (Session.equals('order', 'hot')) {
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'top')){
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'newest')) {
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'alphabetical')) {
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
@@ -500,7 +500,8 @@ Template.projectTabs.helpers({
       /** get location coords, search project by distance */
       var METERS_PER_MILE = 1609.34
       var query = {
-        archived: false, 
+        archived: false,
+        ownerId: {$ne: myId},
         location: { 
           $near: { 
             $geometry: { 
@@ -522,7 +523,7 @@ Template.projectTabs.helpers({
       return p;
     }
     else { /*by default the tab is on hot, in hot order */
-      var p = Projects.find({archived: false, isLive: {$ne: true}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
@@ -530,6 +531,27 @@ Template.projectTabs.helpers({
 });
 
 Template.projectTab.helpers({
+  projectDonated: function() {
+    return '$'+this.funded+' RAISED';
+  },
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  }
+});
+
+Template.settingsTab.helpers({
+  projectDonated: function() {
+    return '$'+this.funded+' RAISED';
+  },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
   },
