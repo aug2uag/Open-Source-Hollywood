@@ -349,7 +349,7 @@
                                     {{/if}}
 
 
-                                    <div class="id-product-proposed-end">Created
+                                    <div class="id-product-proposed-end" style="margin-left:10px;">Created
                                         <div class="id-widget-date">
                                             <div class="id-widget-month">{{project.createdAt}}</div>
                                         </div>
@@ -385,7 +385,9 @@
                                 </div>
                                 <!-- GIFTS -->
                                 <div class="id-product-levels">
-                                  <h4 id="purchaselabel" class="avatar-option await btn-lg">PURCHASE GIFTS</h4>
+                                  <h4 class="avatar-option await btn-lg purchaselabel" style="top:10px;">MERCHANDISE</h4>
+                                  <br>
+                                  <span class="purchaselabel glyphicon glyphicon-arrow-down h1b" aria-hidden="true" style="top: -10px;color: red;"></span>
                                   {{#each project.gifts}}
                                     <a class="level-binding purchase_gift">
                                         <div class="level-group">
@@ -398,7 +400,7 @@
                                         <p class="align-center"><a class="c-related__a button special">PURCHASE NOW</a></p>
                                     </a>
                                     {{else}}
-                                    <script type="text/javascript">document.getElementById('purchaselabel').style.display = 'none';</script>
+                                    <script type="text/javascript">$('.purchaselabel').hide();</script>
                                   {{/each}}
                                 </div>
                                 <!-- end product levels -->

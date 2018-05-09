@@ -162,7 +162,7 @@ Template.settings.events({
 		var o = {};
 		o.firstName = $('#first_name').val();
 		o.lastName = $('#last_name').val();
-		var descriptionText = $('#summernote').summernote('code');
+		var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
       	var plainText = $("#summernote").summernote('code')
             .replace(/<\/p>/gi, " ")
             .replace(/<br\/?>/gi, " ")

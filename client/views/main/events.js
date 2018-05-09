@@ -73,6 +73,7 @@ Template.splashPage.helpers({
   },
   blogs: function() {
     // get blogs
+    return Blogs.find({});
   },
   ifBlogs: function() {
     // blogs count
@@ -81,7 +82,7 @@ Template.splashPage.helpers({
 })
 
 Template.newBlog.events({
-  'change #banner_file': function (e, template) {
+  'change #banner_file': function(e, template) {
     if (e.currentTarget.files && e.currentTarget.files[0]) {
       blogSettings.banner = {};
       var reader = new FileReader();
@@ -100,8 +101,55 @@ Template.newBlog.events({
       reader.readAsDataURL(file);
     }
   },
+  'click #create_article': function(e) {
+    e.preventDefault();
+    /**
+        image file
+        summernote html & text
+        title.trim()
+        category:selected
+        tags.split(',').trim()
+      */
+    var options = {};
+    options.htmlText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
+    options.plainText = $("#summernote").summernote('code')
+        .replace(/<\/p>/gi, " ")
+        .replace(/<br\/?>/gi, " ")
+        .replace(/<\/?[^>]+(>|$)/g, "")
+        .replace(/&nbsp;|<br>/g, " ")
+        .trim();
 
-})
+    if (options.plainText&&options.plainText==='Enter or paste writing here. Use the menu above to format text and insert images from a valid URL.') {
+      vex.dialog.alert('you did not enter your article\'s writing');
+      return;
+    }
+    options.title = $('#title').val().trim();
+    if (!options.title) {
+      vex.dialog.alert('please enter a title');
+      return;
+    };
+    options.teaser = $('#excerpt').val();
+    options.tags = $('#tags').val().toLowerCase().split(',').map(function(t) { return t.trim(); });
+    if (!options.tags.length) {
+      vex.dialog.alert('please include at least one meaningful tag');
+      return;
+    };
+    options.category = $('#category').find(":selected").text();
+    if (options.category.indexOf('Category')>-1) {
+      vex.dialog.alert('please select a category');
+      return;
+    }
+    options.image = blogSettings.banner;
+
+    console.log(new Array(100).join('#'))
+    console.log(options)
+
+    Meteor.call('createBlog', options, function(msg) {
+      console.log(msg);
+    });
+
+  }
+});
 
 Template.newBlog.onRendered(function() {
   blogSettings = {};
@@ -123,7 +171,7 @@ Template.newBlog.onRendered(function() {
       tooltip: false,
       callbacks: {
         onInit: function() {
-          $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+          $('.note-editable').html('<p><span class="large">Enter or paste writing here.</span><br>Use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
         }
       }
     });

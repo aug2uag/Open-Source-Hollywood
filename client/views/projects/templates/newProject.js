@@ -126,7 +126,7 @@ Template.newProject.events({
     o._gifts = gifts;
     if (validateUrl($('#website').val())) o.website = $('#website').val();
 
-    var descriptionText = $('#summernote').summernote('code');
+    var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
     var plainText = $("#summernote").summernote('code')
               .replace(/<\/p>/gi, " ")
               .replace(/<br\/?>/gi, " ")
@@ -141,6 +141,7 @@ Template.newProject.events({
       o.description = '';
     };
     o.budget = $('#budget').val();
+    if (o.budget&&parseInt(o.budget)<1000) delete o['budget'];
     o.creatorsInfo = $('#creators_info').val();
     o.historyInfo = $('#history_info').val();
     o.plansInfo = $('#plans_info').val();
