@@ -13,6 +13,10 @@ Template.nav.onRendered(function() {
 Template.nav.helpers({
   finishedLoading: function() {
     return Session.get('connectReady');
+  },
+  superAdmin: function() {
+    console.log(Meteor.user())
+    return Meteor.user&&Meteor.user()&&Meteor.user().superAdmin||false;
   }
 })
 

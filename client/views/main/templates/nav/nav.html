@@ -28,9 +28,13 @@
                                 <li class="selected parent menu-item"><a href="/create">Create Project</a></li>
                                 <li class="menu-item"><a href="/settings">Settings</a></li>
                                 <li class="menu-item"><a href="/discover" class="ls0">Discover</a></li>
+                                {{#if superAdmin}}
+                                  <li class="menu-item"><a href="/write" class="ls0">Write</a></li>
+                                {{/if}}
                                 <li class="red"><a id="signout" href="#!">Sign Out</a></li>
                               
                               {{else}}
+                                  <li class="menu-item"><a href="/blog" class="ls0">Blog</a></li>
                                   <li class="menu-item"><a href="/discover" class="ls0">Discover</a></li>
                                   <li class="menu-item">&nbsp;</li>
                                   <li class="green"><a href="#!" class="login">Log In / Register</a></li>
