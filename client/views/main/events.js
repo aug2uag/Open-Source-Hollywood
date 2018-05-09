@@ -189,7 +189,29 @@ Template.newBlog.onRendered(function() {
 });
 
 Template.blog.helpers({
-  foo: function() {
+
+  moment: function() {
+    var d = this.created || new Date;
+    return moment(d).format('MMMM Do, YYYY');
+  },
+  _tags: function() {
+    return this.tags.join(', ');
+  },
+  _htmlText: function() {
+    var was = this;
+    setTimeout(function() {
+      $('#htmlText').html(was.htmlText);
+    }, 1000);
+  }
+})
+
+Template.bloglist.helpers({
+    foo: function() {
     console.log(this)
+
+  },
+  moment: function() {
+    var d = this.created || new Date;
+    return moment(d).format('MMMM Do, YYYY');
   }
 })
