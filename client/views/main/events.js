@@ -225,8 +225,8 @@ Template.blog.helpers({
         excerpt: this.teaser,
         summary: this.summary,
         description: this.plainText,
-        thumbnail: this.banner,
-        image: this.banner,
+        thumbnail: this.image,
+        image: this.image,
         url: backupURL
       }
   },
