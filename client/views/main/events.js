@@ -84,19 +84,36 @@ Template.splashPage.helpers({
 Template.newBlog.events({
   'change #banner_file': function(e, template) {
     if (e.currentTarget.files && e.currentTarget.files[0]) {
-      blogSettings.banner = {};
       var reader = new FileReader();
       var files = e.target.files;
       var file = files[0];
       if (file.type.indexOf("image")==-1) {
-        vex.dialog.alert('Invalid File, you can only upload a static image for your profile picture');
+        vex.dialog.alert('Invalid File, you can only upload a static image for your banner picture');
         return;
       };
       reader.onload = function(readerEvt) {
-          blogSettings.banner.data = readerEvt.target.result;
+          blogSettings.banner = readerEvt.target.result;
           /** set file.name to span of inner el */
           $('#banner_file_name').text(file.name);
           $('#hidden_banner_name').show();
+        }; 
+      reader.readAsDataURL(file);
+    }
+  },
+  'change #image_file': function(e, template) {
+    if (e.currentTarget.files && e.currentTarget.files[0]) {
+      var reader = new FileReader();
+      var files = e.target.files;
+      var file = files[0];
+      if (file.type.indexOf("image")==-1) {
+        vex.dialog.alert('Invalid File, you can only upload a static image for your main picture');
+        return;
+      };
+      reader.onload = function(readerEvt) {
+          blogSettings.image = readerEvt.target.result;
+          /** set file.name to span of inner el */
+          $('#image_file_name').text(file.name);
+          $('#hidden_image_name').show();
         }; 
       reader.readAsDataURL(file);
     }
@@ -148,7 +165,8 @@ Template.newBlog.events({
       vex.dialog.alert('please select a category');
       return;
     }
-    options.image = blogSettings.banner;
+    options._image = blogSettings.image;
+    options._banner = blogSettings.banner;
 
     Meteor.call('createBlog', options);
 
@@ -158,6 +176,8 @@ Template.newBlog.events({
     $('#tags').val('');
     $('#category').val('Select Category');
     $('.note-editable').html('<p><span class="large">Enter or paste writing here.</span><br>Use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+    delete blogSettings['image'];
+    delete blogSettings['banner'];
   }
 });
 
@@ -189,7 +209,27 @@ Template.newBlog.onRendered(function() {
 });
 
 Template.blog.helpers({
+  shareData: function() {
+      ShareIt.configure({
+          sites: {
+              'facebook': {
+                  'appId': '1790348544595983'
+              }
+          }
+      });
 
+      var backupURL = 'https://app.opensourcehollywood.org/blog/'+this._id;
+      return {
+        title: this.title,
+        author: 'Open Source Hollywood',
+        excerpt: this.teaser,
+        summary: this.summary,
+        description: this.plainText,
+        thumbnail: this.banner,
+        image: this.banner,
+        url: backupURL
+      }
+  },
   moment: function() {
     var d = this.created || new Date;
     return moment(d).format('MMMM Do, YYYY');
@@ -204,6 +244,15 @@ Template.blog.helpers({
     }, 1000);
   }
 })
+
+Template.blog.onRendered(function() {
+   setTimeout(function() {
+      $('.fb-share').html('<li class="fa fa-facebook"></li>');
+      $('.tw-share').html('<li class="fa fa-twitter"></li>');
+      $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
+      $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
+   }, 133);
+ });
 
 Template.bloglist.helpers({
     foo: function() {

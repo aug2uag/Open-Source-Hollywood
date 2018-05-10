@@ -289,7 +289,7 @@
                   </div>
                 </div>
 
-                  <div class="krown-column-row clearfix">
+                  <div class="krown-column-row clearfix" style="margin-bottom:100px;">
                       <div class="krown-column-container clearfix first span12 clearfix bold">
                           <h3 style="text-align: center;" class="margin_bottom40">OUR TECH IS GENERATIVE !!</h3>
                           <div class="center h1b"> Build Teams &amp; Build Communities </div>
@@ -440,7 +440,7 @@
 
                 <!--cta 2-->
                 
-                <div class="container splash100">
+                <div class="container margin_bottom40">
                   <div class=" row">
                     <div class="col-md-12">
                       <h2 class="ser-title">About us</h2>
@@ -590,19 +590,29 @@
                             <div id="inner_summer" style="display:none"></div>
                         </div>
 
-                        <div class="col-sm-12 col-md-6 margin_bottom40">
+                        <div class="col-sm-12 col-md-4 margin_bottom40">
                             <label for="tags">tags</label>
                             <input type="text" name="tags" id="tags" placeholder="comma separated tags" />
                         </div>
 
-                        <div class="col-sm-12 col-md-6 margin_bottom40">
-                            <label for="banner image">banner image (720x490 for best resolution)</label>
+                        <div class="col-sm-12 col-md-4 margin_bottom40">
+                            <label for="banner image">banner image (1140x450 px for best resolution)</label>
                             <label for="banner_file" class="custom-file-upload">
                                 <i class="fa fa-cloud-upload"></i> Upload Image
                             </label>
                             <input class="noshow-file-upload" id="banner_file" type="file"/>
                             <br>
                             <div id="hidden_banner_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="banner_file_name">This is the name of the file uploaded</span></div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 margin_bottom40">
+                            <label for="banner image">main image</label>
+                            <label for="image_file" class="custom-file-upload">
+                                <i class="fa fa-cloud-upload"></i> Upload Image
+                            </label>
+                            <input class="noshow-file-upload" id="image_file" type="file"/>
+                            <br>
+                            <div id="hidden_image_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="image_file_name">This is the name of the file uploaded</span></div>
                         </div>
 
                         
@@ -710,7 +720,7 @@
 
                 <figure class="post-image">
 
-                    <img src="{{banner}}" width="845" height="453" alt="{{title}}" class="center-block"> 
+                    <img src="{{image}}" width="845" height="453" alt="{{title}}" class="center-block"> 
                 </figure>
 
                 <div class="post-body clearfix">
@@ -718,11 +728,9 @@
                     <!-- <section class="post-content clearfix"> -->
 
                         <aside class="share-buttons clearfix">
-                            <p>Share this post</p>
+                            <p>Share this profile</p>
                             <div class="holder clearfix">
-                                <a target="_blank" class="btn-twitter" href="https://twitter.com/home?status=First+Ultra+Awesome+Post+http%3A%2F%2Fbacker-demo.krownthemes.com%2Fpictures%2Ffirst-ultra-awesome-post%2F"></a>
-                                <a target="_blank" class="btn-facebook" href="https://www.facebook.com/share.php?u=http%3A%2F%2Fbacker-demo.krownthemes.com%2Fpictures%2Ffirst-ultra-awesome-post%2F&amp;title=First+Ultra+Awesome+Post"></a>
-                                <a target="_blank" class="btn-gplus" href="https://plus.google.com/share?url=http%3A%2F%2Fbacker-demo.krownthemes.com%2Fpictures%2Ffirst-ultra-awesome-post%2F"></a>
+                                {{> shareit shareData}}
                             </div>
                         </aside>
                         <div class="krown-column-row clearfix">
