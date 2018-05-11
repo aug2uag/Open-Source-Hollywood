@@ -15,7 +15,7 @@ Template.nav.helpers({
     return Session.get('connectReady');
   },
   superAdmin: function() {
-    return Meteor.user&&Meteor.user()&&Meteor.user().superAdmin||false;
+    return (Meteor.user()._id==='NtwHRpqPZCRiMkbsK' || Meteor.user()._id==='RKgbrBSd9gEfm4cJP' || Meteor.user()._id==='h6hMjCTqgvju6S6ES' || Meteor.user()._id==='Kf4kzSmLze9jYPYh3' || Meteor.user()._id==='k69vzFMz9MhwxqQv2');
   }
 })
 
