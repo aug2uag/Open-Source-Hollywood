@@ -17,9 +17,10 @@ Router.route('/profile/:_id', {
   },
   data: function() {
     var user = Meteor.users.findOne({_id: this.params._id});
+    var headtext = user&&user.bio_plaintext||user&&user.iam&&user.iam.length&&user.iam.join(', ')||'Amazing talent on O . S . H . (https://opensourcehollywood.org)';
     $('meta[name=description]').remove();
-    $('head').append( '<meta name="description" content="'+(user.bio_plaintext||(user.iam.length&&user.iam.join(', '))||'Amazing talent on O . S . H . (https://opensourcehollywood.org)')+'">' );
-    document.title = (user.firstName&&user.lastName) ? [user.firstName, user.lastName, 'on O . S . H . (opensourcehollywood.org)'].join(' ') : 'Member Profile';
+    $('head').append( '<meta name="description" content="'+headtext+'">' );
+    document.title = user&&user.firstName&&user.lastName ? [user.firstName, user.lastName, 'on O . S . H . (opensourcehollywood.org)'].join(' ') : 'Member Profile';
     return user;
   }
 });

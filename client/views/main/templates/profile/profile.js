@@ -1,3 +1,87 @@
+function vexFlag(usr) {
+  vex.dialog.open({
+    message: 'Request to Remove',
+    input: [
+      '<div> ',
+        '<form> ',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t1" id="t1">',
+              'Obscene content, whether images or text',
+            '</label>',
+          '</div>',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t2" id="t2">',
+              'Malicious content',
+            '</label>',
+          '</div>',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t3" id="t3">',
+              'Content that is mislabelled, misplaced, or categorized incorrectly',
+            '</label>',
+          '</div>',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t4" id="t4">',
+              'Spam and solicitations',
+            '</label>',
+          '</div>',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t5" id="t5">',
+              'Violations of site policy',
+            '</label>',
+          '</div>',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t6" id="t6">',
+              'Copyrighted work',
+            '</label>',
+          '</div>',
+          '<div class="checkbox">',
+            '<label style="display: grid;">',
+              '<input type="checkbox" value="" name="t7" id="t7">',
+              'Descriptions/solicitation of illegal acts',
+            '</label>',
+          '</div>',
+        '</form>',
+      '</div>',
+      '<div class="flagdesc"> ',
+        '<form> ',
+          '<textarea class="form-control" rows="3" placeholder="enter here" name="t8" id="t8"></textarea> ',
+        '</form> ',
+      '</div>'
+    ].join(''),
+    callback: function (data) {
+      if (
+          !$("#t1").is(':checked')&&
+          !$("#t2").is(':checked')&&
+          !$("#t3").is(':checked')&&
+          !$("#t4").is(':checked')&&
+          !$("#t5").is(':checked')&&
+          !$("#t6").is(':checked')&&
+          !$("#t7").is(':checked')&&
+          !$("#t8").val()
+        ) return;
+      Meteor.call('flagComplaint', {
+        url: backupURL = 'https://app.opensourcehollywood.org/profile/'+usr._id,
+        complaint: {
+          'Obscene content, whether images or text': $("#t1").is(':checked'),
+          'Malicious content': $("#t2").is(':checked'),
+          'Content that is mislabelled, misplaced, or categorized incorrectly': $("#t3").is(':checked'),
+          'Spam and solicitations': $("#t4").is(':checked'),
+          'Violations of site policy': $("#t5").is(':checked'),
+          'Copyrighted work': $("#t6").is(':checked'),
+          'Descriptions/solicitation of illegal acts': $("#t7").is(':checked')
+        },
+        msg: $("#t8").val()
+      });
+    }
+  })
+}
+
 Template.profile.helpers({
 	formattedBio: function() {
 		var that =  this;
@@ -101,6 +185,14 @@ Template.profile.helpers({
 		return this.reels.length>0;
 	}
 });
+
+Template.profile.events({
+  'click #reportthis': function(e) {
+    e.preventDefault();
+    /** show vex dialog */
+    vexFlag(this);
+  }
+})
 
 
 Template.settings.helpers({
