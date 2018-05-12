@@ -466,33 +466,25 @@ Template.projectTabs.helpers({
     if (Session.equals('order', 'hot')) {
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'top')){
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'newest')) {
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'alphabetical')) {
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'flavor')) {
@@ -505,9 +497,7 @@ Template.projectTabs.helpers({
       if (cat) query.purpose = cat;
       if (gen) query.genre = gen;
       var p = Projects.find(query, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'distance')) {
@@ -534,16 +524,12 @@ Template.projectTabs.helpers({
       if (cat) query.purpose = cat;
       if (gen) query.genre = gen;
       var p = Projects.find(query, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
     else { /*by default the tab is on hot, in hot order */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      var c = p.count();
-      if (c<Session.get('pLimit')) maxCount = true;
-      Session.set('pCount', c);
+      Session.set('pCount', p.count());
       return p;
     }
   }
@@ -551,14 +537,13 @@ Template.projectTabs.helpers({
 
 Template.projectTabs.events({
   "click .next": function() {
-    if (maxCount) return;
+    if (Session.get('pCount')<Session.get('pLimit')) return;
     var s = Session.get('pSkip');
     s = s + 30;
     Session.set('pSkip', s);
     doResetGrid($);
   },
   "click .previous": function() {
-    maxCount = false;
     var s = Session.get('pSkip');
     if (s !== 0 && s > 0) {
       s = s - 30;
