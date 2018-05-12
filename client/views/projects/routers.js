@@ -13,6 +13,7 @@ Router.route('/discover', {
     },
     onBeforeAction: function() {
       var x = localStorage.getItem('redirectURL');
+      localStorage.removeItem('redirectURL');
       if (x&&x!=='null'&&x.indexOf('/')>-1) {
         Router.go(x);
         localStorage.removeItem('redirectURL');

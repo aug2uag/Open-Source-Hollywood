@@ -1,4 +1,5 @@
 const StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
+var maxCount;
 
 var resetGridMasonFunction = function(t) {
         var e = t("html"),
@@ -374,6 +375,12 @@ var resetGridMasonFunction = function(t) {
         }), t(window).trigger("scroll")
 };
 
+function doResetGrid(t) {
+    setTimeout(function() {
+        resetGridMasonFunction(t);
+    }, 144);
+}
+
 var selectOptionsQueryGenres = {
   Feature: 'mixedgenres',
   Indie: 'mixedgenres',
@@ -445,11 +452,9 @@ Template.projectTabs.helpers({
     return x > 3 && Meteor.user();
   },
   counts30: function() {
-    var y = Session.get('doShowFilterOptions');
-    if (y) return true;
-    var x = Session.get('pCount');
-    x = x || 0;
-    return x > 20;
+    var myId = Meteor.user&&Meteor.user()&&Meteor.user()._id||'aaa';
+    var p = Projects.find( {archived: false, ownerId: {$ne: myId}} );
+    return p.count() > 30;
   },
   needsReset: function() {
     return Session.get('needsResetOption') || false;
@@ -461,25 +466,33 @@ Template.projectTabs.helpers({
     if (Session.equals('order', 'hot')) {
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
     else if (Session.equals('order', 'top')){
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
     else if (Session.equals('order', 'newest')) {
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
     else if (Session.equals('order', 'alphabetical')) {
       /** remove all els, & init grid */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
     else if (Session.equals('order', 'flavor')) {
@@ -492,7 +505,9 @@ Template.projectTabs.helpers({
       if (cat) query.purpose = cat;
       if (gen) query.genre = gen;
       var p = Projects.find(query, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
     else if (Session.equals('order', 'distance')) {
@@ -519,112 +534,36 @@ Template.projectTabs.helpers({
       if (cat) query.purpose = cat;
       if (gen) query.genre = gen;
       var p = Projects.find(query, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
     else { /*by default the tab is on hot, in hot order */
       var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
-      Session.set('pCount', p.count());
+      var c = p.count();
+      if (c<Session.get('pLimit')) maxCount = true;
+      Session.set('pCount', c);
       return p;
     }
   }
 });
 
-Template.projectTab.helpers({
-  projectDonated: function() {
-    return '$'+this.funded+' RAISED';
-  },
-  defaultQ: function() {
-    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
-  },
-  applicantLN: function() {
-    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
-    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
-    return (x + y);
-  },
-  formattedTitle: function() {
-    if (this.title.length>25) return this.title.substr(0, 23)+'..';
-    return this.title;
-  }
-});
-
-Template.settingsTab.helpers({
-  projectDonated: function() {
-    return '$'+this.funded+' RAISED';
-  },
-  defaultQ: function() {
-    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
-  },
-  applicantLN: function() {
-    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
-    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
-    return (x + y);
-  },
-  formattedTitle: function() {
-    if (this.title.length>25) return this.title.substr(0, 23)+'..';
-    return this.title;
-  }
-});
-
-Template.projTab.helpers({
-  defaultQ: function() {
-    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
-  },
-  applicantLN: function() {
-    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
-    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
-    return (x + y);
-  },
-  producerReady: function() {
-    return !(Meteor.user() && Meteor.user().didSetProfile);
-  },
-  formattedTitle: function() {
-    if (this.title.length>25) return this.title.substr(0, 23)+'..';
-    return this.title;
-  }
-});
-
-Template.projTab.events({
-  'click .toProj': function(e) {
-    e.preventDefault();
-    var proj = $(this)[0];
-    localStorage.setItem('redirectURL', '/projects/' + proj.slug + '/' + proj.ownerId);
-    lock.show();
-  }
-});
-
 Template.projectTabs.events({
-  "click #hot": function(){
-    Session.set('order', 'hot');
-  },
-  "click #top": function(){
-    Session.set('order', 'top');
-  },
-  "click #newest": function(){
-    Session.set('order', 'newest');
-  },
-  "click #alphabetical": function(){
-    Session.set('order', 'alphabetical');
-  },
-  "click #film": function(){
-    Session.set('order', 'film');
-  },
-  "click #music": function(){
-    Session.set('order', 'music');
-  },
-  "click #books": function(){
-    Session.set('order', 'books');
-  },
   "click .next": function() {
+    if (maxCount) return;
     var s = Session.get('pSkip');
     s = s + 30;
     Session.set('pSkip', s);
+    doResetGrid($);
   },
-  "click .prev": function() {
+  "click .previous": function() {
+    maxCount = false;
     var s = Session.get('pSkip');
-    if (s !== 0 && s > 0){
+    if (s !== 0 && s > 0) {
       s = s - 30;
       Session.set('pSkip', s);
+      doResetGrid($);
     }
   },
   'change #categories_select': function(e) {
@@ -706,6 +645,69 @@ Template.projectTabs.events({
         resetGridMasonFunction($);
       };
     }
+  }
+});
+
+Template.projectTab.helpers({
+  projectDonated: function() {
+    return '$'+this.funded+' RAISED';
+  },
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  }
+});
+
+Template.settingsTab.helpers({
+  projectDonated: function() {
+    return '$'+this.funded+' RAISED';
+  },
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  }
+});
+
+Template.projTab.helpers({
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  producerReady: function() {
+    return !(Meteor.user() && Meteor.user().didSetProfile);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  }
+});
+
+Template.projTab.events({
+  'click .toProj': function(e) {
+    e.preventDefault();
+    var proj = $(this)[0];
+    localStorage.setItem('redirectURL', '/projects/' + proj.slug + '/' + proj.ownerId);
+    lock.show();
   }
 });
 

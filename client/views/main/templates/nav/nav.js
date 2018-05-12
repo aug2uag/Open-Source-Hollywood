@@ -6,7 +6,7 @@ Template.nav.onRendered(function() {
       setTimeout(function() {
         localStorage.setItem('doShowLock', false);
         lock.show();
-      }, 2100);
+      }, 1597);
     };
 });
 
@@ -46,7 +46,7 @@ Template.nav.events({
       localStorage.setItem('doShowLock', true);
       setTimeout(function() {
         window.location.assign('/');
-      }, 800);
+      }, 144);
       return;
     };
     if (url.match(/\//g).length<=4) lock.show();

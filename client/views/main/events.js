@@ -18,13 +18,16 @@ Template.signin.events({
 Template.splashPage.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
-    localStorage.setItem('redirectURL', '');
+    localStorage.removeItem('redirectURL');
     lock.show();
   },
 
   'click #create': function() {
-    localStorage.setItem('redirectURL', '/create');
-    lock.show();
+    localStorage.removeItem('redirectURL');
+    setTimeout(function() {
+      localStorage.setItem('redirectURL', '/create');
+      lock.show();
+    }, 144);
   },
   'click #sendMsg': function() {
     /** get message and subject / email, and send email */
