@@ -71,7 +71,7 @@ function vexFlag(proj) {
           !$("#t8").val()
         ) return;
       Meteor.call('flagComplaint', {
-        url: 'https://app.opensourcehollywood.org/projects/'+proj._slug+'/'+proj.ownerId,
+        url: 'https://opensourcehollywood.org/projects/'+proj._slug+'/'+proj.ownerId,
         complaint: {
           'Obscene content, whether images or text': $("#t1").is(':checked'),
           'Malicious content': $("#t2").is(':checked'),
@@ -443,7 +443,7 @@ Template.projectView.helpers({
     currentSlug = this.project.slug || '';
     currentTitle = this.project.title || '';
     currentProject = this.project;
-    var backupURL = 'https://app.opensourcehollywood.org/projects/'+this.project.slug+'/'+this.project.ownerId;
+    var backupURL = 'https://opensourcehollywood.org/projects/'+this.project.slug+'/'+this.project.ownerId;
     return {
       title: this.project.title+'" on Open Source Hollywood! <opensourcehollywood.org>',
       author: this.project.ownerName,

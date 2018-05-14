@@ -66,7 +66,7 @@ function vexFlag(usr) {
           !$("#t8").val()
         ) return;
       Meteor.call('flagComplaint', {
-        url: backupURL = 'https://app.opensourcehollywood.org/profile/'+usr._id,
+        url: backupURL = 'https://opensourcehollywood.org/profile/'+usr._id,
         complaint: {
           'Obscene content, whether images or text': $("#t1").is(':checked'),
           'Malicious content': $("#t2").is(':checked'),
@@ -169,7 +169,7 @@ Template.profile.helpers({
 		};
 		roles = this.iam.join(', ');	
 
-	    var backupURL = 'https://app.opensourcehollywood.org/profile/'+this._id;
+	    var backupURL = 'https://opensourcehollywood.org/profile/'+this._id;
 	    return {
 	      title: [this.firstName, this.lastName,'on Open Source Hollywood! <opensourcehollywood.org>'].join(' '),
 	      author: 'Open Source Hollywood',

@@ -225,7 +225,7 @@ Template.blog.helpers({
           }
       });
 
-      var backupURL = 'https://app.opensourcehollywood.org/blog/'+this._id;
+      var backupURL = 'https://opensourcehollywood.org/blog/'+this._id;
       return {
         title: this.title,
         author: 'Open Source Hollywood',

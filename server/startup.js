@@ -2,7 +2,7 @@ var connectHandler = WebApp.connectHandlers;
 
 Meteor.startup(function () {
   connectHandler.use(function (req, res, next) {
-    res.setHeader('access-control-allow-origin', 'https://app.opensourcehollywood.org/');
+    res.setHeader('access-control-allow-origin', 'https://opensourcehollywood.org/');
     return next();
   })
 })
