@@ -669,6 +669,24 @@ Template.settingsTab.helpers({
   }
 });
 
+Template.approvedTab.helpers({
+  projectDonated: function() {
+    return '$'+this.funded+' RAISED';
+  },
+  defaultQ: function() {
+    return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
+  },
+  applicantLN: function() {
+    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return (x + y);
+  },
+  formattedTitle: function() {
+    if (this.title.length>25) return this.title.substr(0, 23)+'..';
+    return this.title;
+  }
+});
+
 Template.projTab.helpers({
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';

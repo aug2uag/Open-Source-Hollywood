@@ -308,35 +308,19 @@ Template.settings.helpers({
 		var _id = Meteor.user()._id;
 		return Projects.find({
 	        $and: [
-	          {archived: false},
-	          {usersApproved: {$elemMatch: {id: _id}}}
+	          { archived: false },
+	          { usersApproved: _id }
 	        ]
-	    }).fetch();
+	    });
 	},
 	createdCamps: function() {
 		var _id = Meteor.user()._id;
 		return Projects.find({
 	        $and: [
-	          {archived: false},
-	          {ownerId: _id}
+	          { archived: false },
+	          { ownerId: _id }
 	        ]
-	    }).fetch();
-	},
-	hasCreatedCamps: function() {
-		return Projects.find({
-	        $and: [
-	          {archived: false},
-	          {ownerId: Meteor.user()._id}
-	        ]
-	    }).fetch().length>0;
-	},
-	hasApprovedCamps: function() {
-		return Projects.find({
-	        $and: [
-	          {archived: false},
-	          {usersApproved: {$elemMatch: {id: Meteor.user()._id}}}
-	        ]
-	    }).fetch().length>0;
+	    });
 	},
 	bio: function() {
 		return Meteor.user().bio || 'describe yourself and your experiences'
