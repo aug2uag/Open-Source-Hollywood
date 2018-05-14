@@ -158,11 +158,15 @@ Template.newBlog.events({
       vex.dialog.alert('please enter a summary');
       return;
     };
-    options.tags = $('#tags').val().toLowerCase().split(',').map(function(t) { return t.trim(); });
-    if (!options.tags.length) {
+    var ts = $('#tags').val();
+    try {
+      ts = ts.trim();
+    } catch(e) {};
+    if (!ts) {
       vex.dialog.alert('please include at least one meaningful tag');
       return;
     };
+    options.tags = ts.split(',').map(function(t) { return t.toLowerCase().trim(); });
     options.category = $('#category').find(":selected").text();
     if (options.category.indexOf('Category')>-1) {
       vex.dialog.alert('please select a category');
