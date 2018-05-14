@@ -18,8 +18,13 @@ Template.signin.events({
 Template.splashPage.events({
   // Pressing Ctrl+Enter should submit the form.
   'click .login': function() {
-    localStorage.removeItem('redirectURL');
-    lock.show();
+    if (window.location.href.indexOf('/projects')>-1||window.location.href.indexOf('/profile')>-1) {
+      localStorage.setItem('doShowLock', true);
+      window.location.assign('/');
+    } else {
+      localStorage.removeItem('redirectURL');
+      lock.show();      
+    }
   },
 
   'click #create': function() {

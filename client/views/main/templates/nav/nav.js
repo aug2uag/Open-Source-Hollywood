@@ -41,15 +41,20 @@ Template.nav.events({
   },
   'click .login': function() {
     var url = window.location.href;
-    if (!url||url.match(/\//g).length===3) return lock.show();
-    if ((url.indexOf('/terms')===-1&&url.indexOf('/privacy')===-1&&url.indexOf('/contact')===-1)) {
+    if (url.indexOf('/projects')>-1||url.indexOf('/profile')>-1) {
       localStorage.setItem('doShowLock', true);
-      setTimeout(function() {
-        window.location.assign('/');
-      }, 144);
-      return;
-    };
-    if (url.match(/\//g).length<=4) lock.show();
+      window.location.assign('/');
+    } else {
+      if (!url||url.match(/\//g).length===3) return lock.show();
+      if ((url.indexOf('/terms')===-1&&url.indexOf('/privacy')===-1&&url.indexOf('/contact')===-1)) {
+        localStorage.setItem('doShowLock', true);
+        setTimeout(function() {
+          window.location.assign('/');
+        }, 144);
+        return;
+      };
+      if (url.match(/\//g).length<=4) lock.show();
+    }
   },
   'click .ls0': function() {
     localStorage.removeItem('redirectURL');
