@@ -301,9 +301,15 @@
                                             </div>
                                             <p>&nbsp;</p>
                                             <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
-                                              <a href="#" id="offer-donation" class="btn btn-success" role="button">DONATE</a> 
-                                              {{#if anyRoles}}
-                                              <a href="#" id="join-roles" class="btn btn-danger" role="button">CONNECT</a> 
+                                              
+                                              {{#if anyRolesNoAuth}}
+                                                {{#if currentUser}}
+                                                <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
+                                                <a href="#" id="join-roles" class="btn btn-default" role="button">CONNECT</a> 
+                                                {{else}}
+                                                <a href="#" id="offer-donation" class="btn btn-default" role="button">&nbsp;DONATE&nbsp;&nbsp;</a> 
+                                                <a href="#" id="view-roles" class="btn btn-default" role="button">POSITIONS</a> 
+                                                {{/if}}
                                               {{/if}}
                                             </div>
                                             

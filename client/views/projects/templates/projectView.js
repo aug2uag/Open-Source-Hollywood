@@ -261,6 +261,7 @@ function displayRoleTypeDialog(list, options) {
       if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a>'
       if (options.apply_time) _html+='<a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a>'
       if (options.apply_donate) _html+='<a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a>'
+      if (options.signin) _html+='<a class="btn btn-default btn-group apply-donate dologin" role="button"">Sign in to apply</a>'
       _html+='</div>';
     }
     _html += '</div></div></div></div>';
@@ -425,6 +426,9 @@ Template.projectView.helpers({
   anyRoles: function() {
     return Meteor.user()&&(this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
   },
+  anyRolesNoAuth: function() {
+    return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
+  },
   formattedDescription: function() {
     var that =  this;
     setTimeout(function() {
@@ -535,11 +539,22 @@ Template.projectView.helpers({
 })
 
 Template.projectView.events({
+  'click .dologin': function(e) {
+    e.preventDefault();
+    $('.login').click();
+  },
   'click #reportthis': function(e) {
     e.preventDefault();
     console.log(this);
     /** show vex dialog */
     vexFlag(this);
+  },
+  'click #view-roles': function(e) {
+    e.preventDefault();
+    displayRoleTypeDialog( ((this.project.crew||[]).concat((this.project.cast||[]))).concat((this.project.needs||[])) , {
+      title: 'You must be signed in to offer resources.',
+      signin: true
+    });
   },
   'click #view-cast-positions': function(e) {
     /** display all cast positions */
