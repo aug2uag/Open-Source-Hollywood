@@ -31,7 +31,12 @@ Template.splashPage.events({
     localStorage.removeItem('redirectURL');
     setTimeout(function() {
       localStorage.setItem('redirectURL', '/create');
-      lock.show();
+      if (window.location.href.indexOf('/projects')>-1||window.location.href.indexOf('/profile')>-1) {
+        localStorage.setItem('doShowLock', true);
+        window.location.assign('/');
+      } else {
+        lock.show();
+      }
     }, 144);
   },
   'click #sendMsg': function() {

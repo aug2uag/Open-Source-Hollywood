@@ -32,6 +32,7 @@ Template.nav.events({
     Session.set('selectedGenre', null);
     Meteor.logout();
     Meteor.logoutOtherClients();
+    window.location.reload();
   },
   'click #profile': function() {
     document.title = 'Profile View';
