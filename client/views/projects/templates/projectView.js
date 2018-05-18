@@ -552,7 +552,7 @@ Template.projectView.events({
   'click #view-roles': function(e) {
     e.preventDefault();
     displayRoleTypeDialog( ((this.project.crew||[]).concat((this.project.cast||[]))).concat((this.project.needs||[])) , {
-      title: 'You must be signed in to offer resources.',
+      title: 'You must be signed in to apply or offer resources.',
       signin: true
     });
   },

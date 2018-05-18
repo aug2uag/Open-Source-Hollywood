@@ -86,7 +86,7 @@ Template.splashPage.helpers({
   },
   blogs: function() {
     // get blogs
-    return Blogs.find({});
+    return Blogs.find({}, { sort: { created: -1 }, limit: 16 });
   },
   ifBlogs: function() {
     // blogs count
