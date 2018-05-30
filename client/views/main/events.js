@@ -205,11 +205,11 @@ Template.newBlog.onRendered(function() {
     $('#summernote').summernote({
       toolbar: [
         // [groupName, [list of button]]
-        ['style', ['bold', 'underline', 'clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+        ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
         ['para', ['ul', 'ol', 'paragraph', 'style']],
         ['height', ['height']],
         ['misc', ['undo', 'redo']],
-        ['insert', ['picture', 'video', 'table', 'hr']]
+        ['insert', ['picture', 'table', 'hr']]
       ],
       height: 300,
       minHeight: null,
