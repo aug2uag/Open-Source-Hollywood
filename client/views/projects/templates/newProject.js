@@ -12,9 +12,14 @@ var selectOptionsGenre = {
     Ensemble: 'audio',
     Performance: 'performance',
     'Music Video': 'audio',
+    Writing: 'writing',
+    'Art & Illustrations': 'art',
+    Musical: 'audio',
     Podcast: 'podcast',
     Other: 'mixed'
   },
+  art: '<option val="Advertising">Advertising</option><option val="Book Cover">Book Cover</option><option val="Album Art">Album Art</option><option val="Cartoon">Cartoon</option><option val="Comics">Comics</option><option val="Concept Art">Concept Art</option><option val="Poster">Poster</option><option val="Classical Painting">Classical Painting</option><option val="Classical Sculpture">Classical Sculpture</option><option val="Other">Other</option>',
+  writing: '<option val="Tragedy">Tragedy</option><option val="Comedy">Comedy</option><option val="Fantasy">Fantasy</option><option val="Mythology">Mythology</option><option val="Adventure">Adventure</option><option val="Mystery">Mystery</option><option val="Graphic Novel">Graphic Novel</option><option val="Satire">Satire</option><option val="Childrens">Childrens</option><option val="Poetry">Poetry</option><option val="Other">Other</option>',
   mixed: '<option val="Drama">Drama</option><option val="Comedy">Comedy</option><option val="Documentary">Documentary</option><option val="Educational">Educational</option><option val="Game Show">Game Show</option><option val="Musical">Musical</option><option val="Reality">Reality</option><option val="News">News</option><option val="Sports">Sports</option><option val="Variety">Variety</option><option val="Kids">Kids</option><option val="Cooking">Cooking</option><option val="Other">Other</option>',
   audio: '<option val="Folk">Folk</option><option val="Classical">Classical</option><option val="Contemporary">Contemporary</option><option val="Soul">Soul</option><option val="Jazz">Jazz</option><option val="Rock">Rock</option><option val="Metal">Metal</option><option val="Pop">Pop</option><option val="Hip Hop">Hip Hop</option><option val="EDM">EDM</option><option val="Other">Other</option>',
   performance: '<option val="Ballet">Ballet</option><option val="Opera">Opera</option><option val="Dance">Dance</option><option val="Theatre">Theatre</option><option val="Other">Other</option>',
@@ -67,23 +72,202 @@ Template.newProject.onRendered(function() {
   });
 });
 
+function showVexWithInput(message, input) {
+  vex.dialog.open({
+    message: message,
+    input: input.join(''),
+    buttons: [
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+    ]
+  });
+}
+
 Template.newProject.events({
   'click #file_gift': function(e) {
     $('#gift_file').click();
   },
-  'click #vidurl': function(e) {
-      e.preventDefault();
-      vex.dialog.open({
-        message: 'How to link YouTube and Vimeo URLs',
-        input: [
-        '<div class="embed-responsive embed-responsive-4by3">',
-        '<iframe class="embed-responsive-item" src="/img/vidurls.mp4"></iframe>',
+  'click #budgetform': function(e) {
+    e.preventDefault();
+    vex.dialog.open({
+      message: 'BUDGET FORM',
+      input: [
+        '<h4 class="title">Fill out the budget form to help define your budget.</h4>',
+        '<div class="embed-responsive embed-responsive-4by3" style="overflow: auto;">',
+          '<div class="panel-default">',
+            '<div class="panel-heading">GENERAL COSTS</div>',
+            '<div class="panel-body">',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="dev_cost"> development cost </label>',
+                  '<input type="number" class="budgetform" name="dev_cost" id="dev_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="travel_cost"> insurance costs </label>',
+                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="travel_cost"> legal &amp; accounting </label>',
+                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="travel_cost"> travel, meetings </label>',
+                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="travel_cost"> food </label>',
+                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="travel_cost"> office supplies </label>',
+                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+              '</div>',
+              // '<div class="col-sm-12 col-md-6">',
+              //     '<label for="misc_gen_cost"> miscellaneous </label>',
+              //     '<input type="number" class="budgetform" name="misc_gen_cost" id="misc_gen_cost" min="0" value="0" />',
+              // '</div>',
+            '</div>',
+          '</div>',
+          '<div class="panel-default">',
+            '<div class="panel-heading">PRODUCTION COSTS</div>',
+            '<div class="panel-body">',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="staff_cost"> staff </label>',
+                  '<input type="number" class="budgetform" name="staff_cost" id="staff_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="extras_cost"> extras </label>',
+                  '<input type="number" class="budgetform" name="extras_cost" id="extras_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="wardrobe_cost"> wardrobe </label>',
+                  '<input type="number" class="budgetform" name="wardrobe_cost" id="wardrobe_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="makeup_cost"> makeup &amp; hair </label>',
+                  '<input type="number" class="budgetform" name="makeup_cost" id="makeup_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="set_design_cost"> set design </label>',
+                  '<input type="number" class="budgetform" name="set_design_cost" id="set_design_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="set_construction_cost"> set construction </label>',
+                  '<input type="number" class="budgetform" name="set_construction_cost" id="set_construction_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="set_rigging_cost"> set rigging </label>',
+                  '<input type="number" class="budgetform" name="set_rigging_cost" id="set_rigging_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="operations_cost"> operations </label>',
+                  '<input type="number" class="budgetform" name="operations_cost" id="operations_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="gear_rental_cost"> gear rentals </label>',
+                  '<input type="number" class="budgetform" name="gear_rental_cost" id="gear_rental_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="gear_purchase_cost"> gear purchases </label>',
+                  '<input type="number" class="budgetform" name="gear_purchase_cost" id="gear_purchase_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="engineer_cost"> engineers </label>',
+                  '<input type="number" class="budgetform" name="engineer_cost" id="engineer_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="electric_cost"> electric </label>',
+                  '<input type="number" class="budgetform" name="electric_cost" id="electric_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="cloud_cost"> cloud services </label>',
+                  '<input type="number" class="budgetform" name="cloud_cost" id="cloud_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="soft_cost"> software purchases </label>',
+                  '<input type="number" class="budgetform" name="soft_cost" id="soft_cost" min="0" value="0" />',
+              '</div>',
+            '</div>',
+          '</div>',
+          '<div class="panel-default">',
+            '<div class="panel-heading">POST-PRODUCTION COSTS</div>',
+            '<div class="panel-body">',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="editing_cost"> editing </label>',
+                  '<input type="number" class="budgetform" name="editing_cost" id="editing_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="creative_writing_cost"> creative writing </label>',
+                  '<input type="number" class="budgetform" name="creative_writing_cost" id="creative_writing_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="marketing_cost"> marketing </label>',
+                  '<input type="number" class="budgetform" name="marketing_cost" id="marketing_cost" min="0" value="0" />',
+              '</div>',
+              '<div class="col-sm-12 col-md-6">',
+                  '<label for="misc_post_cost"> miscellaneous </label>',
+                  '<input type="number" class="budgetform" name="misc_post_cost" id="misc_post_cost" min="0" value="0" />',
+              '</div>',
+            '</div>',
+          '</div>',
         '</div>',
-        ].join(''),
-        buttons: [
-            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
-        ]
+      ].join(''),
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Calculate' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+      ],
+      callback: function (data) {
+        if (!data) {
+            return console.log('Cancelled')
+        }
+        console.log('data')
+        console.log(data)
+      }
     });
+
+  },
+  'click #whatisassign': function(e) {
+    e.preventDefault();
+    showVexWithInput('Public Assignments', [
+      '<h2 class="title">Revenue Sharing</h2>',
+      '<div class="embed-responsive embed-responsive-4by3">',
+        '<small>',
+          'You can specify a percentage of your campaign\'s revenues for public auction. ',
+          'To do this option, include how much percent you want open to sales (minimum 10% required). ',
+          'This will result in 100x the assignments of virtual shares or tokens that you can sell. ',
+          'For example, if you specify 10% for assignments then this will result in the issuance of 1,000 shares. ',
+          'The default minimum price per share for auction is $1 and can be changed below. ',
+          'You can change or set the minimum amount for purchase in one share below. ',
+        '</small>',
+        '<p>&nbsp;</p>',
+        '<small>',
+          'This sale represents a <u>LEGAL CONTRACT</u> where you promise to share revenue to the purchaser. ',
+        '</small>',
+      '</div>',
+    ]);
+  },
+  'click #vidurl': function(e) {
+    e.preventDefault();
+    showVexWithInput('How to link YouTube and Vimeo URLs', [
+      '<div class="embed-responsive embed-responsive-4by3">',
+      '<iframe class="embed-responsive-item" src="/img/vidurls.mp4"></iframe>',
+      '</div>',
+    ]);
+  },
+  'click #minassign': function(e) {
+    e.preventDefault();
+    showVexWithInput('Minimum price per share', [
+      '<div class="embed-responsive embed-responsive-4by3">',
+        '<header class="introduction">',
+          '<p>&nbsp;</p>',
+          '<small>',
+            'This field defines the minimum price someone can offer for purchasing one share of the portion of your campaign that you made available in the percent assignments of your campaign. ',
+          '</small>',
+          '<p>&nbsp;</p>',
+          '<small>',
+            'The sale of each share represents a <u>LEGAL CONTRACT</u> where you promise to share revenue to the purchaser. ',
+          '</small>',
+        '</header>',
+      '</div>',
+    ]);
   },
   'click #create_campaign': function(e) {
     e.preventDefault();

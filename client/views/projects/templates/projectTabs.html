@@ -222,6 +222,32 @@
     </article>
 </template>
 
+<template name="equityTab">
+    <article class="krown-id-item">
+
+        <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}" style="max-height:190px!important"></figure><span></span>
+        <div class="fundstatus board-canvas empty">{{ projectDonated }}</div>
+        <div class="container">
+
+            <h3 class="title">{{formattedTitle}}</h3>
+
+            <div class="cats">{{category}}, {{genre}}</div>
+
+            <section class="content">{{defaultQ}}</section>
+
+            <aside class="meta">
+
+                <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
+                  <a href="/projects/{{slug}}/{{ownerId}}" id="offer-donation" class="btn btn-default" role="button">EQUITY STATS</a> 
+                </div>
+
+            </aside>
+
+        </div>
+
+    </article>
+</template>
+
 <template name="settingsTab">
     <article class="krown-id-item">
 

@@ -27,9 +27,30 @@
                             <label for="website">website</label>
                             <input type="text" name="website" id="website" placeholder="ex. https://link.com/id" />
                         </div>
-                        <div class="col-xs-12">
-                            <label for="budget">budget goal</label>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="prodorg">production company</label>
+                            <input type="text" name="prodorg" id="prodorg" placeholder="name of legal entity, if applies" />
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="authorlist">original author(s)</label>
+                            <input type="text" name="authorlist" id="authorlist" placeholder="optional credits to original author(s)" />
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="budget">budget goal&nbsp;<a href="#!" id="budgetform"><i class="fa fa-question-circle"></i></a></label>
                             <input type="number" name="budget" id="budget" placeholder="amount you'd like to raise" min="0" />
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="starting">starting budget</label>
+                            <input type="number" name="starting" id="starting" placeholder="amount you've already raised" min="0" />
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="assign">public assignments&nbsp;<a href="#!" id="whatisassign"><i class="fa fa-question-circle"></i></a></label>
+                            <input type="number" name="assign" id="assign" placeholder="per cent equity available for public assignments" min="0" />
+                        </div>
+
+                        <div class="col-sm-12 col-md-6">
+                            <label for="assign">minimum assignment&nbsp;<a href="#!" id="minassign"><i class="fa fa-question-circle"></i></a></label>
+                            <input type="number" name="assign" id="assign" placeholder="minimum value per share" min="1" disabled />
                         </div>
 
                         <div class="col-sm-12 col-md-6 margin_bottom40">
@@ -60,6 +81,9 @@
                             <option>Ensemble</option>
                             <option>Performance</option>
                             <option>Music Video</option>
+                            <option>Musical</option>
+                            <option>Writing</option>
+                            <option>Art &amp; Illustrations</option>
                             <option>Podcast</option>
                             <option>Other</option>
                           </select>

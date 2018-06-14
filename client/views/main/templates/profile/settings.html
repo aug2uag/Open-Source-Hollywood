@@ -17,6 +17,8 @@
                     <li class="">
                         <h5>Pay Portal</h5></li>
                     <li class="">
+                        <h5>Equity Holdings</h5></li>
+                    <li class="">
                         <h5>Active Campaigns</h5></li>
                     <li class="">
                         <h5>Notifications</h5></li>
@@ -26,6 +28,7 @@
                       <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                         <option>Edit Profile</option>
                         <option>Pay Portal</option>
+                        <option>Equity Holdings</option>
                         <option>Active Campaigns</option>
                         <option>Notifications</option>
                         <option>Messages</option>
@@ -292,7 +295,6 @@
                               </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div id="pay" class="project-content" style="display: none;">
@@ -441,10 +443,10 @@
                         </aside>
                     </div>
 
-                    <div id="active" class="project-content" style="display: none;">
+                    <div id="equity" class="project-content" style="display: none;">
                       <h3 id="comments-title00">Campaigns Created</h3>
                       <div class="krown-id-grid default clearfix" style="position: relative;">
-                        {{#each createdCamps}}
+                        {{#each equityCamps}}
                           {{> settingsTab}}
                         {{else}}
                           <script type="text/javascript">
@@ -464,7 +466,31 @@
                           </script>
                         {{/each}}
                       </div>
+                    </div>
 
+                    <div id="active" class="project-content" style="display: none;">
+                      <h3 id="comments-title00">Campaigns Created</h3>
+                      <div class="krown-id-grid default clearfix" style="position: relative;">
+                        {{#each createdCamps}}
+                          {{> equityTab}}
+                        {{else}}
+                          <script type="text/javascript">
+                            $('#comments-title00').text('No campaign holdings to show. These become available after a campaign is marked as "finish" by the campaign creator.');
+                            $('#comments-title00').addClass('h3b');
+                          </script>
+                        {{/each}}
+                      </div>
+                      <h3 id="comments-title01" style="margin-top: 100px;">Campaigns Approved</h3>
+                      <div class="krown-id-grid default clearfix" style="position: relative;">
+                        {{#each approvedCamps}}
+                          {{> approvedTab}}
+                        {{else}}
+                          <script type="text/javascript">
+                            $('#comments-title01').text('No approved campaigns to show.');
+                            $('#comments-title01').addClass('h3b');
+                          </script>
+                        {{/each}}
+                      </div>
                     </div>
 
                     <div id="notifications" class="project-content" style="display: none;">
@@ -548,7 +574,6 @@
                           {{/each}}
 
                         </ol>
-
                     </div>
 
                 </div>

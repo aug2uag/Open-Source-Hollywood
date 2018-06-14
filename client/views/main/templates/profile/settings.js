@@ -313,6 +313,32 @@ Template.settings.helpers({
 	        ]
 	    });
 	},
+	equityCamps: function() {
+		/** 
+			if my id is in list of equity holders:
+				id:
+				details: {
+					value: percent equity
+					date assigned:
+					considerationType: author | patron | cast | crew | resource
+					considerationValue: amount | role | resource -- details
+				}
+		*/
+		var _id = Meteor.user()._id;
+		return Projects.find({
+			$or: [
+				{
+					$and: [
+			          { archived: false },
+			          { ownerId: _id }
+			        ]
+				},
+				{
+					"equity.id": _id
+				}
+			]
+	    });
+	},
 	createdCamps: function() {
 		var _id = Meteor.user()._id;
 		return Projects.find({
