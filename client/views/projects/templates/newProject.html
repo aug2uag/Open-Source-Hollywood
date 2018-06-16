@@ -35,23 +35,37 @@
                             <label for="authorlist">original author(s)</label>
                             <input type="text" name="authorlist" id="authorlist" placeholder="optional credits to original author(s)" />
                         </div>
-                        <div class="col-sm-12 col-md-6">
-                            <label for="budget">budget goal&nbsp;<a href="#!" id="budgetform"><i class="fa fa-question-circle"></i></a></label>
-                            <input type="number" name="budget" id="budget" placeholder="amount you'd like to raise" min="0" />
+                        <div id="hiddenbudget" hidden>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="budget">budget goal&nbsp;<a href="#!" id="budgetform"><i class="fa fa-question-circle"></i></a></label>
+                                <input type="number" name="budget" id="budget" disabled />
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="starting">starting budget</label>
+                                <input type="number" name="starting" id="starting" disabled />
+                            </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <label for="starting">starting budget</label>
-                            <input type="number" name="starting" id="starting" placeholder="amount you've already raised" min="0" />
+                            <input style="width: 80%!important;left: 10%!important;position:relative;border: 2px solid black!important;background: white!important;color:black!important;" type="submit" name="showbudget" id="showbudget" value="enter budget data" />
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <label for="assign">public assignments&nbsp;<a href="#!" id="whatisassign"><i class="fa fa-question-circle"></i></a></label>
-                            <input type="number" name="assign" id="assign" placeholder="per cent equity available for public assignments" min="0" />
+                            <input style="width: 80%!important;left: 10%!important;position:relative;border: 2px solid black!important;background: white!important;color:black!important;" type="submit" name="showrevsharing" id="showrevsharing" value="enable revenue sharing" />
                         </div>
 
-                        <div class="col-sm-12 col-md-6">
-                            <label for="assign">minimum assignment&nbsp;<a href="#!" id="minassign"><i class="fa fa-question-circle"></i></a></label>
-                            <input type="number" name="assign" id="assign" placeholder="minimum value per share" min="1" disabled />
+                        <div id="norepscore" hidden>You need at least 10,000 rep score or more; <a href="/settings">register as a bona fide agency for automatic points awards</a>!</div>
+                        <div id="hiddenequity" hidden>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="assign">percent campaign equity&nbsp;<a href="#!" id="whatisassign"><i class="fa fa-question-circle"></i></a></label>
+                                <input type="number" name="assign" id="assign" placeholder="per cent equity available for public assignments" min="0" max="49" />
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <label for="assign">minimum price per share (in USD)&nbsp;<a href="#!" id="minassign"><i class="fa fa-question-circle"></i></a></label>
+                                <input type="number" name="minimumassign" id="minimumassign" placeholder="default minimum price is 1 USD" min="1" val="1" />
+                            </div>
                         </div>
+                        <div id="equitydisplay" class="col-sm-12 margin_bottom40" style="font-weight:700;top:-20px" hidden>Your project is assigned <span id="numshares"></span> shares representing <span id="numpercent"></span>% all future revenues of your campaign at $<span id="shareval"></span> minimum price per share.</div>
+                        
 
                         <div class="col-sm-12 col-md-6 margin_bottom40">
                             <label for="banner image">banner image (720x490 for best resolution)</label>

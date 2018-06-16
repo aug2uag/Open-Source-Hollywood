@@ -444,25 +444,15 @@
                     </div>
 
                     <div id="equity" class="project-content" style="display: none;">
-                      <h3 id="comments-title00">Campaigns Created</h3>
+                      <h3 id="comments-title00">Your Campaign Holdings</h3>
+                      <small>This list contains finished campaigns where you own a portion of distribution interests.</small>
                       <div class="krown-id-grid default clearfix" style="position: relative;">
                         {{#each equityCamps}}
-                          {{> settingsTab}}
+                          {{> equityTab}}
                         {{else}}
                           <script type="text/javascript">
                             $('#comments-title00').text('No created campaigns to show.');
                             $('#comments-title00').addClass('h3b');
-                          </script>
-                        {{/each}}
-                      </div>
-                      <h3 id="comments-title01" style="margin-top: 100px;">Campaigns Approved</h3>
-                      <div class="krown-id-grid default clearfix" style="position: relative;">
-                        {{#each approvedCamps}}
-                          {{> approvedTab}}
-                        {{else}}
-                          <script type="text/javascript">
-                            $('#comments-title01').text('No approved campaigns to show.');
-                            $('#comments-title01').addClass('h3b');
                           </script>
                         {{/each}}
                       </div>
@@ -472,7 +462,7 @@
                       <h3 id="comments-title00">Campaigns Created</h3>
                       <div class="krown-id-grid default clearfix" style="position: relative;">
                         {{#each createdCamps}}
-                          {{> equityTab}}
+                          {{> settingsTab}}
                         {{else}}
                           <script type="text/javascript">
                             $('#comments-title00').text('No campaign holdings to show. These become available after a campaign is marked as "finish" by the campaign creator.');
@@ -494,7 +484,6 @@
                     </div>
 
                     <div id="notifications" class="project-content" style="display: none;">
-
                         <h3 id="comments_title">Configure Phone &amp; Email Notifications</h3>
                         <div class="row" style="width:100%">
                           <div class="col-xs-3">
@@ -544,7 +533,6 @@
                     </div>
 
                     <div id="messages" class="project-content" style="display: none;">
-
                         <h3 id="comments_title">Your Recent Messages</h3>
                         <ol id="comments-list">
 

@@ -329,7 +329,7 @@ Template.settings.helpers({
 			$or: [
 				{
 					$and: [
-			          { archived: false },
+			          { archived: true },
 			          { ownerId: _id }
 			        ]
 				},

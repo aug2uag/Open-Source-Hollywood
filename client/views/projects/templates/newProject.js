@@ -82,152 +82,240 @@ function showVexWithInput(message, input) {
   });
 }
 
+function showVexBudgetForm() {
+  vex.dialog.open({
+    message: 'BUDGET FORM',
+    input: [
+      '<h4 class="title">Fill out the budget form to help define your budget. Whole dollar amounts only please.</h4>',
+      '<div class="embed-responsive embed-responsive-4by3" style="overflow: auto;">',
+        '<div class="panel-default">',
+          '<div class="panel-heading">GENERAL COSTS</div>',
+          '<div class="panel-body">',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="dev_cost"> development cost </label>',
+                '<input type="number" class="budgetform" name="dev_cost" id="dev_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="insurance_cost"> insurance costs </label>',
+                '<input type="number" class="budgetform" name="insurance_cost" id="insurance_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="legal_cost"> legal &amp; accounting </label>',
+                '<input type="number" class="budgetform" name="legal_cost" id="legal_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="travel_cost"> travel, meetings </label>',
+                '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="food_cost"> food </label>',
+                '<input type="number" class="budgetform" name="food_cost" id="food_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="supplied_cost"> office supplies </label>',
+                '<input type="number" class="budgetform" name="supplied_cost" id="supplied_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="starting_budget"> starting budget </label>',
+                '<input type="number" class="budgetform" name="starting_budget" id="starting_budget" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="misc_gen_cost"> miscellaneous </label>',
+                '<input type="number" class="budgetform" name="misc_gen_cost" id="misc_gen_cost" min="0" value="0" />',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<div class="panel-default">',
+          '<div class="panel-heading">PRODUCTION COSTS</div>',
+          '<div class="panel-body">',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="staff_cost"> staff </label>',
+                '<input type="number" class="budgetform" name="staff_cost" id="staff_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="extras_cost"> extras </label>',
+                '<input type="number" class="budgetform" name="extras_cost" id="extras_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="wardrobe_cost"> wardrobe </label>',
+                '<input type="number" class="budgetform" name="wardrobe_cost" id="wardrobe_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="makeup_cost"> makeup &amp; hair </label>',
+                '<input type="number" class="budgetform" name="makeup_cost" id="makeup_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="set_design_cost"> set design </label>',
+                '<input type="number" class="budgetform" name="set_design_cost" id="set_design_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="set_construction_cost"> set construction </label>',
+                '<input type="number" class="budgetform" name="set_construction_cost" id="set_construction_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="set_rigging_cost"> set rigging </label>',
+                '<input type="number" class="budgetform" name="set_rigging_cost" id="set_rigging_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="operations_cost"> operations </label>',
+                '<input type="number" class="budgetform" name="operations_cost" id="operations_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="gear_rental_cost"> gear rentals </label>',
+                '<input type="number" class="budgetform" name="gear_rental_cost" id="gear_rental_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="gear_purchase_cost"> gear purchases </label>',
+                '<input type="number" class="budgetform" name="gear_purchase_cost" id="gear_purchase_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="engineer_cost"> engineers </label>',
+                '<input type="number" class="budgetform" name="engineer_cost" id="engineer_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="electric_cost"> electric </label>',
+                '<input type="number" class="budgetform" name="electric_cost" id="electric_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="cloud_cost"> cloud services </label>',
+                '<input type="number" class="budgetform" name="cloud_cost" id="cloud_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="soft_cost"> software purchases </label>',
+                '<input type="number" class="budgetform" name="soft_cost" id="soft_cost" min="0" value="0" />',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<div class="panel-default">',
+          '<div class="panel-heading">POST-PRODUCTION COSTS</div>',
+          '<div class="panel-body">',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="editing_cost"> editing </label>',
+                '<input type="number" class="budgetform" name="editing_cost" id="editing_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="creative_writing_cost"> creative writing </label>',
+                '<input type="number" class="budgetform" name="creative_writing_cost" id="creative_writing_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="marketing_cost"> marketing </label>',
+                '<input type="number" class="budgetform" name="marketing_cost" id="marketing_cost" min="0" value="0" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="misc_post_cost"> miscellaneous </label>',
+                '<input type="number" class="budgetform" name="misc_post_cost" id="misc_post_cost" min="0" value="0" />',
+            '</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+    ].join(''),
+    buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Calculate' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+    ],
+    callback: function (data) {
+      if (!data) {
+          return console.log('Cancelled')
+      }
+      var costTally = 0;
+      for (var key in data) {
+        if (key === 'starting_budget') continue;
+        costTally+=Math.abs(parseInt(data[key]));
+      }
+      if (costTally>0) {
+        $('#budget').val(costTally);
+        $('#starting').val(data.starting_budget||0);
+        $('#hiddenbudget').show();
+        localStorage.setItem('budget', JSON.stringify(data));  
+      } else {
+        $('#hiddenbudget').hide();
+      }
+    }
+  });
+}
+
 Template.newProject.events({
   'click #file_gift': function(e) {
     $('#gift_file').click();
   },
-  'click #budgetform': function(e) {
+  'click #showbudget': function(e) {
     e.preventDefault();
-    vex.dialog.open({
-      message: 'BUDGET FORM',
+    showVexBudgetForm();
+  },
+  'click #showrevsharing': function(e) {
+    e.preventDefault();
+    /** sign agreement form and show fields */
+        vex.dialog.open({
+      message: 'REVENUE SHARING CONFIGURATION',
       input: [
-        '<h4 class="title">Fill out the budget form to help define your budget.</h4>',
         '<div class="embed-responsive embed-responsive-4by3" style="overflow: auto;">',
           '<div class="panel-default">',
-            '<div class="panel-heading">GENERAL COSTS</div>',
+            '<small>by allowing revenue sharing, you are exposing yourself to legal liability and risk; please learn <a href="/terms">all terms</a> before proceeding</small>',
             '<div class="panel-body">',
               '<div class="col-sm-12 col-md-6">',
-                  '<label for="dev_cost"> development cost </label>',
-                  '<input type="number" class="budgetform" name="dev_cost" id="dev_cost" min="0" value="0" />',
+                  '<label for="rev_fullname"> full legal name </label>',
+                  '<input type="text" class="revshareagreement" name="rev_fullname" id="rev_fullname" min="0" placeholder="enter full legal name" />',
               '</div>',
               '<div class="col-sm-12 col-md-6">',
-                  '<label for="travel_cost"> insurance costs </label>',
-                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+                  '<label for="rev_province"> city or province and country name </label>',
+                  '<input type="text" class="revshareagreement" name="rev_province" id="rev_province" min="0" placeholder="enter city or province and country name" />',
               '</div>',
               '<div class="col-sm-12 col-md-6">',
-                  '<label for="travel_cost"> legal &amp; accounting </label>',
-                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
+                  '<label for="rev_contact"> contact email or phone number </label>',
+                  '<input type="text" class="revshareagreement" name="rev_contact" id="rev_contact" min="0" placeholder="enter contact email or phone number" />',
               '</div>',
               '<div class="col-sm-12 col-md-6">',
-                  '<label for="travel_cost"> travel, meetings </label>',
-                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="travel_cost"> food </label>',
-                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="travel_cost"> office supplies </label>',
-                  '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
-              '</div>',
-              // '<div class="col-sm-12 col-md-6">',
-              //     '<label for="misc_gen_cost"> miscellaneous </label>',
-              //     '<input type="number" class="budgetform" name="misc_gen_cost" id="misc_gen_cost" min="0" value="0" />',
-              // '</div>',
-            '</div>',
-          '</div>',
-          '<div class="panel-default">',
-            '<div class="panel-heading">PRODUCTION COSTS</div>',
-            '<div class="panel-body">',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="staff_cost"> staff </label>',
-                  '<input type="number" class="budgetform" name="staff_cost" id="staff_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="extras_cost"> extras </label>',
-                  '<input type="number" class="budgetform" name="extras_cost" id="extras_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="wardrobe_cost"> wardrobe </label>',
-                  '<input type="number" class="budgetform" name="wardrobe_cost" id="wardrobe_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="makeup_cost"> makeup &amp; hair </label>',
-                  '<input type="number" class="budgetform" name="makeup_cost" id="makeup_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="set_design_cost"> set design </label>',
-                  '<input type="number" class="budgetform" name="set_design_cost" id="set_design_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="set_construction_cost"> set construction </label>',
-                  '<input type="number" class="budgetform" name="set_construction_cost" id="set_construction_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="set_rigging_cost"> set rigging </label>',
-                  '<input type="number" class="budgetform" name="set_rigging_cost" id="set_rigging_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="operations_cost"> operations </label>',
-                  '<input type="number" class="budgetform" name="operations_cost" id="operations_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="gear_rental_cost"> gear rentals </label>',
-                  '<input type="number" class="budgetform" name="gear_rental_cost" id="gear_rental_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="gear_purchase_cost"> gear purchases </label>',
-                  '<input type="number" class="budgetform" name="gear_purchase_cost" id="gear_purchase_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="engineer_cost"> engineers </label>',
-                  '<input type="number" class="budgetform" name="engineer_cost" id="engineer_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="electric_cost"> electric </label>',
-                  '<input type="number" class="budgetform" name="electric_cost" id="electric_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="cloud_cost"> cloud services </label>',
-                  '<input type="number" class="budgetform" name="cloud_cost" id="cloud_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="soft_cost"> software purchases </label>',
-                  '<input type="number" class="budgetform" name="soft_cost" id="soft_cost" min="0" value="0" />',
-              '</div>',
-            '</div>',
-          '</div>',
-          '<div class="panel-default">',
-            '<div class="panel-heading">POST-PRODUCTION COSTS</div>',
-            '<div class="panel-body">',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="editing_cost"> editing </label>',
-                  '<input type="number" class="budgetform" name="editing_cost" id="editing_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="creative_writing_cost"> creative writing </label>',
-                  '<input type="number" class="budgetform" name="creative_writing_cost" id="creative_writing_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="marketing_cost"> marketing </label>',
-                  '<input type="number" class="budgetform" name="marketing_cost" id="marketing_cost" min="0" value="0" />',
-              '</div>',
-              '<div class="col-sm-12 col-md-6">',
-                  '<label for="misc_post_cost"> miscellaneous </label>',
-                  '<input type="number" class="budgetform" name="misc_post_cost" id="misc_post_cost" min="0" value="0" />',
+                  '<label for="misc_post_cost"> AGREEMENT </label>',
+                  '<div class="form-check">',
+                    '<input class="form-check-input" type="checkbox" value="" id="agreement1" name="agreement1">',
+                    '<label class="form-check-label" for="agreement1">',
+                      'I understand this is a legal agreement.',
+                    '</label>',
+                  '</div>',
+                  '<div class="form-check">',
+                    '<input class="form-check-input" type="checkbox" value="" id="agreement2" name="agreement2">',
+                    '<label class="form-check-label" for="agreement2">',
+                      'I promise to share revenues with investors.',
+                    '</label>',
+                  '</div>',
+                  '<div class="form-check">',
+                    '<input class="form-check-input" type="checkbox" value="" id="agreement3" name="agreement3">',
+                    '<label class="form-check-label" for="agreement3">',
+                      'I understand that I am accepting legal responsibility for selling interests in my campaign.',
+                    '</label>',
+                  '</div>',
               '</div>',
             '</div>',
           '</div>',
         '</div>',
       ].join(''),
       buttons: [
-          $.extend({}, vex.dialog.buttons.YES, { text: 'Calculate' }),
-          $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+          $.extend({}, vex.dialog.buttons.YES, { text: 'PROCEED' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'CANCEL' }),
       ],
       callback: function (data) {
         if (!data) {
             return console.log('Cancelled')
         }
-        console.log('data')
-        console.log(data)
+        data.agreement1 = $("#agreement1").is(':checked');
+        data.agreement2 = $("#agreement2").is(':checked');
+        data.agreement3 = $("#agreement3").is(':checked');
+        if (!rev_fullname) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!rev_province) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!rev_contact) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!agreement1) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!agreement2) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!agreement3) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        $('#hiddenequity').show();
+        alert('CONGRATULATIONS! you are now eligible for revenue sharing on this campaign; to continue please fill out how much percent of your campaign you are opening for revenue sharing, and the minimum price per share')
+        localStorage.setItem('revshare', JSON.stringify(data));
       }
     });
-
   },
   'click #whatisassign': function(e) {
     e.preventDefault();
-    showVexWithInput('Public Assignments', [
-      '<h2 class="title">Revenue Sharing</h2>',
+    showVexWithInput('Percent Campaign for Auction', [
+      '<h4 class="title">Public Auction for Revenue Sharing</h4>',
       '<div class="embed-responsive embed-responsive-4by3">',
         '<small>',
           'You can specify a percentage of your campaign\'s revenues for public auction. ',
@@ -268,6 +356,30 @@ Template.newProject.events({
         '</header>',
       '</div>',
     ]);
+  },
+  'change #assign': function(e) {
+    e.preventDefault();
+    var num = parseFloat($('#assign').val());
+    try {
+      num = num.toFixed(2);
+    } catch(e) { throw e };
+    num = parseFloat(num);
+    if (num > 49) {
+      return alert('you can assign a maximum of 49% of your project\'s future earnings');
+    };
+    if (isNaN(num)) {
+      $('#equitydisplay').hide();
+    } else {
+      $('#numshares').text(num * 100);
+      $('#numpercent').text(num);
+      $('#shareval').text($('#minimumassign').val()||1);
+      $('#assign').val(num);
+      $('#equitydisplay').show();
+    }
+  },
+  'change #minimumassign': function(e) {
+    e.preventDefault();
+    $('#shareval').text($('#minimumassign').val()||1);
   },
   'click #create_campaign': function(e) {
     e.preventDefault();
@@ -324,8 +436,7 @@ Template.newProject.events({
     } else {
       o.description = '';
     };
-    o.budget = $('#budget').val();
-    if (o.budget&&parseInt(o.budget)<1000) delete o['budget'];
+
     o.creatorsInfo = $('#creators_info').val();
     o.historyInfo = $('#history_info').val();
     o.plansInfo = $('#plans_info').val();
@@ -376,9 +487,27 @@ Template.newProject.events({
       o.social.push(_o);
     });
 
+    /** budget info */
+    var budgetSheet = localStorage.getItem('budget');
+    if (budgetSheet) {
+      o.budgetSheet = JSON.parse(budgetSheet);
+      o.budget = parseInt($('#budget').val());
+      o.funded = parseInt($('#starting').val());
+      localStorage.removeItem('budget');
+    }
+
+
+    /** equity info */
+    var equityInfo = localStorage.getItem('revshare');
+    if (equityInfo) {
+      o.equityInfo = JSON.parse(equityInfo);
+      o.availableShares = parseFloat($('#assign').val()) * 100;
+      o.mpps = parseInt($('#minimumassign').val()||1);
+      localStorage.removeItem('revshare');
+    };
+
     // create virtual account for project
     // add funds to virtual account, non-refundable
-
     Meteor.call('addProject', o, function(err, res) {
       vex.dialog.alert(err||res);
       if (!err) {
