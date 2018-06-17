@@ -510,7 +510,7 @@ Template.settings.rendered = function () {
       $('#summernote').summernote({
       	toolbar: [
 		    // [groupName, [list of button]]
-		    ['style', ['bold', 'underline', 'clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+		    ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
 		    ['para', ['ul', 'ol', 'paragraph', 'style']],
 		    ['height', ['height']],
 		    ['misc', ['undo', 'redo']],

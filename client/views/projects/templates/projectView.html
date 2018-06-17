@@ -35,7 +35,7 @@
                       <li class="">
                           <h5>Comments</h5></li>
                       <li class="">
-                          <h5>Backers</h5></li>
+                          <h5>Community</h5></li>
                       <li class="">
                           <h5>Manage</h5></li>
                       <li class="">
@@ -46,7 +46,7 @@
                             <option>Description</option>
                             <option>Updates</option>
                             <option>Comments</option>
-                            <option>Backers</option>
+                            <option>Community</option>
                             <option>Manage</option>
                             <option>Edit</option>
                           </select>
@@ -62,7 +62,7 @@
                         <li class="">
                             <h5>Comments</h5></li>
                         <li class="">
-                            <h5>Backers</h5></li>
+                            <h5>Community</h5></li>
                         <li class="">
                             <h5>Manage</h5></li>
                         <div class="tabs-select">
@@ -71,7 +71,7 @@
                               <option>Description</option>
                               <option>Updates</option>
                               <option>Comments</option>
-                              <option>Backers</option>
+                              <option>Community</option>
                               <option>Manage</option>
                             </select>
                             <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
@@ -85,14 +85,14 @@
                         <li class="">
                             <h5>Comments</h5></li>
                         <li class="">
-                            <h5>Backers</h5></li>
+                            <h5>Community</h5></li>
                         <div class="tabs-select">
                           <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                             <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                               <option>Description</option>
                               <option>Updates</option>
                               <option>Comments</option>
-                              <option>Backers</option>
+                              <option>Community</option>
                             </select>
                             <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
                           </span> 
@@ -239,7 +239,7 @@
 
                     <div id="backers" class="project-content" style="display: none;">
 
-                        <h3 id="comments_title">Backers ({{backers}})</h3>
+                        <h3 id="comments_title">Community ({{backers}})</h3>
                         <ol id="comments-list">
 
                             {{#each this.project.donations}}
@@ -271,17 +271,19 @@
                     </div>
 
                     <div id="manage" class="project-content" style="display: none;">
-                        {{#if isWidth}}
-                        <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
-                        {{/if}}
                         {{#if isOwner}}
                           {{> applicants}}
+                          <p>&nbsp;</p>
+                          {{#if isWidth}}
+                          <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
+                          {{/if}}
                           <p>&nbsp;</p>
                           <a id="closeProj" class="btn btn-danger btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="#!">DELETE CAMPAIGN</a>
                         {{/if}}
                     </div>
 
                     <div id="edit" class="project-content" style="display: none;">
+                      <h3 id="comments_title">Edit Needs &amp; Merch</h3>
                       {{> editProject}}
                         
                     </div>
@@ -305,14 +307,26 @@
                                               
                                               {{#if anyRolesNoAuth}}
                                                 {{#if currentUser}}
-                                                <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
-                                                <a href="#" id="join-roles" class="btn btn-default" role="button">CONNECT</a> 
-                                                {{else}}
-                                                <a href="#" id="offer-donation" class="btn btn-default" role="button">&nbsp;DONATE&nbsp;&nbsp;</a> 
-                                                <a href="#" id="view-roles" class="btn btn-default" role="button">POSITIONS</a> 
+                                                  <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
+                                                  <a href="#" id="join-roles" class="btn btn-default" role="button">CONNECT</a> 
+                                                  {{else}}
+                                                  <a href="#" id="offer-donation" class="btn btn-default" role="button">&nbsp;DONATE&nbsp;&nbsp;</a> 
+                                                  <a href="#" id="view-roles" class="btn btn-default" role="button">POSITIONS</a> 
                                                 {{/if}}
                                               {{else}}
                                                 <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
+                                              {{/if}}
+                                              <p>&nbsp;</p>
+                                              {{#if anyShares}}
+                                                <div class="rpdata">
+                                                  <div class="id-progress-raised"> {{anyShares}}<span style=" font-size: 13px;line-height: 13px;color: #949494;margin: 0;">&nbsp;shares available</span></div>
+                                                  <div class="margin_bottom20">${{mpps}}<span style=" font-size: 13px;line-height: 13px;color: #949494;margin: 0;"> (price per share)</span></div>
+                                                </div>
+                                                {{#if currentUser}}
+                                                  <a href="#" id="buy-shares" class="btn btn-default" role="button">PURCHASE&nbsp;</a> 
+                                                  {{else}}
+                                                  <small>Login to purchase interests of this campaign's future earnings, which you can own forever!</small>
+                                                {{/if}}
                                               {{/if}}
                                             </div>
                                             
@@ -589,7 +603,7 @@
   <br>
   <h3>Sold Gifts</h3>
   <div class="table-responsive">
-    <table class="table">
+    <table class="table margin_bottom40">
       <thead>
         <tr>
           <th><p class="align-center">Name</p></th>

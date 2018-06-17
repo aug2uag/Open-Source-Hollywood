@@ -429,6 +429,12 @@ Template.projectView.helpers({
   anyRolesNoAuth: function() {
     return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
   },
+  anyShares: function() {
+    return this.project.availableShares || 0;
+  },
+  mpps: function() {
+    return this.project.mpps || 1;
+  },
   formattedDescription: function() {
     var that =  this;
     setTimeout(function() {
@@ -1085,6 +1091,53 @@ Template.projectView.events({
       ],
       callback: function(){},
       afterOpen: timeDateDonateConfig
+    });
+  },
+  'click #buy-shares': function(e) {
+    e.preventDefault();
+    /** vex dialog how many shares to purchase, purchase */
+    var dialogInput = [
+        '<style>',
+            '.vex-custom-field-wrapper {',
+                'margin: 1em 0;',
+            '}',
+            '.vex-custom-field-wrapper > label {',
+                'display: inline-block;',
+                'margin-bottom: .2em;',
+            '}',
+        '</style>',
+        '<div class="vex-custom-field-wrapper">',
+            '<label for="date">Number of shares (' + currentProject.mpps + ' USD per share).</label>',
+            '<div class="vex-custom-input-wrapper">',
+                '<input name="shares" type="number" />',
+            '</div>',
+        '</div>'
+    ]
+    vex.dialog.open({
+      message: 'How many shares?',
+      input: dialogInput.join(''),
+      callback: function(data) {
+        if (!data||!data.shares) return;
+        var amt = Math.abs(parseInt(data.shares)) * currentProject.mpps;
+        if (amt>0) {
+          var donationObject = {
+            first: Meteor.user().firstName,
+            last: Meteor.user().lastName,
+            email: Meteor.user().email,
+            id: Meteor.user()._id,
+            amount: amt
+          }
+          
+          makeStripeCharge({
+            amount: amt,
+            message: 'Purchase ' + data.shares + ' shares',
+            description: data.shares + ' shares purchased on O . S . H .',
+            donationObject: donationObject,
+            route: 'buyShares',
+            slug: currentSlug
+          });
+        }
+      }
     });
   },
   'click #submit-update': function(e) {

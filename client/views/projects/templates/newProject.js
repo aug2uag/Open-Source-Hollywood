@@ -52,7 +52,7 @@ Template.newProject.onRendered(function() {
     $('#summernote').summernote({
       toolbar: [
         // [groupName, [list of button]]
-        ['style', ['bold', 'underline', 'clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+        ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
         ['para', ['ul', 'ol', 'paragraph', 'style']],
         ['height', ['height']],
         ['misc', ['undo', 'redo']],
@@ -502,6 +502,7 @@ Template.newProject.events({
     if (equityInfo) {
       o.equityInfo = JSON.parse(equityInfo);
       o.availableShares = parseFloat($('#assign').val()) * 100;
+      o.totalShares = o.availableShares;
       o.mpps = parseInt($('#minimumassign').val()||1);
       localStorage.removeItem('revshare');
     };
