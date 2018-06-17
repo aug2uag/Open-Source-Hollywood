@@ -551,7 +551,6 @@ Template.projectView.events({
   },
   'click #reportthis': function(e) {
     e.preventDefault();
-    console.log(this);
     /** show vex dialog */
     vexFlag(this);
   },
@@ -1119,13 +1118,14 @@ Template.projectView.events({
       callback: function(data) {
         if (!data||!data.shares) return;
         var amt = Math.abs(parseInt(data.shares)) * currentProject.mpps;
-        if (amt>0) {
+        if (!isNaN(amt) && amt>0) {
           var donationObject = {
             first: Meteor.user().firstName,
             last: Meteor.user().lastName,
             email: Meteor.user().email,
             id: Meteor.user()._id,
-            amount: amt
+            amount: amt,
+            shares: Math.abs(parseInt(data.shares))
           }
           
           makeStripeCharge({

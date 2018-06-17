@@ -511,7 +511,7 @@ Template.settings.rendered = function () {
       	toolbar: [
 		    // [groupName, [list of button]]
 		    ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
-		    ['para', ['ul', 'ol', 'paragraph', 'style']],
+		    ['para', ['paragraph', 'style']],
 		    ['height', ['height']],
 		    ['misc', ['undo', 'redo']],
 		    ['insert', ['picture', 'video', 'table', 'hr']]
