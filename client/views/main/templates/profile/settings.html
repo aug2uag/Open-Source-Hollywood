@@ -15,22 +15,22 @@
                     <li class="opened">
                         <h5>Edit Profile</h5></li>
                     <li class="">
+                        <h5>Notifications</h5></li>
+                    <li class="">
                         <h5>Pay Portal</h5></li>
                     <li class="">
                         <h5>Equity Holdings</h5></li>
                     <li class="">
                         <h5>Active Campaigns</h5></li>
                     <li class="">
-                        <h5>Notifications</h5></li>
-                    <li class="">
                         <h5>Messages</h5></li>
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                         <option>Edit Profile</option>
+                        <option>Notifications</option>
                         <option>Pay Portal</option>
                         <option>Equity Holdings</option>
                         <option>Active Campaigns</option>
-                        <option>Notifications</option>
                         <option>Messages</option>
                       </select>
                       <span class="tabs-select-inner" style="display: block; white-space: nowrap;">SELECT</span></span>
@@ -297,17 +297,67 @@
                         </div>
                     </div>
 
+
+                    <div id="notifications" class="project-content" style="display: none;">
+                        <h3 id="comments_title">Configure Phone &amp; Email Notifications</h3>
+                        <p style="position:relative;top:-20px">Configuring email or phone notifications also backs up your account, which is useful in case you lose your social media account or credentials. This makes future access to your account more secure, and is highly recommended for everyone. Plus you'll get notifications of real-time events as they occur, such as communications or events in campaigns you're involved with.</p>
+                        <hr class="margin_bottom40">
+                        <div class="row" style="width:100%">
+                          <div class="col-xs-3">
+                            <span style="position:relative;top:-10px">Email</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <input type="text" name="email_notify" id="email_notify" value="{{emailValue}}" placeholder="enter email" />
+                          </div>
+                          <div class="col-xs-3">
+                            <p id="email_verified" style="position:relative;top:-10px;text-align:center;margin-bottom:0px!important">{{ emailConfigStatus }}</p>
+                            {{#if emailConfig}}
+                              <a id="remove_email_notify" class="btn btn-sm btn-danger margin_bottom40" style="display: inherit;">DELETE</a>
+                            {{/if}}
+                          </div>
+                          <div class="col-xs-12">
+                            {{#if emailReverify}}   
+                              <a id="resend_email_notify" class="btn btn-block btn-warning margin_bottom40">Resend Email Verification</a>    
+                            {{/if}}
+                          </div>
+                        </div>
+
+
+                        <div class="row" style="width:100%">
+                          <div class="col-xs-3">
+                            <span style="position:relative;top:-10px">Phone</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <input type="text" name="phone_notify" id="phone_notify" value="{{phoneValue}}" placeholder="enter phone" />
+                          </div>
+                          <div class="col-xs-3">
+                            <p id="phone_verified" style="position:relative;top:-10px;text-align:center;margin-bottom:0px!important">{{ phoneConfigStatus }}</p>
+                            {{#if phoneConfig}}
+                              <a id="remove_phone_notify" class="btn btn-sm btn-danger margin_bottom40" style="display: inherit;">DELETE</a>
+                            {{/if}}
+                          </div>
+                          <div class="col-xs-12">
+                            {{#if phoneReverify}}
+                              <a id="resend_phone_notify" class="btn btn-block btn-warning margin_bottom40">Resend Phone Verification</a>    
+                            {{/if}}
+                          </div>
+                        </div>
+                        <div class="row" style="width:100%">
+                          <div class="col-xs-12">
+                            <button class="btn btn-lg btn-block btn-success submit" type="submit" id="set-notifications">Update Notification Settings</button>
+                          </div>
+                        </div>
+                    </div>
+
                     <div id="pay" class="project-content" style="display: none;">
                         <aside id="comments">
-
-                            <a href="/receipts" class="btn btn-lg btn-primary col-xs-12 margin_bottom40" style="width:100%">View transactions history</a>
 
                             <h3 id="comments-title">Configure Pay Transfers</h3>
 
                             {{#if account}}
                             {{#unless bank}}
                               <section>
-                                  <h4 style="margin-top: 20px;">For transferring funds raised from campaigns to your personal or business bank account. You do not need to file this unless you intend to transfer funds from one or more campaigns as an author.</h4>
+                                  <p style="position:relative;top:20px">We use Stripe (<a href="https://stripe.comhttps://stripe.com/us/legal">https://stripe.com/us/legal</a>) to handle payments and transfers. To receive funds from campaigns or revenue sharing, please use the form below to configure the Stripe payment portal. Additional information may become necessary in the future, please visit <a href="https://stripe.com/us/legal">Stripe's terms &amp; conditions</a> for more details.</p>
                                   <hr />
                                   <div class="row">
                                     <div style="width:100%">
@@ -440,6 +490,8 @@
                             {{else}}
                             {{createAccount}}
                             {{/if}}
+                            <p>&nbsp;</p>
+                            <a href="/receipts" class="btn btn-lg btn-primary col-xs-12 margin_bottom40" style="width:100%">View transactions history</a>
                         </aside>
                     </div>
 
@@ -483,57 +535,8 @@
                       </div>
                     </div>
 
-                    <div id="notifications" class="project-content" style="display: none;">
-                        <h3 id="comments_title">Configure Phone &amp; Email Notifications</h3>
-                        <div class="row" style="width:100%">
-                          <div class="col-xs-3">
-                            <span style="position:relative;top:-10px">Email</span>
-                          </div>
-                          <div class="col-xs-6">
-                            <input type="text" name="email_notify" id="email_notify" value="{{emailValue}}" placeholder="enter email" />
-                          </div>
-                          <div class="col-xs-3">
-                            <p id="email_verified" style="position:relative;top:-10px;text-align:center;margin-bottom:0px!important">{{ emailConfigStatus }}</p>
-                            {{#if emailConfig}}
-                              <a id="remove_email_notify" class="btn btn-sm btn-danger margin_bottom40" style="display: inherit;">DELETE</a>
-                            {{/if}}
-                          </div>
-                          <div class="col-xs-12">
-                            {{#if emailReverify}}   
-                              <a id="resend_email_notify" class="btn btn-block btn-warning margin_bottom40">Resend Email Verification</a>    
-                            {{/if}}
-                          </div>
-                        </div>
-
-
-                        <div class="row" style="width:100%">
-                          <div class="col-xs-3">
-                            <span style="position:relative;top:-10px">Phone</span>
-                          </div>
-                          <div class="col-xs-6">
-                            <input type="text" name="phone_notify" id="phone_notify" value="{{phoneValue}}" placeholder="enter phone" />
-                          </div>
-                          <div class="col-xs-3">
-                            <p id="phone_verified" style="position:relative;top:-10px;text-align:center;margin-bottom:0px!important">{{ phoneConfigStatus }}</p>
-                            {{#if phoneConfig}}
-                              <a id="remove_phone_notify" class="btn btn-sm btn-danger margin_bottom40" style="display: inherit;">DELETE</a>
-                            {{/if}}
-                          </div>
-                          <div class="col-xs-12">
-                            {{#if phoneReverify}}
-                              <a id="resend_phone_notify" class="btn btn-block btn-warning margin_bottom40">Resend Phone Verification</a>    
-                            {{/if}}
-                          </div>
-                        </div>
-                        <div class="row" style="width:100%">
-                          <div class="col-xs-12">
-                            <button class="btn btn-lg btn-block btn-success submit" type="submit" id="set-notifications">Update Notification Settings</button>
-                          </div>
-                        </div>
-                    </div>
-
                     <div id="messages" class="project-content" style="display: none;">
-                        <h3 id="comments_title">Your Recent Messages</h3>
+                        <h3 id="comments-title00-messages">Your Recent Messages</h3>
                         <ol id="comments-list">
 
                           {{#each messages}}
@@ -557,8 +560,12 @@
                                     <a href="/message/project/{{ this.slug }}/{{ this.user }}" class="button special" style="margin-top:30px;display:table-caption;">REPLY</a>
 
                                 </div>
-
-                            </li>
+                          </li>
+                          {{else}}
+                          <script type="text/javascript">
+                            $('#comments-title00-messages').text('No recent messages to show.');
+                            $('#comments-title00-messages').addClass('h3b');
+                          </script>
                           {{/each}}
 
                         </ol>

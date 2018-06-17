@@ -182,11 +182,28 @@
                     </div>
 
                     <div id="updates" class="project-content container" style="display: none;width: 100%;">
-
+                      {{#if isOwner}}
+                        <div id="respond" class="comment-respond margin_bottom40">
+                          <h3 id="reply-title" class="comment-reply-title">Announce Update</h3>
+                          <form class="comment-form">
+                              <div class="krown-column-container span12 last" style="margin-left:0">
+                                  <label for="update">Your update</label>
+                                  <textarea id="update-box" name="update" rows="8" style="height: 133px;"></textarea>
+                              </div>
+                              <p class="form-submit">
+                                  <input name="submit" type="submit" id="submit-update" class="submit" value="Post Update">
+                              </p>
+                              <p style="display: none;">
+                                  <input type="hidden" >
+                              </p>
+                              <p style="display: none;"></p>
+                          </form>
+                        </div>
+                      {{/if}}
                       {{#each project.updates}}
                           <div class="row">
                             <div class="col-sm-12">
-                                <p><span style="color: #000000;"><strong>Update {{inc @index}}<br></strong></span></p>
+                                <h3 id="comments-title"><span style="color: #000000;"><strong>Update {{inc @index}}<br></strong></span></h3>
                             </div>
                             <div class="col-sm-9">
                                 <p>{{this.text}}</p>
@@ -196,7 +213,7 @@
                             </div>
                           </div>
                       {{else}}
-                        <p><span style="color: #000000;"><strong>There are no project updates.<br></strong></span></p>
+                        <h3 id="comments-title"><span style="color: #000000;"><strong>There are no updates to show.<br></strong></span></h3>
                       {{/each}}
                     </div>
 
@@ -258,25 +275,9 @@
                         <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
                         {{/if}}
                         {{#if isOwner}}
-                            <div id="respond" class="comment-respond">
-                              <h3 id="reply-title" class="comment-reply-title">Announce Update</h3>
-                              <form class="comment-form">
-                                  <div class="krown-column-container span12 last" style="margin-left:0">
-                                      <label for="update">Your update</label>
-                                      <textarea id="update-box" name="update" rows="8" style="height: 133px;"></textarea>
-                                  </div>
-                                  <p class="form-submit">
-                                      <input name="submit" type="submit" id="submit-update" class="submit" value="Post Update">
-                                  </p>
-                                  <p style="display: none;">
-                                      <input type="hidden" >
-                                  </p>
-                                  <p style="display: none;"></p>
-                              </form>
-                          </div>
-                        {{> applicants}}
-                        <p>&nbsp;</p>
-                        <a id="closeProj" class="btn btn-danger btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="#!">DELETE CAMPAIGN</a>
+                          {{> applicants}}
+                          <p>&nbsp;</p>
+                          <a id="closeProj" class="btn btn-danger btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="#!">DELETE CAMPAIGN</a>
                         {{/if}}
                     </div>
 
