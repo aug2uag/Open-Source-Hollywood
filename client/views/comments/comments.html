@@ -1,7 +1,7 @@
 <template name="commentBox">
   <div id="respond" class="comment-respond">
     {{#if currentUser}}
-      <h3 id="reply-title" class="comment-reply-title">Write a comment</h3>
+      <h4 id="reply-title" class="comment-reply-title">Write a comment</h4>
       <form class="comment-form">
           <div class="krown-column-container span12 last" style="margin-left:0">
               <label for="comment">Your Comment</label>
@@ -12,7 +12,7 @@
           </p>
       </form>
     {{else}}
-      <h3 id="reply-title" class="comment-reply-title">Sign-in to comment</h3>
+      <h4 id="reply-title" class="comment-reply-title">Sign-in to comment</h4>
     {{/if}}
   </div>
 </template>

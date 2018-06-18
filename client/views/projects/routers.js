@@ -1,51 +1,51 @@
 var wasUser = false;
 
 Router.route('/discover', {
-    name: 'Projects',
-    template: 'projectTabs',
-    layoutTemplate: 'StaticLayout',
-    waitOn: function() {
-      return [
-        Meteor.subscribe('projectsList'), 
-        // Meteor.subscribe('connectUser'),
-        Meteor.subscribe('getMe')
-      ];
-    },
-    onBeforeAction: function() {
-      var x = localStorage.getItem('redirectURL');
+  name: 'Projects',
+  template: 'projectTabs',
+  layoutTemplate: 'StaticLayout',
+  waitOn: function() {
+    return [
+      Meteor.subscribe('projectsList'), 
+      // Meteor.subscribe('connectUser'),
+      Meteor.subscribe('getMe')
+    ];
+  },
+  onBeforeAction: function() {
+    var x = localStorage.getItem('redirectURL');
+    localStorage.removeItem('redirectURL');
+    if (x&&x!=='null'&&x.indexOf('/')>-1) {
+      Router.go(x);
       localStorage.removeItem('redirectURL');
-      if (x&&x!=='null'&&x.indexOf('/')>-1) {
-        Router.go(x);
-        localStorage.removeItem('redirectURL');
-        return;
-      };
-      $('meta[name=description]').remove();
-      $('head').append( '<meta name="description" content="Campaigns on O . S . H . (https://opensourcehollywood.org)">' );
-      document.title = 'Active Campaigns';
-      this.next();
-    }
+      return;
+    };
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="Campaigns on O . S . H . (https://opensourcehollywood.org)">' );
+    document.title = 'Active Campaigns';
+    this.next();
+  }
 });
 
 Router.route('/create', {
-    name: 'Create Project',
-    template: 'newProject',
-    layoutTemplate: 'StaticLayout',
-    waitOn: function() {
-      if (!Meteor.user()) {
-        window.location.assign('/');
-        return
-      }
-      return [
-        Meteor.subscribe('getMe'), 
-        // Meteor.subscribe('connectUser')
-      ];
-    },
-    onBeforeAction: function() {
-      $('meta[name=description]').remove();
-      $('head').append( '<meta name="description" content="Free crowdsourcing campaign creation on Open Source Hollywood.' );
-      document.title = 'Create Campaign';
-      this.next();
+  name: 'Create Project',
+  template: 'newProject',
+  layoutTemplate: 'StaticLayout',
+  waitOn: function() {
+    if (!Meteor.user()) {
+      window.location.assign('/');
+      return
     }
+    return [
+      Meteor.subscribe('getMe'), 
+      // Meteor.subscribe('connectUser')
+    ];
+  },
+  onBeforeAction: function() {
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="Free crowdsourcing campaign creation on Open Source Hollywood.' );
+    document.title = 'Create Campaign';
+    this.next();
+  }
 });
 
 Router.route('/projects/:slug/:uid', {

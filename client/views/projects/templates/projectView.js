@@ -397,12 +397,12 @@ Template.projectView.helpers({
   },
   privateShares: function() {
     // how many total private shares?
-    var percent = this.project.totalShares / 100;
+    var percent = (this.project.totalShares || 0) / 100;
     return (100 - percent) * 100;
   },
   availableShares: function() {
     // how many available private shares?
-    var percent = this.project.totalShares / 100;
+    var percent = (this.project.totalShares || 0) / 100;
     var rem = (100 - percent) * 100;
     // list of private share holders
     var assigned = this.project.usersApproved.map(function(i) {
