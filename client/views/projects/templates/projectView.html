@@ -467,6 +467,31 @@
                                                 <div class="id-progress-raised"> {{numBackers}}</div>
                                                 <div class="id-product-funding">backers</div>
                                           </div>
+                                          <p>&nbsp;</p>
+                                          <p>&nbsp;</p>
+                                          <h4>CAMPAIGN EQUITY</h4>
+                                          {{#if hasEquity}}
+                                          <div class="rpdata">
+                                                <div class="id-progress-raised"> {{this.project.totalShares}}</div>
+                                                <div class="id-product-funding">total public</div>
+                                          </div>
+                                          <p>&nbsp;</p>
+                                          <div class="rpdata">
+                                                <div class="id-progress-raised"> {{soldShares}}</div>
+                                                <div class="id-product-funding">public sold</div>
+                                          </div>
+                                          {{/if}}
+                                          <p>&nbsp;</p>
+                                          <div class="rpdata">
+                                                <div class="id-progress-raised"> {{privateShares}}</div>
+                                                <div class="id-product-funding">total private</div>
+                                          </div>
+                                          <p>&nbsp;</p>
+                                          <div class="rpdata">
+                                                <div class="id-progress-raised"> {{availableShares}}</div>
+                                                <div class="id-product-funding">available</div>
+                                          </div>
+                                          
                                         </div>
                                     </div>
                                 </div>

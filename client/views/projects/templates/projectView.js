@@ -384,6 +384,34 @@ Template.projectView.helpers({
   numBackers: function() {
     return this.project.donations&&this.project.donations.length||0;
   },
+  hasEquity: function() {
+    if (this.project.equityInfo.agreement1&&
+      this.project.equityInfo.agreement2&&
+      this.project.equityInfo.agreement3&&
+      this.project.equityInfo.agreement4) 
+      return true;
+    return false;
+  },
+  soldShares: function() {
+    return this.project.totalShares - this.project.availableShares;
+  },
+  privateShares: function() {
+    // how many total private shares?
+    var percent = this.project.totalShares / 100;
+    return (100 - percent) * 100;
+  },
+  availableShares: function() {
+    // how many available private shares?
+    var percent = this.project.totalShares / 100;
+    var rem = (100 - percent) * 100;
+    // list of private share holders
+    var assigned = this.project.usersApproved.map(function(i) {
+      return i.equity||0;
+    }).reduce(function(a, b) {
+      return a + b;
+    }, 0);
+    return rem - assigned;
+  },
   numUpdates: function() {
     var updates = this.project.updates||[];
     return updates.length;
