@@ -275,12 +275,18 @@ Template.newProject.events({
                   '<div class="form-check">',
                     '<input class="form-check-input" type="checkbox" value="" id="agreement2" name="agreement2">',
                     '<label class="form-check-label" for="agreement2">',
-                      'I promise to share revenues with investors.',
+                      'I understand I need to share distribution data with stakeholders.',
                     '</label>',
                   '</div>',
                   '<div class="form-check">',
                     '<input class="form-check-input" type="checkbox" value="" id="agreement3" name="agreement3">',
                     '<label class="form-check-label" for="agreement3">',
+                      'I promise to share revenues with investors.',
+                    '</label>',
+                  '</div>',
+                  '<div class="form-check">',
+                    '<input class="form-check-input" type="checkbox" value="" id="agreement4" name="agreement4">',
+                    '<label class="form-check-label" for="agreement4">',
                       'I understand that I am accepting legal responsibility for selling interests in my campaign.',
                     '</label>',
                   '</div>',
@@ -300,12 +306,14 @@ Template.newProject.events({
         data.agreement1 = $("#agreement1").is(':checked');
         data.agreement2 = $("#agreement2").is(':checked');
         data.agreement3 = $("#agreement3").is(':checked');
-        if (!rev_fullname) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!rev_province) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!rev_contact) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!agreement1) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!agreement2) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!agreement3) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        data.agreement4 = $("#agreement4").is(':checked');
+        if (!data.rev_fullname) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!data.rev_province) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!data.rev_contact) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!data.agreement1) return alert('please agree to all terms to continue');
+        if (!data.agreement2) return alert('please agree to all terms to continue');
+        if (!data.agreement3) return alert('please agree to all terms to continue');
+        if (!data.agreement4) return alert('please agree to all terms to continue');
         $('#hiddenequity').show();
         alert('CONGRATULATIONS! you are now eligible for revenue sharing on this campaign; to continue please fill out how much percent of your campaign you are opening for revenue sharing, and the minimum price per share')
         localStorage.setItem('revshare', JSON.stringify(data));
@@ -501,8 +509,7 @@ Template.newProject.events({
     var equityInfo = localStorage.getItem('revshare');
     if (equityInfo) {
       o.equityInfo = JSON.parse(equityInfo);
-      o.availableShares = parseFloat($('#assign').val()) * 100;
-      o.totalShares = o.availableShares;
+      o.totalShares = o.availableShares = parseFloat($('#assign').val()) * 100;
       o.mpps = parseInt($('#minimumassign').val()||1);
       localStorage.removeItem('revshare');
     };

@@ -438,7 +438,7 @@ Template.projectView.helpers({
   formattedDescription: function() {
     var that =  this;
     setTimeout(function() {
-      $('#formatted_desc').html(that.project.description);
+      $('#formatted_desc').html(currentProject&&currentProject.description||'');
     }, 800);
   },
   shareData: function() {
