@@ -1,6 +1,6 @@
 var was;
 
-function negotiationHelper(key) {
+function getCurrentNegotiation() {
 	var negotiatedRoles = was.project.negotiations || [];
 	var negotiatedRole;
 	for (var i = 0; i < negotiatedRoles.length; i++) {
@@ -9,6 +9,11 @@ function negotiationHelper(key) {
 			break;
 		};
 	};
+	return negotiatedRole || {};
+}
+
+function negotiationHelper(key) {
+	var negotiatedRole = getCurrentNegotiation();
 	if (negotiatedRole&&negotiatedRole[key]) {
 		return negotiatedRole[key];
 	};
@@ -25,8 +30,51 @@ function formattedProjectRoles() {
 }
 
 Template.projectMessage.helpers({
-	foo: function() {
+	was:function() {
 		was = this;
+	},
+	ownerInitAgreement: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
+	},
+	ownerInitAgreementAplicantNote: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id!==was.project.ownerId;
+	},
+	applicantRequestCounter: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id!==was.project.ownerId;
+	},
+	applicantRequestCounterAuthorNote: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
+	},
+	authorNeedsFinishAgreement: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return currentNegotiation.authorVerified&&currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
+	},
+	sharesAvailable: function() {
+		var percent = (this.project.totalShares || 0) / 100;
+    	return (100 - percent) * 100;
+	},
+	auditions: function() {
+		var agg = [];
+		var positions = was.project.cast.concat(was.project.crew);
+		for (var i = 0; i < was.offers.length; i++) {
+			var offer = was.offers[i]
+			for (var j = 0; j < positions.length; j++) {
+				var position = positions[j];
+				if (position.title === offer.position||
+					position.role === offer.position) {
+					if (position.audition) agg.push({
+						title: offer.position,
+						audition: position.audition,
+						url: offer.url || 'applicant enter URL of audition material'
+					});
+				};
+			};
+		};
+		return agg;
 	},
 	isProjectOwner: function() {
 		return this.project.ownerId === Meteor.user()._id;
@@ -61,31 +109,49 @@ Template.projectMessage.helpers({
 	negotiationTerms: function() {
 		var value = negotiationHelper('negotiationTerms');
 		if (value) return value;
-		console.log('negotiationTerms')
 		var roles = formattedProjectRoles();
 		return 'This contract is valid for all expected performance and conditions relating to the roles of ' + roles + '. Campaign author promises to make best efforts to create campaign, and applicant promises to perform the roles outlined in this agreement.';
 	},
 	negotiationDamages: function() {
 		var value = negotiationHelper('negotiationDamages');
 		if (value) return value;
-		console.log('negotiationDamag')
 		return 'Breaching party is responsible for paying any legal fees resulting from breach of non-performance. All disputes will be handled in the State of California, and this contract is bound to California laws and regulations.';
 	},
 	negotiationFinancial: function() {
-		var value = negotiationHelper('negotiationFinancial');
+		var value = negotiationHelper('financials');
 		if (value) return value;
-		console.log('negotiationFinan')
-		return 'enter value, calculated in US Dollars';
+		return '0';
 	},
 	negotiationEquities: function() {
-		var value = negotiationHelper('negotiationEquities');
+		var value = negotiationHelper('equities');
 		if (value) return value;
-		console.log('negotiationEquit')
-		return 'enter value, calculated in number of shares';
+		return '0';
 	}
 })
 
 Template.projectMessage.events({
+	'click #authorinitk': function(e) {
+		/** set authorverified = true */
+		var agreement = {
+			negotiationRoles: $('#negotiationRoles').val(),
+			negotiationTerms: $('#negotiationTerms').val(),
+			negotiationDamages: $('#negotiationDamages').val(),
+			financials: $('#financials').val(),
+			equities: $('#equities').val(),
+			ctx: was
+		}
+		Meteor.call('authorInitAgreement', agreement);
+	},
+	'click #applicantverifyk': function(e) {
+		e.preventDefault();
+		console.log(new Array(100).join(1))
+		Meteor.call('applicantVerifyAgreement', was);
+	},
+	'click #applicantcounterk': function(e) {
+		e.preventDefault();
+		console.log(new Array(100).join(2))
+		Meteor.call('applicantCounterOffer', was);
+	},
 	'change #negotiationRoles': function(e) {
 		var _negotiationRoles = $('#negotiationRoles').val();
 		Meteor.call('updateProjectNegotiations', {
@@ -145,7 +211,6 @@ Template.projectMessageOffer.helpers({
 		}
 	},
 	considerationItself: function() {
-		console.log(this)
 		var amount = this.amount, pay = this.pay, type = this.type;
 		if (amount===0&&pay===0) {
 			return 'time donation offer';

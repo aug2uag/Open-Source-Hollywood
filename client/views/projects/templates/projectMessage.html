@@ -2,7 +2,7 @@
   <div id="content" class="clearfix layout-fixed-width">
     <div class="clearfix wrapper">
         <header id="page-title">
-            {{foo}}
+            {{was}}
             <h1 class="title">Negotiations</h1>
             <h2 class="subtitle">Form a legally binding contract between {{userName}} and campaign "{{project.title}}"</h2>
             <p>&nbsp;</p>
@@ -28,71 +28,132 @@
                 </section>
               </div>
             </div>
-            {{#if isProjectOwner}}
+
+            <div class="krown-column-row clearfix">
+              <div class="krown-column-container clearfix first span12 clearfix">
+                <section class="krown-box light-1 clearfix">
+                <h4>AUDITION SPECIFICATIONS</h4>
+                <h6>CAMPAIGN AUTHORS MAY REQUEST ADDITIONAL AUDITIONS OR SPECIFICATIONS IN THE COMMUNICATIONS BELOW</h6>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>role</th>
+                      <th>request</th>
+                      <th>URL of audition video</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {{#each auditions}}
+                    <tr>
+                      <td>{{title}}</td>
+                      <td>{{audition}}</td>
+                      <td>
+                        <div class="form-group">
+                            <input type="text" class="form-control auditionURL" id="url{{@index}}" placeholder="{{url}}">
+                        </div>
+                      </td>
+                    </tr>
+                  {{else}}
+                    <tr><td colspan="3">NONE</td></tr>
+                  {{/each}}
+                  </tbody>
+                </table>
+                </section>
+              </div>
+            </div>
+            
             <div class="krown-column-row clearfix">
               <div class="krown-column-container clearfix first last span12 clearfix">
                 <h3>FINAL OFFER</h3>
-                <p><small>Negotiate with applicant and form agreement. Make changes to the fields, and they will save automatically. <strong>Submit only after your negotiations are completed</strong>.</small></p>
+                <p class="h5">Negotiate with applicant and form agreement. Make changes to the fields, and they will save automatically. <strong>Submit only after your negotiations are completed</strong>.</p>
                 <div class="krown-accordion accordion large clearfix">
                     <section>
                         <h5>ROLES</h5>
-                        <div>
+                        <div style="display:block">
                             <h4>List of roles this user is accepted to perform.</h4>
-                            <textarea id="negotiationRoles">{{negotiationRoles}}</textarea>
+                            <textarea id="negotiationRoles" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">{{negotiationRoles}}</textarea>
                         </div>
                     </section>
                     <section>
                         <h5>TERMS</h5>
-                        <div>
+                        <div style="display:block">
                             <h4>Define the essential performance terms expected from this member.</h4>
-                            <textarea id="negotiationTerms">{{negotiationTerms}}</textarea>
+                            <textarea id="negotiationTerms" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">{{negotiationTerms}}</textarea>
                         </div>
                     </section>
                     <section>
                         <h5>DAMAGES</h5>
-                        <div>
+                        <div style="display:block">
                             <h4>Specific outcomes in case the member purposely fails to perform.</h4>
-                            <textarea id="negotiationDamages">{{negotiationDamages}}</textarea>
+                            <textarea id="negotiationDamages" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">{{negotiationDamages}}</textarea>
                         </div>
                     </section>
                     <section>
                         <h5>FINANCIAL</h5>
-                        <div>
+                        <div style="display:block">
                             <div class="form-group">
-                              <label for="financials"><strong>How much to pay applicant for their role.</strong></label>
-                              <input type="number" class="form-control" id="financials" placeholder="{{negotiationFinancial}}">
+                              <label for="financials"><strong>How much pay for the role in USD.</strong></label>
+                              <input type="number" class="form-control" id="financials" value="{{negotiationFinancial}}" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">
                           </div>
                         </div>
                     </section>
                     <section>
                         <h5>EQUITY</h5>
-                        <div>
+                        <div style="display:block">
                             <div class="form-group">
-                              <label for="equities"><strong>How much equity is bargained for applicant for their role.</strong></label>
-                              <input type="number" class="form-control" id="equities" placeholder="{{negotiationEquities}}">
-                              <p></p>
+                              <label for="equities"><strong>How many shares of the campaign.</strong></label>
+                              <input type="number" class="form-control" id="equities" value="{{negotiationEquities}}" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">
+                              {{#if isProjectOwner}}
+                              <p class="lead">{{sharesAvailable}} shares available</p>
+                              <p><small>shares updated only after finalization of agreement</small></p>
+                              {{/if}}
                           </div>
                         </div>
                     </section>
                 </div>
               </div>
             </div>
-
-            <!-- FINAL OFFER FORM -->
-            <!-- ROLES -->
-            <!-- SPECIFIC TERMS -->
-            <!-- FINAL AMOUNT -->
-            <!-- EQUITY CONSIDERATION -->
+            
             <p>&nbsp;</p>
-            <hr>
+            {{#if ownerInitAgreement}}
+            <div class="krown-column-row clearfix">
+                <div class="krown-column-container clearfix last span12 clearfix">
+                    <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" id="authorinitk">SELECT HERE TO MAKE OFFER WITH ABOVE SPECIFICATIONS</a></section>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#if ownerInitAgreementAplicantNote}}
+              <p class="h6">author must initiate offer, please communicate with messages below</p>
+            {{/if}}
+
+            {{#if applicantRequestCounter}}
+            <div class="krown-column-row clearfix">
+                <div class="krown-column-container clearfix last span12 clearfix">
+                    <section class="krown-box clearfix">
+                      the campaign author has made an offer detailed above, you may accept their offer to be finalized or negotiate in the communications; if you would like to renegotiate please select "counter-offer", however there is no guarantee the campaign author will accept your counter offer
+                    </section>
+                </div>
+                <div class="krown-column-container clearfix last span6 clearfix">
+                    <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" id="applicantverifyk">SELECT HERE TO ACCEPT</a></section>
+                </div>
+
+                <div class="krown-column-container clearfix last span6 clearfix">
+                    <section class="krown-box color clearfix"><a class="btn btn-block btn-default btn-lg" id="applicantcounterk">SELECT HERE TO COUNTER-OFFER</a></section>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#if applicantRequestCounterAuthorNote}}
+              <p class="h6">applicant is in process of accepting or countering offer, counters are communicated in messages below</p>
+            {{/if}}
+
+            {{#if authorNeedsFinishAgreement}}
+                <div class="krown-column-container clearfix last span12 clearfix">
+                    <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" id="authorfinalizek">SELECT HERE TO FINALIZE AND ACCEPT APPLICANT</a></section>
+                </div>
             {{/if}}
             
-            <!-- <h4>PAYMENTS</h4>
-            {{#each receipts}}
-              {{>projectMessagePayment}}
-            {{else}}
-              <tr>NO PAYMENTS RECEIVED TO DATE</tr>
-            {{/each}} -->
         </header>
         <div class="normal-content no-boxed">
           <div class="krown-column-row clearfix">
