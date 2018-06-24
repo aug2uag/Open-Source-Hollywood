@@ -16,6 +16,10 @@
                         <div class="col-sm-12 col-md-8">
                             <input type="text" name="title" id="crew-description" placeholder="Description" />
                         </div>
+                        <div class="col-sm-12">
+                            <input type="text" name="crew-audition" id="crew-audition" placeholder="Audition Specifications" />
+                            <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
+                        </div>
                     </div>
                     <a id="add-crew" class="button special">Add Crew Position</a>
                     <br>
@@ -25,7 +29,11 @@
                             <thead>
                                 <tr>
                                     <th>Crew Title</th>
+                                    <th></th>
                                     <th>Description</th>
+                                    <th></th>
+                                    <th>Audition</th>
+                                    <th></th>
                                     <th>Status</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -33,8 +41,9 @@
                             <tbody id="crew-table">
                               {{#each project.crew}}
                                 <tr class="crew-val">
-                                  <td>{{title}}</td>
-                                  <td>{{description}}</td>
+                                  <td colspan="2">{{title}}</td>
+                                  <td colspan="2">{{description}}</td>
+                                  <td colspan="2">{{audition}}</td>
                                   <td>
                                     <div class="col-sm-12 col-md-4 margin_bottom20">
                                         <div class="form-check form-check-inline">
@@ -67,6 +76,10 @@
                         <div class="col-sm-12 col-md-8">
                             <input type="text" name="cast-description" id="cast-description" placeholder="Description" />
                         </div>
+                        <div class="col-sm-12">
+                            <input type="text" name="cast-audition" id="cast-audition" placeholder="Audition Specifications" />
+                            <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
+                        </div>
                     </div>
                     <a id="add-cast" class="button special">Add Cast Position</a>
                     <br>
@@ -76,7 +89,11 @@
                             <thead>
                                 <tr>
                                     <th>Role</th>
+                                    <th></th>
                                     <th>Description</th>
+                                    <th></th>
+                                    <th>Audition</th>
+                                    <th></th>
                                     <th>Status</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -84,8 +101,9 @@
                             <tbody id="cast-table">
                               {{#each project.cast}}
                                 <tr class="cast-val">
-                                  <td>{{role}}</td>
-                                  <td>{{description}}</td>
+                                  <td colspan="2">{{role}}</td>
+                                  <td colspan="2">{{description}}</td>
+                                  <td colspan="2">{{audition}}</td>
                                   <td>
                                     <div class="col-sm-12 col-md-4 margin_bottom20">
                                         <div class="form-check form-check-inline">

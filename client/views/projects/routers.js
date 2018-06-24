@@ -171,8 +171,8 @@ Router.route('/message/project/:slug/:uid', {
   layoutTemplate: 'StaticLayout',
   onBeforeAction: function() {
     $('meta[name=description]').remove();
-    $('head').append( '<meta name="description" content="Open Source Hollywood member correspondence channel.">' );
-    document.title = 'Member Correspondence';
+    $('head').append( '<meta name="description" content="Open Source Hollywood member negotiations channel.">' );
+    document.title = 'Member Negotiations';
     this.next();
   },
   waitOn: function() {
@@ -195,8 +195,8 @@ Router.route('/message/project/:slug/:uid', {
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
     if (user&&project) {
-      var offers = Offers.find({uid: user._id, slug: project.slug});
-      var receipts = Receipts.find({user: user._id, slug: project.slug});
+      var offers = Offers.find({uid: user._id, slug: project.slug}).fetch();
+      var receipts = Receipts.find({user: user._id, slug: project.slug}).fetch();
       var messages = ProjectMessages.find({user: this.params.uid, project: project._id}).fetch();
       return {
         project: project,

@@ -376,6 +376,12 @@ function displayRoleTypeDialog(list, options) {
   })
 }
 
+Template.applicantsHelper.helpers({
+  currentSlug: function() {
+    return currentSlug;
+  }
+});
+
 Template.projectView.helpers({
   thumbsupactive: function() {
     // if me in upvote 'active' : null
@@ -385,7 +391,8 @@ Template.projectView.helpers({
     return this.project.donations&&this.project.donations.length||0;
   },
   hasEquity: function() {
-    if (this.project.equityInfo.agreement1&&
+    if (this.project.equityInfo&&
+      this.project.equityInfo.agreement1&&
       this.project.equityInfo.agreement2&&
       this.project.equityInfo.agreement3&&
       this.project.equityInfo.agreement4) 
@@ -591,7 +598,7 @@ Template.projectView.events({
   },
   'click #view-cast-positions': function(e) {
     /** display all cast positions */
-    var castPositions = this.project.cast;
+    var castPositions = currentProject.cast;
     var isMeteorUser = Meteor.user&&Meteor.user()||false;
     var inputHTML = castPositions.map(function(c, idx) {
       var _html = '<div class="vex-custom-field-wrapper">';
@@ -1428,6 +1435,9 @@ Template.applicants.helpers({
   },
   currentSlug: function() {
     return currentSlug
+  },
+  appliedFor: function() {
+    return appliedFor;
   }
 })
 

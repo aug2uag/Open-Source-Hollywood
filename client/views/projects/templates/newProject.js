@@ -459,7 +459,7 @@ Template.newProject.events({
       var arr = $(el).children('td');
       _o.title = $(arr[0]).text();
       _o.description = $(arr[1]).text();
-      _o.status = $(arr[2]).text();
+      _o.audition = $(arr[2]).text();
       o.crew.push(_o);
     });
 
@@ -470,7 +470,7 @@ Template.newProject.events({
       var arr = $(el).children('td');
       _o.role = $(arr[0]).text();
       _o.description = $(arr[1]).text();
-      _o.status = $(arr[2]).text();
+      _o.audition = $(arr[2]).text();
       o.cast.push(_o);
     });
 
@@ -584,18 +584,30 @@ Template.newProject.events({
   },
   'click #add-crew': function(e) {
     e.preventDefault();
-    var title = $('#crew-title').val(), description = $('#crew-description').val(), status = 'needed';
-    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'</td><td>'+status+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    var title = $('#crew-title').val(), 
+        description = $('#crew-description').val(), 
+        audition = $('#crew-audition').val() || 'N/A',
+        status = 'needed';
+    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'</td><td>'+audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
-    $('#crew-title').val(''), $('#crew-description').val(''), $("#crew-radio-needed").prop("checked", true);
+    $('#crew-title').val(''), 
+    $('#crew-description').val(''),
+    $('#crew-audition').val(''), 
+    $("#crew-radio-needed").prop("checked", true);
   },
 
   'click #add-cast': function(e) {
     e.preventDefault();
-    var title = $('#cast-title').val(), description = $('#cast-description').val(), status = 'needed';
-    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'</td><td>'+status+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    var title = $('#cast-title').val(), 
+        description = $('#cast-description').val(), 
+        audition = $('#cast-audition').val() || 'N/A',
+        status = 'needed';
+    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'</td><td>'+audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
-    $('#cast-title').val(''), description = $('#cast-description').val(''), $("#cast-radio-needed").prop("checked", true);
+    $('#cast-title').val(''), 
+    $('#cast-description').val(''), 
+    $('#cast-audition').val(''), 
+    $("#cast-radio-needed").prop("checked", true);
   },
 
   'click #add-needs': function(e) {

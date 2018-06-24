@@ -1,3 +1,11 @@
+<template name="applicantsHelper">
+  <tr>
+    <td><p class="align-center">{{appliedFor}}</p></td>
+    <td style="display:flex"><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px;top:15px;position:relative;" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
+    <td><a style="width:100%;top:15px;position:relative;" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">NEGOTIATE</a></td>
+  </tr>
+</template>
+
 <template name="projectView">
 
   <div id="content" class="clearfix ">
@@ -490,7 +498,7 @@
                                           <p>&nbsp;</p>
                                           <div class="rpdata">
                                                 <div class="id-progress-raised"> {{availableShares}}</div>
-                                                <div class="id-product-funding">available</div>
+                                                <div class="id-product-funding">private reserve</div>
                                           </div>
                                           
                                         </div>
@@ -528,68 +536,32 @@
 
 
 
-
-
-
-
-
-
 <template name="applicants">
-  <h3>Applicants for Roles</h3>
+  <h3>Applicants</h3>
   <div class="table-responsive">
     <table class="table">
       <thead>
         <tr>
           <th><p class="align-center">Role</p></th>
           <th><p class="align-center">Applicant</p></th>
-          <th><p class="align-center">Offer</p></th>
-          <th><p class="align-center">ACCEPT</p></th>
-          <th><p class="align-center">REJECT</p></th>
-          <th><p class="align-center">Message&nbsp;&nbsp;<i class="glyphicon glyphicon-envelope"></i></p></th>
+          <th><p class="align-center">NEGOTIATE</p></th>
         </tr>
       </thead>
       <tbody>
+        <tr class="grouplabel"><th colspan="3">CAST</th></tr>
         {{#each this.project.roleApplicants}}
-          <tr>
-            <td><p class="align-center">{{appliedFor}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-            <td><a style="width:100%" class="btn btn-mini btn-info view_offer">VIEW OFFER</a></td>
-            <td><a style="width:100%" class="btn btn-mini btn-success accept">ACCEPT</a></td>
-            <td><a style="width:100%" class="btn btn-mini btn-danger reject">REJECT</a></td>
-            <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
-          </tr>
+          {{ >applicantsHelper}}
         {{else}}
         <tr>
           <td colspan="6">None Applied</td>
         </tr>
         {{/each}} 
       </tbody>
-    </table>
-  </div>
-  <br>
-  <h3>Applicants for Team</h3>
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th><p class="align-center">Role</p></th>
-          <th><p class="align-center">Applicant</p></th>
-          <th><p class="align-center">Offer</p></th>
-          <th><p class="align-center">ACCEPT</p></th>
-          <th><p class="align-center">REJECT</p></th>
-          <th><p class="align-center">Message&nbsp;&nbsp;<i class="glyphicon glyphicon-envelope"></i></p></th>
-        </tr>
-      </thead>
+
       <tbody>
-        {{#each this.project.crewApplicants}}
-          <tr>
-            <td><p class="align-center">{{appliedFor}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-            <td><a style="width:100%" class="btn btn-mini btn-info view_offer">VIEW OFFER</a></td>
-            <td><a style="width:100%" class="btn btn-mini btn-success accept">ACCEPT</a></td>
-            <td><a style="width:100%" class="btn btn-mini btn-danger reject">REJECT</a></td>
-            <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
-          </tr>
+        <tr class="grouplabel"><th colspan="3">CREW</th></tr>
+        {{#each this.project.crewApplicants}}`
+          {{ >applicantsHelper}}
         {{else}}
         <tr>
           <td colspan="6">None Applied</td>
@@ -605,16 +577,14 @@
       <thead>
         <tr>
           <th><p class="align-center">Asset</p></th>
-          <th><p class="align-center">Offer</p></th>
           <th><p class="align-center">User</p></th>
-          <th><p class="align-center">Message&nbsp;&nbsp;<i class="glyphicon glyphicon-envelope"></i></p></th>
+          <th><p class="align-center">NEGOTIATE</p></th>
         </tr>
       </thead>
       <tbody>
         {{#each this.project.offeredResources}}
           <tr>
             <td><p class="align-center">{{asset}}</p></td>
-            <td><p class="align-center">requesting ${{offer}}</p></td>
             <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
             <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
           </tr>
