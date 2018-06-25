@@ -215,7 +215,7 @@ function showVexBudgetForm() {
     ],
     callback: function (data) {
       if (!data) {
-          return console.log('Cancelled')
+          // return console.log('Cancelled')
       }
       var costTally = 0;
       for (var key in data) {
@@ -301,7 +301,7 @@ Template.newProject.events({
       ],
       callback: function (data) {
         if (!data) {
-            return console.log('Cancelled')
+            // return console.log('Cancelled')
         }
         data.agreement1 = $("#agreement1").is(':checked');
         data.agreement2 = $("#agreement2").is(':checked');

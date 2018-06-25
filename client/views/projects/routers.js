@@ -197,7 +197,7 @@ Router.route('/message/project/:slug/:uid', {
     if (user&&project) {
       var offers = Offers.find({uid: user._id, slug: project.slug}).fetch();
       var receipts = Receipts.find({user: user._id, slug: project.slug}).fetch();
-      var messages = ProjectMessages.find({user: this.params.uid, project: project._id}).fetch();
+      var messages = ProjectMessages.find({user: this.params.uid, project: project._id, archived: {$ne: true}}).fetch();
       return {
         project: project,
         user: user,

@@ -53,6 +53,10 @@ Template.projectMessage.helpers({
 		var currentNegotiation = getCurrentNegotiation();
 		return currentNegotiation.authorVerified&&currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
 	},
+	authorNeedsFinishAgreementApplicantNote: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return currentNegotiation.authorVerified&&currentNegotiation.applicantVerified&&Meteor.user()._id!==was.project.ownerId;
+	},
 	sharesAvailable: function() {
 		var percent = (this.project.totalShares || 0) / 100;
     	return (100 - percent) * 100;
@@ -144,13 +148,27 @@ Template.projectMessage.events({
 	},
 	'click #applicantverifyk': function(e) {
 		e.preventDefault();
-		console.log(new Array(100).join(1))
 		Meteor.call('applicantVerifyAgreement', was);
 	},
 	'click #applicantcounterk': function(e) {
 		e.preventDefault();
-		console.log(new Array(100).join(2))
 		Meteor.call('applicantCounterOffer', was);
+	},
+	'click #authorfinalizek': function(e) {
+		e.preventDefault();
+		// var x = Meteor.call('approveOrDenyRole', this);
+		// console.log(x)
+		Meteor.call('authorFinalizeAgreement', was, function(err, result) {
+			console.log(err, result)
+			if (result===true) {
+				vex.dialog.alert({
+				    message: 'Applicant approved, this negotiations is complete',
+				    callback: function () {
+				        Router.go('Home');
+				    }
+				});
+			};	
+		});
 	},
 	'change #negotiationRoles': function(e) {
 		var _negotiationRoles = $('#negotiationRoles').val();
@@ -195,6 +213,27 @@ Template.projectMessage.events({
 })
 
 Template.projectMessageOffer.helpers({
+	approveOrDenyButton: function() {
+		console.log(this);
+		if (!this.declined) return 'red';
+		return 'green';
+	},
+	approveOrDenyButtonText: function() {
+		if (!this.declined) return 'remove';
+		return 'ok';
+	},
+	approveOrDenyTextDecoration: function() {
+		if (!this.declined) return 'none';
+		return 'line-through';
+	},
+	approveOrDenyButtonTextReadable: function() {
+		if (!this.declined) return 'decline';
+		return 'approve';
+	},
+	isEditable: function() {
+		var currentNegotiation = getCurrentNegotiation();
+		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
+	},
 	considerationType: function() {
 		if (this.ctx==='crew') {
 			if (this.type==='hired'&&this.pay>0) {
@@ -221,6 +260,13 @@ Template.projectMessageOffer.helpers({
 				return 'offering a donation of $' + this.pay;
 			}
 		}
+	}
+})
+
+Template.projectMessageOffer.events({
+	'click .approvedeny': function(e) {
+		console.log(this)
+		console.log(e.target)
 	}
 })
 
