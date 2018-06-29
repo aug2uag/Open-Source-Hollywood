@@ -30,6 +30,24 @@ function formattedProjectRoles() {
 }
 
 Template.projectMessage.helpers({
+	url: function() {
+		console.log(this)
+		if (this.audition==='N/A') {
+			return ' this role does not have an audition ';
+		} else if (this.url) {
+			return this.url;
+		} else {
+			return ' applicant enter URL of audition material ';
+		}
+	},
+	isDisabled: function() {
+		if (this.audition==='N/A'||was.project.ownerId===Meteor.user()._id||this.url) {
+			return 'pointer-events:none;'
+		};
+	},
+	sgoo: function() {
+		console.log(this)
+	},
 	was:function() {
 		was = this;
 	},
@@ -70,10 +88,11 @@ Template.projectMessage.helpers({
 				var position = positions[j];
 				if (position.title === offer.position||
 					position.role === offer.position) {
-					if (position.audition) agg.push({
+					if (position.audition&&position.audition!=='N/A') agg.push({
 						title: offer.position,
 						audition: position.audition,
-						url: offer.url || 'applicant enter URL of audition material'
+						url: offer.url,
+						offer: offer
 					});
 				};
 			};
@@ -87,7 +106,7 @@ Template.projectMessage.helpers({
 		return this.user.firstName + ' ' + this.user.lastName;
 	},
 	title: function() {
-		return 'Conversation w ' + this.user.firstName + ' ' + this.user.lastName + ' campaign: ' + this.project.title;
+		return this.title;
 	},
 	messages: function() {
 		var messages = ProjectMessages.find({user: this.user._id, project: this.project._id}, {sort: {createTimeActual: -1}});
@@ -134,6 +153,20 @@ Template.projectMessage.helpers({
 })
 
 Template.projectMessage.events({
+	'click #rejectUser': function(e) {
+		  vex.dialog.confirm({
+	      message: "Please confirm: you are rejecting " + was.offers[0].user.name,
+	      buttons: [
+	        $.extend({}, vex.dialog.buttons.YES, { text: 'Yes' }),
+	        $.extend({}, vex.dialog.buttons.NO, { text: 'No' })
+	      ],
+	      callback: function (result) {
+	        if (result) {
+	          Meteor.call('rejectUserFromProject', was.offers);
+	        };
+	      }
+	  });
+	},
 	'click #authorinitk': function(e) {
 		/** set authorverified = true */
 		var agreement = {
@@ -156,10 +189,7 @@ Template.projectMessage.events({
 	},
 	'click #authorfinalizek': function(e) {
 		e.preventDefault();
-		// var x = Meteor.call('approveOrDenyRole', this);
-		// console.log(x)
 		Meteor.call('authorFinalizeAgreement', was, function(err, result) {
-			console.log(err, result)
 			if (result===true) {
 				vex.dialog.alert({
 				    message: 'Applicant approved, this negotiations is complete',
@@ -210,6 +240,11 @@ Template.projectMessage.events({
 			value: _equities
 		});
 	},
+	'change .auditionURL': function(e) {
+		this.url = $(e.target).val() || null;
+		console.log(this)
+		Meteor.call('addAuditionURL', this);
+	}
 })
 
 Template.projectMessageOffer.helpers({
@@ -218,8 +253,17 @@ Template.projectMessageOffer.helpers({
 		if (!this.declined) return 'red';
 		return 'green';
 	},
+	approveOrDenyButtonApplicant: function() {
+		console.log(this);
+		if (this.declined) return 'red';
+		return 'green';
+	},
 	approveOrDenyButtonText: function() {
 		if (!this.declined) return 'remove';
+		return 'ok';
+	},
+	approveOrDenyButtonTextApplicant: function() {
+		if (this.declined) return 'remove';
 		return 'ok';
 	},
 	approveOrDenyTextDecoration: function() {
@@ -229,6 +273,10 @@ Template.projectMessageOffer.helpers({
 	approveOrDenyButtonTextReadable: function() {
 		if (!this.declined) return 'decline';
 		return 'approve';
+	},
+	approveOrDenyButtonTextReadableApplicant: function() {
+		if (this.declined) return 'declined';
+		return 'not declined';
 	},
 	isEditable: function() {
 		var currentNegotiation = getCurrentNegotiation();
@@ -265,8 +313,7 @@ Template.projectMessageOffer.helpers({
 
 Template.projectMessageOffer.events({
 	'click .approvedeny': function(e) {
-		console.log(this)
-		console.log(e.target)
+		Meteor.call('approveOrDenyRole', this);
 	}
 })
 

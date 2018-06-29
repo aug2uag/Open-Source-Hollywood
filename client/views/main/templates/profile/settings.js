@@ -430,6 +430,13 @@ Template.settings.helpers({
 		return 'not verified';
 	},
 	messages: function() {
+		/** 
+			THIS METHOD IS COMPLETELY FUCKED
+				- used to show each message
+				- now it's one negotiations tab (set)
+
+		  	IT SHOULD SHOW UNIQUE PROJ BY OFFERS, not messages
+		  */
 		var projects = Projects.find({
 	        $and: [
 	          {archived: false},
@@ -440,16 +447,34 @@ Template.settings.helpers({
 	    });
 		var messages = ProjectMessages.find({ 
 			$or: [
-				{ user: Meteor.user()._id } , 
-				{ project: { $in: projects } }
+				{ 
+					user: Meteor.user()._id,
+					archived: { $ne: true }
+				} , 
+				{ 
+					project: { $in: projects },
+					archived: { $ne: true }
+				}
 			] 
 		}, { 
 				sort: { createTimeActual: -1 } 
 		}).fetch();
 
-		return messages.filter(function(m) {
-			if (Meteor.user()._id!==m.ownerId) return m;
+		var projs = messages.map(function(p) {
+			return p.project;
 		});
+
+		var returnArr = [], duplicatesArr = [];
+
+		for (var i = 0; i < messages.length; i++) {
+			var m = messages[i];
+			if (duplicatesArr.indexOf(m.project)===-1) {
+				returnArr.unshift(m);
+				duplicatesArr.push(m.project);
+			};
+		};
+
+		return returnArr;
 	}
 });
 

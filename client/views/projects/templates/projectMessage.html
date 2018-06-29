@@ -26,7 +26,7 @@
                       <td>{{audition}}</td>
                       <td>
                         <div class="form-group">
-                            <input type="text" class="form-control auditionURL" id="url{{@index}}" placeholder="{{url}}">
+                            <input type="text" class="form-control auditionURL" id="url{{@index}}" placeholder="{{url}}" style="{{isDisabled}}">
                         </div>
                       </td>
                     </tr>
@@ -47,7 +47,7 @@
                     <section>
                         <h5>ROLES</h5>
                         <div style="display:block">
-                            <h4>List of roles this user is accepted to perform.</h4>
+                            <h4>List and status of roles under consideration.</h4>
                             <div class="krown-column-row clearfix">
                               <div class="krown-column-container clearfix first span12 clearfix">
                                 <section class="krown-box light-1 clearfix">
@@ -59,6 +59,8 @@
                                       <th>consideration</th>
                                       {{#if ownerInitAgreement}}
                                       <th>approve or decline</th>
+                                      {{else}}
+                                      <th>status</th>
                                       {{/if}}
                                     </tr>
                                   </thead>
@@ -119,8 +121,15 @@
             {{#if ownerInitAgreement}}
             <div class="krown-column-row clearfix margin_bottom40">
                 <div class="krown-column-container clearfix last span12 clearfix">
-                    <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="authorinitk">SELECT HERE TO MAKE OFFER WITH ABOVE SPECIFICATIONS</a></section>
+                    <section class="krown-box color clearfix" style="background:#8bd7ff"><a class="btn btn-block btn-default btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="authorinitk">MAKE OFFER WITH ABOVE SPECIFICATIONS</a></section>
                 </div>
+            </div>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <div class="krown-column-row clearfix margin_bottom40">
+              <div class="krown-column-container clearfix last span12 clearfix">
+                  <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="rejectUser">REJECT THIS APPLICANT</a></section>
+              </div>
             </div>
             {{/if}}
 
@@ -136,11 +145,11 @@
                     </section>
                 </div>
                 <div class="krown-column-container clearfix last span6 clearfix">
-                    <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="applicantverifyk">SELECT HERE TO ACCEPT THIS OFFER</a></section>
+                    <section class="krown-box color clearfix" style="background:#8bd7ff"><a class="btn btn-block btn-default btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="applicantverifyk">ACCEPT THIS OFFER</a></section>
                 </div>
 
                 <div class="krown-column-container clearfix last span6 clearfix">
-                    <section class="krown-box color clearfix"><a class="btn btn-block btn-default btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="applicantcounterk">SELECT HERE TO REJECT &amp; COUNTER-OFFER</a></section>
+                    <section class="krown-box color clearfix"><a class="btn btn-block btn-default btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="applicantcounterk">REJECT &amp; COUNTER-OFFER</a></section>
                 </div>
             </div>
             {{/if}}
@@ -152,7 +161,7 @@
             {{#if authorNeedsFinishAgreement}}
             <div class="krown-column-row clearfix margin_bottom40">
               <div class="krown-column-container clearfix last span12 clearfix">
-                  <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="authorfinalizek">SELECT HERE TO FINALIZE AND ACCEPT APPLICANT TO THIS CAMPAIGN</a></section>
+                  <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" style="    white-space: normal!important;word-wrap:break-word!important;" id="authorfinalizek">FINALIZE AND ACCEPT APPLICANT TO THIS CAMPAIGN</a></section>
               </div>
             </div>
             {{/if}}
@@ -187,6 +196,8 @@
     <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationItself}}</td>
     {{#if isEditable}}
     <td class="center"><button class="approvedeny button" style="width:100%;background-color:{{approveOrDenyButton}}"><span class="glyphicon glyphicon-{{approveOrDenyButtonText}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadable}}</button></td>
+    {{else}}
+    <td class="center"><button class="approvedeny button" style="width:100%;background-color:{{approveOrDenyButtonApplicant}}" disabled><span class="glyphicon glyphicon-{{approveOrDenyButtonTextApplicant}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadableApplicant}}</button></td>
     {{/if}}
   </tr>
 </template>
