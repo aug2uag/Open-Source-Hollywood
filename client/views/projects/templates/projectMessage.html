@@ -81,14 +81,22 @@
                         <h5>TERMS</h5>
                         <div style="display:block">
                             <h4>Define the essential performance terms expected from this member.</h4>
-                            <textarea id="negotiationTerms" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">{{negotiationTerms}}</textarea>
+                            {{#if ownerInitAgreement}}
+                            <textarea id="negotiationTerms">{{negotiationTerms}}</textarea>
+                            {{else}}
+                            <textarea readonly>{{negotiationTerms}}</textarea>
+                            {{/if}}
                         </div>
                     </section>
                     <section>
                         <h5>DAMAGES</h5>
                         <div style="display:block">
                             <h4>Specific outcomes in case the member purposely fails to perform.</h4>
-                            <textarea id="negotiationDamages" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">{{negotiationDamages}}</textarea>
+                            {{#if ownerInitAgreement}}
+                            <textarea id="negotiationDamages">{{negotiationDamages}}</textarea>
+                            {{else}}
+                            <textarea readonly>{{negotiationDamages}}</textarea>
+                            {{/if}}
                         </div>
                     </section>
                     <section>
@@ -96,7 +104,11 @@
                         <div style="display:block">
                             <div class="form-group">
                               <label for="financials"><strong>How much pay for the role in USD.</strong></label>
-                              <input type="number" class="form-control" id="financials" value="{{negotiationFinancial}}" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">
+                              {{#if ownerInitAgreement}}
+                              <input type="number" class="form-control" id="financials" value="{{negotiationFinancial}}">
+                              {{else}}
+                              <input type="number" class="form-control" value="{{negotiationFinancial}}" disabled>
+                              {{/if}}
                           </div>
                         </div>
                     </section>
@@ -105,7 +117,11 @@
                         <div style="display:block">
                             <div class="form-group">
                               <label for="equities"><strong>How many shares of the campaign.</strong></label>
-                              <input type="number" class="form-control" id="equities" value="{{negotiationEquities}}" style="{{#unless ownerInitAgreement}}pointer-events:none{{/unless}}">
+                              {{#if ownerInitAgreement}}
+                              <input type="number" class="form-control" id="equities" value="{{negotiationEquities}}">
+                              {{else}}
+                              <input type="number" class="form-control" value="{{negotiationEquities}}" disabled>
+                              {{/if}}
                               {{#if isProjectOwner}}
                               <p class="lead">{{sharesAvailable}} shares available</p>
                               <p><small>shares updated only after finalization of agreement</small></p>
@@ -197,7 +213,7 @@
     {{#if isEditable}}
     <td class="center"><button class="approvedeny button" style="width:100%;background-color:{{approveOrDenyButton}}"><span class="glyphicon glyphicon-{{approveOrDenyButtonText}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadable}}</button></td>
     {{else}}
-    <td class="center"><button class="approvedeny button" style="width:100%;background-color:{{approveOrDenyButtonApplicant}}" disabled><span class="glyphicon glyphicon-{{approveOrDenyButtonTextApplicant}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadableApplicant}}</button></td>
+    <td class="center"><button class="button" style="width:100%;background-color:{{approveOrDenyButtonApplicant}}" disabled><span class="glyphicon glyphicon-{{approveOrDenyButtonTextApplicant}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadableApplicant}}</button></td>
     {{/if}}
   </tr>
 </template>

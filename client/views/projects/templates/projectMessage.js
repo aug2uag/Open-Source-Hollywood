@@ -31,7 +31,6 @@ function formattedProjectRoles() {
 
 Template.projectMessage.helpers({
 	url: function() {
-		console.log(this)
 		if (this.audition==='N/A') {
 			return ' this role does not have an audition ';
 		} else if (this.url) {
@@ -125,7 +124,6 @@ Template.projectMessage.helpers({
 	negotiationRoles: function() {
 		var value = negotiationHelper('negotiationRoles');
 		if (value) return value;
-		console.log('negotiationRoles')
 		var roles = formattedProjectRoles();
 		return 'This contract is valid for the following roles: ' + roles + '.';
 	},
@@ -242,19 +240,16 @@ Template.projectMessage.events({
 	},
 	'change .auditionURL': function(e) {
 		this.url = $(e.target).val() || null;
-		console.log(this)
 		Meteor.call('addAuditionURL', this);
 	}
 })
 
 Template.projectMessageOffer.helpers({
 	approveOrDenyButton: function() {
-		console.log(this);
 		if (!this.declined) return 'red';
 		return 'green';
 	},
 	approveOrDenyButtonApplicant: function() {
-		console.log(this);
 		if (this.declined) return 'red';
 		return 'green';
 	},

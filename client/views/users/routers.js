@@ -49,6 +49,44 @@ Router.route('/settings', {
       $('head').append( '<meta name="description" content="Profile settings and account management on Open Source Hollywood">' );
       document.title = 'Account Settings';
       this.next();
+    },
+    onAfterAction: function() {
+      setTimeout(function() {
+        $('#gomain').click();
+      }, 331);
+    }
+});
+
+Router.route('/settings/:area', {
+    name: 'SettingsRouter',
+    template: 'settings',
+    layoutTemplate: 'StaticLayout',
+    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
+    waitOn: function() {
+      if (!Meteor.user()) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
+      return [
+        Meteor.subscribe('getMe'), 
+        // Meteor.subscribe('connectUser'),
+        Meteor.subscribe('getProjectMessages'),
+        Meteor.subscribe('userActiveProjects', Meteor.user()._id),
+        Meteor.subscribe('activeProjectsApproved', Meteor.user()._id)
+      ];
+    },
+    onBeforeAction: function() {
+      $('meta[name=description]').remove();
+      $('head').append( '<meta name="description" content="Profile settings and account management on Open Source Hollywood">' );
+      document.title = 'Account Settings';
+      this.next();
+    },
+    onAfterAction: function() {
+      var route = this.params.area === 'boards' ? '#gocampaigns' : '#gonegotiations';
+      setTimeout(function() {
+        $(route).click();
+      }, 331);
     }
 });
 
