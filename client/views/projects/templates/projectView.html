@@ -2,7 +2,11 @@
   <tr>
     <td><p class="align-center">{{appliedFor}}</p></td>
     <td style="display:flex"><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px;top:15px;position:relative;" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-    <td><a style="width:100%;top:15px;position:relative;" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">NEGOTIATE</a></td>
+    {{#if poke}}
+      <td><a style="width:100%;top:15px;position:relative;" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">NEGOTIATE</a></td>
+    {{else}}
+      <td><a style="width:100%;top:15px;position:relative;" href="#!" class="btn btn-mini btn-primary initiateNegotiate">{{typeofRequest}}</a></td>
+    {{/if}}
   </tr>
 </template>
 

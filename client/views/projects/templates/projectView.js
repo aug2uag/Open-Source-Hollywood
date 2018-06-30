@@ -84,8 +84,8 @@ function vexFlag(proj) {
         msg: $("#t8").val()
       });
     }
-  })
-}
+  });
+};
 
 function loadcss(f){
     var href = '/css/' + f;
@@ -172,7 +172,7 @@ function makeStripeCharge(options) {
       }
     }
   });
-}
+};
 
 function generateOfferMessage(offer){
   var message = "Please confirm:\n\nyou are accepting ";
@@ -189,7 +189,7 @@ function generateOfferMessage(offer){
   message+=' to join your campaign as '+offer.appliedFor;
   message+='. This is a binding agreement, and your acceptance also confirms your agreement to our Terms and Conditions.';
   return message;
-}
+};
 
 function acceptUser(offer) {
   offer.slug = currentSlug;
@@ -206,7 +206,7 @@ function acceptUser(offer) {
       }
     }
   });
-}
+};
 
 function rejectUser(offer) {
   offer.slug = currentSlug;
@@ -222,7 +222,7 @@ function rejectUser(offer) {
         };
       }
   });
-}
+};
 
 function innerVexApply(options, cb) {
   vex.dialog.open({
@@ -246,7 +246,7 @@ function innerVexApply(options, cb) {
       ].join(''),
       callback: cb
     });
-}
+};
 
 /** show roles dialog */
 function displayRoleTypeDialog(list, options) {
@@ -374,13 +374,7 @@ function displayRoleTypeDialog(list, options) {
         });
       }
   })
-}
-
-Template.applicantsHelper.helpers({
-  currentSlug: function() {
-    return currentSlug;
-  }
-});
+};
 
 Template.projectView.helpers({
   thumbsupactive: function() {
@@ -577,7 +571,7 @@ Template.projectView.helpers({
   isWidth: function() {
     return $(window).width() >= 770;
   }
-})
+});
 
 Template.projectView.events({
   'click .dologin': function(e) {
@@ -1417,17 +1411,15 @@ Template.projectView.onRendered(function() {
       $('#genreclick2').click();
     }, 610);
   }
-  if (!Meteor.user()) {
-      localStorage.setItem('redirectURL', '/projects/' + this.data.project.slug + '/' + this.data.project.ownerId);
-  } 
-   setTimeout(function() {
+  if (!Meteor.user()) localStorage.setItem('redirectURL', '/projects/' + this.data.project.slug + '/' + this.data.project.ownerId);
+  setTimeout(function() {
       $('.fb-share').html('<li class="fa fa-facebook"></li>');
       $('.tw-share').html('<li class="fa fa-twitter"></li>');
       $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
       $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
       $('#genreclick1').click();
-   }, 133);
- });
+  }, 133);
+});
 
 Template.applicants.helpers({
   anon: function() {
@@ -1465,7 +1457,39 @@ Template.applicants.events({
       callback: function (data) { }
     });
   }
-})
+});
+
+Template.applicantsHelper.helpers({
+  currentSlug: function() {
+    return currentSlug;
+  },
+  typeofRequest: function() {
+    console.log(this)
+    if (this.audition&&this.audition!=='N/A') return 'Request Audition';
+    return 'Initiate Negotiation';
+  },
+  poke: function() {
+    console.log(this)
+    return this.poke;
+  }
+});
+
+Template.applicantsHelper.events({
+  'click .initiateNegotiate': function(e) {
+    var that = this;
+    that.project = currentProject._id;
+    var msg = (this.audition&&this.audition!=='N/A') ? 'This applicant will be informed you want their audition, continue?' : 'This applicant will be informed you want to enter negotiations, continue?';
+    vex.dialog.open({
+      message: msg,
+      callback: function (data) {
+        if (data) {
+          /** poke and message */
+          Meteor.call('pokeApplicant', that);
+        };
+      }
+    });
+  }
+});
 
 Handlebars.registerHelper("inc", function(value, options) {
     return parseInt(value) + 1;

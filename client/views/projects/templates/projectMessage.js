@@ -25,8 +25,8 @@ function formattedProjectRoles() {
 	was.offers.forEach(function(o) {
 		if (agg.indexOf(o.position)===-1) agg.push(o.position);
 	});
-	var roles = agg.join(', ');
-	return roles.substr(0, roles.length-2);
+	var roles = !agg.length?agg[0]:agg.length==2?agg.join(' & '):agg.join(', ');
+	return roles;
 }
 
 Template.projectMessage.helpers({
@@ -131,7 +131,7 @@ Template.projectMessage.helpers({
 		var value = negotiationHelper('negotiationTerms');
 		if (value) return value;
 		var roles = formattedProjectRoles();
-		return 'This contract is valid for all expected performance and conditions relating to the roles of ' + roles + '. Campaign author promises to make best efforts to create campaign, and applicant promises to perform the roles outlined in this agreement.';
+		return 'This contract is valid for all expected performance and conditions relating to the roles: ' + roles + '.\n\nCampaign author promises to make best efforts to create campaign, and applicant promises to perform the roles outlined in this agreement.';
 	},
 	negotiationDamages: function() {
 		var value = negotiationHelper('negotiationDamages');
