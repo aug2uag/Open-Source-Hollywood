@@ -304,14 +304,40 @@ Template.settings.helpers({
 		var x = Meteor.user();
 		return !(x.primaryRole || (x.iam && x.iam.length));
 	},
-	approvedCamps: function() {
+	nothingActiveCampaigns: function() {
 		var _id = Meteor.user()._id;
-		return Projects.find({
+		var x = Projects.find({
+			$or: [
+				{
+					$and: [
+			          { archived: true },
+			          { ownerId: _id }
+			        ]
+				},
+				{
+					"equity.id": _id
+				}
+			]
+		}).fetch();
+		var y = Projects.find({
 	        $and: [
 	          { archived: false },
 	          { usersApproved: _id }
 	        ]
-	    });
+	    }).fetch();
+	    if (!x.length&&!y.length) return true;
+	    return false;
+	},
+	approvedCamps: function() {
+		var _id = Meteor.user()._id;
+		var x = Projects.find({
+	        $and: [
+	          { archived: false },
+	          { usersApproved: _id }
+	        ]
+	    }).fetch();
+	    if (x.length) $('#no_camps_1').hide();
+	    return x;
 	},
 	equityCamps: function() {
 		/** 
@@ -325,7 +351,7 @@ Template.settings.helpers({
 				}
 		*/
 		var _id = Meteor.user()._id;
-		return Projects.find({
+		var x = Projects.find({
 			$or: [
 				{
 					$and: [
@@ -337,16 +363,20 @@ Template.settings.helpers({
 					"equity.id": _id
 				}
 			]
-	    });
+	    }).fetch();
+		if (x.length) $('#no_camps_0').hide();
+		return x;
 	},
 	createdCamps: function() {
 		var _id = Meteor.user()._id;
-		return Projects.find({
+		var x = Projects.find({
 	        $and: [
 	          { archived: false },
 	          { ownerId: _id }
 	        ]
-	    });
+	    }).fetch();
+	    if (x.length) $('#no_camps_1').hide();
+	    return x;
 	},
 	bio: function() {
 		return Meteor.user().bio || 'describe yourself and your experiences'
@@ -475,6 +505,12 @@ Template.settings.helpers({
 		};
 
 		return returnArr;
+	},
+	textify: function() {
+		if (this.ownerName==='Open Source Hollywood'&&this.ownerId===Meteor.user()._id) {
+			return '';
+		};
+		return this.text;
 	}
 });
 

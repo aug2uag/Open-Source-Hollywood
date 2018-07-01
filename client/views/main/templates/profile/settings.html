@@ -512,9 +512,11 @@
                           {{#each equityCamps}}
                             {{> equityTab}}
                           {{else}}
-                            <script type="text/javascript">
-                              $('#comments-title00').text('No created campaigns to show.');
-                            </script>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <h5 id="no_camps_0">NO CAMPAIGNS TO SHOW</h5>
                           {{/each}}
                         </div>
                       </div>
@@ -526,6 +528,7 @@
                         <hr />
                       </div>
                       <div class="project-content">
+                        <p>This list contains active campaigns with team boards.</p>
                         <div class="krown-id-grid default clearfix" style="position: relative;">
                           {{#each createdCamps}}
                             {{> settingsTab}}
@@ -533,6 +536,13 @@
                           {{#each approvedCamps}}
                             {{> approvedTab}}
                           {{/each}}
+                          {{#if nothingActiveCampaigns}}
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <h5 id="no_camps_1">NO CAMPAIGNS TO SHOW</h5>
+                          {{/if}}
                         </div>
                       </div>
                     </div>
@@ -557,7 +567,7 @@
                                         <h6 class="comment-title">{{this.ownerName}}</h6>
                                         <span class="comment-date">{{this.createdAt}}</span>
                                         <span class="comment-date" style="margin-top:10px;word-break:break-word;width:100px;">campaign:<br>{{this.title}}</span>
-                                        
+                                        {{textify}}
 
                                     </div>
 
@@ -566,9 +576,11 @@
                                 </div>
                           </li>
                           {{else}}
-                          <script type="text/javascript">
-                            $('#comments-title00-messages').text('No recent messages to show.');
-                          </script>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <h5>NO NEGOTIATIONS TO SHOW</h5>
                           {{/each}}
                         </ol>
                       </div>

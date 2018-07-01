@@ -9,6 +9,7 @@ Router.route('/boards/:boardId/:slug', {
             return
         }
         $(document).fadeIn();
+        document.title = 'Campaign Board';
         Session.set('sidebarIsOpen', true);
         Session.set('currentWidget', 'home');
         Session.set('menuWidgetIsOpen', false);
