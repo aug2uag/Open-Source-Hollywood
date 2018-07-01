@@ -530,19 +530,19 @@
                       <div class="project-content">
                         <p>This list contains active campaigns with team boards.</p>
                         <div class="krown-id-grid default clearfix" style="position: relative;">
-                          {{#each createdCamps}}
+                          {{#each activeCamps}}
+                            {{#if isCreated}}
                             {{> settingsTab}}
-                          {{/each}}
-                          {{#each approvedCamps}}
+                            {{else}}
                             {{> approvedTab}}
-                          {{/each}}
-                          {{#if nothingActiveCampaigns}}
+                            {{/if}}
+                          {{else}}
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
                           <h5 id="no_camps_1">NO CAMPAIGNS TO SHOW</h5>
-                          {{/if}}
+                          {{/each}}
                         </div>
                       </div>
                     </div>

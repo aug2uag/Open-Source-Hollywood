@@ -304,41 +304,6 @@ Template.settings.helpers({
 		var x = Meteor.user();
 		return !(x.primaryRole || (x.iam && x.iam.length));
 	},
-	nothingActiveCampaigns: function() {
-		var _id = Meteor.user()._id;
-		var x = Projects.find({
-			$or: [
-				{
-					$and: [
-			          { archived: true },
-			          { ownerId: _id }
-			        ]
-				},
-				{
-					"equity.id": _id
-				}
-			]
-		}).fetch();
-		var y = Projects.find({
-	        $and: [
-	          { archived: false },
-	          { usersApproved: _id }
-	        ]
-	    }).fetch();
-	    if (!x.length&&!y.length) return true;
-	    return false;
-	},
-	approvedCamps: function() {
-		var _id = Meteor.user()._id;
-		var x = Projects.find({
-	        $and: [
-	          { archived: false },
-	          { usersApproved: _id }
-	        ]
-	    }).fetch();
-	    if (x.length) $('#no_camps_1').hide();
-	    return x;
-	},
 	equityCamps: function() {
 		/** 
 			if my id is in list of equity holders:
@@ -351,7 +316,7 @@ Template.settings.helpers({
 				}
 		*/
 		var _id = Meteor.user()._id;
-		var x = Projects.find({
+		return Projects.find({
 			$or: [
 				{
 					$and: [
@@ -363,20 +328,38 @@ Template.settings.helpers({
 					"equity.id": _id
 				}
 			]
-	    }).fetch();
-		if (x.length) $('#no_camps_0').hide();
-		return x;
+	    });
 	},
-	createdCamps: function() {
+	activeCamps: function() {
 		var _id = Meteor.user()._id;
-		var x = Projects.find({
+		var _x = Projects.find({
+	        $and: [
+	          { archived: false },
+	          { usersApproved: _id }
+	        ]
+	    }).fetch();
+	    var x = _x.map(function(p) {
+	    	p.scope = 'approved';
+	    	return p;
+	    });
+
+		var _y = Projects.find({
 	        $and: [
 	          { archived: false },
 	          { ownerId: _id }
 	        ]
 	    }).fetch();
-	    if (x.length) $('#no_camps_1').hide();
-	    return x;
+	    var y = _y.map(function(p) {
+	    	p.scope = 'created';
+	    	return p;
+	    });
+
+	    return x.concat(y);
+	},
+	isCreated: function() {
+		console.log(this)
+		if (this.scope==='created') return true;
+		return false;
 	},
 	bio: function() {
 		return Meteor.user().bio || 'describe yourself and your experiences'
