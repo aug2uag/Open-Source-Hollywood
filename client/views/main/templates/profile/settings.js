@@ -357,7 +357,6 @@ Template.settings.helpers({
 	    return x.concat(y);
 	},
 	isCreated: function() {
-		console.log(this)
 		if (this.scope==='created') return true;
 		return false;
 	},
