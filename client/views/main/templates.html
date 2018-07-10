@@ -52,6 +52,13 @@
   <!--<![endif]-->
     <body id="body" class="home page-template page-template-template-slider page-template-template-slider-php page page-id-835 regular-header no-touch fixed-width">
       {{ > nav}}
+      {{#if isUser}}
+      <div class="container">
+        <p class="col-xs-12 body-text comment-title">
+          We are currently in test mode. You can make all your transactions with a test credit card and test bank account integration. The test bank account data is the same data as you will find in the placeholder text. For credit cards, use number 4000 0000 0000 0077 exp 02/22 cvc 222 to make all your transactions. Please test things out and give it a try! Email to hello@opensourcehollywood.org for any and all help or feedback.
+        </p>
+      </div>
+      {{/if}}
       {{ > yield }}
       {{ > footer }}
 
@@ -64,6 +71,8 @@
           </p>
       </div>
       <!-- IE7 Message End -->
+
+
 
       <div id="responsive-test">
           <div id="p780"></div>

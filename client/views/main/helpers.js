@@ -23,6 +23,10 @@ var Helpers = {
 };
 
 Template.StaticLayout.helpers({
+  isUser: function() {
+    if (Meteor.user()) return true;
+    return false;
+  },
   profileSet: function() {
     return Meteor.user().didSetProfile;
   },
