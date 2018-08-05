@@ -39,6 +39,10 @@ Template.splashPage.events({
       }
     }, 144);
   },
+  'click .goDiscover': function() {
+      localStorage.setItem('redirectURL', '');
+      window.location.assign('/discover');
+  },
   'click #sendMsg': function() {
     /** get message and subject / email, and send email */
     var o = {
