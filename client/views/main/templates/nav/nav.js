@@ -23,6 +23,9 @@ Template.nav.events({
   'click .menu-item': function() {
     if ($(window).width()<=692) $('#navbutton').click();
   },
+  'click #logo': function() {
+    window.location.assign('/');
+  },
   'click #signout': function() {
     localStorage.clear();
     Session.set('order', 'hot');

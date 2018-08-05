@@ -43,6 +43,7 @@ function removeGift(e) {
 }
 
 var StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
+
 Template.newProject.onRendered(function() {
   gifts = [];
   osettings = {};

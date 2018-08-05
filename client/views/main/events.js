@@ -28,19 +28,11 @@ Template.splashPage.events({
   },
 
   'click #create': function() {
-    localStorage.removeItem('redirectURL');
-    setTimeout(function() {
-      localStorage.setItem('redirectURL', '/create');
-      if (window.location.href.indexOf('/projects')>-1||window.location.href.indexOf('/profile')>-1) {
-        localStorage.setItem('doShowLock', true);
-        window.location.assign('/');
-      } else {
-        lock.show();
-      }
-    }, 144);
+    localStorage.setItem('redirectURL', '/create');
+    lock.show();
   },
   'click .goDiscover': function() {
-      localStorage.setItem('redirectURL', '');
+      localStorage.removeItem('redirectURL');
       window.location.assign('/discover');
   },
   'click #sendMsg': function() {
@@ -91,10 +83,6 @@ Template.splashPage.helpers({
   blogs: function() {
     // get blogs
     return Blogs.find({}, { sort: { created: -1 }, limit: 16 });
-  },
-  ifBlogs: function() {
-    // blogs count
-    return false;
   }
 })
 

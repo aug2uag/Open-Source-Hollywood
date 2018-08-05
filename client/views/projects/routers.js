@@ -13,12 +13,13 @@ Router.route('/discover', {
   },
   onBeforeAction: function() {
     var x = localStorage.getItem('redirectURL');
-    localStorage.removeItem('redirectURL');
     if (x&&x!=='null'&&x.indexOf('/')>-1) {
-      Router.go(x);
-      localStorage.removeItem('redirectURL');
+      setTimeout(function() {
+        Router.go(x);
+      }, 144);
       return;
     };
+    localStorage.removeItem('redirectURL');
     $('meta[name=description]').remove();
     $('head').append( '<meta name="description" content="Campaigns on O . S . H . (https://opensourcehollywood.org)">' );
     document.title = 'Active Campaigns';
@@ -130,8 +131,8 @@ Router.route('/projects/:slug/:uid', {
         },
         duration: project.duration,
         applied: project.applied
-      }
     }
+  }
 });
 
 Router.route('/edit/projects/:slug/edit', {
