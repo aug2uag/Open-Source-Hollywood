@@ -86,7 +86,7 @@ Router.route('/settings/:area', {
       var route = this.params.area === 'boards' ? '#gocampaigns' : '#gonegotiations';
       setTimeout(function() {
         $(route).click();
-      }, 331);
+      }, 987);
     }
 });
 

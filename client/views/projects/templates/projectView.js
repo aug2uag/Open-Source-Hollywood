@@ -1024,6 +1024,13 @@ Template.projectView.events({
               '</div>',
           '</div>'
       ]
+
+      dialogInput = dialogInput.concat([
+        '<div class="vex-custom-field-wrapper">',
+          '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+        '</div>'
+      ])
+
       vex.dialog.open({
         message: 'Enter donation amount.',
         input: dialogInput.join(''),
@@ -1089,7 +1096,6 @@ Template.projectView.events({
     };
 
     var msg1 = Meteor.user() ? 'Would you like to donate money or time?' : 'Enter donation amount.';
-
     var dialogInput = [
         '<style>',
             '.vex-custom-field-wrapper {',
@@ -1110,6 +1116,14 @@ Template.projectView.events({
           '</div>',
         '</div>'
     ]
+
+    if (msg1.indexOf('Enter')>-1) {
+      dialogInput = dialogInput.concat([
+        '<div class="vex-custom-field-wrapper">',
+          '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+        '</div>'
+      ])
+    };
 
     vex.dialog.alert({
       message: msg1,
@@ -1141,6 +1155,14 @@ Template.projectView.events({
             '</div>',
         '</div>'
     ]
+
+
+    dialogInput = dialogInput.concat([
+      '<div class="vex-custom-field-wrapper">',
+        '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+      '</div>'
+    ])
+
     vex.dialog.open({
       message: 'How many shares?',
       input: dialogInput.join(''),
@@ -1224,9 +1246,21 @@ Template.projectView.events({
   'click #donation_btn': function(e) {
     e.preventDefault();
     var was = this;
+
+    var dialogInput = [
+      '<label for="application_offer" style="display:break;">Please verify payment for $'+donationObject.amount+'</label>'
+    ]
+
+
+    dialogInput = dialogInput.concat([
+      '<div class="vex-custom-field-wrapper">',
+        '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+      '</div>'
+    ])
+
     var intmodal = vex.dialog.open({
       title: 'Your Donation',
-      message: '<label for="application_offer" style="display:break;">Please verify payment for $'+donationObject.amount+'</label>',
+      message: dialogInput.join(''),
       buttons: {
         danger:  {
           label: 'Cancel',
@@ -1254,6 +1288,28 @@ Template.projectView.events({
   'click .purchase_gift': function(e) {
     e.preventDefault();
     var was = this, o={gift:was};
+
+    var dialogInput = [
+      '<figure class="snip1165 red">',
+        '<img src="',
+        was.url,
+        '" alt="sample63"/>',
+        '<figcaption>',
+          '<h3>',
+          was.name,
+          '</h3>',
+          '<p>',
+            was.description,
+          '</p>',
+          '<hr>',
+          '<h3 style="margin-top:8px;margin-bottom:0px">$',
+          was.msrp,
+          '</h3>',
+        '</figcaption>',
+      '</figure>'
+    ]
+
+  
     var vex1Open = true, vex2Open = true;
     var vex1 = vex.dialog.open({
         message: ['   Details of ',was.name,'. Purchase below.'].join(''),
@@ -1261,28 +1317,7 @@ Template.projectView.events({
           $.extend({}, vex.dialog.buttons.YES, { text: 'PURCHASE' }),
           $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
         ],
-        input: [
-
-                        '<figure class="snip1165 red">',
-                          '<img src="',
-                          was.url,
-                          '" alt="sample63"/>',
-                          '<figcaption>',
-                            '<h3>',
-                            was.name,
-                            '</h3>',
-                            '<p>',
-                              was.description,
-                            '</p>',
-                            '<hr>',
-                            '<h3 style="margin-top:8px;margin-bottom:0px">$',
-                            was.msrp,
-                            '</h3>',
-                          '</figcaption>',
-                        '</figure>',
-
-
-        ].join(''),
+        input: dialogInput.join(''),
         callback: function (data) {
             if (!data) {
                 return console.log('Cancelled')
@@ -1290,60 +1325,69 @@ Template.projectView.events({
             if (vex1Open) {
               vex1Open = false;
               vex1.close();
+
+              var dialogInput = [
+                  '<style>',
+                      '.vex-custom-field-wrapper {',
+                          'margin: 1em 0;',
+                      '}',
+                      '.vex-custom-field-wrapper > label {',
+                          'display: inline-block;',
+                          'margin-bottom: .2em;',
+                      '}',
+                  '</style>',
+                  '<div class="vex-custom-field-wrapper">',
+                      '<label for="address-gift">Shipping Address</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift">',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
+                      '<label for="city-gift">City</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift">',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
+                      '<label for="state-gift">State</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift">',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
+                      '<label for="zip-gift">Zip Code</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift">',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
+                      '<label for="email-gift">Contact Email</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift">',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
+                      '<label for="phone-gift">Contact Phone</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift">',
+                      '</div>',
+                  '</div>'
+
+              ]
+
+              dialogInput = dialogInput.concat([
+                '<div class="vex-custom-field-wrapper">',
+                  '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+                '</div>'
+              ])
+
               var vex2 = vex.dialog.open({
                 message: 'Order and Pay Info',
                 buttons: [
                   $.extend({}, vex.dialog.buttons.YES, { text: 'CONTINUE' }),
                   $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }),
                 ],
-                input: [
-                    '<style>',
-                        '.vex-custom-field-wrapper {',
-                            'margin: 1em 0;',
-                        '}',
-                        '.vex-custom-field-wrapper > label {',
-                            'display: inline-block;',
-                            'margin-bottom: .2em;',
-                        '}',
-                    '</style>',
-                    '<div class="vex-custom-field-wrapper">',
-                        '<label for="address-gift">Shipping Address</label>',
-                        '<div class="vex-custom-input-wrapper">',
-                            '<input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift">',
-                        '</div>',
-                    '</div>',
-                    '<div class="vex-custom-field-wrapper">',
-                        '<label for="city-gift">City</label>',
-                        '<div class="vex-custom-input-wrapper">',
-                            '<input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift">',
-                        '</div>',
-                    '</div>',
-                    '<div class="vex-custom-field-wrapper">',
-                        '<label for="state-gift">State</label>',
-                        '<div class="vex-custom-input-wrapper">',
-                            '<input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift">',
-                        '</div>',
-                    '</div>',
-                    '<div class="vex-custom-field-wrapper">',
-                        '<label for="zip-gift">Zip Code</label>',
-                        '<div class="vex-custom-input-wrapper">',
-                            '<input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift">',
-                        '</div>',
-                    '</div>',
-                    '<div class="vex-custom-field-wrapper">',
-                        '<label for="email-gift">Contact Email</label>',
-                        '<div class="vex-custom-input-wrapper">',
-                            '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift">',
-                        '</div>',
-                    '</div>',
-                    '<div class="vex-custom-field-wrapper">',
-                        '<label for="phone-gift">Contact Phone</label>',
-                        '<div class="vex-custom-input-wrapper">',
-                            '<input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift">',
-                        '</div>',
-                    '</div>'
-
-                ].join(''),
+                input: dialogInput.join(''),
                 callback: function (data) {
                     if (!data) {
                         return console.log('Cancelled')
