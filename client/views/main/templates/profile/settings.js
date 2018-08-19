@@ -41,7 +41,7 @@ function guid() {
 }
 
 function phoneVerifyVexCB(data, _vex) {
-	// vex.closeAll();
+	vex.closeAll();
     if (data) {
     	$('osh_loader').show();
         Meteor.call('verifyPhonePIN', data.pin, function(err, msg) {
