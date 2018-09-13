@@ -32,6 +32,9 @@ Template.StaticLayout.helpers({
   },
   degenerateProfile: function() {
     return Meteor.user().degenerateIAM;
+  },
+  year: function() {
+    new Date().getYear() + 1900
   }
 })
 

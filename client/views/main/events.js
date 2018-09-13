@@ -27,7 +27,7 @@ Template.splashPage.events({
     }
   },
 
-  'click #create': function() {
+  'click .create': function() {
     localStorage.setItem('redirectURL', '/create');
     lock.show();
   },

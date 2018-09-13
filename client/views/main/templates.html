@@ -52,13 +52,48 @@
   <!--<![endif]-->
     <body id="body" class="home page-template page-template-template-slider page-template-template-slider-php page page-id-835 regular-header no-touch fixed-width">
       {{ > nav}}
+      
+      <div style="position:relative;margin-top:80px">
       {{#if isUser}}
         <div class="krown-alert info betatest" style="margin-bottom:0px!important">
           We're in beta testing mode and appreciate any of your feedback for improvements. Email us to <a href="mailto:hello@opensourcehollywood.org">hello@opensourcehollywood.org</a> for any help or feedback.
         </div>
       {{/if}}
+      </div>
+      
       {{ > yield }}
-      {{ > footer }}
+      
+      {{#unless isUser}}
+        {{ > footer }}
+      {{/unless}}
+
+      <!-- Footer #2 Wrapper Start -->
+      <footer id="footer2" class="footer clearfix">
+          <div class="wrapper clearfix">
+
+              <div class="left clearfix">
+                  <div id="text-11" class="widget left widget_text">
+                      <div class="textwidget">Open Source Hollywood © {{year}}</div>
+                  </div>
+              </div>
+
+              <div class="right clearfix">
+                  <div id="text-12" class="widget right widget_text">
+                      <div class="textwidget">
+                          <div class="krown-social clearfix">
+                              <ul>
+                                  <!-- <li class="fa fa-twitter"><a target="_self" href="#">#</a></li>
+                                  <li class="fa fa-facebook"><a target="_self" href="#">#</a></li> -->
+                                  <li class="fa fa-meetup"><a target="_self" href="https://www.meetup.com/Open-Source-Hollywood/">#</a></li>
+                                  <!-- <li class="fa fa-google-plus-g"><a target="_self" href="#">#</a></li> -->
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </footer>
+      <!-- Footer End -->
 
       <!-- IE7 Message Start -->
       <div id="oldie">
@@ -201,7 +236,7 @@
                           <a href="#!" class="smoothscroll btn btn--stroke goDiscover">
                               Discover Campaigns
                           </a>
-                          <a href="#!" id="create" class="smoothscroll btn btn--stroke">
+                          <a href="#!" id="create" class="create smoothscroll btn btn--stroke">
                               Create or Join Campaign
                           </a>
                       </div>
@@ -250,7 +285,7 @@
                       </video>
                   </div>
                   <div class="col-sm-6 col-xs-12">
-                      <h1 class="heading-hero">Apply to Campaigns &amp; Build Teams</h1>
+                      <h1 class="heading-hero animated bounce">Apply to Campaigns &amp; Build Teams</h1>
                       <h3>Post and Announce YOUR Projects for FREE and Build Teams for YOUR Projects.</h3>
                       <div class="krown-column-row clearfix">
                             <div class="krown-column-container clearfix first span3 clearfix">
@@ -282,7 +317,7 @@
                 <div class="row">
                   
                   <div class="col-sm-7 col-sm-offset-1 col-xs-12">
-                      <h1 class="heading-hero">FREE Profiles &amp; Campaigns</h1>
+                      <h1 class="heading-hero animated wobble">FREE Profiles &amp; Campaigns</h1>
                       <h3>Link All YOUR Media to a Simple Webpage with Social Share for YOUR Profile and Campaigns for FREE.</h3>
                       <div class="krown-column-row clearfix">
                             <div class="krown-column-container clearfix first span3 clearfix">
@@ -322,7 +357,7 @@
                       </video>
                   </div>
                   <div class="col-sm-6 col-xs-12">
-                      <h1 class="heading-hero">FREE Project Management</h1>
+                      <h1 class="heading-hero animated rollIn">FREE Project Management</h1>
                       <h3>Each Campaign Comes with it's Own Board where YOU can Manage Production in a secure environment.</h3>
                       <div class="krown-column-row clearfix">
                             <div class="krown-column-container clearfix first span3 clearfix">
@@ -354,7 +389,7 @@
 
                 <div class="row">
                   <div class="col-xs-12">
-                      <h1 class="heading-hero center">Virtual Merchant Center</h1>
+                      <h1 class="heading-hero center animated flip">Virtual Merchant Center</h1>
                       <h3 class="center" style="content: none;">Your OSH account creates a virtual bank account where you can accept money from others.</h3>
                       <div class="krown-column-row clearfix">
                             <div class="krown-column-container clearfix first span3 clearfix">
@@ -395,7 +430,7 @@
                       </video>
                   </div>
                   <div class="col-sm-6 col-xs-12">
-                      <h1 class="heading-hero">Accept Donations for Crowdfunding</h1>
+                      <h1 class="heading-hero animated swing">Accept Donations for Crowdfunding</h1>
                       <h3>List and Share YOUR Campaigns and be Ready to Accept Donations from Supporters Everywhere.</h3>
                       <div class="krown-column-row clearfix">
                             <div class="krown-column-container clearfix first span3 clearfix">
@@ -427,7 +462,7 @@
                 
                 <div class="row">
                     <div class="col-sm-6 col-xs-12">
-                        <h1 class="heading-hero">Sell YOUR Merchandise</h1>
+                        <h1 class="heading-hero animated rubberBand">Sell YOUR Merchandise</h1>
                         <h3>List and Sell YOUR personal and project merch for FREE.</h3>
                         <div class="krown-column-row clearfix">
                               <div class="krown-column-container clearfix first span3 clearfix">
@@ -461,7 +496,7 @@
 
                 <div class="row">
                   <div class="col-xs-12">
-                      <h1 class="heading-hero center">Auction Roles &amp; Resources</h1>
+                      <h1 class="heading-hero center animated lightSpeedIn">Auction Roles &amp; Resources</h1>
                       <h3 class="center" style="content: none;">These are <span style="font-weight:600">revolutionary</span> features because what's old is new again.</h3>
                       <div class="krown-column-row clearfix">
                             <div class="krown-column-container clearfix first span4 clearfix">
@@ -487,7 +522,7 @@
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
 
-                <h1 class="awesomeness center big-message" style="font-size:3.5rem;width:80%;max-width:1200px;font-family:monospace;">Hollywood 2.0</h1>
+                <h1 class="awesomeness center big-message animated flash" style="font-size:3.5rem;width:80%;max-width:1200px;font-family:monospace;">Hollywood 2.0</h1>
                 <div class="krown-column-row clearfix">
                     <div class="krown-column-container clearfix span3 clearfix">
                         <p style="text-align: center;"><i class="fa fa-users b-break fa-5x" style="color:#F75146"></i></p>
@@ -508,6 +543,28 @@
                         <p style="text-align: center;"><i class="fa fa-star b-break fa-5x" style="color:#F75146"></i></p>
                         <h4 style="text-align: center;">OPTIMIZED STORYTELLING</h4>
                         <p style="text-align: center; font-size: 14px; line-height: 22px;"><strong>ANY TYPE OF MEDIA PROJECT</strong>  benefits from our crowdsourcing model.</p>
+                    </div>
+                </div>
+                <div class="krown-column-row clearfix" style="margin-bottom:90px">
+                    <div class="krown-column-container clearfix span3 clearfix">
+                        <p style="text-align: center;"><i class="fa fa-leaf b-break fa-5x" style="color:#F75146"></i></p>
+                        <h4 style="text-align: center;">BUILD &amp; MANAGE</h4>
+                        <p style="text-align: center; font-size: 14px; line-height: 22px;">Finish what you start with our technologies that do not require any subscription fees.</p>
+                    </div>
+                    <div class="krown-column-container clearfix last span3 clearfix">
+                        <p style="text-align: center;"><i class="fa fa-check-square-o b-break fa-5x" style="color:#F75146"></i></p>
+                        <h4 style="text-align: center;">COLLABORATE</h4>
+                        <p style="text-align: center; font-size: 14px; line-height: 22px;">Onboard anyone from any location to handle almost any role for your media production works.</p>
+                    </div>
+                    <div class="krown-column-container clearfix span3 clearfix">
+                        <p style="text-align: center;"><i class="fa-trophy fa b-break fa-5x" style="color:#F75146"></i></p>
+                        <h4 style="text-align: center;">EXPERIENCE</h4>
+                        <p style="text-align: center; font-size: 14px; line-height: 22px;">Build your professional work experience and beefen up those resumes and profiles.</p>
+                    </div>
+                    <div class="krown-column-container clearfix first span3 clearfix">
+                        <p style="text-align: center;"><i class="fa fa-thumbs-up b-break fa-5x" style="color:#F75146"></i></p>
+                        <h4 style="text-align: center;">LEAD</h4>
+                        <p style="text-align: center; font-size: 14px; line-height: 22px;">Become the expert. Join here for free and make the future of online media creation.</p>
                     </div>
                 </div>
                 <p>&nbsp;</p>
@@ -545,7 +602,7 @@
                   </div> -->
                 </div>                
                 {{#if ifProjs}}
-                <h3>New Projects</h3>
+                <a class="create" href="#!"><h3>Live Projects&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-plus-circle b-break awesomeness">&nbsp;&nbsp;&nbsp;</i><span class="awesomeness" style="font-weight:700">CREATE YOURS TODAY!</span></h3></a>
                 <div class="krown-id-grid carousel clearfix" id="ign-8534" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
                     <div class="holder" style="height: 550px;">
                         <div class="carousel-holder clearfix" data-visible="4" style="position: absolute;">
