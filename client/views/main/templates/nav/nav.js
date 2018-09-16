@@ -35,7 +35,7 @@ Template.nav.events({
     Session.set('selectedGenre', null);
     Meteor.logout();
     Meteor.logoutOtherClients();
-    window.location.reload();
+    window.location.assign('/discover');
   },
   'click #profile': function() {
     document.title = 'Profile View';
@@ -47,13 +47,13 @@ Template.nav.events({
     var url = window.location.href;
     if (url.indexOf('/projects')>-1||url.indexOf('/profile')>-1) {
       localStorage.setItem('doShowLock', true);
-      window.location.assign('/');
+      window.location.assign('/discover');
     } else {
       if (!url||url.match(/\//g).length===3) return lock.show();
       if ((url.indexOf('/terms')===-1&&url.indexOf('/privacy')===-1&&url.indexOf('/contact')===-1)) {
         localStorage.setItem('doShowLock', true);
         setTimeout(function() {
-          window.location.assign('/');
+          window.location.assign('/discover');
         }, 144);
         return;
       };

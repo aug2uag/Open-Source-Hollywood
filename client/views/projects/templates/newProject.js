@@ -67,6 +67,7 @@ Template.newProject.onRendered(function() {
       callbacks: {
         onInit: function() {
           $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+          $('.note-toolbar').css('z-index', '0');
         }
       }
     });
@@ -425,7 +426,7 @@ Template.newProject.events({
     // (3) check location and continue
     o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
     o.title = $('#title').val() || 'untitled';
-    o.logline = $('#logline').val() || 'nothing to see here';
+    o.logline = $('#logline').val() || 'eligible for support';
     o.purpose = $('#genre').find(":selected").text();
     o.genre = $('#genre').find(":selected").text();
     o._gifts = gifts;

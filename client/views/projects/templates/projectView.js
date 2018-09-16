@@ -284,6 +284,7 @@ function displayRoleTypeDialog(list, options) {
           inputHTML
       ].join(''),
       callback: function (data) {
+        if (options.signin) return $('.login').click();
         if (!data) {
             return console.log('Cancelled')
         }
@@ -1209,7 +1210,7 @@ Template.projectView.events({
   },
   'click .login': function(e) {
     e.preventDefault();
-    window.location.assign('/');
+    window.location.assign('/discover');
   },
   'click .accept': function(e) {
     e.preventDefault();

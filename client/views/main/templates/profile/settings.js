@@ -570,6 +570,7 @@ Template.settings.rendered = function () {
         callbacks: {
           onInit: function() {
             $('.note-editable').html(Meteor.user&&Meteor.user().bio||'<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+            $('.note-toolbar').css('z-index', '0');
           }
         }
       });

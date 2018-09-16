@@ -524,6 +524,10 @@ Template.projectTabs.helpers({
 });
 
 Template.projectTabs.events({
+  'click .create': function() {
+    localStorage.setItem('redirectURL', '/create');
+    lock.show();
+  },
   "click .next": function() {
     if (Session.get('pCount')<Session.get('pLimit')) return;
     var s = Session.get('pSkip');
@@ -622,8 +626,12 @@ Template.projectTabs.events({
 });
 
 Template.projectTab.helpers({
+  isHomePage: function() {
+    if (window.location.href.indexOf('discover')===-1) return true
+    return false
+  },
   projectDonated: function() {
-    return '$'+this.funded+' RAISED';
+    return '$'+this.funded+' BUDGET';
   },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
@@ -641,7 +649,7 @@ Template.projectTab.helpers({
 
 Template.settingsTab.helpers({
   projectDonated: function() {
-    return '$'+this.funded+' RAISED';
+    return '$'+this.funded+' BUDGET';
   },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
@@ -659,7 +667,7 @@ Template.settingsTab.helpers({
 
 Template.approvedTab.helpers({
   projectDonated: function() {
-    return '$'+this.funded+' RAISED';
+    return '$'+this.funded+' BUDGET';
   },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
