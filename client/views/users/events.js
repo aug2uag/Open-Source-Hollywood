@@ -4,7 +4,7 @@ function goDiscovery() {
       cb.dispatchEvent(new MouseEvent('click', {
         view: window
       }));
-  } catch(e){ window.location.assign('/dicover');}
+  } catch(e){ window.location.assign('/discover');}
 };
 
 Template.memberHeader.events({

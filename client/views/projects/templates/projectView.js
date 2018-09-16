@@ -4,7 +4,7 @@ function goDiscovery() {
       cb.dispatchEvent(new MouseEvent('click', {
         view: window
       }));
-  } catch(e){ window.location.assign('/dicover');}
+  } catch(e){ window.location.assign('/discover');}
 };
 
 const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHHwJDUni09o09sq';
