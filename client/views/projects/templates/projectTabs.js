@@ -536,6 +536,12 @@ Template.projectTabs.helpers({
 
 Template.projectTabs.events({
   'click .create': function() {
+    if (Meteor.user()) {
+      var cb = document.getElementById('gocreate'); 
+      return cb.dispatchEvent(new MouseEvent('click', {
+        view: window
+      }));
+    };
     localStorage.setItem('redirectURL', '/create');
     lock.show();
   },

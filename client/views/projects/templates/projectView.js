@@ -1,8 +1,10 @@
 function goDiscovery() {
-  var cb = document.getElementById('discoverybtn'); 
-  cb.dispatchEvent(new MouseEvent('click', {
-    view: window
-  }));
+  try{
+    var cb = document.getElementById('discoverybtn'); 
+      cb.dispatchEvent(new MouseEvent('click', {
+        view: window
+      }));
+  } catch(e){ window.location.assign('/dicover');}
 };
 
 const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHHwJDUni09o09sq';

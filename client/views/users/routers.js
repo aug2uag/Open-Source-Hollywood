@@ -83,10 +83,14 @@ Router.route('/settings/:area', {
       this.next();
     },
     onAfterAction: function() {
-      var route = this.params.area === 'boards' ? '#gocampaigns' : '#gonegotiations';
+      var that = this;
       setTimeout(function() {
-        $(route).click();
-      }, 987);
+        /** make sure campaigns and negotiations are loaded before continuing */
+        var route = that.params.area === 'boards' ? '#gocampaigns' : '#gonegotiations';
+        setTimeout(function() {
+          $(route).click();
+        }, $('#active').html() ? 987 : 1442);
+      }, 144);
     }
 });
 

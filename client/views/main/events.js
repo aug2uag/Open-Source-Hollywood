@@ -1,10 +1,12 @@
 var blogSettings = {};
 
 function goDiscovery() {
-  var cb = document.getElementById('discoverybtn'); 
-  cb.dispatchEvent(new MouseEvent('click', {
-    view: window
-  }));
+  try{
+    var cb = document.getElementById('discoverybtn'); 
+      cb.dispatchEvent(new MouseEvent('click', {
+        view: window
+      }));
+  } catch(e){ window.location.assign('/dicover');}
 };
 
 var resetGridMasonFunction = function(t) {

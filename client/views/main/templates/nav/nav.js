@@ -1,10 +1,12 @@
 document.title = "Open Source Hollywood";
 
 function goDiscovery() {
-  var cb = document.getElementById('discoverybtn'); 
-  cb.dispatchEvent(new MouseEvent('click', {
-    view: window
-  }));
+  try{
+    var cb = document.getElementById('discoverybtn'); 
+      cb.dispatchEvent(new MouseEvent('click', {
+        view: window
+      }));
+  } catch(e){ window.location.assign('/dicover');}
 };
 
 Template.nav.onRendered(function() {
@@ -22,7 +24,7 @@ Template.nav.helpers({
 
 Template.nav.events({
   'click .menu-item': function() {
-    if ($(window).width()<=692) $('#navbutton').click();
+    if ($(window).width()<=767) $('#navbutton').click();
   },
   'click #logo': function() {
     window.location.assign('/');

@@ -12,14 +12,18 @@ Router.route('/discover', {
     ];
   },
   onBeforeAction: function() {
-    var x = localStorage.getItem('redirectURL');
-    if (x&&x!=='null'&&x.indexOf('/')>-1) {
-      setTimeout(function() {
-        Router.go(x);
-      }, 144);
-      return;
-    };
-    localStorage.removeItem('redirectURL');
+    if (Meteor.user()) {
+      localStorage.removeItem('redirectURL');
+    }else{
+      var x = localStorage.getItem('redirectURL');
+      if (x&&x!=='null'&&x.indexOf('/')>-1) {
+        setTimeout(function() {
+          Router.go(x);
+        }, 144);
+        return;
+      };
+      localStorage.removeItem('redirectURL');
+    }
     $('meta[name=description]').remove();
     $('head').append( '<meta name="description" content="Campaigns on O . S . H . (https://opensourcehollywood.org)">' );
     document.title = 'Active Campaigns';
@@ -32,10 +36,7 @@ Router.route('/create', {
   template: 'newProject',
   layoutTemplate: 'StaticLayout',
   waitOn: function() {
-    if (!Meteor.user()) {
-      window.location.assign('/');
-      return
-    }
+    localStorage.removeItem('redirectURL');
     return [
       Meteor.subscribe('getMe'), 
       // Meteor.subscribe('connectUser')
