@@ -1,13 +1,14 @@
 document.title = "Open Source Hollywood";
 
+function goDiscovery() {
+  var cb = document.getElementById('discoverybtn'); 
+  cb.dispatchEvent(new MouseEvent('click', {
+    view: window
+  }));
+};
+
 Template.nav.onRendered(function() {
   $('.login').mouseenter();
-  if (localStorage.getItem('doShowLock')==='true'||localStorage.getItem('doShowLock')===true) {
-      setTimeout(function() {
-        localStorage.setItem('doShowLock', false);
-        lock.show();
-      }, 1597);
-    };
 });
 
 Template.nav.helpers({
@@ -35,7 +36,7 @@ Template.nav.events({
     Session.set('selectedGenre', null);
     Meteor.logout();
     Meteor.logoutOtherClients();
-    window.location.assign('/discover');
+    goDiscovery();
   },
   'click #profile': function() {
     document.title = 'Profile View';
@@ -47,13 +48,13 @@ Template.nav.events({
     var url = window.location.href;
     if (url.indexOf('/projects')>-1||url.indexOf('/profile')>-1) {
       localStorage.setItem('doShowLock', true);
-      window.location.assign('/discover');
+      goDiscovery();
     } else {
       if (!url||url.match(/\//g).length===3) return lock.show();
       if ((url.indexOf('/terms')===-1&&url.indexOf('/privacy')===-1&&url.indexOf('/contact')===-1)) {
         localStorage.setItem('doShowLock', true);
         setTimeout(function() {
-          window.location.assign('/discover');
+          goDiscovery();
         }, 144);
         return;
       };

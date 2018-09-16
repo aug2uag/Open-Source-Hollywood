@@ -1,5 +1,12 @@
 var blogSettings = {};
 
+function goDiscovery() {
+  var cb = document.getElementById('discoverybtn'); 
+  cb.dispatchEvent(new MouseEvent('click', {
+    view: window
+  }));
+};
+
 var resetGridMasonFunction = function(t) {
         var e = t("html"),
             i = t("body"),
@@ -370,8 +377,14 @@ function doResetGrid() {
 
 Template.splashPage.onRendered(function() {
   $(document).ready(function() {
-      $(window).resize(function() {
-        $('.holder').css('height', '');
+    if (localStorage.getItem('doShowLock')==='true'||localStorage.getItem('doShowLock')===true) {
+      setTimeout(function() {
+        localStorage.setItem('doShowLock', false);
+        lock.show();
+      }, 1597);
+    };
+    $(window).resize(function() {
+      $('.holder').css('height', '');
     });
   });
 });
@@ -411,7 +424,7 @@ Template.splashPage.events({
   },
   'click .goDiscover': function() {
       localStorage.removeItem('redirectURL');
-      window.location.assign('/discover');
+      goDiscovery();
   },
   'click #sendMsg': function() {
     /** get message and subject / email, and send email */

@@ -418,6 +418,17 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
   return buffer;
 });
 
+Template.projectTabs.onRendered(function() {
+    $(document).ready(function() {
+        if (localStorage.getItem('doShowLock')==='true'||localStorage.getItem('doShowLock')===true) {
+          setTimeout(function() {
+            localStorage.setItem('doShowLock', false);
+            lock.show();
+          }, 1597);
+        };
+    });
+});
+
 Template.projectTabs.helpers({
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
@@ -705,7 +716,6 @@ Template.projTab.events({
   'click .toProj': function(e) {
     e.preventDefault();
     var proj = $(this)[0];
-    localStorage.setItem('redirectURL', '/projects/' + proj.slug + '/' + proj.ownerId);
     lock.show();
   }
 });

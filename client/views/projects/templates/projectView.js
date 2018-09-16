@@ -1,3 +1,9 @@
+function goDiscovery() {
+  var cb = document.getElementById('discoverybtn'); 
+  cb.dispatchEvent(new MouseEvent('click', {
+    view: window
+  }));
+};
 
 const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHHwJDUni09o09sq';
 var donationObject = {};
@@ -1210,7 +1216,7 @@ Template.projectView.events({
   },
   'click .login': function(e) {
     e.preventDefault();
-    window.location.assign('/discover');
+    goDiscovery();
   },
   'click .accept': function(e) {
     e.preventDefault();
@@ -1456,7 +1462,7 @@ Template.projectView.onRendered(function() {
       $('#genreclick2').click();
     }, 610);
   }
-  if (!Meteor.user()) localStorage.setItem('redirectURL', '/projects/' + this.data.project.slug + '/' + this.data.project.ownerId);
+  
   setTimeout(function() {
       $('.fb-share').html('<li class="fa fa-facebook"></li>');
       $('.tw-share').html('<li class="fa fa-twitter"></li>');

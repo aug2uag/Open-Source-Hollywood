@@ -1,3 +1,10 @@
+function goDiscovery() {
+  var cb = document.getElementById('discoverybtn'); 
+  cb.dispatchEvent(new MouseEvent('click', {
+    view: window
+  }));
+};
+
 Template.memberHeader.events({
     'click .js-open-header-member-menu': Popup.open('memberMenu'),
     'click #stats': Popup.open('stats'),
@@ -6,7 +13,7 @@ Template.memberHeader.events({
     'click #asss': Popup.open('asss'),
     'click #mine': Popup.open('mine'),
     'click #exit': function() {
-        Router.go('Projects');
+        goDiscovery()
     }
 });
 
