@@ -427,6 +427,7 @@
                                   </div>
                                 </div>
                                 <!-- GIFTS -->
+                                {{#if hasGifts}}
                                 <div class="id-product-levels">
                                   <h4 class="avatar-option await btn-lg purchaselabel" style="top:10px;">MERCHANDISE</h4>
                                   <br>
@@ -440,12 +441,13 @@
                                                 <!-- <p class="code">quantity available ({{this.quantity}})</p> -->
                                             </div>
                                         </div>
-                                        <p class="align-center"><a class="c-related__a button special">PURCHASE NOW</a></p>
+                                        <p class="align-center"><a class="c-related__a button special purchase_gift">PURCHASE NOW</a></p>
                                     </a>
                                     {{else}}
                                     <script type="text/javascript">$('.purchaselabel').hide();</script>
                                   {{/each}}
                                 </div>
+                                {{/if}}
                                 <!-- end product levels -->
                             </div>
                             <!-- end product-infobox -->                       

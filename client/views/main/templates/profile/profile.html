@@ -2,9 +2,9 @@
 	<div id="content" class="clearfix ">
 
     <div class="clearfix wrapper">
-
+    	<div id="u_id" val="{{_id}}" display="none"></div>
         <header id="page-title" style="padding-top: 0px;margin-bottom: 0px!important;">
-            <h1 class="title">{{name}}</h1>
+            <h1 class="title" id="artistname">{{name}}</h1>
             <h2 class="subtitle">{{iams}}</h2>
         </header>
 
@@ -69,7 +69,6 @@
 	                                    </li>
 	                                </ul>
 	                            </div>
-
 	                        </div>
                         	<aside class="share-buttons clearfix">
                                 <p>Share this profile</p>
@@ -81,6 +80,40 @@
 							{{/if}}
                             <div id="formatted_desc">{{formattedBio}}</div>
                             <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <hr>
+                            <section>
+                               	{{#if hasGifts}}
+	                                <div class="id-product-levels">
+	                                  <h2 class="center avatar-option await btn-lg purchaselabel animated bounce" style="top:10px;">MERCHANDISE FOR SALE</h2>
+	                                  <div class="holder" style="height: 550px;">
+					                    <div class="carousel-holder clearfix" data-visible="4" style="position: absolute;">
+
+					                          {{#each gifts}}
+
+					                            <article class="krown-id-item">
+
+											        <a class="fancybox-thumb purchase_gift" href="#!">
+											            <figure class="img"><img src="{{giftIMG}}" width="255" height="173" alt="{{this.name}}" style="height:190px!important"></figure><span></span>
+											        </a>
+											        <div class="container">
+
+											            <p class="title">{{this.description}}</p>
+
+											            <div class="cats">{{this.name}}, {{this.type}} item</div>
+
+											            <section class="content"><p class="align-center"><a class="purchase_gift c-related__a button special">PURCHASE NOW</a></p></section>
+
+											        </div>
+
+											    </article>
+
+					                          {{/each}}
+					                     </div>
+					                   </div>
+	                                </div>
+	                            {{/if}}
+                            </section>
                             <div class="krown-accordion accordion large clearfix">
                                 <section>
                                     <h5>Social Media &amp; Links</h5>
@@ -153,6 +186,8 @@
             </div>
 
         </div>
+
+
 
         <!-- Inner Wrapper End -->
     </div>

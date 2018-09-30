@@ -23,6 +23,7 @@ function removeGift(e) {
 Template.editProject.events({
   'click #update_campaign': function(e) {
     e.preventDefault();
+    console.log('in 1')
     var o = {slug: currentSlug};
     o._gifts = gifts;
     var crew = $('.crew-val'); 
@@ -69,11 +70,13 @@ Template.editProject.events({
       _o.address = $(arr[1]).text();
       o.social.push(_o);
     });
+    console.log('in 2')
 
     // create virtual account for project
     // add funds to virtual account, non-refundable
     Meteor.call('editProject', o);
     vex.dialog.alert("Project updated!");
+    console.log('in 3')
     $('.after-the-fact').remove();
     try {
       glowToClick();
@@ -139,19 +142,66 @@ Template.editProject.events({
     $('.deleteRow').on('click', deleteRow);
     $('#social-title').val(''), $('#social-url').val('');
   },
-
+  'change #merchtype': function(e) {
+    e.preventDefault();
+    var giftType = $('#merchtype option:selected').val();
+    if (giftType.indexOf('Select')>-1) return alert('please select merchandise type');
+    $('#merchtypehidden').show();
+    if (giftType==='Apparel') {
+      $('#apparelsizes').show();
+      $('#perishabledetails').hide();
+    } else if (giftType==='Perishable') {
+      $('#apparelsizes').hide();
+      $('#merch_handling').prop("placeholder", "Shelf Life and Handling Instructions");
+      $('#perishabledetails').show();
+    } else {
+      $('#apparelsizes').hide();
+      $('#merch_handling').prop("placeholder", "Details and Handling Instructions");
+      $('#perishabledetails').show();
+    };
+  },
   'click #add-gift': function(e) {
     e.preventDefault();
     var o = {};
-    o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.quantity = parseInt($('#gift-quantity').val()), o.msrp = parseFloat($('#gift-msrp').val());
-    if (!o.name || !o.quantity || !o.msrp || typeof o.quantity !== 'number' || typeof o.msrp !== 'number' || o.quantity < 1 || o.msrp < 1) return;
+    o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
+    if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
     if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
     else o.data = osettings.giftImage.data;
+    // get type
+    o.type = $('#merchtype option:selected').val();
+    if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
+    if (o.type==='Apparel') {
+      o.secondaryData = $('.apparelsize:checkbox:checked').map(function(el){ return $(this).val();}).get();
+    } else {
+      o.secondaryData = $('#merch_handling').val();
+    };
+    o.disclaimer = $('#merch_disclaimer').val();
     osettings.giftImage = {};
     gifts.push(o);
-    $('#gift-table').append('<tr class="gift-val after-the-fact"><td>'+o.name+'</td><td>'+o.description+'</td><td>'+o.quantity+'</td><td>'+o.msrp+'</td><td><button class="removeGift button small">X</button></td></tr>');
+    console.log(gifts)
+    var tblRow = [
+      '<tr class="gift-val after-the-fact">',
+        '<td>'+o.name+'</td>',
+        '<td>'+o.type+'</td>',
+        '<td>'+o.description+'</td>',
+        '<td>'
+    ];
+    
+    if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
+    if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
+    tblRow = tblRow.concat([
+      '</td>',
+        '<td>'+o.msrp+'</td>',
+        '<td><button class="removeGift button special">X</button></td></tr>'
+    ]);
+    $('#gift-table').append(tblRow.join(''));
     $('.removeGift').on('click', removeGift);
     $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
+    /** set file.name to span of inner el */
+    $('#gift_file_name').text('');
+    $('#merch_handling').val('');
+    $('#merch_disclaimer').val('');
+    $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
   }
 });
 

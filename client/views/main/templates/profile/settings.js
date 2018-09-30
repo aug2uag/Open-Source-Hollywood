@@ -1,3 +1,5 @@
+var gifts = [];
+var osettings = {giftImage: {}, avatar: {}};
 function videoURLValidation(url) {
 	var vimeo = /^https:\/\/vimeo.com\/[\d]{8,}$/;
 	var youtube = /^https:\/\/youtu.be\/[A-z0-9]{9,}$/;
@@ -22,8 +24,12 @@ function deleteRow(e) {
 	$(this).closest('tr').remove();
 }
 
-var osettings = {};
-osettings.avatar = {};
+function removeGift(e) {
+  e.preventDefault();
+  var idx = $($(this).closest('tr')).index();
+  gifts.splice(idx, 1);
+  $(this).closest('tr').remove();
+}
 
 function isURL(str) {
   var pattern = new RegExp('^(https?):\\/\\/[^ "]+$','i');
@@ -71,7 +77,20 @@ function phoneVerifyVex() {
 	});
 }
 
+Template.settings.onRendered(function() {
+	$(document).ready(function() {
+	    setTimeout(function() {
+	      var script = document.createElement('script');
+	      script.src = "/js/scripts.min.js";
+	      document.head.appendChild(script);
+	    }, 987);
+	})
+})
+
 Template.settings.events({
+	'click #gotoemailconfig': function(e) {
+
+	},
 	'click #remove_phone_notify': function(e) {
 		Meteor.call('removeNotificationRT', 'phone', function(err, msg) {
 			vex.dialog.alert(msg);
@@ -145,6 +164,25 @@ Template.settings.events({
 		e.preventDefault();
 		$('#avatar_file').click();
 	},
+	'click #file_gift': function(e) {
+	    $('#gift_file').click();
+	},
+	'change #gift_file': function (e, template) {
+		if (e.currentTarget.files && e.currentTarget.files[0]) {
+			osettings.giftImage = {};
+			var reader = new FileReader();
+			var files = e.target.files;
+			var file = files[0];
+			if (file.type.indexOf("image")==-1) {
+			  vex.dialog.alert('Invalid File, you can only upload a static image for your profile picture');
+			  return;
+			};
+			reader.onload = function(readerEvt) {
+			    osettings.giftImage.data = readerEvt.target.result;
+			}; 
+			reader.readAsDataURL(file);
+		}
+	},
 	'click #save_settings': function(e) {
 		e.preventDefault();
 
@@ -184,6 +222,7 @@ Template.settings.events({
 		o.assets = [];
 		o.social = [];
 		o.reels = [];
+		o.gifts = gifts;
 		o.avatar = osettings.avatar;
 		if ($('#website').val().trim()&&$('#website').val()!=='enter http://www.your.site') o.website = $('#website').val();
 
@@ -296,10 +335,89 @@ Template.settings.events({
 		        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
 		    ]
 		});
-    }
+    },
+	'change #merchtype': function(e) {
+		e.preventDefault();
+		var giftType = $('#merchtype option:selected').val();
+		if (giftType.indexOf('Select')>-1) return alert('please select merchandise type');
+		$('#merchtypehidden').show();
+		if (giftType==='Apparel') {
+		  $('#apparelsizes').show();
+		  $('#perishabledetails').hide();
+		} else if (giftType==='Perishable') {
+		  $('#apparelsizes').hide();
+		  $('#merch_handling').prop("placeholder", "Shelf Life and Handling Instructions");
+		  $('#perishabledetails').show();
+		} else {
+		  $('#apparelsizes').hide();
+		  $('#merch_handling').prop("placeholder", "Details and Handling Instructions");
+		  $('#perishabledetails').show();
+		};
+	},
+	'click #add-gift': function(e) {
+		e.preventDefault();
+		var o = {};
+		o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
+		if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
+		if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
+		else o.data = osettings.giftImage.data;
+		// get type
+		o.type = $('#merchtype option:selected').val();
+		if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
+		if (o.type==='Apparel') {
+		  o.secondaryData = $('.apparelsize:checkbox:checked').map(function(el){ return $(this).val();}).get();
+		} else {
+		  o.secondaryData = $('#merch_handling').val();
+		};
+		o.disclaimer = $('#merch_disclaimer').val();
+		osettings.giftImage = {};
+		gifts.push(o);
+		var tblRow = [
+		  '<tr class="gift-val after-the-fact">',
+		    '<td>'+o.name+'</td>',
+		    '<td>'+o.type+'</td>',
+		    '<td>'+o.description+'</td>',
+		    '<td>'
+		];
+
+		if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
+		if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
+		tblRow = tblRow.concat([
+		  '</td>',
+		    '<td>'+o.msrp+'</td>',
+		    '<td><button class="removeGift button special">X</button></td></tr>'
+		]);
+		$('#gift-table').append(tblRow.join(''));
+		$('.removeGift').on('click', removeGift);
+		$('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
+		/** set file.name to span of inner el */
+		$('#gift_file_name').text('');
+		$('#merch_handling').val('');
+		$('#merch_disclaimer').val('');
+		$('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
+	}
 });
 
 Template.settings.helpers({
+	giftPurchases: function() {
+		return Meteor.user().giftPurchases||[]
+	},
+	purchaseAMT: function() {
+		return this.token.receipt.amount/100
+	},
+	purchaseStatus: function() {
+		return this.status||'unfulfilled'
+	},
+	hasEmail: function() {
+		return Meteor.user().email!==null
+	},
+	hasGifts: function() {
+
+		return Meteor.user().gifts&&Meteor.user().gifts.length
+	},
+	userGifts: function() {
+		return Meteor.user().gifts||[]
+	},
 	createAccount: function() {
 		Meteor.call('createBankingAccount');
 	},

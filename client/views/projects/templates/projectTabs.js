@@ -464,25 +464,25 @@ Template.projectTabs.helpers({
     Session.set('pLimit', pLimit);
     if (Session.equals('order', 'hot')) {
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false/*, ownerId: {$ne: myId}*/}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'top')){
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false/*, ownerId: {$ne: myId}*/}, {sort: {count: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'newest')) {
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false/*, ownerId: {$ne: myId}*/}, {sort: {createTimeActual: -1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
     else if (Session.equals('order', 'alphabetical')) {
       /** remove all els, & init grid */
-      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false/*, ownerId: {$ne: myId}*/}, {sort: {title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }
@@ -527,7 +527,7 @@ Template.projectTabs.helpers({
       return p;
     }
     else { /*by default the tab is on hot, in hot order */
-      var p = Projects.find({archived: false, ownerId: {$ne: myId}}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
+      var p = Projects.find({archived: false/*, ownerId: {$ne: myId}*/}, {sort: {count: -1, createTimeActual: -1, title: 1}, skip: Session.get('pSkip'), limit: Session.get('pLimit')});
       Session.set('pCount', p.count());
       return p;
     }

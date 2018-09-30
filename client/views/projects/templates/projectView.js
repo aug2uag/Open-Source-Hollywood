@@ -386,6 +386,9 @@ function displayRoleTypeDialog(list, options) {
 };
 
 Template.projectView.helpers({
+  hasGifts: function() {
+    return this.project.gifts&&this.project.gifts.length
+  },
   thumbsupactive: function() {
     // if me in upvote 'active' : null
     if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
@@ -1301,7 +1304,7 @@ Template.projectView.events({
     var dialogInput = [
       '<figure class="snip1165 red">',
         '<img src="',
-        was.url,
+        was.url||was.data,
         '" alt="sample63"/>',
         '<figcaption>',
           '<h3>',
@@ -1310,10 +1313,16 @@ Template.projectView.events({
           '<p>',
             was.description,
           '</p>',
+          '<h4>ADDITIONAL INFORMATION:&nbsp;<br><small><strong>',
+            was.secondaryData||'no additional information provided for this item',
+          '</small></strong></h4>',
+          '<h4>REFUND POLICY & DISCLAIMER:&nbsp;<br><small><strong>',
+            was.disclaimer||'no refund policy or disclaimer provided for this item',
+          '</small></strong></h4>',
           '<hr>',
-          '<h3 style="margin-top:8px;margin-bottom:0px">$',
+          '<h6 style="margin-top:8px;margin-bottom:0px">Available for Purchase $',
           was.msrp,
-          '</h3>',
+          '</h6>',
         '</figcaption>',
       '</figure>'
     ]
@@ -1321,7 +1330,8 @@ Template.projectView.events({
   
     var vex1Open = true, vex2Open = true;
     var vex1 = vex.dialog.open({
-        message: ['   Details of ',was.name,'. Purchase below.'].join(''),
+        message: ['   Merchandise for sale'].join(''),
+        // message: ['   Details of ',was.name,'. Purchase below.'].join(''),
         buttons: [
           $.extend({}, vex.dialog.buttons.YES, { text: 'PURCHASE' }),
           $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
@@ -1405,7 +1415,7 @@ Template.projectView.events({
                       vex2Open = false;
                       vex2.close();
                       o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val(), o.phone = $('#phone-gift').val();
-                      if (!o.address||!o.city||!o.state||!o.zip||!o.email||!o.phone) return vex.dialog.alert('invalid order information, please include all fields and try again');
+                      if (!o.address||!o.zip||!o.email) return vex.dialog.alert('invalid order information, please include address, email, and zipcode fields and try again');
                       o.amount = was.msrp;
                       o.message = was.name + ' purchase';
                       o.route = 'purchaseGift';

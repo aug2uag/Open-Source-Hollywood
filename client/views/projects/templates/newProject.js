@@ -50,6 +50,11 @@ Template.newProject.onRendered(function() {
   osettings.banner = {};
   osettings.giftImage = {};
   $(document).ready(function() {
+    setTimeout(function() {
+      var script = document.createElement('script');
+      script.src = "/js/scripts.min.js";
+      document.head.appendChild(script);
+    }, 987);
     $('#summernote').summernote({
       toolbar: [
         // [groupName, [list of button]]
@@ -562,8 +567,6 @@ Template.newProject.events({
       /** hide genres */
       $('#hidden_genre').hide();
     }
-
-
   },
   'change #gift_file': function (e, template) {
       if (e.currentTarget.files && e.currentTarget.files[0]) {
@@ -597,7 +600,6 @@ Template.newProject.events({
     $('#crew-audition').val(''), 
     $("#crew-radio-needed").prop("checked", true);
   },
-
   'click #add-cast': function(e) {
     e.preventDefault();
     var title = $('#cast-title').val(), 
@@ -611,7 +613,6 @@ Template.newProject.events({
     $('#cast-audition').val(''), 
     $("#cast-radio-needed").prop("checked", true);
   },
-
   'click #add-needs': function(e) {
     e.preventDefault();
     var cat = $('#needs-category').val(), description = $('#needs-description').val();
@@ -620,7 +621,6 @@ Template.newProject.events({
     $('.deleteRow').on('click', deleteRow);
     $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
   },
-
   'click #add-social': function(e) {
     e.preventDefault();
     var title = $('#social-title').val(), url = $('#social-url').val();
@@ -628,22 +628,73 @@ Template.newProject.events({
     $('.deleteRow').on('click', deleteRow);
     $('#social-title').val(''), $('#social-url').val('');
   },
-
+  'change #merchtype': function(e) {
+    e.preventDefault();
+    var giftType = $('#merchtype option:selected').val();
+    if (giftType.indexOf('Select')>-1) return alert('please select merchandise type');
+    $('#merchtypehidden').show();
+    if (giftType==='Apparel') {
+      $('#apparelsizes').show();
+      $('#perishabledetails').hide();
+    } else if (giftType==='Perishable') {
+      $('#apparelsizes').hide();
+      $('#merch_handling').prop("placeholder", "Shelf Life and Handling Instructions");
+      $('#perishabledetails').show();
+    } else {
+      $('#apparelsizes').hide();
+      $('#merch_handling').prop("placeholder", "Details and Handling Instructions");
+      $('#perishabledetails').show();
+    };
+  },
   'click #add-gift': function(e) {
     e.preventDefault();
+    console.log('add gift')
     var o = {};
-    o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.quantity = parseInt($('#gift-quantity').val()), o.msrp = parseFloat($('#gift-msrp').val());
-    if (!o.name || !o.quantity || !o.msrp || typeof o.quantity !== 'number' || typeof o.msrp !== 'number' || o.quantity < 1 || o.msrp < 1) return;
+    o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
+    if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
     if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
     else o.data = osettings.giftImage.data;
+    // get type
+    o.type = $('#merchtype option:selected').val();
+    if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
+    if (o.type==='Apparel') {
+      o.secondaryData = $('.apparelsize:checkbox:checked').map(function(el){ return $(this).val();}).get();
+    } else {
+      o.secondaryData = $('#merch_handling').val();
+    };
+    o.disclaimer = $('#merch_disclaimer').val();
     osettings.giftImage = {};
     gifts.push(o);
-    $('#gift-table').append('<tr class="gift-val"><td>'+o.name+'</td><td>'+o.description+'</td><td>'+o.quantity+'</td><td>'+o.msrp+'</td><td><button class="removeGift button special">X</button></td></tr>');
+    console.log(gifts)
+    var tblRow = [
+      '<tr class="gift-val">',
+        '<td>'+o.name+'</td>',
+        '<td>'+o.type+'</td>',
+        '<td>'+o.description+'</td>',
+        '<td>'
+    ];
+    
+    if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
+    if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
+    tblRow = tblRow.concat([
+      '</td>',
+        '<td>'+o.msrp+'</td>',
+        '<td><button class="removeGift button special">X</button></td></tr>'
+    ]);
+    $('#gift-table').append(tblRow.join(''));
     $('.removeGift').on('click', removeGift);
     $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
     /** set file.name to span of inner el */
     $('#gift_file_name').text('');
+    $('#merch_handling').val('');
+    $('#merch_disclaimer').val('');
+    $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
     $('#hidden_gift_name').hide();
+  },
+  'click .login': function(e){
+    e.preventDefault();
+    localStorage.setItem('redirectURL', '/create');
+    lock.show();
   }
 });
 

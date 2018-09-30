@@ -1,3 +1,86 @@
+// buy merch
+const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHHwJDUni09o09sq';
+
+function makeStripeCharge(options) {
+  StripeCheckout.open({
+    key: StripePublicKey,
+    amount: Math.abs(Math.floor(options.amount*100))<1?1:Math.abs(Math.floor(options.amount*100)),
+    currency: 'usd',
+    name: options.message,
+    bitcoin: true,
+    description: options.description || 'opensourcehollywood.org',
+    panelLabel: 'Pay Now',
+    token: function(_token) {
+      if (_token) {
+        options.token = _token;
+        if (Meteor.user()) {
+          Meteor.call('userMerchSale', options, function(err, result) {
+            if (err) return vex.dialog.alert('your payment failed');
+            vex.dialog.alert(result)
+          });
+        } else {
+          // confirm dialog
+          vex.dialog.alert({
+            message: 'Please confirm the following to finalize payment.',
+            input: [
+              '<ul>',
+                '<li class="wcheckbox">',
+                    '<label class="with-square-checkbox">',
+                        '<input id="ageverify" name="ageverify" type="checkbox">',
+                        '<span>I am 18 years of age or older.</span>',
+                    '</label>',
+                '</li>',
+                '<li class="wcheckbox">',
+                    '<label class="with-square-checkbox">',
+                        '<input id="payverify" name="payverify" type="checkbox">',
+                        '<span>I am authorized to make payments with the payment method I selected.</span>',
+                    '</label>',
+                '</li>',
+                '<li class="wcheckbox">',
+                    '<label class="with-square-checkbox">',
+                        '<input id="refverify" name="refverify" type="checkbox">',
+                        '<span>I understand my payment is non-refundable and will be immediately applied to the campaign\'s budget.</span>',
+                    '</label>',
+                '</li>',
+              '</ul>',
+              '<div class="form-group">',
+                  '<label for="signature">Sign Your Name</label>',
+                  '<input type="text" class="form-control" name="signature" id="signature" placeholder="enter your name here">',
+              '</div>',
+            ].join(''),
+            callback: function(data) {
+              if (!data.ageverify) {
+                vex.dialog.alert('you must be 18 or older to continue, your payment was cancelled');
+                return
+              } else if (!data.payverify) {
+                vex.dialog.alert('you must be authorized for the transaction, your payment was cancelled');
+                return
+              } else if (!data.refverify) {
+                vex.dialog.alert('you must agree to our terms to continue, your payment was cancelled');
+                return
+              } else if (!data.signature) {
+                vex.dialog.alert('you must provide a signature, your payment was cancelled');
+                return
+              } 
+              data.date = new Date();
+              options.anonymous_verification = data;
+              Meteor.call('userMerchSale', options, function(err, result) {
+                if (err) return vex.dialog.alert('your payment failed');
+                vex.dialog.alert(result)
+              });
+            }
+          });
+        }
+        
+      } else {
+        vex.dialog.alert('your payment did not succeed');
+      }
+    }
+  });
+};
+
+
+
 function vexFlag(usr) {
   vex.dialog.open({
     message: 'Request to Remove',
@@ -83,6 +166,16 @@ function vexFlag(usr) {
 }
 
 Template.profile.helpers({
+	giftIMG: function() {
+		return this.url||this.data
+	},
+	hasGifts: function() {
+		return this.gifts&&this.gifts.length
+	},
+	gifts: function() {
+		console.log(this.gifts)
+		return this.gifts||[]
+	},
 	formattedBio: function() {
 		var that =  this;
 		setTimeout(function() {
@@ -191,7 +284,147 @@ Template.profile.events({
     e.preventDefault();
     /** show vex dialog */
     vexFlag(this);
-  }
+  },
+  'click .purchase_gift': function(e) {
+		e.preventDefault();
+		var was = this, o={gift:was};
+
+		var dialogInput = [
+		  '<figure class="snip1165 red">',
+		    '<img src="',
+		    was.url||was.data,
+		    '" alt="sample63"/>',
+		    '<figcaption>',
+		      '<h3>',
+		      was.name,
+		      '</h3>',
+		      '<p>',
+		        was.description,
+		      '</p>',
+		      '<h4>ADDITIONAL INFORMATION:&nbsp;<br><small><strong>',
+		        was.secondaryData||'no additional information provided for this item',
+		      '</small></strong></h4>',
+		      '<h4>REFUND POLICY & DISCLAIMER:&nbsp;<br><small><strong>',
+		        was.disclaimer||'no refund policy or disclaimer provided for this item',
+		      '</small></strong></h4>',
+		      '<hr>',
+		      '<h6 style="margin-top:8px;margin-bottom:0px">Available for Purchase $',
+		      was.msrp,
+		      '</h6>',
+		    '</figcaption>',
+		  '</figure>'
+		]
+
+
+		var vex1Open = true, vex2Open = true;
+		var vex1 = vex.dialog.open({
+		    message: ['   Merchandise for sale'].join(''),
+		    // message: ['   Details of ',was.name,'. Purchase below.'].join(''),
+		    buttons: [
+		      $.extend({}, vex.dialog.buttons.YES, { text: 'PURCHASE' }),
+		      $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+		    ],
+		    input: dialogInput.join(''),
+		    callback: function (data) {
+		        if (!data) {
+		            return console.log('Cancelled')
+		        }
+		        if (vex1Open) {
+		          vex1Open = false;
+		          vex1.close();
+
+		          var dialogInput = [
+		              '<style>',
+		                  '.vex-custom-field-wrapper {',
+		                      'margin: 1em 0;',
+		                  '}',
+		                  '.vex-custom-field-wrapper > label {',
+		                      'display: inline-block;',
+		                      'margin-bottom: .2em;',
+		                  '}',
+		              '</style>',
+		              '<div class="vex-custom-field-wrapper">',
+		                  '<label for="address-gift">Shipping Address</label>',
+		                  '<div class="vex-custom-input-wrapper">',
+		                      '<input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift">',
+		                  '</div>',
+		              '</div>',
+		              '<div class="vex-custom-field-wrapper">',
+		                  '<label for="city-gift">City</label>',
+		                  '<div class="vex-custom-input-wrapper">',
+		                      '<input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift">',
+		                  '</div>',
+		              '</div>',
+		              '<div class="vex-custom-field-wrapper">',
+		                  '<label for="state-gift">State</label>',
+		                  '<div class="vex-custom-input-wrapper">',
+		                      '<input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift">',
+		                  '</div>',
+		              '</div>',
+		              '<div class="vex-custom-field-wrapper">',
+		                  '<label for="zip-gift">Zip Code</label>',
+		                  '<div class="vex-custom-input-wrapper">',
+		                      '<input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift">',
+		                  '</div>',
+		              '</div>',
+		              '<div class="vex-custom-field-wrapper">',
+		                  '<label for="email-gift">Contact Email</label>',
+		                  '<div class="vex-custom-input-wrapper">',
+		                      '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift">',
+		                  '</div>',
+		              '</div>',
+		              '<div class="vex-custom-field-wrapper">',
+		                  '<label for="phone-gift">Contact Phone</label>',
+		                  '<div class="vex-custom-input-wrapper">',
+		                      '<input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift">',
+		                  '</div>',
+		              '</div>'
+
+		          ]
+
+		          dialogInput = dialogInput.concat([
+		            '<div class="vex-custom-field-wrapper">',
+		              '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+		            '</div>'
+		          ])
+
+		          var vex2 = vex.dialog.open({
+		            message: 'Order and Pay Info',
+		            buttons: [
+		              $.extend({}, vex.dialog.buttons.YES, { text: 'CONTINUE' }),
+		              $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }),
+		            ],
+		            input: dialogInput.join(''),
+		            callback: function (data) {
+		                if (!data) {
+		                    return console.log('Cancelled')
+		                }
+		                if (vex2Open) {
+		                  vex2Open = false;
+		                  vex2.close();
+		                  o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val(), o.phone = $('#phone-gift').val();
+		                  if (!o.address||!o.zip||!o.email) return vex.dialog.alert('invalid order information, please include address, email, and zipcode fields and try again');
+		                  o.amount = was.msrp;
+		                  o.message = was.name + ' purchase';
+		                  o.artistName = $('#artistname').text();
+		                  o.uid = $('#u_id').attr('val');
+		                  makeStripeCharge(o);
+		                };
+		            }
+		          });
+		        };
+		    },
+		    afterOpen: function() {
+		      var was = this;
+		      setTimeout(function() {
+		          // Either of these lines will do the trick, depending on what browsers you need to support.
+		          was.rootEl.scrollTop = 0;
+		          was.contentEl.scrollIntoView(true);
+		          $(was.$vex).scrollTop(0)
+		      }, 0)
+		    }
+		});
+  },
 })
 
 
