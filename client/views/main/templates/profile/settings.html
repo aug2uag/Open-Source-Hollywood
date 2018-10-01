@@ -14,7 +14,7 @@
                 <ul class="titles clearfix" id="settings_menu">
                     <li class="opened">
                         <h5 id="gomain">Profile</h5></li>
-                    <li class="">
+                    <li class="gotonotifications">
                         <h5>Notifications</h5></li>
                     <li class="">
                         <h5>Merchant Center</h5></li>
@@ -27,7 +27,7 @@
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                         <option id="gomain">Profile</option>
-                        <option>Notifications</option>
+                        <option class="gotonotifications">Notifications</option>
                         <option>Merchant Center</option>
                         <option>Holdings</option>
                         <option id="gocampaigns">Campaigns</option>
@@ -43,7 +43,7 @@
 
                         <div class="project-header">
 
-                            <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> EDIT PROFILE {{#unless hasEmail}}<small><strong><a href="#!" id="gotoemailconfig" class="button">CONFIGURE YOUR EMAIL TO RECEIVE NOTIFICATIONS!</a></strong></small>{{/unless}} </h3>
+                            <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> EDIT PROFILE {{#unless emailValue}}<small><strong><a href="#!" id="gotoemailpref" class="btn animated bounce" style="border-color:steelblue;color:royalblue;margin-left: 20px;">CONFIGURE YOUR EMAIL TO RECEIVE NOTIFICATIONS!</a></strong></small>{{/unless}} </h3>
                             <hr />
                             <div class="container">
                                 <div class="row margin_bottom40" style="width: 100%;">

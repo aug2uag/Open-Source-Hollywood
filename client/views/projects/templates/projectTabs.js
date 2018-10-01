@@ -420,12 +420,15 @@ Handlebars.registerHelper('each_with_index', function(array, fn) {
 
 Template.projectTabs.onRendered(function() {
     $(document).ready(function() {
+
         if (localStorage.getItem('doShowLock')==='true'||localStorage.getItem('doShowLock')===true) {
           setTimeout(function() {
             localStorage.setItem('doShowLock', false);
             lock.show();
-          }, 1597);
+          }, 1597); 
         };
+
+        setTimeout(function() { $('#createyourownbutton').removeClass('animated'); }, 2999);
     });
 });
 

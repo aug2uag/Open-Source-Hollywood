@@ -84,12 +84,16 @@ Template.settings.onRendered(function() {
 	      script.src = "/js/scripts.min.js";
 	      document.head.appendChild(script);
 	    }, 987);
+	    setTimeout(function() { 
+	    	$('#gotoemailpref').removeClass('animated'); 
+	    }, 2499);
 	})
 })
 
 Template.settings.events({
-	'click #gotoemailconfig': function(e) {
-
+	'click #gotoemailpref': function(e) {
+		e.preventDefault();
+		$('.gotonotifications').click();
 	},
 	'click #remove_phone_notify': function(e) {
 		Meteor.call('removeNotificationRT', 'phone', function(err, msg) {
