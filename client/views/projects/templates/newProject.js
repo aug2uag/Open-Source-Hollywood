@@ -1,29 +1,207 @@
 var gifts = [];
 var osettings = {};
 
+var autoSaveNewProjInterval = null;
+
+function appendCampaignMerchTable(o) {
+  var tblRow = [
+    '<tr class="gift-val">',
+      '<td>'+o.name+'</td>',
+      '<td>'+o.type+'</td>',
+      '<td>'+o.description+'</td>',
+      '<td>'
+  ];
+  
+  if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
+  if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
+  tblRow = tblRow.concat([
+    '</td>',
+      '<td>'+o.msrp+'</td>',
+      '<td><button class="removeGift button special">X</button></td></tr>'
+  ]);
+  $('#gift-table').append(tblRow.join(''));
+  $('.removeGift').off();
+  $('.removeGift').on('click', removeGift);
+};
+
+function setNewProjectBanner(file) {
+  var reader = new FileReader();
+  reader.onload = function(readerEvt) {
+    osettings.banner.data = readerEvt.target.result;
+
+    /** set file.name to span of inner el */
+    $('#banner_file_name').text(file.name);
+    $('#hidden_banner_name').show();
+  }; 
+  reader.readAsDataURL(file);
+}
+
+function returnProjectCreateDetails(o) {
+  o = o || {};
+
+  // (1) check video sanity
+  /** 
+      check youtube / vimeo format
+      /^https:\/\/vimeo.com\/[\d]{8,}$/
+      https://vimeo.com/262118158
+      /^https:\/\/youtu.be\/[A-z0-9]{9,}$/
+      https://youtu.be/cWjz9pB70vc
+    */
+  o.videoExplainer = $('#video_explainer').val();
+  if (o.videoExplainer) {
+    var vimeo = /^https:\/\/vimeo.com\/[\d]{8,}$/;
+    var youtube = /^https:\/\/youtu.be\/[A-z0-9]{9,}$/;
+    if (o.showDialog&&!vimeo.test(o.videoExplainer)&&!youtube.test(o.videoExplainer)) {
+      vex.dialog.alert('your video URL link is invalid, please select the question mark for help, correct the mistake and try again or contact us');
+      return null;
+    }
+    if (o.videoExplainer.indexOf('vimeo')>-1) {
+      var patternMatch = /^https:\/\/vimeo.com\/([\d]{8,}$)/;
+      var videoID = o.videoExplainer.match(patternMatch)[1];
+      o.videoExplainer = 'https://player.vimeo.com/video/' + videoID + '?autoplay=0&loop=1&autopause=0';
+    } else {
+      try {
+        var patternMatch = /^https:\/\/youtu.be\/([A-z0-9]{9,}$)/;
+        var videoID = o.videoExplainer.match(patternMatch)[1];
+        o.videoExplainer = 'https://www.youtube.com/embed/' + videoID;
+      } catch(e) { };
+    };
+  };
+
+  // (2) check required fields
+  o.category = $('#category').find(":selected").text();
+  if (o.showDialog&&o.category.toLowerCase().indexOf('format')>-1) {
+    vex.dialog.alert('please select category or genre');
+    return null;
+  }
+
+  // (3) check location and continue
+  o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
+  o.title = $('#title').val() || 'untitled';
+  o.logline = $('#logline').val() || 'eligible for support';
+  o.genre = $('#genre').find(":selected").text();
+  o.production_company = $('#prodorg').val();
+  o.author_list = $('#authorlist').val();
+  o._gifts = gifts;
+  o.website = $('#website').val();
+
+  var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
+  var plainText = $("#summernote").summernote('code')
+    .replace(/<\/p>/gi, " ")
+    .replace(/<br\/?>/gi, " ")
+    .replace(/<\/?[^>]+(>|$)/g, "")
+    .replace(/&nbsp;|<br>/g, " ")
+    .trim();
+
+  if (plainText&&plainText!=='Enter your campaign description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+    o.description = descriptionText;
+    o.descriptionText = plainText;
+  } else {
+    o.description = '';
+  };
+
+  o.creatorsInfo = $('#creators_info').val();
+  o.historyInfo = $('#history_info').val();
+  o.plansInfo = $('#plans_info').val();
+  o.needsInfo = $('#needs_info').val();
+  o.significanceInfo = $('#significance_info').val();
+  
+  if (osettings.banner.data) o._banner = osettings.banner.data;
+  else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
+  
+  var crew = $('.crew-val'); 
+  o.crew = [];
+  crew.each(function(i, el) {
+    var _o = {};
+    var arr = $(el).children('td');
+    _o.title = $(arr[0]).text();
+    _o.description = $(arr[1]).text();
+    _o.audition = $(arr[2]).text();
+    o.crew.push(_o);
+  });
+
+  var cast = $('.cast-val');
+  o.cast = [];
+  cast.each(function(i, el) {
+    var _o = {};
+    var arr = $(el).children('td');
+    _o.role = $(arr[0]).text();
+    _o.description = $(arr[1]).text();
+    _o.audition = $(arr[2]).text();
+    o.cast.push(_o);
+  });
+
+  var needs = $('.needs-val');
+  o.needs = [];
+  needs.each(function(i, el) {
+    var _o = {};
+    var arr = $(el).children('td');
+    _o.category = $(arr[0]).text();
+    _o.description = $(arr[1]).text();
+    _o.quantity = $(arr[2]).text();
+    o.needs.push(_o);
+  });
+
+  var social = $('.social-val');
+  o.social = [];
+  social.each(function(i, el) {
+    var _o = {};
+    var arr = $(el).children('td');
+    _o.name = $(arr[0]).text();
+    _o.address = $(arr[1]).text();
+    o.social.push(_o);
+  });
+
+  /** budget info */
+  var budgetSheet = localStorage.getItem('budget');
+  if (budgetSheet) {
+    o.budgetSheet = JSON.parse(budgetSheet);
+    o.budget = parseInt($('#budget').val());
+    o.funded = parseInt($('#starting').val());
+    localStorage.removeItem('budget');
+  };
+
+  /** equity info */
+  var equityInfo = localStorage.getItem('revshare');
+  if (equityInfo) {
+    o.equityInfo = JSON.parse(equityInfo);
+    o.totalShares = o.availableShares = parseFloat($('#assign').val()) * 100;
+    o.mpps = parseInt($('#minimumassign').val()||1);
+    localStorage.removeItem('revshare');
+  };
+
+  delete o['showDialog'];
+  return o;
+}
+
 var selectOptionsGenre = {
   meta: {
     Feature: 'mixed',
-    Indie: 'mixed',
+    Short: 'mixed',
     Series: 'mixed',
     Sketch: 'mixed',
-    Animations: 'mixed',
-    Theater: 'mixed',
-    Ensemble: 'audio',
-    Performance: 'performance',
-    'Music Video': 'audio',
+    Animation: 'mixed',
+    'Live Performance': 'performance',
     Writing: 'writing',
     'Art & Illustrations': 'art',
     Musical: 'audio',
     Podcast: 'podcast',
-    Other: 'mixed'
+    Other: 'all'
   },
-  art: '<option val="Advertising">Advertising</option><option val="Book Cover">Book Cover</option><option val="Album Art">Album Art</option><option val="Cartoon">Cartoon</option><option val="Comics">Comics</option><option val="Concept Art">Concept Art</option><option val="Poster">Poster</option><option val="Classical Painting">Classical Painting</option><option val="Classical Sculpture">Classical Sculpture</option><option val="Other">Other</option>',
-  writing: '<option val="Tragedy">Tragedy</option><option val="Comedy">Comedy</option><option val="Fantasy">Fantasy</option><option val="Mythology">Mythology</option><option val="Adventure">Adventure</option><option val="Mystery">Mystery</option><option val="Graphic Novel">Graphic Novel</option><option val="Satire">Satire</option><option val="Childrens">Childrens</option><option val="Poetry">Poetry</option><option val="Other">Other</option>',
-  mixed: '<option val="Drama">Drama</option><option val="Comedy">Comedy</option><option val="Documentary">Documentary</option><option val="Educational">Educational</option><option val="Game Show">Game Show</option><option val="Musical">Musical</option><option val="Reality">Reality</option><option val="News">News</option><option val="Sports">Sports</option><option val="Variety">Variety</option><option val="Kids">Kids</option><option val="Cooking">Cooking</option><option val="Other">Other</option>',
+  art: '<option val="Advertising">Advertising</option><option val="Book Cover">Book Cover</option><option val="Album Art">Album Art</option><option val="Cartoon">Cartoon</option><option val="Comics">Comics</option><option val="Concept Art">Concept Art</option><option val="Poster">Poster</option><option val="Classical Painting">Classical Painting</option><option val="Classical Sculpting">Classical Sculpting</option><option val="Other">Other</option>',
+  writing: '<option val="Tragedy">Tragedy</option><option val="Comedy">Comedy</option><option val="Fantasy">Fantasy</option><option val="Adventure">Adventure</option><option val="Mystery">Mystery</option><option val="Graphic Novel">Graphic Novel</option><option val="Satire">Satire</option><option val="Childrens">Childrens</option><option val="Poetry">Poetry</option><option val="Other">Other</option>',
+  mixed: '<option val="Drama">Drama</option><option val="Comedy">Comedy</option><option val="Documentary">Documentary</option><option val="Educational">Educational</option><option val="Game Show">Game Show</option><option val="Music Video">Music Video</option><option val="Musical">Musical</option><option val="Reality">Reality</option><option val="News">News</option><option val="Sports">Sports</option><option val="Variety">Variety</option><option val="Kids">Kids</option><option val="Cooking">Cooking</option><option val="Other">Other</option>',
   audio: '<option val="Folk">Folk</option><option val="Classical">Classical</option><option val="Contemporary">Contemporary</option><option val="Soul">Soul</option><option val="Jazz">Jazz</option><option val="Rock">Rock</option><option val="Metal">Metal</option><option val="Pop">Pop</option><option val="Hip Hop">Hip Hop</option><option val="EDM">EDM</option><option val="Other">Other</option>',
   performance: '<option val="Ballet">Ballet</option><option val="Opera">Opera</option><option val="Dance">Dance</option><option val="Theatre">Theatre</option><option val="Other">Other</option>',
-  podcast: '<option val="Comedy">Comedy</option><option val="Culture">Culture</option><option val="Politics">Politics</option><option val="Arts">Arts</option><option val="Technology">Technology</option><option val="Other">Other</option>'
+  podcast: '<option val="Comedy">Comedy</option><option val="Culture">Culture</option><option val="Politics">Politics</option><option val="Arts">Arts</option><option val="Technology">Technology</option><option val="Other">Other</option>',
+  all: function() {
+    var acc = [selectOptionsGenre['art'], selectOptionsGenre['writing'], selectOptionsGenre['mixed'], selectOptionsGenre['audio'], selectOptionsGenre['performance'], selectOptionsGenre['podcast']].join('').split('</option>')
+    var agg = []
+    acc.forEach(function(a) {
+      if (agg.indexOf(a)===-1) agg.push(a);
+    })
+    return agg.sort().join('</option>')
+  }
 }
 
 function validateUrl(value) {
@@ -49,34 +227,120 @@ Template.newProject.onRendered(function() {
   osettings = {};
   osettings.banner = {};
   osettings.giftImage = {};
-  $(document).ready(function() {
-    setTimeout(function() {
-      var script = document.createElement('script');
-      script.src = "/js/scripts.min.js";
-      document.head.appendChild(script);
-    }, 987);
-    $('#summernote').summernote({
-      toolbar: [
-        // [groupName, [list of button]]
-        ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
-        ['para', ['paragraph', 'style']],
-        ['height', ['height']],
-        ['misc', ['undo', 'redo']],
-        ['insert', ['picture', 'video', 'table', 'hr']]
-      ],
-      height: 300,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      tooltip: false,
-      callbacks: {
-        onInit: function() {
-          $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
-          $('.note-toolbar').css('z-index', '0');
-        }
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = "/js/scripts.min.js";
+    document.head.appendChild(script);
+  }, 987);
+  $('#summernote').summernote({
+    toolbar: [
+      // [groupName, [list of button]]
+      ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+      ['para', ['paragraph', 'style']],
+      ['height', ['height']],
+      ['misc', ['undo', 'redo']],
+      ['insert', ['picture', 'video', 'table', 'hr']]
+    ],
+    height: 300,
+    minHeight: null,
+    maxHeight: null,
+    focus: false,
+    tooltip: false,
+    callbacks: {
+      onInit: function() {
+        $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+        $('.note-toolbar').css('z-index', '0');
       }
-    });
+    }
   });
+  
+  try {
+    var newProject = JSON.parse(localStorage.getItem('projectnew'));
+
+    if (newProject.videoExplainer) $('#video_explainer').val(newProject.videoExplainer);
+    if (newProject.category) $("#category option[value='"+newProject.category+"']").prop('selected', true).trigger('change');
+    if (newProject.zip) $('#location').val(newProject.zip);
+    if (newProject.title&&newProject.title!=='untitled') $('#title').val(newProject.title);
+    if (newProject.logline&&newProject.logline!=='eligible for support') $('#logline').val(newProject.logline);
+    if (newProject.genre) $("#genre option[value='"+newProject.genre+"']").prop('selected', true);
+    if (newProject.website) $('#website').val(newProject.website);
+    if (newProject.production_company) $('#prodorg').val(newProject.production_company);
+    if (newProject.gifts&&newProject.gifts.length) {
+      gifts = newProject.gifts;
+      newProject.gifts.forEach(function(g) {
+        appendCampaignMerchTable(g);
+      });
+    };
+
+    if (newProject._banner||newProject.banner) {
+      var filename = JSON.parse(localStorage.getItem('projectnew_banner'));
+      $('#banner_file_name').text(filename);
+      $('#hidden_banner_name').show();
+    };
+
+    if (newProject.author_list) $('#authorlist').val(newProject.author_list);
+    if (newProject.description) $('#summernote').summernote('code', newProject.description);
+    if (newProject.creatorsInfo) $('#creators_info').val(newProject.creatorsInfo);
+    if (newProject.historyInfo) $('#history_info').val(newProject.historyInfo);
+    if (newProject.plansInfo) $('#plans_info').val(newProject.plansInfo);
+    if (newProject.needsInfo) $('#needs_info').val(newProject.needsInfo);
+    if (newProject.significanceInfo) $('#significance_info').val(newProject.significanceInfo);
+
+    if (newProject.crew&&newProject.crew.length) {
+      newProject.crew.forEach(function(c) {
+        $('#crew-table').append('<tr class="crew-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+      });
+      $('#newProjCrewAccord').removeClass('krown-accordion');
+    };
+
+    if (newProject.cast&&newProject.cast.length) {
+      newProject.cast.forEach(function(c) {
+        $('#cast-table').append('<tr class="cast-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+      });
+      $('#newProjCastAccord').removeClass('krown-accordion');
+    };
+
+    if (newProject.needs&&newProject.needs.length) {
+      newProject.needs.forEach(function(n) {
+        $('#needs-table').append('<tr class="needs-val"><td>'+n.category+'</td><td>'+n.description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+      });
+      $('#newProjNeedsAccord').removeClass('krown-accordion');
+    };
+
+    if (newProject.social&&newProject.social.length) {
+      newProject.social.forEach(function(s) {
+        $('#social-table').append('<tr class="social-val"><td>'+s.name+'</td><td>'+s.address+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+      });
+      $('#newproj_social_accord').removeClass('krown-accordion');
+    };
+
+    if (newProject._gifts&&newProject._gifts.length) {
+      newProject._gifts.forEach(function(g) {
+        appendCampaignMerchTable(g);
+      });
+      $('#newProjGiftAccord').removeClass('krown-accordion');
+    };
+
+    /**
+      1) test
+      2) add budget
+      3) add equity info
+     */
+
+    
+    $('.deleteRow').off();
+    $('.deleteRow').on('click', deleteRow);
+
+
+  } catch(e) { } finally {
+    // poll input every 30 seconds
+    clearInterval(autoSaveNewProjInterval);
+    autoSaveNewProjInterval = setInterval(function(){ 
+      var o = returnProjectCreateDetails();
+      if (!o) return;
+      localStorage.setItem('projectnew', JSON.stringify(o));
+    }, 30000);
+  }
 });
 
 function showVexWithInput(message, input) {
@@ -396,130 +660,16 @@ Template.newProject.events({
     e.preventDefault();
     $('#shareval').text($('#minimumassign').val()||1);
   },
+  'click #save_campaign_create_changes': function(e) {
+    var o = returnProjectCreateDetails();
+    if (!o) return;
+    localStorage.setItem('projectnew', JSON.stringify(o));
+    vex.dialog.alert('progress saved for this session');
+  },
   'click #create_campaign': function(e) {
     e.preventDefault();
-    var o = {};
-
-    // (1) check video sanity
-    /** 
-        check youtube / vimeo format
-        /^https:\/\/vimeo.com\/[\d]{8,}$/
-        https://vimeo.com/262118158
-        /^https:\/\/youtu.be\/[A-z0-9]{9,}$/
-        https://youtu.be/cWjz9pB70vc
-      */
-    o.videoExplainer = $('#video_explainer').val();
-    if (o.videoExplainer) {
-      var vimeo = /^https:\/\/vimeo.com\/[\d]{8,}$/;
-      var youtube = /^https:\/\/youtu.be\/[A-z0-9]{9,}$/;
-      if (!vimeo.test(o.videoExplainer)&&!youtube.test(o.videoExplainer)) return vex.dialog.alert('your video URL link is invalid, please select the question mark for help, correct the mistake and try again or contact us');
-      if (o.videoExplainer.indexOf('vimeo')>-1) {
-        var patternMatch = /^https:\/\/vimeo.com\/([\d]{8,}$)/;
-        var videoID = o.videoExplainer.match(patternMatch)[1];
-        o.videoExplainer = 'https://player.vimeo.com/video/' + videoID + '?autoplay=0&loop=1&autopause=0';
-      } else {
-        var patternMatch = /^https:\/\/youtu.be\/([A-z0-9]{9,}$)/;
-        var videoID = o.videoExplainer.match(patternMatch)[1];
-        o.videoExplainer = 'https://www.youtube.com/embed/' + videoID;
-      }
-    };
-
-    // (2) check required fields
-    o.category = $('#category').find(":selected").text();
-    if (o.category.toLowerCase().indexOf('format')>-1) return vex.dialog.alert('please select category or genre');
-
-    // (3) check location and continue
-    o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
-    o.title = $('#title').val() || 'untitled';
-    o.logline = $('#logline').val() || 'eligible for support';
-    o.purpose = $('#genre').find(":selected").text();
-    o.genre = $('#genre').find(":selected").text();
-    o._gifts = gifts;
-    if (validateUrl($('#website').val())) o.website = $('#website').val();
-
-    var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
-    var plainText = $("#summernote").summernote('code')
-              .replace(/<\/p>/gi, " ")
-              .replace(/<br\/?>/gi, " ")
-              .replace(/<\/?[^>]+(>|$)/g, "")
-              .replace(/&nbsp;|<br>/g, " ")
-              .trim();
-
-    if (plainText&&plainText!=='Enter your campaign description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
-      o.description = descriptionText;
-      o.descriptionText = plainText;
-    } else {
-      o.description = '';
-    };
-
-    o.creatorsInfo = $('#creators_info').val();
-    o.historyInfo = $('#history_info').val();
-    o.plansInfo = $('#plans_info').val();
-    o.needsInfo = $('#needs_info').val();
-    o.significanceInfo = $('#significance_info').val();
-    if (osettings.banner.data) o._banner = osettings.banner.data;
-    else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
-    var crew = $('.crew-val'); 
-    o.crew = [];
-    crew.each(function(i, el) {
-      var _o = {};
-      var arr = $(el).children('td');
-      _o.title = $(arr[0]).text();
-      _o.description = $(arr[1]).text();
-      _o.audition = $(arr[2]).text();
-      o.crew.push(_o);
-    });
-
-    var cast = $('.cast-val');
-    o.cast = [];
-    cast.each(function(i, el) {
-      var _o = {};
-      var arr = $(el).children('td');
-      _o.role = $(arr[0]).text();
-      _o.description = $(arr[1]).text();
-      _o.audition = $(arr[2]).text();
-      o.cast.push(_o);
-    });
-
-    var needs = $('.needs-val');
-    o.needs = [];
-    needs.each(function(i, el) {
-      var _o = {};
-      var arr = $(el).children('td');
-      _o.category = $(arr[0]).text();
-      _o.description = $(arr[1]).text();
-      _o.quantity = $(arr[2]).text();
-      o.needs.push(_o);
-    });
-
-    var social = $('.social-val');
-    o.social = [];
-    social.each(function(i, el) {
-      var _o = {};
-      var arr = $(el).children('td');
-      _o.name = $(arr[0]).text();
-      _o.address = $(arr[1]).text();
-      o.social.push(_o);
-    });
-
-    /** budget info */
-    var budgetSheet = localStorage.getItem('budget');
-    if (budgetSheet) {
-      o.budgetSheet = JSON.parse(budgetSheet);
-      o.budget = parseInt($('#budget').val());
-      o.funded = parseInt($('#starting').val());
-      localStorage.removeItem('budget');
-    }
-
-
-    /** equity info */
-    var equityInfo = localStorage.getItem('revshare');
-    if (equityInfo) {
-      o.equityInfo = JSON.parse(equityInfo);
-      o.totalShares = o.availableShares = parseFloat($('#assign').val()) * 100;
-      o.mpps = parseInt($('#minimumassign').val()||1);
-      localStorage.removeItem('revshare');
-    };
+    var o = returnProjectCreateDetails({showDialog: true});
+    if (!o) return;
 
     // create virtual account for project
     // add funds to virtual account, non-refundable
@@ -535,20 +685,18 @@ Template.newProject.events({
   'change #banner_file': function (e, template) {
       if (e.currentTarget.files && e.currentTarget.files[0]) {
         osettings.banner = {};
-        var reader = new FileReader();
+        
         var files = e.target.files;
         var file = files[0];
+
+        localStorage.setItem('projectnew_banner', JSON.stringify(file.name));
+
         if (file.type.indexOf("image")==-1) {
           vex.dialog.alert('Invalid File, you can only upload a static image for your profile picture');
           return;
         };
-        reader.onload = function(readerEvt) {
-            osettings.banner.data = readerEvt.target.result;
-            /** set file.name to span of inner el */
-            $('#banner_file_name').text(file.name);
-            $('#hidden_banner_name').show();
-          }; 
-        reader.readAsDataURL(file);
+
+        return setNewProjectBanner(file);
       }
   },
   'change #category': function() {
@@ -594,6 +742,7 @@ Template.newProject.events({
         audition = $('#crew-audition').val() || 'N/A',
         status = 'needed';
     if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'</td><td>'+audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $('#crew-title').val(''), 
     $('#crew-description').val(''),
@@ -607,6 +756,7 @@ Template.newProject.events({
         audition = $('#cast-audition').val() || 'N/A',
         status = 'needed';
     if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'</td><td>'+audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $('#cast-title').val(''), 
     $('#cast-description').val(''), 
@@ -618,6 +768,7 @@ Template.newProject.events({
     var cat = $('#needs-category').val(), description = $('#needs-description').val();
     if (cat.toLowerCase().indexOf('category')>-1) return;
     if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
   },
@@ -665,24 +816,9 @@ Template.newProject.events({
     o.disclaimer = $('#merch_disclaimer').val();
     osettings.giftImage = {};
     gifts.push(o);
-    console.log(gifts)
-    var tblRow = [
-      '<tr class="gift-val">',
-        '<td>'+o.name+'</td>',
-        '<td>'+o.type+'</td>',
-        '<td>'+o.description+'</td>',
-        '<td>'
-    ];
+    // console.log(gifts)
+    appendCampaignMerchTable(o);
     
-    if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
-    if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
-    tblRow = tblRow.concat([
-      '</td>',
-        '<td>'+o.msrp+'</td>',
-        '<td><button class="removeGift button special">X</button></td></tr>'
-    ]);
-    $('#gift-table').append(tblRow.join(''));
-    $('.removeGift').on('click', removeGift);
     $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
     /** set file.name to span of inner el */
     $('#gift_file_name').text('');
@@ -699,6 +835,22 @@ Template.newProject.events({
 });
 
 Template.newProject.helpers({
+  cachedNewProject: function() {
+    console.log('in cachedNewProject')
+    var hasCached = false
+    try {
+      var obj = JSON.parse(localStorage.getItem('projectnew'));
+      for (var propName in obj) { 
+        if (obj[propName] === null || obj[propName] === undefined) {
+          delete obj[propName];
+        }
+      }
+      console.log('obj.keys.ln =', Object.keys(obj).length)
+      if (Object.keys(obj).length>0) hasCached = true;
+    } catch(e) { } finally {
+      return hasCached
+    }
+  },
   needs: function() {
     var needs = Session.get('needs');
     var _needs = needs.map(function(el, idx) {

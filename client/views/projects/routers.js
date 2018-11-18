@@ -1,4 +1,41 @@
 var wasUser = false;
+var onboardDialogShowing = false;
+
+Router.route('/dashboard', {
+    name: 'Dashboard',
+    template: 'dashboard',
+    layoutTemplate: 'StaticLayout',
+    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
+    waitOn: function() {
+      if (!Meteor.user()) {
+        Router.go('Home');
+        window.location.assign('/');
+        return
+      }
+      return [
+        Meteor.subscribe('getMe'),
+        Meteor.subscribe('getProjectMessages'),
+        Meteor.subscribe('userActiveProjects', Meteor.user()._id),
+        Meteor.subscribe('activeProjectsApproved', Meteor.user()._id)
+      ];
+    },
+    onBeforeAction: function() {
+      $('meta[name=description]').remove();
+      $('head').append( '<meta name="description" content="Merchant Center on Open Source Hollywood">' );
+      document.title = 'Dashboard';
+      this.next();
+    },
+    onAfterAction: function() {
+      var that = this;
+      setTimeout(function() {
+        /** make sure campaigns and negotiations are loaded before continuing */
+        var route = that.params.area === 'boards' ? '#gocampaigns' : '#gonegotiations';
+        setTimeout(function() {
+          $(route).click();
+        }, $('#active').html() ? 987 : 1442);
+      }, 144);
+    }
+});
 
 Router.route('/discover', {
   name: 'Projects',
@@ -24,10 +61,36 @@ Router.route('/discover', {
       };
       localStorage.removeItem('redirectURL');
     }
+
     $('meta[name=description]').remove();
     $('head').append( '<meta name="description" content="Campaigns on O . S . H . (https://opensourcehollywood.org)">' );
     document.title = 'Active Campaigns';
     this.next();
+  },
+  onAfterAction: function() {
+    
+    
+      setTimeout(function() {
+        var user = Meteor.user();
+        if (user&&user.didOnboard===false&&onboardDialogShowing===false) {
+          Meteor.call('onboardNewUser');
+          onboardDialogShowing = true;
+          var vx = vex.dialog.alert({
+            message: 'Welcome to Open Source Hollywood!',
+            input: [
+              '<div> ',
+                '<h6>&nbsp;</h6>',
+                '<p>To get started, update your profile!</p>',
+                '<small>&nbsp;</small><br>',
+                '<small>Others can view your works and experiences from your profile.</small>',
+                '<small>You may configure notifications and know about important events relating to your campaigns.</small><br>',
+                '<a class="btn btn-default btn-group-justified btn-lg" href="/settings">Click here to update your profile!</a>',
+              '</div>'
+            ].join('')
+          });
+        };
+      }, 4181);
+    
   }
 });
 

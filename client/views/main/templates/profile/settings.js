@@ -77,6 +77,80 @@ function phoneVerifyVex() {
 	});
 }
 
+function saveSettings(o) {
+	/**
+		firstname
+		lastname
+		bio
+		category -- primaryRole
+		user-role -- checkboxes //array
+		needs-val  == table //array
+		social-val  == table //array
+		reel-val  == table //array
+
+	*/
+
+
+	o = o || {};
+	o.firstName = $('#first_name').val();
+	o.lastName = $('#last_name').val();
+	var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
+  	var plainText = $("#summernote").summernote('code')
+        .replace(/<\/p>/gi, " ")
+        .replace(/<br\/?>/gi, " ")
+        .replace(/<\/?[^>]+(>|$)/g, "")
+        .replace(/&nbsp;|<br>/g, " ")
+        .trim();
+	if (plainText&&plainText!=='Enter your biography and self-description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+		o.bio = descriptionText;
+		o.bio_plaintext = plainText;
+	} else {
+		o.bio = '';
+	};
+	o.primaryRole = $('#category').find(":selected").text();
+	if (o.primaryRole.toLowerCase().indexOf('primary')>-1) delete o['primaryRole'];
+	o.iam = [];
+	o.assets = [];
+	o.social = [];
+	o.reels = [];
+	o.gifts = gifts;
+	o.avatar = osettings.avatar;
+	if ($('#website').val().trim()&&$('#website').val()!=='enter http://www.your.site') o.website = $('#website').val();
+
+	var userRoles = $('.user-role');
+	userRoles.each(function(idx, el) {
+		if ($(el).prop('checked')) o.iam.push($(el).attr('name'));
+	});
+
+	var userAssets = $('.needs-val');
+	userAssets.each(function(i, el) {
+		var _o = {};
+		var arr = $(el).children('td');
+		_o.category = $(arr[0]).text();
+		_o.description = $(arr[1]).text();
+		o.assets.push(_o);
+	});
+
+	var userSocial = $('.social-val');
+	userSocial.each(function(i, el) {
+		var _o = {};
+		var arr = $(el).children('td');
+		_o.name = $(arr[0]).text();
+		_o.address = $(arr[1]).text();
+		o.social.push(_o);
+	});
+
+	var userReels = $('.reel-val');
+	userReels.each(function(i, el) {
+		var _o = {};
+		var arr = $(el).children('td');
+		_o.url = $(arr[0]).text();
+		o.reels.push(_o);
+	});
+
+	Meteor.call('upgradeProfile', o);
+}
+
 Template.settings.onRendered(function() {
 	$(document).ready(function() {
 	    setTimeout(function() {
@@ -93,7 +167,8 @@ Template.settings.onRendered(function() {
 Template.settings.events({
 	'click #gotoemailpref': function(e) {
 		e.preventDefault();
-		$('.gotonotifications').click();
+		$('#not1').click();
+		$('#not2').click();
 	},
 	'click #remove_phone_notify': function(e) {
 		Meteor.call('removeNotificationRT', 'phone', function(err, msg) {
@@ -183,85 +258,15 @@ Template.settings.events({
 			};
 			reader.onload = function(readerEvt) {
 			    osettings.giftImage.data = readerEvt.target.result;
+			    $('#merch_thumbnail').attr('src', osettings.giftImage.data);
+			    $('#merch_thumbnail').show();
 			}; 
 			reader.readAsDataURL(file);
 		}
 	},
-	'click #save_settings': function(e) {
+	'click .save_settings': function(e) {
 		e.preventDefault();
-
-
-		/**
-			firstname
-			lastname
-			bio
-			category -- primaryRole
-			user-role -- checkboxes //array
-			needs-val  == table //array
-			social-val  == table //array
-			reel-val  == table //array
-
-		*/
-
-
-		var o = {};
-		o.firstName = $('#first_name').val();
-		o.lastName = $('#last_name').val();
-		var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
-      	var plainText = $("#summernote").summernote('code')
-            .replace(/<\/p>/gi, " ")
-            .replace(/<br\/?>/gi, " ")
-            .replace(/<\/?[^>]+(>|$)/g, "")
-            .replace(/&nbsp;|<br>/g, " ")
-            .trim();
-		if (plainText&&plainText!=='Enter your biography and self-description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
-			o.bio = descriptionText;
-			o.bio_plaintext = plainText;
-		} else {
-			o.bio = '';
-		};
-		o.primaryRole = $('#category').find(":selected").text();
-		if (o.primaryRole.toLowerCase().indexOf('primary')>-1) delete o['primaryRole'];
-		o.iam = [];
-		o.assets = [];
-		o.social = [];
-		o.reels = [];
-		o.gifts = gifts;
-		o.avatar = osettings.avatar;
-		if ($('#website').val().trim()&&$('#website').val()!=='enter http://www.your.site') o.website = $('#website').val();
-
-		var userRoles = $('.user-role');
-		userRoles.each(function(idx, el) {
-			if ($(el).prop('checked')) o.iam.push($(el).attr('name'));
-		});
-
-		var userAssets = $('.needs-val');
-		userAssets.each(function(i, el) {
-			var _o = {};
-			var arr = $(el).children('td');
-			_o.category = $(arr[0]).text();
-			_o.description = $(arr[1]).text();
-			o.assets.push(_o);
-		});
-
-		var userSocial = $('.social-val');
-		userSocial.each(function(i, el) {
-			var _o = {};
-			var arr = $(el).children('td');
-			_o.name = $(arr[0]).text();
-			_o.address = $(arr[1]).text();
-			o.social.push(_o);
-		});
-
-		var userReels = $('.reel-val');
-		userReels.each(function(i, el) {
-			var _o = {};
-			var arr = $(el).children('td');
-			_o.url = $(arr[0]).text();
-			o.reels.push(_o);
-		});
-
-		Meteor.call('upgradeProfile', o);
+		saveSettings({showDialog:true});
 
 	},
 	'click #add_account': function(e) {
@@ -377,7 +382,7 @@ Template.settings.events({
 		osettings.giftImage = {};
 		gifts.push(o);
 		var tblRow = [
-		  '<tr class="gift-val after-the-fact">',
+		  	'<tr class="gift-val after-the-fact">',
 		    '<td>'+o.name+'</td>',
 		    '<td>'+o.type+'</td>',
 		    '<td>'+o.description+'</td>',
@@ -387,7 +392,7 @@ Template.settings.events({
 		if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
 		if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
 		tblRow = tblRow.concat([
-		  '</td>',
+		  	'</td>',
 		    '<td>'+o.msrp+'</td>',
 		    '<td><button class="removeGift button special">X</button></td></tr>'
 		]);
@@ -395,10 +400,9 @@ Template.settings.events({
 		$('.removeGift').on('click', removeGift);
 		$('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
 		/** set file.name to span of inner el */
-		$('#gift_file_name').text('');
-		$('#merch_handling').val('');
-		$('#merch_disclaimer').val('');
-		$('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
+		$('#settings_add_merch_form')[0].reset();
+		$('#merch_thumbnail').hide();
+		saveSettings();
 	}
 });
 
@@ -416,7 +420,6 @@ Template.settings.helpers({
 		return Meteor.user().email!==null
 	},
 	hasGifts: function() {
-
 		return Meteor.user().gifts&&Meteor.user().gifts.length
 	},
 	userGifts: function() {
@@ -697,5 +700,4 @@ Template.settings.rendered = function () {
         }
       });
   });
-
 };

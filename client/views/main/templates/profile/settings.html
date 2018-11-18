@@ -13,25 +13,20 @@
 
                 <ul class="titles clearfix" id="settings_menu">
                     <li class="opened">
-                        <h5 id="gomain">Profile</h5></li>
-                    <li class="gotonotifications">
-                        <h5>Notifications</h5></li>
+                        <h5>PROFILE</h5></li>
                     <li class="">
-                        <h5>Merchant Center</h5></li>
+                        <h5>MERCH</h5></li>
+                    <li id="not1" class="">
+                        <h5>NOTIFICATIONS</h5></li>
                     <li class="">
-                        <h5>Holdings</h5></li>
-                    <li class="">
-                        <h5 id="gocampaigns">Campaigns</h5></li>
-                    <li class="">
-                        <h5 id="gonegotiations">Negotiations</h5></li>
+                        <h5>MESSAGES</h5></li>
+
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
-                        <option id="gomain">Profile</option>
-                        <option class="gotonotifications">Notifications</option>
-                        <option>Merchant Center</option>
-                        <option>Holdings</option>
-                        <option id="gocampaigns">Campaigns</option>
-                        <option id="gonegotiations">Negotiations</option>
+                        <option>PROFILE</option>
+                        <option>MERCH</option>
+                        <option id="not2">NOTIFICATIONS</option>
+                        <option>MESSAGES</option>
                       </select>
                       <span class="tabs-select-inner" style="display: block; white-space: nowrap;">SELECT</span></span>
                     </div>
@@ -39,7 +34,7 @@
 
                 <div class="contents clearfix" style="width: 100%;">
 
-                    <div id="edit" style="display: block;">
+                    <div id="edit" style="display: none;">
 
                         <div class="project-header">
 
@@ -170,116 +165,6 @@
                             </div>
 
                             <div class="krown-column-row clearfix">
-                              <div class="krown-column-container clearfix first last span12 clearfix">
-                                  <h3>Personal Merchandise</h3>
-                                  <div class="krown-accordion accordion large clearfix {{#if hasGifts}}opened{{/if}}">
-                                      <section>
-                                          <h5>Configure merchandise for sale on your profile page.</h5>
-                                          <div>
-                                            <div class="row">
-                                              <div class="col-xs-12 col-md-5">
-                                                  <label for="title">name</label>
-                                                  <input type="text" name="title" id="gift-title" placeholder="" />
-                                              </div>
-                                              <div class="col-xs-12 col-md-5">
-                                                  <label for="description">description</label>
-                                                  <input type="text" name="description" id="gift-description" placeholder="" />
-                                              </div>
-                                              <div class="col-xs-12 col-md-2">
-                                                  <label for="merchtype">merch type</label>
-                                                  <select name="merchtype" id="merchtype" class="form-control">
-                                                      <option selected disabled>- Select -</option>
-                                                      <option value="Apparel">Apparel</option>
-                                                      <option value="Perishable">Perishable</option>
-                                                      <option value="Non-Perishable">Non-Perishable</option>
-                                                  </select>
-                                              </div>
-                                            </div>
-                                            <div class="row" id="merchtypehidden" hidden>
-
-                                              <div id="apparelsizes" class="col-xs-3" hidden>
-                                                  <div class="checkbox">
-                                                    <label><input class="apparelsize" type="checkbox" value="XS">&nbsp;&nbsp;&nbsp;&nbsp;XS</label>
-                                                  </div>
-                                                  <div class="checkbox">
-                                                    <label><input class="apparelsize" type="checkbox" value="S">&nbsp;&nbsp;&nbsp;&nbsp;S</label>
-                                                  </div>
-                                                  <div class="checkbox">
-                                                    <label><input class="apparelsize" type="checkbox" value="M">&nbsp;&nbsp;&nbsp;&nbsp;M</label>
-                                                  </div>
-                                                  <div class="checkbox">
-                                                    <label><input class="apparelsize" type="checkbox" value="L">&nbsp;&nbsp;&nbsp;&nbsp;L</label>
-                                                  </div>
-                                                  <div class="checkbox">
-                                                    <label><input class="apparelsize" type="checkbox" value="XL">&nbsp;&nbsp;&nbsp;&nbsp;XL</label>
-                                                  </div>
-                                                  <div class="checkbox">
-                                                    <label><input class="apparelsize" type="checkbox" value="XXL">&nbsp;&nbsp;&nbsp;&nbsp;XXL</label>
-                                                  </div>
-                                              </div>
-
-                                              <div class="col-xs-3" id="perishabledetails" hidden>
-                                                  <textarea name="merch_handling" id="merch_handling" placeholder="" rows="6"></textarea>
-                                              </div>
-
-                                              <div class="col-xs-9">
-                                                  <textarea name="merch_disclaimer" id="merch_disclaimer" placeholder="Return Policy and Disclaimers" rows="6"></textarea>
-                                              </div>
-                                            </div>
-                                            <div class="row">
-                                              <!-- <div class="col-xs-4">
-                                                  <label for="quantity">quantity</label>
-                                                  <input type="text" name="quantity" id="gift-quantity" placeholder="" />
-                                              </div> -->
-                                              <div class="col-xs-7">
-                                                  <label for="msrp">price</label>
-                                                  <input type="text" name="msrp" id="gift-msrp" placeholder="" />
-                                              </div>
-                                              <div class="col-xs-5" style="margin-top:  25px;">
-                                                  <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
-                                                      <i class="fa fa-cloud-upload"></i> Upload Image
-                                                  </label>
-                                                  <input class="noshow-file-upload" id="gift_file" type="file"/>
-                                                  <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
-                                              </div>
-                                            </div>
-                                            <a id="add-gift" class="button special">Add Merchandise</a>
-                                            <br>
-                                            <br />
-                                            <div class="table-wrapper">
-                                                <table>
-                                                    <thead>
-                                                      <tr>
-                                                        <th>Name</th>
-                                                        <th>Type</th>
-                                                        <th>Description</th>
-                                                        <th>Info</th>
-                                                        <th>Price</th>
-                                                        <th>DELETE</th>
-                                                      </tr>
-                                                    </thead>
-                                                    <tbody id="gift-table">
-                                                      {{#each userGifts}}
-                                                        <tr class="gift-val">
-                                                          <td>{{name}}</td>
-                                                          <td>{{type}}</td>
-                                                          <td>{{description}}</td>
-                                                          <td>{{#if secondaryData}}<strong><small>DATA:</small></strong>&nbsp;{{secondaryData}}{{/if}}{{#if disclaimer}}<br><strong><small>DISCLAIMER:</small></strong>&nbsp;{{disclaimer}}{{/if}}</td>
-                                                          <td>{{msrp}}</td>
-                                                          <td><button class="deleteRow button small special">X</button></td>
-                                                        </tr>
-                                                      {{/each}}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                          </div>
-                                      </section>
-                                  </div>
-                              </div>
-                          </div>
-                            
-
-                            <div class="krown-column-row clearfix">
                                 <div class="krown-column-container clearfix first last span12 clearfix">
                                     <section class="krown-box light-2 clearfix">
                                         <h5>Specialties &amp; Interests</h5>
@@ -402,10 +287,134 @@
 
                             <div class="row">
                               <div class="col-sm-12">
-                                <button class="btn btn-lg btn-block btn-success submit" type="submit" id="save_settings">SAVE CHANGES</button>
+                                <button class="btn btn-lg btn-block btn-success submit save_settings" type="submit">SAVE CHANGES</button>
                               </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div id="personalmerch" style="display: none;">
+                          <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> YOUR PERSONAL MERCH </h3>
+                          <div class="container">
+                                <div class="krown-column-row clearfix">
+                                      <div class="krown-column-container clearfix first last span12 clearfix">
+                                          <div class="accordion large clearfix {{#if hasGifts}}opened{{/if}}">
+                                              <form id="settings_add_merch_form">
+                                                  <h5>Configure merchandise for sale on your profile page.</h5>
+                                                  <div>
+                                                    <div class="row">
+                                                      <div class="col-xs-12 col-md-5">
+                                                          <label for="title">name</label>
+                                                          <input type="text" name="title" id="gift-title" placeholder="" />
+                                                      </div>
+                                                      <div class="col-xs-12 col-md-5">
+                                                          <label for="description">description</label>
+                                                          <input type="text" name="description" id="gift-description" placeholder="" />
+                                                      </div>
+                                                      <div class="col-xs-12 col-md-2">
+                                                          <label for="merchtype">merch type</label>
+                                                          <select name="merchtype" id="merchtype" class="form-control">
+                                                              <option selected disabled>- Select -</option>
+                                                              <option value="Apparel">Apparel</option>
+                                                              <option value="Perishable">Perishable</option>
+                                                              <option value="Non-Perishable">Non-Perishable</option>
+                                                          </select>
+                                                      </div>
+                                                    </div>
+                                                    <div class="row" id="merchtypehidden" hidden>
+
+                                                        <div id="apparelsizes" class="col-xs-3" hidden>
+                                                              <div class="checkbox">
+                                                                <label><input class="apparelsize" type="checkbox" value="XS">&nbsp;&nbsp;&nbsp;&nbsp;XS</label>
+                                                              </div>
+                                                              <div class="checkbox">
+                                                                <label><input class="apparelsize" type="checkbox" value="S">&nbsp;&nbsp;&nbsp;&nbsp;S</label>
+                                                              </div>
+                                                              <div class="checkbox">
+                                                                <label><input class="apparelsize" type="checkbox" value="M">&nbsp;&nbsp;&nbsp;&nbsp;M</label>
+                                                              </div>
+                                                              <div class="checkbox">
+                                                                <label><input class="apparelsize" type="checkbox" value="L">&nbsp;&nbsp;&nbsp;&nbsp;L</label>
+                                                              </div>
+                                                              <div class="checkbox">
+                                                                <label><input class="apparelsize" type="checkbox" value="XL">&nbsp;&nbsp;&nbsp;&nbsp;XL</label>
+                                                              </div>
+                                                              <div class="checkbox">
+                                                                <label><input class="apparelsize" type="checkbox" value="XXL">&nbsp;&nbsp;&nbsp;&nbsp;XXL</label>
+                                                              </div>
+                                                        </div>
+
+                                                        <div class="col-xs-3" id="perishabledetails" hidden>
+                                                              <textarea name="merch_handling" id="merch_handling" placeholder="Shelf Life and Handling Instructions" rows="6">
+                                                              </textarea>
+                                                        </div>
+
+                                                        <div class="col-xs-9">
+                                                              <textarea name="merch_disclaimer" id="merch_disclaimer" placeholder="Return Policy and Disclaimers" rows="6">
+                                                              </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                      <!-- <div class="col-xs-4">
+                                                          <label for="quantity">quantity</label>
+                                                          <input type="text" name="quantity" id="gift-quantity" placeholder="" />
+                                                      </div> -->
+                                                      <div class="col-xs-6">
+                                                          <label for="msrp">price</label>
+                                                          <input type="text" name="msrp" id="gift-msrp" placeholder="" />
+                                                      </div>
+                                                      <div class="col-xs-3" style="margin-top:  25px;">
+                                                          <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
+                                                              <i class="fa fa-cloud-upload"></i> Upload Image
+                                                          </label>
+                                                          <input class="noshow-file-upload" id="gift_file" type="file"/>
+                                                          <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
+                                                      </div>
+                                                      <div class="col-xs-3">
+                                                        <img class="img-thumbnail" alt="merch_thumbnail" id="merch_thumbnail" style="display:none">
+                                                      </div>
+                                                    </div>
+                                                    <a id="add-gift" class="button special">Add Merchandise</a>
+                                                    <br>
+                                                    <br />
+                                                    <div class="table-wrapper">
+                                                        <table>
+                                                            <thead>
+                                                              <tr>
+                                                                <th>Name</th>
+                                                                <th>Type</th>
+                                                                <th>Description</th>
+                                                                <th>Info</th>
+                                                                <th>Price</th>
+                                                                <th>DELETE</th>
+                                                              </tr>
+                                                            </thead>
+                                                            <tbody id="gift-table">
+                                                              {{#each userGifts}}
+                                                                <tr class="gift-val">
+                                                                  <td>{{name}}</td>
+                                                                  <td>{{type}}</td>
+                                                                  <td>{{description}}</td>
+                                                                  <td>{{#if secondaryData}}<strong><small>DATA:</small></strong>&nbsp;{{secondaryData}}{{/if}}{{#if disclaimer}}<br><strong><small>DISCLAIMER:</small></strong>&nbsp;{{disclaimer}}{{/if}}</td>
+                                                                  <td>{{msrp}}</td>
+                                                                  <td><button class="deleteRow button small special">X</button></td>
+                                                                </tr>
+                                                              {{/each}}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                  </div>
+                                              </form>
+                                          </div>
+                                      </div>
+                                </div>
+
+                                
+                          </div>
+                          <p>&nbsp;</p>
+                          <div class="row">
+                              <a class="btn collapsible" href="/allmerch">VIEW ALL YOUR OTHER MERCH</a>
+                          </div>
                     </div>
 
                     <div id="notifications" style="display: none;">
@@ -466,234 +475,9 @@
                         </div>
                     </div>
 
-                    <div id="pay" style="display: none;">
-                      <div class="project-header">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Configure Payment Portal</h3>
-                        <br>
-                        <div class="krown-alert info betatest"> Transactions are provided by <a href="https://stripe.com">Stripe</a>. For more information visit https://stripe.com for details including their <a href="https://stripe.com/us/legal">terms &amp; conditions</a>.</div>
-                        <hr />
-                      </div>   
-                      <div class="project-content">
-                        {{#if account}}
-                        {{#unless bank}}
-                          <section>
-                              <hr />
-                              <div class="row">
-                                <div style="width:100%">
-                                  <div class="panel panel-default">
-                                    <div class="panel-body">
-                                      <form>
-                                        <div class="errors"></div>
-                                        <div class="row">
-                                          <div class="col-md-8">
-                                            <div class="form-group">
-                                              <label>Country</label>
-                                              <select class="form-control input-lg" id="country" data-stripe="country">
-                                                <option value="US">United States</option>
-                                                <option value="AU">Australia</option>
-                                                <option value="AT">Austria</option>
-                                                <option value="BE">Belgium</option>
-                                                <option value="BR">Brazil</option>
-                                                <option value="CA">Canada</option>
-                                                <option value="DK">Denmark</option>
-                                                <option value="FI">Finland</option>
-                                                <option value="FR">France</option>
-                                                <option value="DE">Germany</option>
-                                                <option value="HK">Hong Kong</option>
-                                                <option value="IE">Ireland</option>
-                                                <option value="IT">Italy</option>
-                                                <option value="JP">Japan</option>
-                                                <option value="LU">Luxembourg</option>
-                                                <option value="MX">Mexico</option>
-                                                <option value="NZ">New Zealand</option>
-                                                <option value="NL">Netherlands</option>
-                                                <option value="NO">Norway</option>
-                                                <option value="PT">Portugal</option>
-                                                <option value="SG">Singapore</option>
-                                                <option value="ES">Spain</option>
-                                                <option value="SE">Sweden</option>
-                                                <option value="CH">Switzerland</option>
-                                              </select>
-                                            </div>
-                                          </div>
-                                          <div class="col-md-4">
-                                            <div class="form-group">
-                                              <label>Currency</label>
-                                              <select class="form-control input-lg" id="currency" data-stripe="currency">
-                                                <option value="usd">USD</option>
-                                                <option value="aud">AUD</option>
-                                                <option value="brl">BRL</option>
-                                                <option value="cad">CAD</option>
-                                                <option value="eur">EUR</option>
-                                                <option value="gbp">GBP</option>
-                                                <option value="hkd">HKD</option>
-                                                <option value="jpy">JPY</option>
-                                                <option value="mxn">MXN</option>
-                                                <option value="nzd">NZD</option>
-                                                <option value="sgd">SGD</option>
-                                              </select>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-md-6">
-                                            <div class="form-group">
-                                              <label>Full Legal Name</label>
-                                              <input class="form-control input-lg account_holder_name" id="account_holder_name" type="text" data-stripe="account_holder_name" placeholder="Jane Doe" autocomplete="off">
-                                            </div>
-                                          </div>
-                                          <div class="col-md-6">
-                                            <div class="form-group">
-                                              <label>Account Type</label>
-                                              <select class="form-control input-lg account_holder_type" id="account_holder_type" data-stripe="account_holder_type">
-                                                <option value="individual">Individual</option>
-                                                <option value="company">Company</option>
-                                              </select>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-md-6" id="routing_number_div">
-                                            <div class="form-group">
-                                              <label id="routing_number_label">Routing Number</label>
-                                              <input class="form-control input-lg bank_account" id="routing_number" type="tel" size="12" data-stripe="routing_number" placeholder="111000025" autocomplete="off" >
-                                            </div>
-                                          </div>
-                                          <div class="col-md-6">
-                                            <div class="form-group">
-                                              <label id="account_number_label">Account Number</label>
-                                              <input class="form-control input-lg bank_account" id="account_number" type="tel" size="20" data-stripe="account_number" placeholder="000123456789" autocomplete="off">
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-xs-12">
-                                            <button class="btn btn-lg btn-block btn-success submit" type="submit" id="add_account">ADD ACCOUNT</button>
-                                          </div>
-                                        </div>
-                                      </form>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                          </section>
-                          {{else}}
-                          <section>
-                            <div class="bs-callout bs-callout-info" id="callout-glyphicons-location"> 
-                              <h4 style="margin-top: 20px;">Account Transfer Details</h4> 
-                              <div class="table-responsive">
-                                <table class="table">
-                                  <thead>
-                                    <tr>
-                                      <th>Bank Name</th>
-                                      <th>Account No.</th>
-                                      <th>Routing No.</th>
-                                      <th>Status</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <th>{{bank_name}}</th>
-                                      <th>{{account_no}}</th>
-                                      <th>{{routing_no}}</th>
-                                      <th><i class="glyphicon glyphicon-ok-sign"></i> Good</th>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <p style="margin-top: 20px;">Click <strong>RESET</strong> to reset your transfer settings.</p> 
-                              <a class="button reset_transfer">RESET TRANSFER SETTINGS</a>
-                            </div>
-                          </section>
-                        {{/unless}}
-                        {{else}}
-                        {{createAccount}}
-                        {{/if}}
-                        <p>&nbsp;</p>
-                        <a href="/receipts" class="btn btn-lg btn-primary col-xs-12 margin_bottom40" style="width:100%">View transactions history</a>
-
-                        <p>&nbsp;</p>
-                        <h4>SOLD MERCHANDISE</h4>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead>
-                                  <tr>
-                                    <th>Purchaser (email)</th>
-                                    <th>Item Name</th>
-                                    <th>Amount</th>
-                                    <th>Address</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody id="gift-table">
-                                  {{#each giftPurchases}}
-                                    <tr class="gift-val">
-                                      <td>{{this.token.user.name}} ({{this.email}})</td>
-                                      <td>{{this.gift.name}}</td>
-                                      <td>{{this.amount}}</td>
-                                      <td>{{this.address}}<br>{{this.city}}, {{this.state}} {{this.zip}}</td>
-                                      <td>{{purchaseStatus}}</td>
-                                      <td>{{#if this.status}}<button class="removesales button small special">REMOVE ITEM</button>{{else}}<button class="markfulfilled button small special">MARK FULFILLED</button>{{/if}}</td>
-                                    </tr>
-                                  {{else}}
-                                  <tr colspan="6">None</tr>
-                                  {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div id="equity" style="display: none;">
-                      <div class="project-header">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Your Campaign Holdings</h3>
-                        <hr />
-                      </div>   
-                      <div class="project-content">
-                        <p>This list contains finished campaigns where you own a portion of distribution interests.</p>
-                        <div class="krown-id-grid default clearfix" style="position: relative;">
-                          {{#each equityCamps}}
-                            {{> equityTab}}
-                          {{else}}
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <h5 id="no_camps_0">NO CAMPAIGNS TO SHOW</h5>
-                          {{/each}}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div id="active" style="display: none;">
-                      <div class="project-header">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Active Campaigns</h3>
-                        <hr />
-                      </div>
-                      <div class="project-content">
-                        <p>This list contains active campaigns with team boards.</p>
-                        <div class="krown-id-grid default clearfix" style="position: relative;">
-                          {{#each activeCamps}}
-                            {{#if isCreated}}
-                            {{> settingsTab}}
-                            {{else}}
-                            {{> approvedTab}}
-                            {{/if}}
-                          {{else}}
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <h5 id="no_camps_1">NO CAMPAIGNS TO SHOW</h5>
-                          {{/each}}
-                        </div>
-                      </div>
-                    </div>
-
                     <div id="messages" style="display: none;">
                       <div class="project-header">
-                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Your Active Negotiations</h3>
+                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Recent Messages</h3>
                         <hr />
                       </div>
                       <div class="project-content">
@@ -724,11 +508,12 @@
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
-                          <h5>NO NEGOTIATIONS TO SHOW</h5>
+                          <h5>NO MESSAGES TO SHOW</h5>
                           {{/each}}
                         </ol>
                       </div>
                     </div>
+
                 </div>
             </div>
         </div>
