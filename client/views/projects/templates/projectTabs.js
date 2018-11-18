@@ -651,7 +651,7 @@ Template.projectTab.helpers({
     return false
   },
   projectDonated: function() {
-    return '$'+this.funded+' BUDGET';
+    return '$'+(Number.isInteger(parseInt(this.funded)) ? this.funded : 0)+' BUDGET';
   },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
@@ -669,7 +669,7 @@ Template.projectTab.helpers({
 
 Template.settingsTab.helpers({
   projectDonated: function() {
-    return '$'+this.funded+' BUDGET';
+    return '$'+(Number.isInteger(parseInt(this.funded)) ? this.funded : 0)+' BUDGET';
   },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
@@ -687,7 +687,7 @@ Template.settingsTab.helpers({
 
 Template.approvedTab.helpers({
   projectDonated: function() {
-    return '$'+this.funded+' BUDGET';
+    return '$'+(Number.isInteger(parseInt(this.funded)) ? this.funded : 0)+' BUDGET';
   },
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';

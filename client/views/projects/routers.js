@@ -14,6 +14,7 @@ Router.route('/dashboard', {
       }
       return [
         Meteor.subscribe('getMe'),
+        // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getProjectMessages'),
         Meteor.subscribe('userActiveProjects', Meteor.user()._id),
         Meteor.subscribe('activeProjectsApproved', Meteor.user()._id)

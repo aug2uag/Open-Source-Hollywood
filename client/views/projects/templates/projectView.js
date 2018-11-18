@@ -434,20 +434,24 @@ Template.projectView.helpers({
   },
   projectBudgetIfExists: function() {
     if (this.project.budget) {
-      return this.project.budget;
+      return Number.isInteger(parseInt(this.project.budget)) ? this.project.budget : 0
     } else {
-      return this.project.funded;
+      return Number.isInteger(parseInt(this.project.funded)) ? this.project.funded : 0
     }
   },
   projectFundedIfExists: function() {
     if (this.project.budget) {
-      return '$'+this.project.funded+' raised';
+      var funds = Number.isInteger(parseInt(this.project.funded)) ? this.project.funded : 0
+      return '$'+funds+' raised';
     } else {
       return 'funds raised';
     }
   },
   showNeeded: function() {
     if (this.project.budget) return 'needed';
+  },
+  fundedNumber: function() {
+    return Number.isInteger(parseInt(this.project.funded)) ? this.project.funded : 0
   },
   formattedUpdateDate: function() {
     return moment(this.date).format('MM-DD-YYYY');
