@@ -251,9 +251,18 @@
 
 <template name="settingsTab">
     <article class="krown-id-item">
-
-        <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}" style="height:190px!important"></figure><span></span>
+        <a class="fancybox-thumb" href="/projects/{{slug}}/{{ownerId}}">
+            <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}" style="height:190px!important"></figure><span></span>
+        </a>
         <div class="fundstatus board-canvas empty">{{ projectDonated }}</div>
+        <div class="">
+            <div class="col s6"> 
+              <a href="/projects/{{slug}}/{{ownerId}}" id="offer-donation" class="btn btn-default w100" role="button">EDIT</a> 
+            </div>
+            <div class="col s6"> 
+              <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default w100" role="button">BOARD</a> 
+            </div>
+        </div>
         <div class="container">
 
             <h3 class="title">{{formattedTitle}}</h3>
@@ -261,15 +270,6 @@
             <div class="cats">{{category}}, {{genre}}</div>
 
             <section class="content">{{defaultQ}}</section>
-
-            <aside class="meta">
-
-                <div class="rpdata btn-group-vertical" role="group" aria-label="Justified button group"> 
-                  <a href="/projects/{{slug}}/{{ownerId}}" id="offer-donation" class="btn btn-default" role="button">EDIT PROJECT</a> 
-                  <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default" role="button">MANAGE PROJECT</a> 
-                </div>
-
-            </aside>
 
         </div>
 
@@ -283,6 +283,11 @@
             <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}" style="height:190px!important"></figure><span></span>
         </a>
         <div class="fundstatus board-canvas empty">{{ projectDonated }}</div>
+        <div class="row">
+            <div class="col s12 w100"> 
+                <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default w100" role="button">PROJECT BOARD</a> 
+            </div>
+        </div>
         <div class="container">
 
             <h3 class="title">{{formattedTitle}}</h3>
@@ -290,14 +295,6 @@
             <div class="cats">{{category}}, {{genre}}</div>
 
             <section class="content">{{defaultQ}}</section>
-
-            <aside class="meta">
-
-                <div class="rpdata btn-group btn-group-vertical" role="group" aria-label="Justified button group"> 
-                  <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default" role="button">ACCESS BOARD</a> 
-                </div>
-
-            </aside>
 
         </div>
 

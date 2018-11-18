@@ -1530,10 +1530,14 @@ Template.applicantsHelper.helpers({
   currentSlug: function() {
     return currentSlug;
   },
-  typeofRequest: function() {
+  foobar: function() {
+    console.log(new Array(100).join('# '))
     console.log(this)
-    if (this.audition&&this.audition!=='N/A') return 'Request Audition';
-    return 'Initiate Negotiation';
+  },
+  typeofRequest: function() {
+    // console.log(this)
+    // if (this.audition&&this.audition!=='N/A') return 'Request Audition';
+    return 'Negotiate';
   },
   poke: function() {
     console.log(this)
@@ -1544,17 +1548,7 @@ Template.applicantsHelper.helpers({
 Template.applicantsHelper.events({
   'click .initiateNegotiate': function(e) {
     var that = this;
-    that.project = currentProject._id;
-    var msg = (this.audition&&this.audition!=='N/A') ? 'This applicant will be informed you want their audition, continue?' : 'This applicant will be informed you want to enter negotiations, continue?';
-    vex.dialog.open({
-      message: msg,
-      callback: function (data) {
-        if (data) {
-          /** poke and message */
-          Meteor.call('pokeApplicant', that);
-        };
-      }
-    });
+    Meteor.call('pokeApplicant', currentProject);
   }
 });
 

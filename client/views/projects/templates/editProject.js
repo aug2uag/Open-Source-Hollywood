@@ -430,13 +430,19 @@ Template.editProject.events({
   },
   'click #add-crew': function(e) {
     e.preventDefault();
+    console.log('click add-crew')
     var countRows = $('.crew-val').length||0;
     var title = $('#crew-title').val(), 
         description = $('#crew-description').val(), 
         audition = $('#crew-audition').val() || 'N/A',
         status = 'needed';
     if (title && description && status) 
-      $('#crew-table').append('<tr class="crew-val after-the-fact"><td colspan="2">'+title+'</td><td colspan="2">'+description+'</td><td colspan="2">'+audition+'</td><td><div class="col-sm-12 col-md-4 margin_bottom20"><div class="form-check form-check-inline"><input type="radio" id="crew-radio-needed'+countRows+'" name="crew-radio'+countRows+'" value="needed" '+(status==='needed'?'checked':'')+'><label for="crew-radio-needed'+countRows+'">Needed</label></div><div class="form-check form-check-inline"><input type="radio" id="crew-radio-fulfilled'+countRows+'" name="crew-radio'+countRows+'" value="fulfilled"  '+(status==='fulfilled'?'checked':'')+'><label for="crew-radio-fulfilled'+countRows+'">Fulfilled</label></div></div></td><td><button class="deleteRow button special">X</button></td></tr>');
+      $('#crew-table').append([
+        '<tr class="crew-val after-the-fact">',
+          '<td>'+title+'</td>',
+          '<td>'+description+'</td>',
+          '<td>'+audition+'</td>',
+          '<td><button class="deleteRow button special">X</button></td></tr>'].join(''));
     $('.deleteRow').on('click', deleteRow);
     $('#crew-title').val(''), $('#crew-description').val(''), $('#crew-audition').val(''), $("#crew-radio-needed").prop("checked", true);
   },
@@ -449,7 +455,12 @@ Template.editProject.events({
         audition = $('#cast-audition').val() || 'N/A',
         status = 'needed';
     if (title && description && status) 
-      $('#cast-table').append('<tr class="cast-val after-the-fact"><td colspan="2">'+title+'</td><td colspan="2">'+description+'</td><td colspan="2">'+audition+'</td><td><div class="col-sm-12 col-md-4 margin_bottom20"><div class="form-check form-check-inline"><input type="radio" id="cast-radio-needed'+countRows+'" name="cast-radio'+countRows+'" value="needed" '+(status==='needed'?'checked':'')+'><label for="cast-radio-needed'+countRows+'">Needed</label></div><div class="form-check form-check-inline"><input type="radio" id="cast-radio-fulfilled'+countRows+'" name="cast-radio'+countRows+'" value="fulfilled"  '+(status==='fulfilled'?'checked':'')+'><label for="cast-radio-fulfilled'+countRows+'">Fulfilled</label></div></div></td><td><button class="deleteRow button special">X</button></td></tr>');
+      $('#cast-table').append([
+        '<tr class="cast-val after-the-fact">',
+        '<td>'+title+'</td>',
+        '<td>'+description+'</td>',
+        '<td>'+audition+'</td>',
+        '<td><button class="deleteRow button special">X</button></td></tr>'].join(''));
     $('.deleteRow').on('click', deleteRow);
     $('#cast-title').val(''), description = $('#cast-description').val(''), $('#cast-audition').val(''), $("#cast-radio-needed").prop("checked", true);
   },
@@ -458,7 +469,11 @@ Template.editProject.events({
     e.preventDefault();
     var cat = $('#needs-category').val(), description = $('#needs-description').val();
     if (cat.toLowerCase().indexOf('category')>-1) return;
-    if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    if (cat && description) $('#needs-table').append([
+      '<tr class="needs-val">',
+        '<td>'+cat+'</td>',
+        '<td>'+description+'</td>',
+        '<td><button class="deleteRow button special">X</button></td></tr>'].join(''));
     $('.deleteRow').on('click', deleteRow);
     $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
   },
@@ -466,7 +481,7 @@ Template.editProject.events({
   'click #add-social': function(e) {
     e.preventDefault();
     var title = $('#social-title').val(), url = $('#social-url').val();
-    if (title && url) $('#social-table').append('<tr class="social-val after-the-fact"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
+    if (title && url) $('#social-table').append('<tr class="social-val after-the-fact"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
     $('#social-title').val(''), $('#social-url').val('');
   },
