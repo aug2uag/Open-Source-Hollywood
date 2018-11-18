@@ -84,21 +84,25 @@ function returnProjectCreateDetails(o) {
   o.author_list = $('#authorlist').val();
   o._gifts = gifts;
   o.website = $('#website').val();
+  o.rawbudget = osettings.rawbudget
+  delete osettings['rawbudget']
 
-  var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
-  var plainText = $("#summernote").summernote('code')
-    .replace(/<\/p>/gi, " ")
-    .replace(/<br\/?>/gi, " ")
-    .replace(/<\/?[^>]+(>|$)/g, "")
-    .replace(/&nbsp;|<br>/g, " ")
-    .trim();
+  try {
+    var descriptionText = $('#summernote').summernote('code').replace(/(<script.*?<\/script>)/g, '');
+    var plainText = $("#summernote").summernote('code')
+      .replace(/<\/p>/gi, " ")
+      .replace(/<br\/?>/gi, " ")
+      .replace(/<\/?[^>]+(>|$)/g, "")
+      .replace(/&nbsp;|<br>/g, " ")
+      .trim();
 
-  if (plainText&&plainText!=='Enter your campaign description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
-    o.description = descriptionText;
-    o.descriptionText = plainText;
-  } else {
-    o.description = '';
-  };
+    if (plainText&&plainText!=='Enter your campaign description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+      o.description = descriptionText;
+      o.descriptionText = plainText;
+    } else {
+      o.description = '';
+    };
+  } catch(e){}
 
   o.creatorsInfo = $('#creators_info').val();
   o.historyInfo = $('#history_info').val();
@@ -106,7 +110,10 @@ function returnProjectCreateDetails(o) {
   o.needsInfo = $('#needs_info').val();
   o.significanceInfo = $('#significance_info').val();
   
-  if (osettings.banner.data) o._banner = osettings.banner.data;
+  if (osettings.banner.data) {
+    o._banner = osettings.banner.data;
+    o.bannerFileName = osettings.banner.file.name
+  }
   else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
   
   var crew = $('.crew-val'); 
@@ -220,6 +227,157 @@ function removeGift(e) {
   $(this).closest('tr').remove();
 }
 
+function showVexBudgetForm() {
+  var raw = osettings.rawbudget||{};
+  vex.dialog.open({
+    message: 'BUDGET FORM',
+    input: [
+      '<h4 class="title">Fill out the budget form to help define your budget. Whole dollar amounts only please.</h4>',
+      '<div class="embed-responsive embed-responsive-4by3" style="overflow: auto;height: auto;">',
+        '<div class="panel-default">',
+          '<div class="panel-heading">GENERAL COSTS</div>',
+          '<div class="panel-body">',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="dev_cost"> development cost </label>',
+                '<input type="number" class="budgetform" name="dev_cost" id="dev_cost" min="0" value="' + (raw.dev_cost ? raw.dev_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="insurance_cost"> insurance costs </label>',
+                '<input type="number" class="budgetform" name="insurance_cost" id="insurance_cost" min="0" value="' + (raw.insurance_cost ? raw.insurance_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="legal_cost"> legal &amp; accounting </label>',
+                '<input type="number" class="budgetform" name="legal_cost" id="legal_cost" min="0" value="' + (raw.legal_cost ? raw.legal_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="travel_cost"> travel, meetings </label>',
+                '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="' + (raw.travel_cost ? raw.travel_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="food_cost"> food </label>',
+                '<input type="number" class="budgetform" name="food_cost" id="food_cost" min="0" value="' + (raw.food_cost ? raw.food_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="supplied_cost"> office supplies </label>',
+                '<input type="number" class="budgetform" name="supplied_cost" id="supplied_cost" min="0" value="' + (raw.supplied_cost ? raw.supplied_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="starting_budget"> starting budget </label>',
+                '<input type="number" class="budgetform" name="starting_budget" id="starting_budget" min="0" value="' + (raw.starting_budget ? raw.starting_budget : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="misc_gen_cost"> miscellaneous </label>',
+                '<input type="number" class="budgetform" name="misc_gen_cost" id="misc_gen_cost" min="0" value="' + (raw.misc_gen_cost ? raw.misc_gen_cost : 0) +'" />',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<div class="panel-default">',
+          '<div class="panel-heading">PRODUCTION COSTS</div>',
+          '<div class="panel-body">',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="staff_cost"> staff </label>',
+                '<input type="number" class="budgetform" name="staff_cost" id="staff_cost" min="0" value="' + (raw.staff_cost ? raw.staff_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="extras_cost"> extras </label>',
+                '<input type="number" class="budgetform" name="extras_cost" id="extras_cost" min="0" value="' + (raw.extras_cost ? raw.extras_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="wardrobe_cost"> wardrobe </label>',
+                '<input type="number" class="budgetform" name="wardrobe_cost" id="wardrobe_cost" min="0" value="' + (raw.wardrobe_cost ? raw.wardrobe_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="makeup_cost"> makeup &amp; hair </label>',
+                '<input type="number" class="budgetform" name="makeup_cost" id="makeup_cost" min="0" value="' + (raw.makeup_cost ? raw.makeup_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="set_design_cost"> set design </label>',
+                '<input type="number" class="budgetform" name="set_design_cost" id="set_design_cost" min="0" value="' + (raw.set_design_cost ? raw.set_design_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="set_construction_cost"> set construction </label>',
+                '<input type="number" class="budgetform" name="set_construction_cost" id="set_construction_cost" min="0" value="' + (raw.set_construction_cost ? raw.set_construction_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="set_rigging_cost"> set rigging </label>',
+                '<input type="number" class="budgetform" name="set_rigging_cost" id="set_rigging_cost" min="0" value="' + (raw.set_rigging_cost ? raw.set_rigging_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="operations_cost"> operations </label>',
+                '<input type="number" class="budgetform" name="operations_cost" id="operations_cost" min="0" value="' + (raw.operations_cost ? raw.operations_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="gear_rental_cost"> gear rentals </label>',
+                '<input type="number" class="budgetform" name="gear_rental_cost" id="gear_rental_cost" min="0" value="' + (raw.gear_rental_cost ? raw.gear_rental_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="gear_purchase_cost"> gear purchases </label>',
+                '<input type="number" class="budgetform" name="gear_purchase_cost" id="gear_purchase_cost" min="0" value="' + (raw.gear_purchase_cost ? raw.gear_purchase_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="engineer_cost"> engineers </label>',
+                '<input type="number" class="budgetform" name="engineer_cost" id="engineer_cost" min="0" value="' + (raw.engineer_cost ? raw.engineer_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="electric_cost"> electric </label>',
+                '<input type="number" class="budgetform" name="electric_cost" id="electric_cost" min="0" value="' + (raw.electric_cost ? raw.electric_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="cloud_cost"> cloud services </label>',
+                '<input type="number" class="budgetform" name="cloud_cost" id="cloud_cost" min="0" value="' + (raw.cloud_cost ? raw.cloud_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="soft_cost"> software purchases </label>',
+                '<input type="number" class="budgetform" name="soft_cost" id="soft_cost" min="0" value="' + (raw.soft_cost ? raw.soft_cost : 0) +'" />',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<div class="panel-default">',
+          '<div class="panel-heading">POST-PRODUCTION COSTS</div>',
+          '<div class="panel-body">',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="editing_cost"> editing </label>',
+                '<input type="number" class="budgetform" name="editing_cost" id="editing_cost" min="0" value="' + (raw.editing_cost ? raw.editing_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="creative_writing_cost"> creative writing </label>',
+                '<input type="number" class="budgetform" name="creative_writing_cost" id="creative_writing_cost" min="0" value="' + (raw.creative_writing_cost ? raw.creative_writing_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="marketing_cost"> marketing </label>',
+                '<input type="number" class="budgetform" name="marketing_cost" id="marketing_cost" min="0" value="' + (raw.marketing_cost ? raw.marketing_cost : 0) +'" />',
+            '</div>',
+            '<div class="col-sm-12 col-md-6">',
+                '<label for="misc_post_cost"> miscellaneous </label>',
+                '<input type="number" class="budgetform" name="misc_post_cost" id="misc_post_cost" min="0" value="' + (raw.misc_post_cost ? raw.misc_post_cost : 0) +'" />',
+            '</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+    ].join(''),
+    buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Calculate' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+    ],
+    callback: function (data) {
+      osettings.rawbudget = data
+      var costTally = 0;
+      for (var key in data) {
+        if (key === 'starting_budget') continue;
+        costTally+=Math.abs(parseInt(data[key]));
+      }
+      if (costTally>0) {
+        $('#budget').val(costTally);
+        $('#starting').val(data.starting_budget||0);
+        $('#hiddenbudget').show();
+        localStorage.setItem('budget', JSON.stringify(data));  
+      } else {
+        $('#hiddenbudget').hide();
+      }
+    }
+  });
+};
+
 var StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
 
 Template.newProject.onRendered(function() {
@@ -273,7 +431,8 @@ Template.newProject.onRendered(function() {
     };
 
     if (newProject._banner||newProject.banner) {
-      var filename = JSON.parse(localStorage.getItem('projectnew_banner'));
+      var filename = newProject.bannerFileName;
+      if (filename===null) return;
       $('#banner_file_name').text(filename);
       $('#hidden_banner_name').show();
     };
@@ -285,6 +444,7 @@ Template.newProject.onRendered(function() {
     if (newProject.plansInfo) $('#plans_info').val(newProject.plansInfo);
     if (newProject.needsInfo) $('#needs_info').val(newProject.needsInfo);
     if (newProject.significanceInfo) $('#significance_info').val(newProject.significanceInfo);
+    osettings.rawbudget = newProject.rawbudget||null;
 
     if (newProject.crew&&newProject.crew.length) {
       newProject.crew.forEach(function(c) {
@@ -350,158 +510,6 @@ function showVexWithInput(message, input) {
     buttons: [
         $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
     ]
-  });
-}
-
-function showVexBudgetForm() {
-  vex.dialog.open({
-    message: 'BUDGET FORM',
-    input: [
-      '<h4 class="title">Fill out the budget form to help define your budget. Whole dollar amounts only please.</h4>',
-      '<div class="embed-responsive embed-responsive-4by3" style="overflow: auto;">',
-        '<div class="panel-default">',
-          '<div class="panel-heading">GENERAL COSTS</div>',
-          '<div class="panel-body">',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="dev_cost"> development cost </label>',
-                '<input type="number" class="budgetform" name="dev_cost" id="dev_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="insurance_cost"> insurance costs </label>',
-                '<input type="number" class="budgetform" name="insurance_cost" id="insurance_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="legal_cost"> legal &amp; accounting </label>',
-                '<input type="number" class="budgetform" name="legal_cost" id="legal_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="travel_cost"> travel, meetings </label>',
-                '<input type="number" class="budgetform" name="travel_cost" id="travel_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="food_cost"> food </label>',
-                '<input type="number" class="budgetform" name="food_cost" id="food_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="supplied_cost"> office supplies </label>',
-                '<input type="number" class="budgetform" name="supplied_cost" id="supplied_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="starting_budget"> starting budget </label>',
-                '<input type="number" class="budgetform" name="starting_budget" id="starting_budget" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="misc_gen_cost"> miscellaneous </label>',
-                '<input type="number" class="budgetform" name="misc_gen_cost" id="misc_gen_cost" min="0" value="0" />',
-            '</div>',
-          '</div>',
-        '</div>',
-        '<div class="panel-default">',
-          '<div class="panel-heading">PRODUCTION COSTS</div>',
-          '<div class="panel-body">',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="staff_cost"> staff </label>',
-                '<input type="number" class="budgetform" name="staff_cost" id="staff_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="extras_cost"> extras </label>',
-                '<input type="number" class="budgetform" name="extras_cost" id="extras_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="wardrobe_cost"> wardrobe </label>',
-                '<input type="number" class="budgetform" name="wardrobe_cost" id="wardrobe_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="makeup_cost"> makeup &amp; hair </label>',
-                '<input type="number" class="budgetform" name="makeup_cost" id="makeup_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="set_design_cost"> set design </label>',
-                '<input type="number" class="budgetform" name="set_design_cost" id="set_design_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="set_construction_cost"> set construction </label>',
-                '<input type="number" class="budgetform" name="set_construction_cost" id="set_construction_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="set_rigging_cost"> set rigging </label>',
-                '<input type="number" class="budgetform" name="set_rigging_cost" id="set_rigging_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="operations_cost"> operations </label>',
-                '<input type="number" class="budgetform" name="operations_cost" id="operations_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="gear_rental_cost"> gear rentals </label>',
-                '<input type="number" class="budgetform" name="gear_rental_cost" id="gear_rental_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="gear_purchase_cost"> gear purchases </label>',
-                '<input type="number" class="budgetform" name="gear_purchase_cost" id="gear_purchase_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="engineer_cost"> engineers </label>',
-                '<input type="number" class="budgetform" name="engineer_cost" id="engineer_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="electric_cost"> electric </label>',
-                '<input type="number" class="budgetform" name="electric_cost" id="electric_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="cloud_cost"> cloud services </label>',
-                '<input type="number" class="budgetform" name="cloud_cost" id="cloud_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="soft_cost"> software purchases </label>',
-                '<input type="number" class="budgetform" name="soft_cost" id="soft_cost" min="0" value="0" />',
-            '</div>',
-          '</div>',
-        '</div>',
-        '<div class="panel-default">',
-          '<div class="panel-heading">POST-PRODUCTION COSTS</div>',
-          '<div class="panel-body">',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="editing_cost"> editing </label>',
-                '<input type="number" class="budgetform" name="editing_cost" id="editing_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="creative_writing_cost"> creative writing </label>',
-                '<input type="number" class="budgetform" name="creative_writing_cost" id="creative_writing_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="marketing_cost"> marketing </label>',
-                '<input type="number" class="budgetform" name="marketing_cost" id="marketing_cost" min="0" value="0" />',
-            '</div>',
-            '<div class="col-sm-12 col-md-6">',
-                '<label for="misc_post_cost"> miscellaneous </label>',
-                '<input type="number" class="budgetform" name="misc_post_cost" id="misc_post_cost" min="0" value="0" />',
-            '</div>',
-          '</div>',
-        '</div>',
-      '</div>',
-    ].join(''),
-    buttons: [
-        $.extend({}, vex.dialog.buttons.YES, { text: 'Calculate' }),
-        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
-    ],
-    callback: function (data) {
-      if (!data) {
-          // return console.log('Cancelled')
-      }
-      var costTally = 0;
-      for (var key in data) {
-        if (key === 'starting_budget') continue;
-        costTally+=Math.abs(parseInt(data[key]));
-      }
-      if (costTally>0) {
-        $('#budget').val(costTally);
-        $('#starting').val(data.starting_budget||0);
-        $('#hiddenbudget').show();
-        localStorage.setItem('budget', JSON.stringify(data));  
-      } else {
-        $('#hiddenbudget').hide();
-      }
-    }
   });
 }
 
@@ -687,16 +695,14 @@ Template.newProject.events({
         osettings.banner = {};
         
         var files = e.target.files;
-        var file = files[0];
+        osettings.banner.file = files[0];
 
-        localStorage.setItem('projectnew_banner', JSON.stringify(file.name));
-
-        if (file.type.indexOf("image")==-1) {
+        if (osettings.banner.file.type.indexOf("image")==-1) {
           vex.dialog.alert('Invalid File, you can only upload a static image for your profile picture');
           return;
         };
 
-        return setNewProjectBanner(file);
+        return setNewProjectBanner(osettings.banner.file);
       }
   },
   'change #category': function() {
@@ -836,7 +842,6 @@ Template.newProject.events({
 
 Template.newProject.helpers({
   cachedNewProject: function() {
-    console.log('in cachedNewProject')
     var hasCached = false
     try {
       var obj = JSON.parse(localStorage.getItem('projectnew'));
@@ -845,7 +850,6 @@ Template.newProject.helpers({
           delete obj[propName];
         }
       }
-      console.log('obj.keys.ln =', Object.keys(obj).length)
       if (Object.keys(obj).length>0) hasCached = true;
     } catch(e) { } finally {
       return hasCached
