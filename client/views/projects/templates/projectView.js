@@ -927,7 +927,9 @@ Template.projectView.events({
 
     displayRoleTypeDialog( ((this.project.crew||[]).concat((this.project.cast||[]))).concat((this.project.needs||[])) , {
       title: 'Select Role',
-      apply_pay: true
+      apply_pay: true,
+      apply_donate: true,
+      apply_time: true
     });
   },
   'click #offer-donation': function(e) {
@@ -945,80 +947,6 @@ Template.projectView.events({
 
     var was = this;
 
-    function moneyDonationTypeHelper() {
-      /** show help dialog on top */
-      var dialogInput = [
-        '<style>',
-            '.vex-custom-field-wrapper {',
-                'margin: 1em 0;',
-            '}',
-            '.vex-custom-field-wrapper > label {',
-                'display: inline-block;',
-                'margin-bottom: .2em;',
-            '}',
-        '</style>',
-        '<div class="vex-custom-field-wrapper">',
-          '<p>1) EXPRESS DONATIONS are traditional money donations where you transfer a specified amount of money directly to the campaign.</p>',
-          '<p>2) CONDITIONAL DONATIONS are donations that are given in return for consideration and approval to a role. These are refunded within 5 days unless you were considered and accepted to the role. In order to make a conditional donation, you must specify a role you are donating towards.</p>',
-        '</div>'
-      ]
-      vex.dialog.alert({
-        message: 'There are two types of money donations you can make.',
-        input: dialogInput.join('')
-      });
-    }
-
-    function expressOrConditionalMoneyConfig() {
-      $('.dty').on('click', function(e) {
-        if ($(this).attr('id').indexOf('express')>-1) {
-          displayExpressDonationDialog();
-        } else {
-          displayRoleTypeDialog((was.project.crew||[]).concat((was.project.cast||[])), {
-            title: 'Select Role',
-            apply_donate: true
-          });
-        }
-      });
-      $('#helpmedonate').on('click', function(e) {
-        moneyDonationTypeHelper();
-      });
-    }
-
-    /** express v conditional dialog */
-    function displayMoneyTypeDialog() {
-      vex.closeTop();
-      var dialogInput = [
-        '<style>',
-            '.vex-custom-field-wrapper {',
-                'margin: 1em 0;',
-            '}',
-            '.vex-custom-field-wrapper > label {',
-                'display: inline-block;',
-                'margin-bottom: .2em;',
-            '}',
-        '</style>',
-        '<div class="vex-custom-field-wrapper">',
-          '<div class="bs-example" data-example-id="simple-justified-button-group">',
-            '<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">',
-              '<a href="#" id="dexpress" class="btn btn-default dty" role="button">Express</a>',
-              '<a href="#" id="dconditional" class="btn btn-default dty" role="button">Conditional</a>',
-            '</div>',
-            '<br>',
-            '<a id="helpmedonate" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&nbsp;&nbsp;<small>HELP</small></a>',
-            '</div>',
-          '</div>',
-        '</div>'
-      ]
-      vex.dialog.alert({
-        message: 'Choose Money Donation Type',
-        input: dialogInput.join(''),
-        buttons: [
-          $.extend({}, vex.dialog.buttons.NO, { text: 'CLOSE' })
-        ],
-        callback: function(){},
-        afterOpen: expressOrConditionalMoneyConfig
-      });
-    }
 
     /** express donation dialog (0a) */
     function displayExpressDonationDialog() {
@@ -1090,66 +1018,11 @@ Template.projectView.events({
     function timeDateDonateConfig() {
       $('.dtm').on('click', function(e) {
         e.preventDefault();
-        if ($(this).attr('id').indexOf('time')>-1) {
-          // donate time options
-          displayRoleTypeDialog( ((was.project.crew||[]).concat((was.project.cast||[]))).concat((was.project.needs||[])) , {
-            title: 'Select Role',
-            apply_time: true
-          });
-        } else {
-          // donate money options
           displayMoneyTypeDialog();
-        }
-
       })
     }
 
-    // return (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0)
-    var anyRoles = (this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);
-    if (!anyRoles||!Meteor.user()) {
-      // express donation only
-      return displayExpressDonationDialog();
-    };
-
-    var msg1 = Meteor.user() ? 'Would you like to donate money or time?' : 'Enter donation amount.';
-    var dialogInput = [
-        '<style>',
-            '.vex-custom-field-wrapper {',
-                'margin: 1em 0;',
-            '}',
-            '.vex-custom-field-wrapper > label {',
-                'display: inline-block;',
-                'margin-bottom: .2em;',
-            '}',
-        '</style>',
-        '<div class="vex-custom-field-wrapper">',
-          '<div class="bs-example" data-example-id="simple-justified-button-group">',
-            '<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">',
-              '<a href="#" id="dmoney" class="btn btn-default dtm" role="button">Donate Money</a>',
-              '<a href="#" id="dtime" class="btn btn-default dtm" role="button">Donate Time</a>',
-            '</div>',
-            '</div>',
-          '</div>',
-        '</div>'
-    ]
-
-    if (msg1.indexOf('Enter')>-1) {
-      dialogInput = dialogInput.concat([
-        '<div class="vex-custom-field-wrapper">',
-          '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
-        '</div>'
-      ])
-    };
-
-    vex.dialog.alert({
-      message: msg1,
-      input: dialogInput.join(''),
-      buttons: [
-        $.extend({}, vex.dialog.buttons.NO, { text: 'CLOSE' })
-      ],
-      callback: function(){},
-      afterOpen: timeDateDonateConfig
-    });
+    displayExpressDonationDialog()
   },
   'click #buy-shares': function(e) {
     e.preventDefault();

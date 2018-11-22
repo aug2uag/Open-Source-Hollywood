@@ -436,11 +436,7 @@ Template.projectTabs.helpers({
   defaultQ: function() {
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
   },
-  applicantLN: function() {
-    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
-    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
-    return (x + y);
-  },
+
   producerReady: function() {
     return !(Meteor.user() && Meteor.user().didSetProfile);
   },
@@ -657,8 +653,9 @@ Template.projectTab.helpers({
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
   },
   applicantLN: function() {
-    var x = this.cast.filter(function(e){if(e.status==='needed')return true}).length;
-    var y = this.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    console.log(this)
+    var x = this.cast.length;
+    var y = this.crew.length;
     return (x + y);
   },
   formattedTitle: function() {

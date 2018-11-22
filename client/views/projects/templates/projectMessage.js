@@ -187,10 +187,33 @@ Template.projectMessage.events({
 	},
 	'click #authorfinalizek': function(e) {
 		e.preventDefault();
+		console.log('authorfinalizek')
+		console.log(was)
 		Meteor.call('authorFinalizeAgreement', was, function(err, result) {
 			if (result===true) {
 				vex.dialog.alert({
 				    message: 'Applicant approved, this negotiations is complete',
+				    callback: function () {
+				        Router.go('Home');
+				    }
+				});
+			};	
+		});
+	},
+	'click #counterofferbtn': function(e) {
+		$('#counteroffer').show();
+		window.scrollTo({
+			'behavior': 'smooth',
+			'left': 0,
+			'top': document.getElementById('counteroffer').offsetTop
+		});
+	},
+	'click #applicantfinalizek': function(e) {
+		e.preventDefault();
+		Meteor.call('applicantFinalizeAgreement', was, function(err, result) {
+			if (result===true) {
+				vex.dialog.alert({
+				    message: 'Offer accepted, this negotiations is complete',
 				    callback: function () {
 				        Router.go('Home');
 				    }
@@ -245,6 +268,9 @@ Template.projectMessage.events({
 })
 
 Template.projectMessageOffer.helpers({
+	optradio: function() {
+		return this.uid + this.position;
+	},
 	approveOrDenyButton: function() {
 		if (!this.declined) return 'red';
 		return 'green';
