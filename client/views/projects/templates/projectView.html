@@ -3,11 +3,8 @@
     {{foobar}}
     <td><p class="align-center">{{appliedFor}}</p></td>
     <td style="display:flex"><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px;top:15px;position:relative;" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-    {{#if poke}}
-      <td><a style="width:100%;top:15px;position:relative;" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">NEGOTIATE</a></td>
-    {{else}}
-      <td><a style="width:100%;top:15px;position:relative;" href="#!" class="btn btn-mini btn-primary initiateNegotiate">{{typeofRequest}}</a></td>
-    {{/if}}
+
+    <td><a style="width:100%;top:15px;position:relative;" href="/message/project/{{ currentSlug }}/{{ user.id }}" val="{{thisString}}" class="btn btn-mini btn-primary {{#unless poke}}initiateNegotiate{{/unless}}">{{typeofRequest}}</a></td>
   </tr>
 </template>
 
@@ -318,13 +315,8 @@
                                             <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
                                               
                                               {{#if anyRolesNoAuth}}
-                                                {{#if currentUser}}
                                                   <a href="#" id="join-roles" class="btn btn-default" role="button">APPLY</a> 
                                                   <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
-                                                  {{else}}
-                                                  <a href="#" id="view-roles" class="btn btn-default" role="button">CONNECT</a> 
-                                                  <a href="#" id="offer-donation" class="btn btn-default" role="button">&nbsp;DONATE&nbsp;&nbsp;</a> 
-                                                {{/if}}
                                               {{else}}
                                                 <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
                                               {{/if}}

@@ -1403,6 +1403,9 @@ Template.applicantsHelper.helpers({
   currentSlug: function() {
     return currentSlug;
   },
+  thisString: function() {
+    return JSON.stringify(this)
+  },
   foobar: function() {
     console.log(new Array(100).join('# '))
     console.log(this)
@@ -1420,8 +1423,12 @@ Template.applicantsHelper.helpers({
 
 Template.applicantsHelper.events({
   'click .initiateNegotiate': function(e) {
-    var that = this;
-    Meteor.call('pokeApplicant', currentProject);
+    try {
+      var val = JSON.parse($(e.target).attr('val'))
+      Meteor.call('pokeApplicant', val);
+    } catch(e) {
+      vex.dialog.alert('There was an error, please try again later.');
+    }
   }
 });
 
