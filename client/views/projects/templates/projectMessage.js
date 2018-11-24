@@ -161,6 +161,8 @@ Template.projectMessage.events({
 	      callback: function (result) {
 	        if (result) {
 	          Meteor.call('rejectUserFromProject', was.offers);
+	          vex.dialog.alert('applicant rejected');
+	          setTimeout(function() { history.back() }, 1597);
 	        };
 	      }
 	  });
