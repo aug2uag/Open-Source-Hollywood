@@ -385,6 +385,8 @@ function displayRoleTypeDialog(list, options) {
   })
 };
 
+
+
 Template.projectView.helpers({
   hasGifts: function() {
     return this.project.gifts&&this.project.gifts.length
@@ -1370,6 +1372,12 @@ Template.applicants.helpers({
   },
   appliedFor: function() {
     return appliedFor;
+  },
+  applicants: function() {
+    console.log(this.project.roleApplicants)
+
+
+    return []
   }
 })
 

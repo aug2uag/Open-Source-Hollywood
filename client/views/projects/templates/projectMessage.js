@@ -191,7 +191,19 @@ Template.projectMessage.events({
 		e.preventDefault();
 		console.log('authorfinalizek')
 		console.log(was)
-		Meteor.call('authorFinalizeAgreement', was, function(err, result) {
+
+		var agg = []
+		$('.offer_role_decision:checked').each(function() {
+			var o = {}
+			o[$(this).val()] = JSON.parse($(this).attr('val'))
+			agg.push(o)
+		})
+
+		Meteor.call('authorFinalizeAgreement', {
+			offers: agg,
+			user: was.user,
+			project: was.project
+		}, function(err, result) {
 			if (result===true) {
 				vex.dialog.alert({
 				    message: 'Applicant approved, this negotiations is complete',
@@ -272,6 +284,9 @@ Template.projectMessage.events({
 Template.projectMessageOffer.helpers({
 	optradio: function() {
 		return this.uid + this.position;
+	},
+	stringyThis: function() {
+		return JSON.stringify(this)
 	},
 	approveOrDenyButton: function() {
 		if (!this.declined) return 'red';
