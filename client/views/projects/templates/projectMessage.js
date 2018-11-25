@@ -192,6 +192,10 @@ Template.projectMessage.events({
 			counteroffer: counteroffer,
 			context: was
 		});
+
+		vex.dialog.alert('your counter offer was sent')
+		setTimeout(function() { history.back() }, 1597);
+
 	},
 	'click #authorfinalizek': function(e) {
 		e.preventDefault();
