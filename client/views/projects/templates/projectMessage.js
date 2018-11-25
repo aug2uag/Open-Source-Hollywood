@@ -53,15 +53,18 @@ Template.projectMessage.helpers({
 	needsApplicantAction: function() {
 		try {
 			var o = this.offers[0]
-			if (o.needsApplicantAction) return true;
+			if (o.needsApplicantAction&&Meteor.user()._id!==was.project.ownerId) return true;
 			else return false
 		} catch(e) {
 			return false
 		}
 	},
 	ownerInitAgreement: function() {
-		var currentNegotiation = getCurrentNegotiation();
-		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
+		for (var i = this.offers.length - 1; i >= 0; i--) {
+			var o = this.offers[i]
+			if (o.needsApplicantAction) return false
+		}
+		if (Meteor.user()._id===was.project.ownerId) return true
 	},
 	ownerInitAgreementAplicantNote: function() {
 		for (var i = this.offers.length - 1; i >= 0; i--) {
@@ -261,6 +264,7 @@ Template.projectMessageOffer.helpers({
 		return this.uid + this.position;
 	},
 	myProject: function() {
+		if (this.authorCounterOffer) return false
 		return was.project.ownerId===Meteor.user()._id
 	},
 	stringyThis: function() {

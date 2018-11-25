@@ -1124,7 +1124,7 @@ function uniqueApplicantsFromProject(ctx, project) {
   var unique = []
   var uids = []
 
-  var arr = project['roleApplicants'].concat(project['crewApplicants'])
+  var arr = (project['roleApplicants']||[]).concat(project['crewApplicants']||[])
 
   for (var i = arr.length - 1; i >= 0; i--) {
     var a = arr[i]
@@ -1153,8 +1153,8 @@ Template.applicants.helpers({
     return uniqueApplicantsFromProject('roleApplicants', this.project)
   },
   hasApplicant: function() {
-    var lnRoles = this.project&&this.project.roleApplicants.length||0
-    var lnCrew = this.project&&this.project.crewApplicants.length||0
+    var lnRoles = this.project&&this.project.roleApplicants&&this.project.roleApplicants.length||0
+    var lnCrew = this.project&&this.project.crewApplicants&&this.project.crewApplicants.length||0
     return (lnRoles + lnCrew) > 0
   }
 })
