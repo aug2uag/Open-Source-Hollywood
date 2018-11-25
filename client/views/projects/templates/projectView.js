@@ -238,10 +238,14 @@ function displayRoleTypeDialog(list, options) {
       // console.log('raw c = ')
       // console.log(c)
       _html += '<div class="btn-toolbar">';
+
       if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Request Pay</a>'
       if (options.apply_time) _html+='<a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Donate Time</a>'
-      if (options.apply_donate) _html+='<a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Offer Pay</a>'
-      if (options.signin) _html+='<a class="btn btn-default btn-group apply-donate dologin" role="button"">Sign in to apply</a>'
+
+      if (c.ctx!=='need') {
+        if (options.apply_donate) _html+='<a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Offer Pay</a>'
+      }
+
       _html+='</div>';
     }
     _html += '</div></div></div></div>';
@@ -566,6 +570,77 @@ Template.projectView.helpers({
 });
 
 Template.projectView.events({
+  'click #view-need-positions': function(e) {
+    /** display all cast positions */
+    var projectNeeds = this.project.needs;
+    var isMeteorUser = Meteor.user&&Meteor.user()||false;
+    var inputHTML = projectNeeds.map(function(c, idx) {
+      var _html = '<div class="vex-custom-field-wrapper">';
+      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p>';
+      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Donate Time</a></div>'
+      _html += '</div></div></div></div>';
+      _html += '</div>';
+      return _html;
+    }).join('');
+    vex.dialog.alert({
+        message: 'View and offer resources for project NEEDS:',
+        contentCSS: { width: '100%', overflow: 'auto' },
+        input: [
+            '<style>',
+                '.vex-custom-field-wrapper {',
+                    'margin: 1em 0;',
+                '}',
+                '.vex-custom-field-wrapper > label {',
+                    'display: inline-block;',
+                    'margin-bottom: .2em;',
+                '}',
+            '</style>',
+            inputHTML
+        ].join(''),
+        callback: function () { },
+        afterOpen: function() {
+          var was = this;
+          setTimeout(function() {
+              // Either of these lines will do the trick, depending on what browsers you need to support.
+              was.rootEl.scrollTop = 0;
+              was.contentEl.scrollIntoView(true);
+              $(was.$vex).scrollTop(0)
+          }, 0)
+          $('.apply-pay').on('click', function(e) {
+            var needItem = projectNeeds[parseInt($(this).attr('idx'))];
+            vex.closeAll();
+            /** ask user to define how much pay for resource */
+            innerVexApply({
+              message: 'How much for your resource.',
+              label: 'Amount of money (USD).',
+            }, function(data) {
+              var amt = data.donation || 0;
+              amt = Math.abs(parseInt(amt));
+              if (amt) {
+                /** send offer to user, email user */
+                Meteor.call("lendResource", {
+                  slug: currentSlug,
+                  asset: needItem.category,
+                  offer: amt
+                });
+                vex.dialog.alert('resource offer submitted');
+              };
+            });
+          });
+
+          $('.apply-time').on('click', function(e) {
+            var needItem = projectNeeds[parseInt($(this).attr('idx'))];
+            Meteor.call("lendResource", {
+              slug: currentSlug,
+              asset: needItem.category,
+              offer: 0
+            });
+            vex.dialog.alert('resource offer submitted');
+          });
+
+        }
+    })
+  },
   'click .dologin': function(e) {
     e.preventDefault();
     $('.login').click();
