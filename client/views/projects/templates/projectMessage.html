@@ -33,7 +33,7 @@
                               {{#each offers}}
                                 {{>projectMessageOffer}}
                               {{else}}
-                                <tr>NO OFFERS TO SHOW</tr>
+                                <tr colspan="3">NO OFFERS TO SHOW</tr>
                               {{/each}}
                               </tbody>
                             </table>
@@ -43,6 +43,7 @@
                     </div>
                 </section>
 
+                {{#if hasOffer}}
                 <section class="t20">
                   {{#if ownerInitAgreement}}
                     <div class="krown-column-row clearfix btn-group">
@@ -125,9 +126,11 @@
                     </div>
                   </div>
                 </section>
+                {{/if}}
             </div>
           </div>
         </div>
+        {{#if hasOffer}}
         <!-- COUNTER OFFER -->
         <div id="counteroffer" class="krown-column-row clearfix t40" style="display:none">
 
@@ -204,6 +207,7 @@
 
             {{> messageBox}}
         </div>
+        {{/if}}
 
     </div>
   </div>

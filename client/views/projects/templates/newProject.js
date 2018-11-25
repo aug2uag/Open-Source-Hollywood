@@ -432,7 +432,7 @@ Template.newProject.onRendered(function() {
 
     if (newProject._banner||newProject.banner) {
       var filename = newProject.bannerFileName;
-      if (filename===null) return;
+      if (filename===null||filename.toLowerCase()==='this is the name of the file uploaded') return;
       $('#banner_file_name').text(filename);
       $('#hidden_banner_name').show();
     };

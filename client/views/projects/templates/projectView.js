@@ -259,16 +259,22 @@ function innerVexApply(options, cb) {
 /** show roles dialog */
 function displayRoleTypeDialog(list, options) {
   vex.closeTop();
+  // console.log(list, options)
+  // console.log(new Array(10).join('1 2  '))
   var isMeteorUser = Meteor.user&&Meteor.user()||false;
   var inputHTML = list.map(function(c, idx) {
     var typeofRole = c.title ? 'a crew position' : c.role ? 'a cast position' : 'a resource needed';
     var _html = '<div class="vex-custom-field-wrapper" id="displayroles">';
     _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3 style="margin-bottom: 10px;">' + (c.title||c.role||c.category) + '</h3><p style="margin-bottom: 13px;font-weight:200">'+ typeofRole +'</p><p style="margin-bottom: 5px">' + c.description + '</p>';
     if (isMeteorUser) {
+      // console.log('what is ctx ?')
+      // console.log(c.ctx)
+      // console.log('raw c = ')
+      // console.log(c)
       _html += '<div class="btn-toolbar">';
-      if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a>'
-      if (options.apply_time) _html+='<a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a>'
-      if (options.apply_donate) _html+='<a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a>'
+      if (options.apply_pay) _html+='<a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Request Pay</a>'
+      if (options.apply_time) _html+='<a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Donate Time</a>'
+      if (options.apply_donate) _html+='<a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'" ctx="' +c.ctx+'">Offer Pay</a>'
       if (options.signin) _html+='<a class="btn btn-default btn-group apply-donate dologin" role="button"">Sign in to apply</a>'
       _html+='</div>';
     }
@@ -306,6 +312,8 @@ function displayRoleTypeDialog(list, options) {
             $(was.$vex).scrollTop(0)
         }, 0)
         $('.apply-pay').on('click', function(e) {
+          console.log(e)
+          var ctx = $(e.target).attr('ctx').trim()
           var position = list[parseInt($(this).attr('idx'))];
           vex.closeAll();
           /** ask user to define how much pay for resource */
@@ -318,15 +326,15 @@ function displayRoleTypeDialog(list, options) {
             if (amt) {
               /** send offer to user, email user */
               var o = {
-                ctx:'crew', 
-                position: position.title,
+                ctx:ctx, 
+                position: position.title||position.role||position.category,
                 type: 'hired',
                 pay: amt,
                 amount: amt,
-                message: currentTitle + ' crew offer',
+                message: currentTitle + ' offer',
                 route: 'applyToProject',
                 slug: currentSlug,
-                appliedFor: position.title
+                appliedFor: position.title||position.role||position.category
               };
               Meteor.call(o.route, o, function(err, result) {
                 vex.dialog.alert(err||result);
@@ -337,17 +345,18 @@ function displayRoleTypeDialog(list, options) {
 
         $('.apply-time').on('click', function(e) {
           var position = list[parseInt($(this).attr('idx'))];
+          var ctx = $(e.target).attr('ctx').trim()
           vex.closeAll();
           var o = {
-            ctx:'crew', 
-            position: position.title,
+            ctx:ctx, 
+            position: position.title||position.role||position.category,
             type: 'hired',
             pay: 0,
             amount: 0,
-            message: currentTitle + ' crew offer (time donation)',
+            message: currentTitle + ' offer (time donation)',
             route: 'applyToProject',
             slug: currentSlug,
-            appliedFor: position.title
+            appliedFor: position.title||position.role||position.category
           };
           Meteor.call(o.route, o, function(err, result) {
             vex.dialog.alert(err||result);
@@ -356,6 +365,7 @@ function displayRoleTypeDialog(list, options) {
 
         $('.apply-donate').on('click', function(e) {
           var position = list[parseInt($(this).attr('idx'))];
+          var ctx = $(e.target).attr('ctx').trim()
           vex.closeAll();
           /** ask user to define how much pay for resource */
           innerVexApply({
@@ -367,15 +377,15 @@ function displayRoleTypeDialog(list, options) {
             if (amt) {
               /** send offer to user, email user */
               var o = {
-                ctx:'crew', 
-                position: position.title,
+                ctx:ctx, 
+                position: position.title||position.role||position.category,
                 type: 'sourced',
                 pay: amt,
                 amount: amt,
-                message: currentTitle + ' crew offer (money and time donation)',
+                message: currentTitle + ' offer (money and time donation)',
                 route: 'applyToProject',
                 slug: currentSlug,
-                appliedFor: position.title
+                appliedFor: position.title||position.role||position.category
               };
               makeStripeCharge(o);
             };
@@ -384,8 +394,6 @@ function displayRoleTypeDialog(list, options) {
       }
   })
 };
-
-
 
 Template.projectView.helpers({
   hasGifts: function() {
@@ -421,7 +429,7 @@ Template.projectView.helpers({
     var rem = (100 - percent) * 100;
     // list of private share holders
     var assigned = this.project.usersApproved.map(function(i) {
-      return i.equity||0;
+      return i&&i.equity||0;
     }).reduce(function(a, b) {
       return a + b;
     }, 0);
@@ -603,319 +611,21 @@ Template.projectView.events({
   },
   'click #view-roles': function(e) {
     e.preventDefault();
-    displayRoleTypeDialog( ((this.project.crew||[]).concat((this.project.cast||[]))).concat((this.project.needs||[])) , {
+    displayRoleTypeDialog( 
+      (
+        (this.project.crew||[]).map(function(r){ 
+          r.ctx='crew' 
+          return r
+        }).concat((this.project.cast||[]).map(function(r){ 
+          r.ctx='cast' 
+          return r
+        }))).concat((this.project.needs||[]).map(function(r){ 
+          r.ctx='need' 
+          return r
+        })) , {
       title: 'You must be signed in to apply or offer resources.',
       signin: true
     });
-  },
-  'click #view-cast-positions': function(e) {
-    /** display all cast positions */
-    var castPositions = currentProject.cast;
-    var isMeteorUser = Meteor.user&&Meteor.user()||false;
-    var inputHTML = castPositions.map(function(c, idx) {
-      var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.role + '</h3><p>' + c.description + '</p>';
-      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a><a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a></div>';
-      _html += '</div></div></div></div>';
-      _html += '</div>';
-      return _html;
-    }).join('');
-    vex.dialog.alert({
-        message: 'View and apply CAST positions:',
-        contentCSS: { width: '100%', overflow: 'auto' },
-        input: [
-            '<style>',
-                '.vex-custom-field-wrapper {',
-                    'margin: 1em 0;',
-                '}',
-                '.vex-custom-field-wrapper > label {',
-                    'display: inline-block;',
-                    'margin-bottom: .2em;',
-                '}',
-            '</style>',
-            inputHTML
-        ].join(''),
-        callback: function (data) {
-          if (!data) {
-              return console.log('Cancelled')
-          }
-        },
-        afterOpen: function() {
-          var was = this;
-          setTimeout(function() {
-              // Either of these lines will do the trick, depending on what browsers you need to support.
-              was.rootEl.scrollTop = 0;
-              was.contentEl.scrollIntoView(true);
-              $(was.$vex).scrollTop(0)
-          }, 0)
-          $('.apply-pay').on('click', function(e) {
-            var position = castPositions[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            /** ask user to define how much pay for resource */
-            innerVexApply({
-              message: 'How much for your participation.',
-              label: 'Amount of money (USD).',
-            }, function(data) {
-              var amt = data.donation || 0;
-              amt = Math.abs(parseInt(amt));
-              if (amt) {
-                /** send offer to user, email user */
-                var o = {
-                  ctx:'cast', 
-                  position: position.role,
-                  type: 'hired',
-                  pay: amt,
-                  amount: amt,
-                  message: currentTitle + ' cast offer',
-                  route: 'applyToProject',
-                  slug: currentSlug,
-                  appliedFor: position.role
-                };
-                Meteor.call(o.route, o, function(err, result) {
-                  vex.dialog.alert(err||result);
-                });
-              };
-            });
-          });
-
-          $('.apply-time').on('click', function(e) {
-            var position = castPositions[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            var o = {
-              ctx:'cast', 
-              position: position.role,
-              type: 'hired',
-              pay: 0,
-              amount: 0,
-              message: currentTitle + ' cast offer (time donation)',
-              route: 'applyToProject',
-              slug: currentSlug,
-              appliedFor: position.role
-            };
-            Meteor.call(o.route, o, function(err, result) {
-              vex.dialog.alert(err||result);
-            });
-          });
-
-          $('.apply-donate').on('click', function(e) {
-            var position = castPositions[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            /** ask user to define how much pay for resource */
-            innerVexApply({
-              message: 'How much will you donate for this role.',
-              label: 'Money amount (USD), refunded in 5 business days unless accepted.',
-            }, function(data) {
-              var amt = data.donation || 0;
-              amt = Math.abs(parseInt(amt));
-              if (amt) {
-                /** send offer to user, email user */
-                var o = {
-                  ctx:'cast', 
-                  position: position.role,
-                  type: 'sourced',
-                  pay: amt,
-                  amount: amt,
-                  message: currentTitle + ' cast offer (money and time donation)',
-                  route: 'applyToProject',
-                  slug: currentSlug,
-                  appliedFor: position.role
-                };
-                makeStripeCharge(o);
-              };
-            });
-          });
-        }
-    })
-  },
-  'click #view-crew-positions': function(e) {
-    /** display all cast positions */
-    var crewPositions = this.project.crew;
-    var isMeteorUser = Meteor.user&&Meteor.user()||false;
-    var inputHTML = crewPositions.map(function(c, idx) {
-      var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.title + '</h3><p>' + c.description + '</p>';
-      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a><a href="#" class="btn btn-default btn-group apply-donate" role="button" idx="'+idx+'">Offer Pay</a></div>'
-      _html += '</div></div></div></div>';
-      _html += '</div>';
-      return _html;
-    }).join('');
-    vex.dialog.alert({
-        message: 'View and apply CREW positions:',
-        contentCSS: { width: '100%', overflow: 'auto' },
-        input: [
-            '<style>',
-                '.vex-custom-field-wrapper {',
-                    'margin: 1em 0;',
-                '}',
-                '.vex-custom-field-wrapper > label {',
-                    'display: inline-block;',
-                    'margin-bottom: .2em;',
-                '}',
-            '</style>',
-            inputHTML
-        ].join(''),
-        callback: function (data) {
-          if (!data) {
-              return console.log('Cancelled')
-          }
-        },
-        afterOpen: function() {
-          var was = this;
-          setTimeout(function() {
-              // Either of these lines will do the trick, depending on what browsers you need to support.
-              was.rootEl.scrollTop = 0;
-              was.contentEl.scrollIntoView(true);
-              $(was.$vex).scrollTop(0)
-          }, 0)
-          $('.apply-pay').on('click', function(e) {
-            var position = crewPositions[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            /** ask user to define how much pay for resource */
-            innerVexApply({
-              message: 'How much for your participation.',
-              label: 'Amount of money (USD).',
-            }, function(data) {
-              var amt = data.donation || 0;
-              amt = Math.abs(parseInt(amt));
-              if (amt) {
-                /** send offer to user, email user */
-                var o = {
-                  ctx:'crew', 
-                  position: position.title,
-                  type: 'hired',
-                  pay: amt,
-                  amount: amt,
-                  message: currentTitle + ' crew offer',
-                  route: 'applyToProject',
-                  slug: currentSlug,
-                  appliedFor: position.title
-                };
-                Meteor.call(o.route, o, function(err, result) {
-                  vex.dialog.alert(err||result);
-                });
-              };
-            });
-          });
-
-          $('.apply-time').on('click', function(e) {
-            var position = crewPositions[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            var o = {
-              ctx:'crew', 
-              position: position.title,
-              type: 'hired',
-              pay: 0,
-              amount: 0,
-              message: currentTitle + ' crew offer (time donation)',
-              route: 'applyToProject',
-              slug: currentSlug,
-              appliedFor: position.title
-            };
-            Meteor.call(o.route, o, function(err, result) {
-              vex.dialog.alert(err||result);
-            });
-          });
-
-          $('.apply-donate').on('click', function(e) {
-            var position = crewPositions[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            /** ask user to define how much pay for resource */
-            innerVexApply({
-              message: 'How much will you donate for this role.',
-              label: 'Money amount (USD), refunded in 5 business days unless accepted.',
-            }, function(data) {
-              var amt = data.donation || 0;
-              amt = Math.abs(parseInt(amt));
-              if (amt) {
-                /** send offer to user, email user */
-                var o = {
-                  ctx:'crew', 
-                  position: position.title,
-                  type: 'sourced',
-                  pay: amt,
-                  amount: amt,
-                  message: currentTitle + ' crew offer (money and time donation)',
-                  route: 'applyToProject',
-                  slug: currentSlug,
-                  appliedFor: position.title
-                };
-                makeStripeCharge(o);
-              };
-            });
-          });
-        }
-    })
-  },
-  'click #view-need-positions': function(e) {
-    /** display all cast positions */
-    var projectNeeds = this.project.needs;
-    var isMeteorUser = Meteor.user&&Meteor.user()||false;
-    var inputHTML = projectNeeds.map(function(c, idx) {
-      var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p>';
-      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'">Donate Time</a></div>'
-      _html += '</div></div></div></div>';
-      _html += '</div>';
-      return _html;
-    }).join('');
-    vex.dialog.alert({
-        message: 'View and offer resources for project NEEDS:',
-        contentCSS: { width: '100%', overflow: 'auto' },
-        input: [
-            '<style>',
-                '.vex-custom-field-wrapper {',
-                    'margin: 1em 0;',
-                '}',
-                '.vex-custom-field-wrapper > label {',
-                    'display: inline-block;',
-                    'margin-bottom: .2em;',
-                '}',
-            '</style>',
-            inputHTML
-        ].join(''),
-        callback: function () { },
-        afterOpen: function() {
-          var was = this;
-          setTimeout(function() {
-              // Either of these lines will do the trick, depending on what browsers you need to support.
-              was.rootEl.scrollTop = 0;
-              was.contentEl.scrollIntoView(true);
-              $(was.$vex).scrollTop(0)
-          }, 0)
-          $('.apply-pay').on('click', function(e) {
-            var needItem = projectNeeds[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            /** ask user to define how much pay for resource */
-            innerVexApply({
-              message: 'How much for your resource.',
-              label: 'Amount of money (USD).',
-            }, function(data) {
-              var amt = data.donation || 0;
-              amt = Math.abs(parseInt(amt));
-              if (amt) {
-                /** send offer to user, email user */
-                Meteor.call("lendResource", {
-                  slug: currentSlug,
-                  asset: needItem.category,
-                  offer: amt
-                });
-                vex.dialog.alert('resource offer submitted');
-              };
-            });
-          });
-
-          $('.apply-time').on('click', function(e) {
-            var needItem = projectNeeds[parseInt($(this).attr('idx'))];
-            Meteor.call("lendResource", {
-              slug: currentSlug,
-              asset: needItem.category,
-              offer: 0
-            });
-            vex.dialog.alert('resource offer submitted');
-          });
-
-        }
-    })
   },
   'click #join-roles': function(e) {
     e.preventDefault();
@@ -927,7 +637,16 @@ Template.projectView.events({
 
      */
 
-    displayRoleTypeDialog( ((this.project.crew||[]).concat((this.project.cast||[]))).concat((this.project.needs||[])) , {
+    displayRoleTypeDialog( ((this.project.crew||[]).map(function(r){ 
+          r.ctx='crew' 
+          return r
+        }).concat((this.project.cast||[]).map(function(r){ 
+          r.ctx='cast' 
+          return r
+        }))).concat((this.project.needs||[]).map(function(r){ 
+          r.ctx='need' 
+          return r
+        })) , {
       title: 'Select Role',
       apply_pay: true,
       apply_donate: true,
@@ -1360,8 +1079,32 @@ Template.projectView.onRendered(function() {
       $('.pinterest-share').html('<li class="fa fa-pinterest"></li>');
       $('.googleplus-share').html('<li class="fa fa-google-plus"></li>');
       $('#genreclick1').click();
-  }, 133);
+  }, 144);
 });
+
+/**
+  @params { String } ctx - crewApplicants | roleApplicants
+  @params { Object } project
+  */
+function uniqueApplicantsFromProject(ctx, project) {
+
+  var unique = []
+  var uids = []
+
+  var arr = project['roleApplicants'].concat(project['crewApplicants'])
+
+  for (var i = arr.length - 1; i >= 0; i--) {
+    var a = arr[i]
+    if (uids.indexOf(a.user.id)>-1) {
+      continue
+    } else {
+      unique.push(a)
+      uids.push(a.user.id)
+    }
+  }
+
+  return unique
+}
 
 Template.applicants.helpers({
   anon: function() {
@@ -1374,10 +1117,12 @@ Template.applicants.helpers({
     return appliedFor;
   },
   applicants: function() {
-    console.log(this.project.roleApplicants)
-
-
-    return []
+    return uniqueApplicantsFromProject('roleApplicants', this.project)
+  },
+  hasApplicant: function() {
+    var lnRoles = this.project.roleApplicants.length
+    var lnCrew = this.project.crewApplicants.length
+    return (lnRoles + lnCrew) > 0
   }
 })
 
@@ -1415,8 +1160,8 @@ Template.applicantsHelper.helpers({
     return JSON.stringify(this)
   },
   foobar: function() {
-    console.log(new Array(100).join('# '))
-    console.log(this)
+    // console.log(new Array(100).join('# '))
+    // console.log(this)
   },
   typeofRequest: function() {
     // console.log(this)
@@ -1424,7 +1169,6 @@ Template.applicantsHelper.helpers({
     return 'Negotiate';
   },
   poke: function() {
-    console.log(this)
     return this.poke;
   }
 });

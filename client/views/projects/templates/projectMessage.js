@@ -50,6 +50,11 @@ Template.projectMessage.helpers({
 	was:function() {
 		was = this;
 	},
+	hasOffer: function() {
+		console.log('in hasOffer')
+		console.log(this)
+		return this.offers.length > 0
+	},
 	ownerInitAgreement: function() {
 		var currentNegotiation = getCurrentNegotiation();
 		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
@@ -208,7 +213,7 @@ Template.projectMessage.events({
 				vex.dialog.alert({
 				    message: 'Applicant approved, this negotiations is complete',
 				    callback: function () {
-				        Router.go('Home');
+				        history.back()
 				    }
 				});
 			};	
@@ -229,7 +234,7 @@ Template.projectMessage.events({
 				vex.dialog.alert({
 				    message: 'Offer accepted, this negotiations is complete',
 				    callback: function () {
-				        Router.go('Home');
+				        history.back()
 				    }
 				});
 			};	

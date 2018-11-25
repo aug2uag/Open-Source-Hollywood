@@ -653,7 +653,6 @@ Template.projectTab.helpers({
     return this.logline||this.descriptionText||'click <code>DETAILS</code> for more info';
   },
   applicantLN: function() {
-    console.log(this)
     var x = this.cast.length;
     var y = this.crew.length;
     return (x + y);
