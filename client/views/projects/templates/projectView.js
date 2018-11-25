@@ -1120,8 +1120,8 @@ Template.applicants.helpers({
     return uniqueApplicantsFromProject('roleApplicants', this.project)
   },
   hasApplicant: function() {
-    var lnRoles = this.project.roleApplicants.length
-    var lnCrew = this.project.crewApplicants.length
+    var lnRoles = this.project&&this.project.roleApplicants.length||0
+    var lnCrew = this.project&&this.project.crewApplicants.length||0
     return (lnRoles + lnCrew) > 0
   }
 })

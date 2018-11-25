@@ -51,8 +51,6 @@ Template.projectMessage.helpers({
 		was = this;
 	},
 	hasOffer: function() {
-		console.log('in hasOffer')
-		console.log(this)
 		return this.offers.length > 0
 	},
 	ownerInitAgreement: function() {
@@ -194,8 +192,6 @@ Template.projectMessage.events({
 	},
 	'click #authorfinalizek': function(e) {
 		e.preventDefault();
-		console.log('authorfinalizek')
-		console.log(was)
 
 		var agg = []
 		$('.offer_role_decision:checked').each(function() {
