@@ -44,38 +44,43 @@ Template.projectMessage.helpers({
 			return 'pointer-events:none;'
 		};
 	},
-	sgoo: function() {
-		console.log(this)
-	},
 	was:function() {
 		was = this;
 	},
 	hasOffer: function() {
 		return this.offers.length > 0
 	},
+	needsApplicantAction: function() {
+		try {
+			var o = this.offers[0]
+			if (o.needsApplicantAction) return true;
+			else return false
+		} catch(e) {
+			return false
+		}
+	},
 	ownerInitAgreement: function() {
 		var currentNegotiation = getCurrentNegotiation();
 		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
 	},
 	ownerInitAgreementAplicantNote: function() {
-		var currentNegotiation = getCurrentNegotiation();
-		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id!==was.project.ownerId;
+		for (var i = this.offers.length - 1; i >= 0; i--) {
+			var o = this.offers[i]
+			if (o.needsApplicantAction) return false
+		}
+		if (Meteor.user()._id!==was.project.ownerId) return true
 	},
 	applicantRequestCounter: function() {
 		var currentNegotiation = getCurrentNegotiation();
 		return currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id!==was.project.ownerId;
 	},
-	applicantRequestCounterAuthorNote: function() {
-		var currentNegotiation = getCurrentNegotiation();
-		return currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
-	},
-	authorNeedsFinishAgreement: function() {
-		var currentNegotiation = getCurrentNegotiation();
-		return currentNegotiation.authorVerified&&currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
-	},
-	authorNeedsFinishAgreementApplicantNote: function() {
-		var currentNegotiation = getCurrentNegotiation();
-		return currentNegotiation.authorVerified&&currentNegotiation.applicantVerified&&Meteor.user()._id!==was.project.ownerId;
+	applicantInCounter: function() {
+		if (Meteor.user()._id!==was.project.ownerId) return false
+		for (var i = this.offers.length - 1; i >= 0; i--) {
+			var o = this.offers[i]
+			if (o.needsApplicantAction) return true
+		}
+		return false
 	},
 	sharesAvailable: function() {
 		var percent = (this.project.totalShares || 0) / 100;
@@ -170,25 +175,20 @@ Template.projectMessage.events({
 	      }
 	  });
 	},
-	'click #authorinitk': function(e) {
-		/** set authorverified = true */
-		var agreement = {
-			negotiationRoles: $('#negotiationRoles').val(),
+
+	'click #counterk': function(e) {
+		e.preventDefault();
+		console.log('clicked counterk')
+		var counteroffer = {
 			negotiationTerms: $('#negotiationTerms').val(),
 			negotiationDamages: $('#negotiationDamages').val(),
 			financials: $('#financials').val(),
-			equities: $('#equities').val(),
-			ctx: was
+			equities: $('#equities').val()
 		}
-		Meteor.call('authorInitAgreement', agreement);
-	},
-	'click #applicantverifyk': function(e) {
-		e.preventDefault();
-		Meteor.call('applicantVerifyAgreement', was);
-	},
-	'click #applicantcounterk': function(e) {
-		e.preventDefault();
-		Meteor.call('applicantCounterOffer', was);
+		Meteor.call('counterRoleOffer', {
+			counteroffer: counteroffer,
+			context: was
+		});
 	},
 	'click #authorfinalizek': function(e) {
 		e.preventDefault();
@@ -217,6 +217,7 @@ Template.projectMessage.events({
 	},
 	'click #counterofferbtn': function(e) {
 		$('#counteroffer').show();
+		$('#equity_negotiations_block')[0].reset();
 		window.scrollTo({
 			'behavior': 'smooth',
 			'left': 0,
@@ -236,44 +237,17 @@ Template.projectMessage.events({
 			};	
 		});
 	},
-	'change #negotiationRoles': function(e) {
-		var _negotiationRoles = $('#negotiationRoles').val();
-		Meteor.call('updateProjectNegotiations', {
-			ctx: was,
-			switch: 'negotiationRoles',
-			value: _negotiationRoles
-		});
-	},
-	'change #negotiationTerms': function(e) {
-		var _negotiationTerms = $('#negotiationTerms').val();
-		Meteor.call('updateProjectNegotiations', {
-			ctx: was,
-			switch: 'negotiationTerms',
-			value: _negotiationTerms
-		});
-	},
-	'change #negotiationDamages': function(e) {
-		var _negotiationDamages = $('#negotiationDamages').val();
-		Meteor.call('updateProjectNegotiations', {
-			ctx: was,
-			switch: 'negotiationDamages',
-			value: _negotiationDamages
-		});
-	},
-	'change #financials': function(e) {
-		var _financials = $('#financials').val();
-		Meteor.call('updateProjectNegotiations', {
-			ctx: was,
-			switch: 'financials',
-			value: _financials
-		});
-	},
-	'change #equities': function(e) {
-		var _equities = $('#equities').val();
-		Meteor.call('updateProjectNegotiations', {
-			ctx: was,
-			switch: 'equities',
-			value: _equities
+	'click #applicantrejectoffer': function(e) {
+		e.preventDefault();
+		Meteor.call('applicantRejectOffer', was, function(err, result) {
+			if (result===true) {
+				vex.dialog.alert({
+				    message: 'Offer accepted, this negotiations is complete',
+				    callback: function () {
+				        history.back()
+				    }
+				});
+			};	
 		});
 	},
 	'change .auditionURL': function(e) {
@@ -285,6 +259,9 @@ Template.projectMessage.events({
 Template.projectMessageOffer.helpers({
 	optradio: function() {
 		return this.uid + this.position;
+	},
+	myProject: function() {
+		return was.project.ownerId===Meteor.user()._id
 	},
 	stringyThis: function() {
 		return JSON.stringify(this)
@@ -322,7 +299,11 @@ Template.projectMessageOffer.helpers({
 		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
 	},
 	considerationType: function() {
-		if (this.ctx==='crew') {
+
+		console.log(this)
+		if (this.authorCounterOffer) {
+			return 'agreement is for the following positions: ' + this.position
+		} else if (this.ctx==='crew') {
 			if (this.type==='hired'&&this.pay>0) {
 				return 'requesting pay for crew position: ' + this.position||'';
 			} else {
@@ -338,6 +319,21 @@ Template.projectMessageOffer.helpers({
 	},
 	considerationItself: function() {
 		var amount = this.amount, pay = this.pay, type = this.type;
+
+		if (this.authorCounterOffer) {
+			var returnMsg = 'pay of $' + this.pay;
+			if (this.equity > 0) {
+				returnMsg += ' and equity of ' + this.equity + ' shares'
+			};
+			if (this.customTerms) {
+				returnMsg += '; additional terms: ' + this.customTerms
+			};
+			if (this.customLimits) {
+				returnMsg += '; further limitations: ' + this.customLimits
+			};
+			return returnMsg
+		};
+
 		if (amount===0&&pay===0) {
 			return 'time donation offer';
 		} else {
@@ -347,14 +343,11 @@ Template.projectMessageOffer.helpers({
 				return 'offering a donation of $' + this.pay;
 			}
 		}
+
+
 	}
 })
 
-Template.projectMessageOffer.events({
-	'click .approvedeny': function(e) {
-		Meteor.call('approveOrDenyRole', this);
-	}
-})
 
 Template.projectMessage.events({
 	'click #submit-message': function(e) {

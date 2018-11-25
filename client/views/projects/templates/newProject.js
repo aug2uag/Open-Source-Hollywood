@@ -174,6 +174,7 @@ function returnProjectCreateDetails(o) {
     o.equityInfo = JSON.parse(equityInfo);
     o.totalShares = o.availableShares = parseFloat($('#assign').val()) * 100;
     o.mpps = parseInt($('#minimumassign').val()||1);
+    o.assignmentLife = $('.assignment_length:checked').val();
     localStorage.removeItem('revshare');
   };
 
@@ -527,23 +528,23 @@ Template.newProject.events({
         vex.dialog.open({
       message: 'REVENUE SHARING CONFIGURATION',
       input: [
-        '<div class="embed-responsive embed-responsive-4by3" style="overflow: auto;">',
+        '<div class="" style="overflow: auto;">',
           '<div class="panel-default">',
             '<small>by allowing revenue sharing, you are exposing yourself to legal liability and risk; please learn <a href="/terms">all terms</a> before proceeding</small>',
             '<div class="panel-body">',
-              '<div class="col-sm-12 col-md-6">',
+              '<div class="col-sm-12">',
                   '<label for="rev_fullname"> full legal name </label>',
                   '<input type="text" class="revshareagreement" name="rev_fullname" id="rev_fullname" min="0" placeholder="enter full legal name" />',
               '</div>',
-              '<div class="col-sm-12 col-md-6">',
+              '<div class="col-sm-12">',
                   '<label for="rev_province"> city or province and country name </label>',
                   '<input type="text" class="revshareagreement" name="rev_province" id="rev_province" min="0" placeholder="enter city or province and country name" />',
               '</div>',
-              '<div class="col-sm-12 col-md-6">',
+              '<div class="col-sm-12">',
                   '<label for="rev_contact"> contact email or phone number </label>',
                   '<input type="text" class="revshareagreement" name="rev_contact" id="rev_contact" min="0" placeholder="enter contact email or phone number" />',
               '</div>',
-              '<div class="col-sm-12 col-md-6">',
+              '<div class="col-sm-12">',
                   '<label for="misc_post_cost"> AGREEMENT </label>',
                   '<div class="form-check">',
                     '<input class="form-check-input" type="checkbox" value="" id="agreement1" name="agreement1">',

@@ -485,6 +485,19 @@
                                         <label for="assign">minimum price per share (in USD)&nbsp;<a href="#!" id="minassign"><i class="fa fa-question-circle"></i></a></label>
                                         <input type="number" name="minimumassign" id="minimumassign" placeholder="default minimum price is 1 USD" min="1" val="1" />
                                     </div>
+
+                                    <div class="col-sm-12">
+                                        <label for="misc_post_cost">LENGTH OF ASSIGNMENT </label>
+                                        <div class="radio" style="left: 20px;">
+                                          <label style="display: grid;"><input class="assignment_length" val="2 years" type="radio" name="assignment_length" value="2 years" checked>2 years</label>
+                                        </div>
+                                        <div class="radio" style="left: 20px;">
+                                          <label style="display: grid;"><input class="assignment_length" val="5 years" type="radio" name="assignment_length" value="5 years">5 years</label>
+                                        </div>
+                                        <div class="radio" style="left: 20px;">
+                                          <label style="display: grid;"><input class="assignment_length" val="infinite" type="radio" name="assignment_length" value="infinite">infinite</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div id="equitydisplay" class="col-sm-12 margin_bottom40" style="font-weight:700;top:-20px" hidden>Your project is assigned <span id="numshares"></span> shares representing <span id="numpercent"></span>% all future revenues of your campaign at $<span id="shareval"></span> minimum price per share.</div>

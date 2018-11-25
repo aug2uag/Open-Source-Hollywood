@@ -182,40 +182,6 @@ function makeStripeCharge(options) {
   });
 };
 
-function generateOfferMessage(offer){
-  var message = "Please confirm:\n\nyou are accepting ";
-  message+= offer.user.name;
-  if (offer.type==='sourced') {
-    var expiresOn = new Date(offer.expires).toLocaleDateString();
-    message += ' as unpaid position that is offering $'+offer.pay+' conditioned to your agreement and that expires on '+expiresOn;
-  } else {
-    message += ' as paid position for ';
-    if (offer.pay) message+='$'+offer.pay;
-    if (offer.pay&&offer.equity) message+=' and ';
-    if (offer.equity) message+=offer.equity+'%';
-  }
-  message+=' to join your campaign as '+offer.appliedFor;
-  message+='. This is a binding agreement, and your acceptance also confirms your agreement to our Terms and Conditions.';
-  return message;
-};
-
-function acceptUser(offer) {
-  offer.slug = currentSlug;
-  vex.dialog.confirm({
-    message: generateOfferMessage(offer),
-    buttons: [
-      $.extend({}, vex.dialog.buttons.YES, { text: 'I WANT '+offer.user.name.toUpperCase()+' TO JOIN' }),
-      $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
-    ],
-    callback: function (result) {
-      if (result) {
-        Meteor.call('acceptUserToProject', offer);
-        vex.dialog.alert('you have accepted the user, you can update the status of your positions in the "Edit Campaign" section and by rejecting other users applying for the same position');
-      }
-    }
-  });
-};
-
 function rejectUser(offer) {
   offer.slug = currentSlug;
   vex.dialog.confirm({
@@ -820,14 +786,6 @@ Template.projectView.events({
   'click .login': function(e) {
     e.preventDefault();
     goDiscovery();
-  },
-  'click .accept': function(e) {
-    e.preventDefault();
-    acceptUser(this);
-  },
-  'click .reject': function(e) {
-    e.preventDefault();
-    rejectUser(this);
   },
   'click .fulfill_gift': function(e) {
     e.preventDefault();

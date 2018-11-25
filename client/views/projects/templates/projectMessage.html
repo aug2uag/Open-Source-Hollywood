@@ -20,8 +20,8 @@
                             <table class="table table-striped table-responsive">
                               <thead>
                                 <tr>
-                                  <th>offer</th>
-                                  <th>consideration</th>
+                                  <th>role(s)</th>
+                                  <th>terms</th>
                                   {{#if ownerInitAgreement}}
                                   <th id="approveordeclineth">your decision</th>
                                   {{else}}
@@ -59,36 +59,25 @@
                     </div>
                   {{/if}}
 
-                  {{#if ownerInitAgreementAplicantNote}}
-                    <p class="h6">author must initiate offer, please communicate with messages below</p>
-                  {{/if}}
-
-                  {{#if applicantRequestCounter}}
-                    <div class="krown-column-row clearfix margin_bottom40">
-                        <div class="krown-column-container clearfix last span12 clearfix">
-                            <section class="krown-box clearfix">
-                              the campaign author has made an offer detailed above, you may accept their offer to be finalized or negotiate in the communications; if you would like to renegotiate please select "counter-offer", however there is no guarantee the campaign author will accept your counter offer
-                            </section>
-                        </div>
-                        <div class="krown-column-row clearfix margin_bottom40">
-                      <div class="krown-column-container clearfix last span12 clearfix">
-                          <section class="krown-box color clearfix"><a class="btn btn-block btn-danger btn-lg" id="applicantfinalizek">ACCEPT OFFER &amp; FINALIZE</a></section>
+                  {{#if needsApplicantAction}}
+                    <div class="krown-column-row clearfix btn-group">
+                      <div class="krown-column-container clearfix last span6 btn-group-justified">
+                          <a class="btn btn-block bg-green btn-lg white" id="applicantfinalizek">ACCEPT</a>
+                      </div>
+                      <div class="krown-column-container clearfix last span6 btn-group-justified">
+                          <a class="btn btn-block bg-red btn-lg white" id="applicantrejectoffer">REJECT</a>
                       </div>
                     </div>
-
-                        <div class="krown-column-container clearfix last span6 clearfix">
-                            <section class="krown-box color clearfix"><a class="btn btn-block btn-default btn-lg" id="applicantcounterk">REJECT &amp; COUNTER-OFFER</a></section>
-                        </div>
-                    </div>
                   {{/if}}
 
-                  {{#if applicantRequestCounterAuthorNote}}
-                    <p class="h6">applicant is in process of accepting or countering your current offer</p>
+                  {{#if ownerInitAgreementAplicantNote}}
+                    <p class="h6">author is in the process of deciding your offer</p>
                   {{/if}}
 
-                  {{#if authorNeedsFinishAgreementApplicantNote}}
-                    <p class="h6">author is in process of accepting or countering your current offer</p>
+                  {{#if applicantInCounter}}
+                    <p class="h6">applicant is in process of accepting or rejecting your counter offer</p>
                   {{/if}}
+
                 </section>
 
                 <section class="t20">
@@ -141,32 +130,32 @@
                       <h5>TERMS</h5>
                       <div style="display:block">
                           <h4>Define the essential performance terms expected from this member.</h4>
-                          {{#if ownerInitAgreement}}
+                          {{#unless needsApplicantAction}}
                           <textarea id="negotiationTerms">{{negotiationTerms}}</textarea>
                           {{else}}
                           <textarea readonly>{{negotiationTerms}}</textarea>
-                          {{/if}}
+                          {{/unless}}
                       </div>
                   
                       <h5>DAMAGES</h5>
                       <div style="display:block">
                           <h4>Specific outcomes in case the member purposely fails to perform.</h4>
-                          {{#if ownerInitAgreement}}
+                          {{#unless needsApplicantAction}}
                           <textarea id="negotiationDamages">{{negotiationDamages}}</textarea>
                           {{else}}
                           <textarea readonly>{{negotiationDamages}}</textarea>
-                          {{/if}}
+                          {{/unless}}
                       </div>
                   
                       <h5>FINANCIAL</h5>
                       <div style="display:block">
                           <div class="form-group">
                             <label for="financials"><strong>How much pay for the role in USD.</strong></label>
-                            {{#if ownerInitAgreement}}
+                            {{#unless needsApplicantAction}}
                             <input type="number" class="form-control" id="financials" value="{{negotiationFinancial}}">
                             {{else}}
                             <input type="number" class="form-control" value="{{negotiationFinancial}}" disabled>
-                            {{/if}}
+                            {{/unless}}
                         </div>
                       </div>
                   
@@ -174,20 +163,20 @@
                       <div style="display:block">
                           <div class="form-group">
                             <label for="equities"><strong>How many shares of the campaign.</strong></label>
-                            {{#if ownerInitAgreement}}
-                            <input type="number" class="form-control" id="equities" value="{{negotiationEquities}}">
-                            {{else}}
-                            <input type="number" class="form-control" value="{{negotiationEquities}}" disabled>
-                            {{/if}}
-                            {{#if isProjectOwner}}
-                            <p class="lead">{{sharesAvailable}} shares available</p>
-                            <p><small>shares updated only after finalization of agreement</small></p>
-                            {{/if}}
+                            <form id="equity_negotiations_block">
+                              {{#unless needsApplicantAction}}
+                              <input type="number" class="form-control" id="equities" value="{{negotiationEquities}}">
+                              {{else}}
+                              <input type="number" class="form-control" value="{{negotiationEquities}}" disabled>
+                              {{/unless}}
+                              <p class="lead">{{sharesAvailable}} shares available</p>
+                              <p><small>shares updated only after finalization of agreement</small></p>
+                            </form>
                         </div>
                       </div>
                   
                   <div class="krown-column-container clearfix last clearfix">
-                    <a class="btn btn-group-justified btn-info btn-lg w100" style="white-space: normal!important;word-wrap:break-word!important;" id="applicantcounterk">COUNTER-OFFER WITH TERMS ABOVE</a>
+                    <a class="btn btn-group-justified btn-info btn-lg w100" style="white-space: normal!important;word-wrap:break-word!important;" id="counterk">COUNTER-OFFER WITH TERMS ABOVE</a>
                   </div>
 
 
@@ -218,26 +207,17 @@
   <tr>
     <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationType}}</td>
     <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationItself}}</td>
-    <div class="radio" style="left: 20px;">
-      <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}" value="accept" checked>Accept</label>
-    </div>
-    <div class="radio disabled" style="left: 20px;">
-      <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}" value="decline">Decline</label>
-    </div>
+    {{#if myProject}}
+      <div class="radio" style="left: 20px;">
+        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}" value="accept" checked>Accept</label>
+      </div>
+      <div class="radio disabled" style="left: 20px;">
+        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}" value="decline">Decline</label>
+      </div>
+      {{/if}}
   </tr>
 </template>
 
-<template name="projectMessageOfferOld">
-  <tr>
-    <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationType}}</td>
-    <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationItself}}</td>
-    {{#if isEditable}}
-    <td class="center"><button class="approvedeny button" style="width:100%;background-color:{{approveOrDenyButton}}"><span class="glyphicon glyphicon-{{approveOrDenyButtonText}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadable}}</button></td>
-    {{else}}
-    <td class="center"><button class="button" style="width:100%;background-color:{{approveOrDenyButtonApplicant}}" disabled><span class="glyphicon glyphicon-{{approveOrDenyButtonTextApplicant}}"></span>&nbsp;&nbsp;{{approveOrDenyButtonTextReadableApplicant}}</button></td>
-    {{/if}}
-  </tr>
-</template>
 
 <template name="projectMessagePayment">
 
