@@ -27,7 +27,7 @@
                         {{> projectTab}}
                         
                     {{else}}
-                        <h3 class="subtitle" style="margin-top: 20px;">No Campaigns for display 😞</h3>
+                        <h3 class="subtitle" style="margin-top: 40px;top: 20px;position: relative;">No Campaigns for display 😞</h3>
                     {{/each}}
                     
                     
@@ -212,7 +212,7 @@
             <aside class="meta">
 
                 <ul>
-                    <li><span>{{applicantLN}}</span> roles</li>
+                    <li><a href="#!" class="view_roles_conv"><span>{{applicantLN}}</span> roles</a></li>
                     <li><a href="/profile/{{ownerId}}"><span>{{ownerName}}</span></a></li>
                 </ul>
 
@@ -257,10 +257,10 @@
         <div class="fundstatus board-canvas empty">{{ projectDonated }}</div>
         <div class="">
             <div class="col s6"> 
-              <a href="/projects/{{slug}}/{{ownerId}}" id="offer-donation" class="btn btn-default w100" role="button">EDIT</a> 
+              <a href="/projects/{{slug}}/{{ownerId}}" id="offer-donation" class="btn btn-default w100" role="button"><i class="fa fa-edit"></i>&nbsp;&nbsp;EDIT</a> 
             </div>
             <div class="col s6"> 
-              <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default w100" role="button">BOARD</a> 
+              <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default w100" role="button"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;BOARD</a> 
             </div>
         </div>
         <div class="container">
@@ -283,9 +283,9 @@
             <figure class="img"><img src="{{banner}}" width="255" height="173" alt="{{formattedTitle}}" style="height:190px!important"></figure><span></span>
         </a>
         <div class="fundstatus board-canvas empty">{{ projectDonated }}</div>
-        <div class="row">
-            <div class="col s12 w100"> 
-                <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default w100" role="button">PROJECT BOARD</a> 
+        <div class="">
+            <div class=""> 
+                <a href="/boards/{{bid}}/{{slug}}" id="join-roles" class="btn btn-default w100" role="button"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;PROJECT BOARD</a> 
             </div>
         </div>
         <div class="container">

@@ -11,6 +11,30 @@ const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHH
 var donationObject = {};
 var currentSlug, currentTitle, currentProject, me;
 
+function quantOrdersTable(quantOrders, o, msrp) {
+  var _order = [], totalOrder = 0
+  quantOrders.forEach(function(o) {
+    totalOrder+=o.quantity
+    _order = _order.concat([
+      '<tr><td>',
+        o.key,
+      '</td>',
+      '<td>',
+        o.quantity,
+      '</td><td class="center">--</td></tr>'
+    ])
+  })
+
+  _order = _order.concat([
+      '<tr><td class="center">&nbsp;</td><td class="center">&nbsp;</td>',
+      '<td>$',
+        totalOrder * msrp,
+      '</td></tr>'
+  ])
+
+  return _order.join()
+}
+
 function vexFlag(proj) {
   vex.dialog.open({
     message: 'Request to Remove',
@@ -229,7 +253,7 @@ function displayRoleTypeDialog(list, options) {
   // console.log(new Array(10).join('1 2  '))
   var isMeteorUser = Meteor.user&&Meteor.user()||false;
   var inputHTML = list.map(function(c, idx) {
-    var typeofRole = c.title ? 'a crew position' : c.role ? 'a cast position' : 'a resource needed';
+    var typeofRole = c.ctx === 'crew' ? 'a crew position' : c.ctx === 'cast' ? 'a cast position' : 'a resource needed';
     var _html = '<div class="vex-custom-field-wrapper" id="displayroles">';
     _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3 style="margin-bottom: 10px;">' + (c.title||c.role||c.category) + '</h3><p style="margin-bottom: 13px;font-weight:200">'+ typeofRole +'</p><p style="margin-bottom: 5px">' + c.description + '</p>';
     if (isMeteorUser) {
@@ -270,7 +294,7 @@ function displayRoleTypeDialog(list, options) {
       callback: function (data) {
         if (options.signin) return $('.login').click();
         if (!data) {
-            return console.log('Cancelled')
+            return
         }
       },
       afterOpen: function() {
@@ -282,7 +306,6 @@ function displayRoleTypeDialog(list, options) {
             $(was.$vex).scrollTop(0)
         }, 0)
         $('.apply-pay').on('click', function(e) {
-          console.log(e)
           var ctx = $(e.target).attr('ctx').trim()
           var position = list[parseInt($(this).attr('idx'))];
           vex.closeAll();
@@ -563,9 +586,6 @@ Template.projectView.helpers({
       if (this.archived) return ! false;
       return ! true;
     }
-  },
-  isWidth: function() {
-    return $(window).width() >= 770;
   }
 });
 
@@ -575,12 +595,12 @@ Template.projectView.events({
     var projectNeeds = this.project.needs;
     var isMeteorUser = Meteor.user&&Meteor.user()||false;
     var inputHTML = projectNeeds.map(function(c, idx) {
-      var _html = '<div class="vex-custom-field-wrapper">';
-      _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p>';
-      if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Donate Time</a></div>'
-      _html += '</div></div></div></div>';
-      _html += '</div>';
-      return _html;
+        var _html = '<div class="vex-custom-field-wrapper">';
+        _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p>';
+        if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Donate Time</a></div>'
+        _html += '</div></div></div></div>';
+        _html += '</div>';
+        return _html;
     }).join('');
     vex.dialog.alert({
         message: 'View and offer resources for project NEEDS:',
@@ -660,10 +680,7 @@ Template.projectView.events({
         }).concat((this.project.cast||[]).map(function(r){ 
           r.ctx='cast' 
           return r
-        }))).concat((this.project.needs||[]).map(function(r){ 
-          r.ctx='need' 
-          return r
-        })) , {
+        }))), {
       title: 'You must be signed in to apply or offer resources.',
       signin: true
     });
@@ -684,10 +701,7 @@ Template.projectView.events({
         }).concat((this.project.cast||[]).map(function(r){ 
           r.ctx='cast' 
           return r
-        }))).concat((this.project.needs||[]).map(function(r){ 
-          r.ctx='need' 
-          return r
-        })) , {
+        }))) , {
       title: 'Select Role',
       apply_pay: true,
       apply_donate: true,
@@ -869,14 +883,16 @@ Template.projectView.events({
     var vexOpen = true;
     var _vex = vex.dialog.open({
       title: 'Gift Fulfillment',
-      input: '<div class="container" style="width:100%"> <h2>'+this.message+'</h2> <div class="row margin_bottom20"> <div class="col-xs-6"><label>Buyer Name</label> <h4>'+user_name+'</h4> </div><div class="col-xs-6"><label>Purchase Item</label> <h4>'+this.gift.name+'</h4> </div></div><div class="row margin_bottom40"> <div class="col-xs-6"> <label>Email</label> <h4>'+this.email+'</h4> </div><div class="col-xs-6"> <label>Phone</label> <h4>'+this.phone+'</h4> </div></div><div class="row"> <div class="col-xs-12" style="text-align:center"><label>SHIPPING INFO</label> <p class="align-center">'+this.address+'</p><p class="align-center">'+this.city+', '+this.state+' '+this.zip+'</p></div></div></div>',
+      input: [
+
+      ].join(''),
       buttons: [
         // $.extend({}, vex.dialog.buttons.YES, { text: 'Mark as Fulfilled' }),
         $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
       ],
       callback: function (data) {
           if (!data) {
-              return console.log('Cancelled')
+              return
           }
           if (vexOpen) {
             vexOpen = false;
@@ -893,13 +909,6 @@ Template.projectView.events({
     var dialogInput = [
       '<label for="application_offer" style="display:break;">Please verify payment for $'+donationObject.amount+'</label>'
     ]
-
-
-    dialogInput = dialogInput.concat([
-      '<div class="vex-custom-field-wrapper">',
-        '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
-      '</div>'
-    ])
 
     var intmodal = vex.dialog.open({
       title: 'Your Donation',
@@ -933,10 +942,10 @@ Template.projectView.events({
     var was = this, o={gift:was};
 
     var dialogInput = [
-      '<figure class="snip1165 red">',
+      '<figure class="snip1165">',
         '<img src="',
         was.url||was.data,
-        '" alt="sample63"/>',
+        '" />',
         '<figcaption>',
           '<h3>',
           was.name,
@@ -951,17 +960,63 @@ Template.projectView.events({
             was.disclaimer||'no refund policy or disclaimer provided for this item',
           '</small></strong></h4>',
           '<hr>',
-          '<h6 style="margin-top:8px;margin-bottom:0px">Available for Purchase $',
+          '<h6 style="margin-top:8px;margin-bottom:0px">$',
           was.msrp,
-          '</h6>',
-        '</figcaption>',
-      '</figure>'
+          '&nbsp;<span style="font-weight:300"><small>per unit</small></span></h6>',
+        
     ]
 
+    var quantityData = was.quantity
+
+    if (was.type==='Apparel') {
+      // show sizes / availability
+      for (var key in quantityData) {
+        dialogInput = dialogInput.concat([
+          '<div class="row merchbottomborder t20">',
+              '<div class="col-sm-12 col-md-5">',
+                  '<div class="checkbox">',
+                    '<input class="apparelsize" type="text" value="',
+                    key,
+                    '" readonly/>',
+                  '</div>',
+              '</div>',
+              '<div class="col-sm-12 col-md-7">',
+                  '<input class="quantorder" type="number" min="0" val="',
+                  key,
+                  '" max="',
+                  quantityData[key],
+                  '" placeholder="enter number units here">',
+                  '<label style="font-weight:300">',
+                    quantityData[key],
+                    '&nbsp;units available',
+                  '</label>',
+              '</div>',
+          '</div>'
+        ])
+      }
+    } else {
+      // ask quantity
+      dialogInput = dialogInput.concat([
+        '<div class="row merchbottomborder t20">',
+            '<div class="col-sm-12">',
+                '<input class="quantorder" val="',was.name.replace('"',''),'" type="number" min="0" max="',
+                quantityData.all,
+                '" placeholder="enter number units here">',
+                '<label style="font-weight:300">',
+                  quantityData.all,
+                  '&nbsp;units available',
+                '</label>',
+            '</div>',
+        '</div>'
+      ])
+    }
+
+
+    dialogInput = dialogInput.concat(['</figcaption>','</figure>'])
   
     var vex1Open = true, vex2Open = true;
     var vex1 = vex.dialog.open({
-        message: ['   Merchandise for sale'].join(''),
+        message: [was.type, 'for sale'].join(' '),
         // message: ['   Details of ',was.name,'. Purchase below.'].join(''),
         buttons: [
           $.extend({}, vex.dialog.buttons.YES, { text: 'PURCHASE' }),
@@ -970,8 +1025,42 @@ Template.projectView.events({
         input: dialogInput.join(''),
         callback: function (data) {
             if (!data) {
-                return console.log('Cancelled')
+                return
             }
+
+            var quantOrders = []
+            $('.quantorder').each(function() {
+              if (parseInt($(this).val())) {
+                quantOrders.push({
+                  key: $(this).attr('val'),
+                  quantity: parseInt($(this).val())
+                })
+              };
+            })
+
+            for (var i = 0; i < quantOrders.length; i++) {
+              var desiredQuant = quantOrders[i].quantity
+              var actualQuant = was.quantity[quantOrders[i].key]
+              if (desiredQuant>actualQuant) {
+                vex1.close();
+                vex.dialog.alert("You requested more items than were available. Please try again.")
+                return
+              };
+            };
+
+            var orderSummary = [
+              '<div class="row">',
+                '<div class="col-sm-7">',
+                was.name,
+                '&nbsp;Order Summary</div>',
+                '<div class="panel-body">',
+                  '<table class="table"><thead><tr><th>Type</th><th>Quantity</th><th>Total</th></tr></thead><tbody>',
+                  quantOrdersTable(quantOrders, o, was.msrp),
+                  '</tbody></table>',
+                '</div>',
+              '</div>'
+            ].join('')
+
             if (vex1Open) {
               vex1Open = false;
               vex1.close();
@@ -986,6 +1075,8 @@ Template.projectView.events({
                           'margin-bottom: .2em;',
                       '}',
                   '</style>',
+                  orderSummary,
+                  '<h5>Please complete your order:</h5>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="address-gift">Shipping Address</label>',
                       '<div class="vex-custom-input-wrapper">',
@@ -1017,22 +1108,21 @@ Template.projectView.events({
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
+                      '<label for="email-gift">Verify Email</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift-ver">',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
                       '<label for="phone-gift">Contact Phone</label>',
                       '<div class="vex-custom-input-wrapper">',
                           '<input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift">',
                       '</div>',
                   '</div>'
-
               ]
 
-              dialogInput = dialogInput.concat([
-                '<div class="vex-custom-field-wrapper">',
-                  '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
-                '</div>'
-              ])
-
               var vex2 = vex.dialog.open({
-                message: 'Order and Pay Info',
+                message: 'Summary and Payment',
                 buttons: [
                   $.extend({}, vex.dialog.buttons.YES, { text: 'CONTINUE' }),
                   $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }),
@@ -1040,18 +1130,24 @@ Template.projectView.events({
                 input: dialogInput.join(''),
                 callback: function (data) {
                     if (!data) {
-                        return console.log('Cancelled')
+                        return
                     }
                     if (vex2Open) {
-                      vex2Open = false;
-                      vex2.close();
-                      o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val(), o.phone = $('#phone-gift').val();
-                      if (!o.address||!o.zip||!o.email) return vex.dialog.alert('invalid order information, please include address, email, and zipcode fields and try again');
-                      o.amount = was.msrp;
-                      o.message = was.name + ' purchase';
-                      o.route = 'purchaseGift';
-                      o.slug = currentSlug;
-                      makeStripeCharge(o);
+                      try {
+                        vex2Open = false;
+                        o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val().toLowerCase().trim(), o.phone = $('#phone-gift').val();
+                        if (o.email!==$('#email-gift-ver').val().toLowerCase().trim()) return vex.dialog.alert('invalid email, your email must match');
+                        if (!o.address||!o.zip||!o.email) return vex.dialog.alert('invalid order information, please include address, email, and zipcode fields and try again');
+                        o.order = quantOrders;
+                        o.amount = totalOrder * was.msrp;
+                        o.totalUnits = totalOrder;
+                        o.message = was.name + ' purchase';
+                        o.route = 'purchaseGift';
+                        o.slug = currentSlug;
+                        makeStripeCharge(o);
+                      } catch(e) {} finally {
+                        vex2.close();
+                      }
                     };
                 }
               });
@@ -1140,6 +1236,23 @@ function uniqueApplicantsFromProject(ctx, project) {
 }
 
 Template.applicants.helpers({
+  giftTotals: function() {
+    if (this.purchases.length<=1) {
+      return this.purchases[0]&&this.purchases[0].amount||0
+    };
+    return this.purchases.reduce(function(a,b) {
+      return a.amount + b.amount
+    })
+  },
+  orderDate: function() {
+    return new Date(this.created).toDateString()
+  },
+  isWidth: function() {
+    return $(window).width() >= 770;
+  },
+  giftFoo: function() {
+    console.log(this)
+  },
   anon: function() {
     return this.user.id==='anon';
   },
@@ -1160,6 +1273,14 @@ Template.applicants.helpers({
 })
 
 Template.applicants.events({
+  'click .res_show_resources': function(e) {
+    $('.resources_view_toggle').hide()
+    $('.res_show_resources').removeClass('bold')
+    $(e.target).addClass('bold')
+    var v= $(e.target).attr('val')
+    var id = '#' + v
+    $(id).show()
+  },
   'click .view_offer': function(e) {
     var was = this;
     vex.dialog.open({

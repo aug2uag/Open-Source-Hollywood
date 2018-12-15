@@ -188,6 +188,7 @@ Router.route('/projects/:slug/:uid', {
         createdAt: project.createdAt,
         title: project.title,
         gifts: project.gifts,
+        purchases: project.giftPurchases||[],
         budget: function() {
           if (project.budget) {
             return '$ ' + project.budget

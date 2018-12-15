@@ -1,5 +1,11 @@
 var gifts = [];
 var osettings = {};
+var positions = {};
+var consideration_icons = {
+  pay: '<i class="glyphicon glyphicon-star"></i>',
+  escrow: '<i class="glyphicon glyphicon-usd"></i>',
+  time: '<i class="glyphicon glyphicon-time"></i>'
+}
 
 var autoSaveNewProjInterval = null;
 
@@ -68,12 +74,11 @@ function returnProjectCreateDetails(o) {
     };
   };
 
-  // (2) check required fields
+  // (2) remove default category value
   o.category = $('#category').find(":selected").text();
-  if (o.showDialog&&o.category.toLowerCase().indexOf('format')>-1) {
-    vex.dialog.alert('please select category or genre');
-    return null;
-  }
+  try {
+    if (o.category.toLowerCase().indexOf('format')>-1) delete o['category'];
+  } catch(e) { delete o['category']; }
 
   // (3) check location and continue
   o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
@@ -117,37 +122,37 @@ function returnProjectCreateDetails(o) {
   else o.banner = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_banner.jpg';
   
   var crew = $('.crew-val'); 
-  o.crew = [];
-  crew.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.title = $(arr[0]).text();
-    _o.description = $(arr[1]).text();
-    _o.audition = $(arr[2]).text();
-    o.crew.push(_o);
-  });
+  o.crew = positions.crew||[];
+  // crew.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.title = $(arr[0]).text();
+  //   _o.description = $(arr[1]).text();
+  //   _o.audition = $(arr[2]).text();
+  //   o.crew.push(_o);
+  // });
 
   var cast = $('.cast-val');
-  o.cast = [];
-  cast.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.role = $(arr[0]).text();
-    _o.description = $(arr[1]).text();
-    _o.audition = $(arr[2]).text();
-    o.cast.push(_o);
-  });
+  o.cast = positions.cast||[];
+  // cast.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.role = $(arr[0]).text();
+  //   _o.description = $(arr[1]).text();
+  //   _o.audition = $(arr[2]).text();
+  //   o.cast.push(_o);
+  // });
 
   var needs = $('.needs-val');
   o.needs = [];
-  needs.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.category = $(arr[0]).text();
-    _o.description = $(arr[1]).text();
-    _o.quantity = $(arr[2]).text();
-    o.needs.push(_o);
-  });
+  // needs.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.category = $(arr[0]).text();
+  //   _o.description = $(arr[1]).text();
+  //   _o.quantity = $(arr[2]).text();
+  //   o.needs.push(_o);
+  // });
 
   var social = $('.social-val');
   o.social = [];
@@ -218,6 +223,23 @@ function validateUrl(value) {
 
 function deleteRow(e) {
   e.preventDefault();
+  var ctx = $(e.target).attr('ctx')
+  if (ctx) {
+    try {
+      var idx = $($(this).closest('tr')).index();
+  
+      var val = JSON.parse($(e.target).attr('val'))
+
+      if (ctx==='crew') {
+        positions.crew.splice(idx, 1);
+      };
+
+      if (ctx==='cast') {
+        positions.cast.splice(idx, 1);
+      };
+    } catch(e) {}
+  };
+
   $(this).closest('tr').remove();
 }
 
@@ -386,6 +408,7 @@ Template.newProject.onRendered(function() {
   osettings = {};
   osettings.banner = {};
   osettings.giftImage = {};
+  positions = {};
   setTimeout(function() {
     var script = document.createElement('script');
     script.src = "/js/scripts.min.js";
@@ -415,7 +438,10 @@ Template.newProject.onRendered(function() {
   
   try {
     var newProject = JSON.parse(localStorage.getItem('projectnew'));
-
+    if (!newProject) {
+      $('#resetNewProjCacheBtn').hide()
+      return
+    };
     if (newProject.videoExplainer) $('#video_explainer').val(newProject.videoExplainer);
     if (newProject.category) $("#category option[value='"+newProject.category+"']").prop('selected', true).trigger('change');
     if (newProject.zip) $('#location').val(newProject.zip);
@@ -429,13 +455,15 @@ Template.newProject.onRendered(function() {
       newProject.gifts.forEach(function(g) {
         appendCampaignMerchTable(g);
       });
+      $('#merchtabletoggle').show()
     };
-
     if (newProject._banner||newProject.banner) {
-      var filename = newProject.bannerFileName;
-      if (filename===null||filename.toLowerCase()==='this is the name of the file uploaded') return;
-      $('#banner_file_name').text(filename);
-      $('#hidden_banner_name').show();
+      (function() {
+        var filename = newProject.bannerFileName;
+        if (!filename||filename===null||filename.toLowerCase()==='this is the name of the file uploaded') return;
+        $('#banner_file_name').text(filename);
+        $('#hidden_banner_name').show();
+      }())
     };
 
     if (newProject.author_list) $('#authorlist').val(newProject.author_list);
@@ -446,12 +474,12 @@ Template.newProject.onRendered(function() {
     if (newProject.needsInfo) $('#needs_info').val(newProject.needsInfo);
     if (newProject.significanceInfo) $('#significance_info').val(newProject.significanceInfo);
     osettings.rawbudget = newProject.rawbudget||null;
-
     if (newProject.crew&&newProject.crew.length) {
       newProject.crew.forEach(function(c) {
         $('#crew-table').append('<tr class="crew-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newProjCrewAccord').removeClass('krown-accordion');
+      $('#crewtabletoggle').show()
     };
 
     if (newProject.cast&&newProject.cast.length) {
@@ -459,6 +487,7 @@ Template.newProject.onRendered(function() {
         $('#cast-table').append('<tr class="cast-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newProjCastAccord').removeClass('krown-accordion');
+      $('#casttabletoggle').show()
     };
 
     if (newProject.needs&&newProject.needs.length) {
@@ -466,6 +495,7 @@ Template.newProject.onRendered(function() {
         $('#needs-table').append('<tr class="needs-val"><td>'+n.category+'</td><td>'+n.description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newProjNeedsAccord').removeClass('krown-accordion');
+      $('#needstabletoggle').show()
     };
 
     if (newProject.social&&newProject.social.length) {
@@ -473,6 +503,7 @@ Template.newProject.onRendered(function() {
         $('#social-table').append('<tr class="social-val"><td>'+s.name+'</td><td>'+s.address+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newproj_social_accord').removeClass('krown-accordion');
+      $('#display_link_data').show()
     };
 
     if (newProject._gifts&&newProject._gifts.length) {
@@ -492,8 +523,9 @@ Template.newProject.onRendered(function() {
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
 
+  } catch(e) { console.log(e) } finally {
 
-  } catch(e) { } finally {
+
     // poll input every 30 seconds
     clearInterval(autoSaveNewProjInterval);
     autoSaveNewProjInterval = setInterval(function(){ 
@@ -515,6 +547,32 @@ function showVexWithInput(message, input) {
 }
 
 Template.newProject.events({
+  'click .oshchx': function(e) {
+    $(e.target).find('input').click()
+    if ($(e.target).val()==='pay') {
+      if ($(e.target).prop('checked')) {
+        $('#crew_pay_amounth').show()
+      } else {
+        $('#crew_pay_amounth').hide()
+      }
+    };
+  },
+  'click .bread_show_resources': function(e) {
+    $('.show_resources_toggle').hide()
+    $('.bread_show_resources').removeClass('bold')
+    $(e.target).addClass('bold')
+    var v= $(e.target).attr('val')
+    var id = '#show_options_' + v
+    $(id).show()
+  },
+  'click .bread_show_story': function(e) {
+    $('.story_toggler').hide()
+    $('.bread_show_story').removeClass('bold')
+    $(e.target).addClass('bold')
+    var v= $(e.target).attr('val')
+    var id = '#story_' + v
+    $(id).show()
+  },
   'click #file_gift': function(e) {
     $('#gift_file').click();
   },
@@ -670,6 +728,7 @@ Template.newProject.events({
     $('#shareval').text($('#minimumassign').val()||1);
   },
   'click #save_campaign_create_changes': function(e) {
+    $('#resetNewProjCacheBtn').show();
     var o = returnProjectCreateDetails();
     if (!o) return;
     localStorage.setItem('projectnew', JSON.stringify(o));
@@ -685,6 +744,8 @@ Template.newProject.events({
     Meteor.call('addProject', o, function(err, res) {
       vex.dialog.alert(err||res);
       if (!err) {
+        localStorage.removeItem('projectnew')
+        localStorage.removeItem('projectnew_banner')
         setTimeout(function() {
           Router.go('Home');
         }, 987);
@@ -742,13 +803,33 @@ Template.newProject.events({
         reader.readAsDataURL(file);
       }
   },
+  'change #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
+  'change #needs-description': function() {$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled') },
+  'change #crew-title': function() { $('#add-crew').removeClass('btn'), $('#add-crew').removeClass('disabled') },
+  'change #cast-title': function() { $('#add-cast').removeClass('btn'), $('#add-cast').removeClass('disabled') },
+  'change #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
   'click #add-crew': function(e) {
     e.preventDefault();
+    $('#crewtabletoggle').show()
     var title = $('#crew-title').val(), 
         description = $('#crew-description').val(), 
         audition = $('#crew-audition').val() || 'N/A',
+        consideration = $('.crew_consideration:checked').map(function(a) { return $(this).val() }).get(),
+        pay_offer = $('#crew_pay_amount').val()||0,
         status = 'needed';
-    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'</td><td>'+audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('#crew_pay_amount').val('')
+    positions.crew = positions.crew || []
+    var o = {
+      title: title,
+      description: description,
+      audition: audition,
+      consideration: consideration,
+      pay_offer: pay_offer
+    }
+    positions.crew.push(o)
+    if (!consideration.length) return vex.dialog.alert('You must select at least one consideration / offer type for this role.');
+    var payIcons = consideration.map(function(c) { return consideration_icons[c] })
+    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="crew" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $('#crew-title').val(''), 
@@ -758,11 +839,26 @@ Template.newProject.events({
   },
   'click #add-cast': function(e) {
     e.preventDefault();
+    $('#casttabletoggle').show()
     var title = $('#cast-title').val(), 
         description = $('#cast-description').val(), 
         audition = $('#cast-audition').val() || 'N/A',
+        consideration = $('.cast_consideration:checked').map(function(a) { return $(this).val() }).get(),
+        pay_offer = $('#cast_pay_amount').val()||0,
         status = 'needed';
-    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'</td><td>'+audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('#cast_pay_amount').val('')
+    var o = {
+      title: title,
+      description: description,
+      audition: audition,
+      consideration: consideration,
+      pay_offer: pay_offer
+    }
+    positions.cast = positions.cast || []
+    positions.cast.push(o)
+    if (!consideration.length) return vex.dialog.alert('You must select at least one consideration / offer type for this role.');
+    var payIcons = consideration.map(function(c) { return consideration_icons[c] })
+    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="cast" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $('#cast-title').val(''), 
@@ -772,6 +868,7 @@ Template.newProject.events({
   },
   'click #add-needs': function(e) {
     e.preventDefault();
+    $('#needstabletoggle').show()
     var cat = $('#needs-category').val(), description = $('#needs-description').val();
     if (cat.toLowerCase().indexOf('category')>-1) return;
     if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
@@ -781,6 +878,7 @@ Template.newProject.events({
   },
   'click #add-social': function(e) {
     e.preventDefault();
+    $('#display_link_data').show()
     var title = $('#social-title').val(), url = $('#social-url').val();
     if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
@@ -806,7 +904,8 @@ Template.newProject.events({
   },
   'click #add-gift': function(e) {
     e.preventDefault();
-    console.log('add gift')
+
+    $('#merchtabletoggle').show()
     var o = {};
     o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
     if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
@@ -816,9 +915,26 @@ Template.newProject.events({
     o.type = $('#merchtype option:selected').val();
     if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
     if (o.type==='Apparel') {
-      o.secondaryData = $('.apparelsize:checkbox:checked').map(function(el){ return $(this).val();}).get();
+
+      o.quantity = {}
+
+      $('.apparelsize').each(function() {
+        o.quantity[$(this).val()] = parseInt($('#' + $(this).attr('val')).val()||0)
+      })
+
+      for (var key in o.quantity) {
+        if (!o.quantity[key]) {
+          delete o.quantity[key]
+        };
+      }
+
+      o.secondaryData = Object.keys(o.quantity)
+
+      if (!o.secondaryData.length) return vex.dialog.alert('You should have at least one size available for sale to continue.');
+
     } else {
       o.secondaryData = $('#merch_handling').val();
+      o.quantity = {all: $('#oneoff').val()||1}
     };
     o.disclaimer = $('#merch_disclaimer').val();
     osettings.giftImage = {};
@@ -831,6 +947,8 @@ Template.newProject.events({
     $('#gift_file_name').text('');
     $('#merch_handling').val('');
     $('#merch_disclaimer').val('');
+    $('.merch_quantity').val('');
+    $('#oneoff').val('');
     $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
     $('#hidden_gift_name').hide();
   },
@@ -842,6 +960,17 @@ Template.newProject.events({
 });
 
 Template.newProject.helpers({
+  noUserEmail: function() {
+    if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.email&&Meteor.user().notification_preferences.email.verification) {
+      return false
+    };
+
+    if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.phone&&Meteor.user().notification_preferences.phone.verification) {
+      return false
+    };
+
+    return true
+  },
   cachedNewProject: function() {
     var hasCached = false
     try {

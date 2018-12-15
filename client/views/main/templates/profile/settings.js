@@ -1,4 +1,4 @@
-var gifts = [];
+var gifts = [], resources = [], reels = [], social = [];
 var osettings = {giftImage: {}, avatar: {}};
 function videoURLValidation(url) {
 	var vimeo = /^https:\/\/vimeo.com\/[\d]{8,}$/;
@@ -15,13 +15,89 @@ function videoURLValidation(url) {
 	}
 }
 
+function appendResourceToTable(o, set) {
+	if (set===true) {
+		resources.push(o)
+		Session.set('resources', resources);
+	}
+	$('#assets-table-toggle').show()
+	$('#needs-table').append('<tr class="needs-val"><td>'+o.category||'N/A'+'</td><td>'+o.name||'N/A'+'</td><td>'+o.description||'N/A'+'</td><td><button val="resource" class="deleteRow button small">X</button></td></tr>');
+	$('.deleteRow').off()
+	$('.deleteRow').on('click', deleteRow);
+	$("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val('');
+}
+
+function appendSocialToTable(o, set) {
+	if (set===true) {
+		social.push(o)
+		Session.set('social', social);
+	}
+	$('#social-table-toggle').show()
+	$('#social-table').append('<tr class="social-val"><td>'+o.name+'</td><td>'+o.address+'</td><td><button val="social" class="deleteRow button small special">X</button></td></tr>');
+	$('.deleteRow').off()
+	$('.deleteRow').on('click', deleteRow);
+	$('#social-title').val(''), $('#social-url').val('');
+}
+
+function appendMediaURLtoTable(o, set) {
+	if (!o.url) return;
+	if (set===true) {
+		reels.push(o)
+		Session.set('reels', reels);
+	}
+	console.log(o)
+	$('#reel-table-toggle').show()
+	$('#reel-table').append([
+	  	'<tr class="krown-pricing-title reel-val">',
+	  		'<td><div class="krown-column-container">',
+	  			o.name?'<small>'+o.name+'</small><br>':'',
+	  			o.url,
+	  			'</div><div class="krown-pie">',
+	  			'<button val="reel" class="right deleteRow button special small">X</button>',
+	  		'</div></td>',
+	  	'</tr>'
+	  ].join(''));
+	$('.deleteRow').off()
+	$('.deleteRow').on('click', deleteRow);
+	$('#reel-name').val('');
+	$('#reel-url').val('');
+}
+
 function validateUrl(url) {
 	return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(url);
 }
 
 function deleteRow(e) {
 	e.preventDefault();
-	$(this).closest('tr').remove();
+
+	var ctx = $(e.target).attr('val')
+	console.log('in deleteRow', ctx)
+	if (ctx) {
+	  try {
+	    var idx = $($(e.target).closest('tr')).index();
+
+	    if (ctx==='gift') {
+	    	
+	      gifts.splice(idx, 1);
+	    };
+
+	    if (ctx==='resource') {
+	      resources.splice(idx, 1);
+	    };
+
+	    if (ctx==='reel') {
+	      reels.splice(idx, 1);
+	    };
+
+	    if (ctx==='social') {
+	    	console.log('remove social at index', idx)
+	      social.splice(idx, 1);
+	      console.log(social)
+	    };
+	  } catch(e) {}
+	};
+
+	$(e.target).closest('tr').remove();
 }
 
 function removeGift(e) {
@@ -47,9 +123,7 @@ function guid() {
 }
 
 function phoneVerifyVexCB(data) {
-	console.log('yo1')
 	// vex.closeAll();
-	console.log('yo2')
     if (data) {
     	$('osh_loader').show();
         Meteor.call('verifyPhonePIN', data.pin, function(err, msg) {
@@ -90,7 +164,6 @@ function saveSettings(o) {
 
 	*/
 
-
 	o = o || {};
 	o.firstName = $('#first_name').val();
 	o.lastName = $('#last_name').val();
@@ -101,7 +174,7 @@ function saveSettings(o) {
         .replace(/<\/?[^>]+(>|$)/g, "")
         .replace(/&nbsp;|<br>/g, " ")
         .trim();
-	if (plainText&&plainText!=='Enter your biography and self-description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+	if (plainText&&plainText.indexOf('https://en.wikipedia.org/wiki/Template:Biography')===-1) {
 		o.bio = descriptionText;
 		o.bio_plaintext = plainText;
 	} else {
@@ -110,10 +183,11 @@ function saveSettings(o) {
 	o.primaryRole = $('#category').find(":selected").text();
 	if (o.primaryRole.toLowerCase().indexOf('primary')>-1) delete o['primaryRole'];
 	o.iam = [];
-	o.assets = [];
-	o.social = [];
-	o.reels = [];
-	o.gifts = gifts;
+	o.assets = resources||[];
+	o.social = social||[];
+	o.reels = reels||[];
+	o.gifts = gifts||[];
+
 	o.avatar = osettings.avatar;
 	if ($('#website').val().trim()&&$('#website').val()!=='enter http://www.your.site') o.website = $('#website').val();
 
@@ -122,49 +196,37 @@ function saveSettings(o) {
 		if ($(el).prop('checked')) o.iam.push($(el).attr('name'));
 	});
 
-	var userAssets = $('.needs-val');
-	userAssets.each(function(i, el) {
-		var _o = {};
-		var arr = $(el).children('td');
-		_o.category = $(arr[0]).text();
-		_o.description = $(arr[1]).text();
-		o.assets.push(_o);
-	});
-
-	var userSocial = $('.social-val');
-	userSocial.each(function(i, el) {
-		var _o = {};
-		var arr = $(el).children('td');
-		_o.name = $(arr[0]).text();
-		_o.address = $(arr[1]).text();
-		o.social.push(_o);
-	});
-
-	var userReels = $('.reel-val');
-	userReels.each(function(i, el) {
-		var _o = {};
-		var arr = $(el).children('td');
-		_o.url = $(arr[0]).text();
-		o.reels.push(_o);
-	});
-
 	Meteor.call('upgradeProfile', o);
 }
 
 Template.settings.onRendered(function() {
-	$(document).ready(function() {
-	    setTimeout(function() {
-	      var script = document.createElement('script');
-	      script.src = "/js/scripts.min.js";
-	      document.head.appendChild(script);
-	    }, 987);
-	    setTimeout(function() { 
-	    	$('#gotoemailpref').removeClass('animated'); 
-	    }, 2499);
-	})
+    setTimeout(function() {
+      var script = document.createElement('script');
+      script.src = "/js/scripts.min.js";
+      document.head.appendChild(script);
+    }, 987);
+    setTimeout(function() { 
+    	$('#gotoemailpref').removeClass('animated'); 
+    }, 2499);
 })
 
 Template.settings.events({
+	'click .res_show_setting': function(e) {
+	    $('.settings_view_toggle').hide()
+	    $('.res_show_setting').removeClass('bold')
+	    $(e.target).addClass('bold')
+	    var v= $(e.target).attr('val')
+	    var id = '#' + v
+	    $(id).show()
+	},
+	'click .res_show_opt': function(e) {
+	    $('.res_opt_set').hide()
+	    $('.res_show_opt').removeClass('bold')
+	    $(e.target).addClass('bold')
+	    var v= $(e.target).attr('val')
+	    var id = '#' + v
+	    $(id).show()
+	},
 	'click #gotoemailpref': function(e) {
 		e.preventDefault();
 		$('#not1').click();
@@ -227,7 +289,6 @@ Template.settings.events({
 				}
 			};
 		});
-
 	},
 	'click #resend_email_notify': function(e) {
 		/** resend email verification */
@@ -267,7 +328,6 @@ Template.settings.events({
 	'click .save_settings': function(e) {
 		e.preventDefault();
 		saveSettings({showDialog:true});
-
 	},
 	'click #add_account': function(e) {
 		e.preventDefault();
@@ -308,28 +368,54 @@ Template.settings.events({
 	  	}
 	},
 	'click #add-needs': function(e) { 
-      e.preventDefault();
-      var cat = $('#needs-category').val(), description = $('#needs-description').val();
-      if (cat.toLowerCase().indexOf('category')>-1) return;
-      if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button small">X</button></td></tr>');
-      $('.deleteRow').on('click', deleteRow);
-      $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val('');
+	      e.preventDefault();
+	      
+	      var o = {
+	      	category: $('#needs-category').val(),
+	      	name: $('#needs-title').val(),
+	      	description: $('#needs-description').val(),
+	      	location: $('#needs-location').val(),
+	      	pricing: {
+	      		fixed: parseFloat($('#needs-offer-fixed').val()),
+	      		hourly: parseFloat($('#needs-offer-hour').val()),
+	      		daily: parseFloat($('#needs-offer-day').val()),
+	      		weekly: parseFloat($('#needs-offer-week').val())
+	      	},
+	      	availability: $('.need-sched:checkbox:checked').map(function(el){ return $(this).val();}).get(),
+	      	paySchedule: $('.need-payopt:checkbox:checked').map(function(el){ return $(this).val();}).get(),
+	      }
+
+	      if (o.paySchedule.indexOf('deposit')>-1) {
+	      	o.deposit = {
+	      		type: $('#input-fixed-need').val() ? 'usd' : 'percent',
+	      		amount: $('#input-fixed-need').val() || $('#input-percent-need').val()
+	      	}
+	      };
+
+	      if (!o.category||!o.name) return vex.dialog.alert('please select a valid category for your resource');
+
+	      try {
+	      	var x = /^\d{5}$/.exec(o.location.trim())
+	      	if (!x) throw new Error()
+	      } catch(e) {
+	      	return vex.dialog.alert('invalid postal code detected, please enter valid zipcode or postal code')
+	      }
+
+	      appendResourceToTable(o, true)
     },
     'click #add-social': function(e) { 
       e.preventDefault();
-      var title = $('#social-title').val(), url = $('#social-url').val();
-      if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
-      $('.deleteRow').on('click', deleteRow);
-      $('#social-title').val(''), $('#social-url').val('');
+      appendSocialToTable({
+      	name: $('#social-title').val(),
+      	address: $('#social-url').val()
+      }, true)
     },
     'click #add-reel': function(e) { 
       e.preventDefault();
-      var url = videoURLValidation($('#reel-url').val().trim());
-      if (url) {
-      	  $('#reel-table').append('<tr class="reel-val"><td>'+url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
-	      $('.deleteRow').on('click', deleteRow);
-	      $('#reel-url').val('');
-	  }
+      appendMediaURLtoTable({
+      	name: $('#reel-name').val().trim(),
+      	url: videoURLValidation($('#reel-url').val().trim())
+      }, true)
     },
     'click #vidurl': function(e) {
     	e.preventDefault();
@@ -403,10 +489,46 @@ Template.settings.events({
 		$('#settings_add_merch_form')[0].reset();
 		$('#merch_thumbnail').hide();
 		saveSettings();
+	},
+	'input #social-title': function() { 
+		if (true) {};
+		$('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled')
+	},
+	'input #reel-url': function() { 
+		if (true) {};
+		$('#add-reel').removeClass('btn'), $('#add-reel').removeClass('disabled')
+	},
+	'input #needs-title': function() { 
+		if (true) {};
+		$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled')
+	},
+	'input #input-percent-need': function() { 
+		$('#percent_deposit_val').text($('#input-percent-need').val()) 
+	},
+	'click #checkbox-need-deposit': function() { 
+		if ($('input#checkbox-need-deposit').is(':checked')) { $('.percent_deposit').show() } else { $('.percent_deposit').hide() }
+	},
+	'input #input-fixed-need': function() { 
+		if ($('#input-fixed-need').val()) {
+			$('#input-percent-need').prop('disabled', true)
+			$('#percent_deposit_sign').text(' USD')
+			$('#percent_deposit_val').text($('#input-fixed-need').val())
+		} else {
+			$('#input-percent-need').prop('disabled', false)
+			$('#percent_deposit_sign').text('%')
+			$('#percent_deposit_val').text($('#input-percent-need').val()||10)
+		}
 	}
 });
 
 Template.settings.helpers({
+	resources: function() {
+		return Session.get('resources');
+	},
+	init: function() {
+		Session.set('resources', resources)
+		Session.set('gifts', gifts)
+	},
 	giftPurchases: function() {
 		return Meteor.user().giftPurchases||[]
 	},
@@ -427,10 +549,6 @@ Template.settings.helpers({
 	},
 	createAccount: function() {
 		Meteor.call('createBankingAccount');
-	},
-	foo: function() {
-		var x = Meteor.user();
-		return !(x.primaryRole || (x.iam && x.iam.length));
 	},
 	equityCamps: function() {
 		/** 
@@ -625,79 +743,83 @@ Template.settings.helpers({
 });
 
 Template.settings.rendered = function () {
-  if ($(window).width()<580) {
-  	setTimeout(function() {
-  		$($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
-  	}, 610);
-  }
-  $(".iam").each(function(){
-    var val = $(this).attr('value');
-    if (Meteor.user().iam.indexOf(val) > -1) {
-      $(this).prop("checked", true);
-    }
-   });
+	gifts = [], resources = [], reels = [], social = [];
+	// console.log(new Array(1000).join('# '))
+	var u = Meteor.user()
+	// console.log(JSON.stringify(u, null, 4))
 
-  $(".interests").each(function(){
-    var val = $(this).attr('value');
-    if (Meteor.user().interests.indexOf(val) > -1) {
-      $(this).prop("checked", true);
-    }
-   });
 
-  // set primaryRole
-  if (Meteor.user().primaryRole) {
-  	var val = Meteor.user().primaryRole;
-  	$("#category").val(val);
-  };
+	resources = u.assets||[]
+	resources.forEach(appendResourceToTable)
+	
+	gifts = u.gifts||[]
+	// list gifts
 
-  // set user-role
-  Meteor.user().iam.forEach(function(el) {
-  	var elId = '#checkbox-' + el;
-  	$(elId).prop("checked", true);
-  });
+	social = u.social||[]
+	social.forEach(appendSocialToTable)
+
+	reels = u.reels||[]
+	reels.forEach(appendMediaURLtoTable)
+
+	console.log(social)
+
+	if ($(window).width()<580) {
+	  	setTimeout(function() {
+	  		$($( ".tabs-select" )[1]).prepend('<i id="crazed_foo" class="fa fa-chevron-down fa-2x" style="position:absolute;pointer-events:none;"></i>');
+	  	}, 610);
+	}
+
+	$(".iam").each(function(){
+		var val = $(this).attr('value');
+		if (u.iam.indexOf(val) > -1) {
+		  $(this).prop("checked", true);
+		}
+	});
+
+	$(".interests").each(function(){
+		var val = $(this).attr('value');
+		if (u.interests.indexOf(val) > -1) {
+		  $(this).prop("checked", true);
+		}
+	});
+
+	// set primaryRole
+	if (u.primaryRole) {
+		var val = u.primaryRole;
+		$("#category").val(val);
+	};
+
+	// set user-role
+	u.iam.forEach(function(el) {
+		var elId = '#checkbox-' + el;
+		$(elId).prop("checked", true);
+	});
   
-  // set needs-table
-  Meteor.user().assets.forEach(function(el) {
-  	$('#needs-table').append('<tr class="needs-val"><td>'+el.category+'</td><td>'+el.description+'</td><td><button class="deleteRow button small">X</button></td></tr>');
-  	$('.deleteRow').on('click', deleteRow);
-  });
 
-  // set social table
-  Meteor.user().social.forEach(function(el) {
-  	$('#social-table').append('<tr class="social-val"><td>'+el.name+'</td><td>'+el.address+'</td><td><button class="deleteRow button small">X</button></td></tr>');
-  	$('.deleteRow').on('click', deleteRow);
-  });
+	var wbs = u.website && u.website.length > 0 ? u.website : 'enter http://www.your.site';
+	$('#website').attr('placeholder', wbs);
 
-  // set reel-table
-  Meteor.user().reels.forEach(function(el) {
-  	$('#reel-table').append('<tr class="reel-val"><td>'+el.url+'</td><td><button class="deleteRow button small">X</button></td></tr>');
-  	$('.deleteRow').on('click', deleteRow);
-  });
-
-  var wbs = Meteor.user().website && Meteor.user().website.length > 0 ? Meteor.user().website : 'enter http://www.your.site';
-  $('#website').attr('placeholder', wbs);
-
-  $(document).ready(function() {
-      $('#summernote').summernote({
-      	toolbar: [
-		    // [groupName, [list of button]]
-		    ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
-		    ['para', ['paragraph', 'style']],
-		    ['height', ['height']],
-		    ['misc', ['undo', 'redo']],
-		    ['insert', ['picture', 'video', 'table', 'hr']]
-		],
-        height: 300,
-        minHeight: null,
-        maxHeight: null,
-        focus: false,
-        tooltip: false,
-        callbacks: {
-          onInit: function() {
-            $('.note-editable').html(Meteor.user&&Meteor.user().bio||'<p><span class="large">Enter your biography and self-description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
-            $('.note-toolbar').css('z-index', '0');
-          }
-        }
-      });
-  });
+	$(document).ready(function() {
+		$('#summernote').summernote({
+		  	toolbar: [
+			    // [groupName, [list of button]]
+			    ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+			    ['para', ['paragraph', 'style']],
+			    ['height', ['height']],
+			    ['misc', ['undo', 'redo']],
+			    ['insert', ['picture', 'video', 'table', 'hr']]
+			],
+		    height: 300,
+		    minHeight: null,
+		    maxHeight: null,
+		    focus: false,
+		    tooltip: false,
+		    callbacks: {
+		      onInit: function() {
+		        $('.note-editable').html(u.bio||'<p><span class="large">Enter your biography here.</span><br>You can copy / paste HTML, for more help visit <a href="https://en.wikipedia.org/wiki/Template:Biography" target="_blank">https://en.wikipedia.org/wiki/Template:Biography</a>.</p><p>&nbsp;</p>');
+		        $('.note-toolbar').css('z-index', '0');
+		      }
+		    }
+		});
+	});
 };

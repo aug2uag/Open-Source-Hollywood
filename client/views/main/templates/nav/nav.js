@@ -23,8 +23,10 @@ Template.nav.helpers({
 })
 
 Template.nav.events({
-  'click .menu-item': function() {
+  'click .menu-item': function(e) {
     if ($(window).width()<=767) $('#navbutton').click();
+    $('.menu-item').removeClass('bold')
+    $(e.target).addClass('bold')
   },
   'click #logo': function() {
     window.location.assign('/');

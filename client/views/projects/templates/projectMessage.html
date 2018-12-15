@@ -148,7 +148,7 @@
                       <h5>FINANCIAL</h5>
                       <div style="display:block">
                           <div class="form-group">
-                            <label for="financials"><strong>How much pay for the role in USD.</strong></label>
+                            <label for="financials"><strong>How much to pay for the final offer in USD.</strong></label>
                             {{#unless needsApplicantAction}}
                             <input type="number" class="form-control" id="financials" value="{{negotiationFinancial}}">
                             {{else}}
@@ -163,7 +163,7 @@
                             <label for="equities"><strong>How many shares of the campaign.</strong></label>
                             <form id="equity_negotiations_block">
                               {{#unless needsApplicantAction}}
-                              <input type="number" class="form-control" id="equities" value="{{negotiationEquities}}">
+                              <input type="number" class="form-control" id="equities" placeholder="enter number of shares here" value="{{negotiationEquities}}">
                               {{else}}
                               <input type="number" class="form-control" value="{{negotiationEquities}}" disabled>
                               {{/unless}}

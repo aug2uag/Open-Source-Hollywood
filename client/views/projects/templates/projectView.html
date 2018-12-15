@@ -46,7 +46,7 @@
                       <li class="">
                           <h5>Community</h5></li>
                       <li class="">
-                          <h5>Team</h5></li>
+                          <h5>Manage</h5></li>
                       <li class="">
                           <h5>Edit</h5></li>
                       <div class="tabs-select">
@@ -56,63 +56,44 @@
                             <option>Updates</option>
                             <option>Comments</option>
                             <option>Community</option>
-                            <option>Team</option>
+                            <option>Manage</option>
                             <option>Edit</option>
                           </select>
                           <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
                         </span> 
                       </div>
                   {{else}}
-                    {{#if isAllowed}}
-                        <li class="opened">
-                            <h5>Description</h5></li>
-                        <li class="">
-                            <h5>Updates</h5></li>
-                        <li class="">
-                            <h5>Comments</h5></li>
-                        <li class="">
-                            <h5>Community</h5></li>
-                        <li class="">
-                            <h5>Manage</h5></li>
-                        <div class="tabs-select">
-                          <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
-                            <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
-                              <option>Description</option>
-                              <option>Updates</option>
-                              <option>Comments</option>
-                              <option>Community</option>
-                              <option>Manage</option>
-                            </select>
-                            <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
-                          </span> 
-                        </div>
-                    {{else}}
-                        <li class="opened">
-                            <h5>Description</h5></li>
-                        <li class="">
-                            <h5>Updates</h5></li>
-                        <li class="">
-                            <h5>Comments</h5></li>
-                        <li class="">
-                            <h5>Community</h5></li>
-                        <div class="tabs-select">
-                          <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
-                            <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
-                              <option>Description</option>
-                              <option>Updates</option>
-                              <option>Comments</option>
-                              <option>Community</option>
-                            </select>
-                            <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
-                          </span> 
-                        </div>
-                    {{/if}}
+                      <li class="opened">
+                          <h5>Description</h5></li>
+                      <li class="">
+                          <h5>Updates</h5></li>
+                      <li class="">
+                          <h5>Comments</h5></li>
+                      <li class="">
+                          <h5>Community</h5></li>
+                      <div class="tabs-select">
+                        <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
+                          <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
+                            <option>Description</option>
+                            <option>Updates</option>
+                            <option>Comments</option>
+                            <option>Community</option>
+                          </select>
+                          <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Description</span>
+                        </span> 
+                      </div>
                   {{/if}}     
                 </ul>
 
                 <div class="contents clearfix">
                     <div id="description" style="display: block;">
                         <div class="project-header">
+
+                            {{#if isAllowed}}
+
+                                <a href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
+
+                            {{/if}}
 
                             {{#if project.videoExplainer}}
                             <div class="video-container">
@@ -190,7 +171,7 @@
                         </div>
                     </div>
 
-                    <div id="updates" class="project-content container" style="display: none;width: 100%;">
+                    <div id="updates" class="project-content container" style="display: none;">
                       {{#if isOwner}}
                         <div id="respond" class="comment-respond margin_bottom40">
                           <h3 id="reply-title" class="comment-reply-title">Announce Update</h3>
@@ -283,12 +264,6 @@
                     <div id="manage" class="project-content" style="display: none;">
                         {{#if isOwner}}
                           {{> applicants}}
-                          <p>&nbsp;</p>
-                          {{#if isWidth}}
-                          <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
-                          {{/if}}
-                          <p>&nbsp;</p>
-                          <a id="closeProj" class="btn btn-danger btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="#!">DELETE CAMPAIGN</a>
                         {{/if}}
                     </div>
 
@@ -418,21 +393,25 @@
                                 </div>
                                 <!-- GIFTS -->
                                 {{#if hasGifts}}
-                                <div class="id-product-levels">
-                                  <h4 class="avatar-option await btn-lg purchaselabel" style="top:10px;">MERCHANDISE</h4>
+                                <div class="a id-product-levels t20">
+                                  <h4 class="avatar-option await btn-lg purchaselabel" style="top:10px;color:#333">MERCHANDISE</h4>
                                   <br>
-                                  <span class="purchaselabel glyphicon glyphicon-arrow-down h1b" aria-hidden="true" style="top: -10px;color: red;"></span>
                                   {{#each project.gifts}}
-                                    <a class="level-binding purchase_gift">
-                                        <div class="level-group">
-                                            <div class="id-level-title"><span>{{this.name}}:</span> ${{this.msrp}}</div>
-                                            <div class="id-level-desc">
-                                                <p>{{this.description}}</p>
-                                                <!-- <p class="code">quantity available ({{this.quantity}})</p> -->
-                                            </div>
+
+                                  <div class="row">
+                                    <div class="col-sm-12">
+                                      <div class="thumbnail">
+                                        <img src="{{this.url}}">
+                                        <div class="caption">
+                                          <p><small>({{this.type}})</small></p>
+                                          <h6>{{this.name}}</h6>
+                                          <p>{{this.description}}</p>
+                                          <p><a class="c-related__a button special w100 t20 purchase_gift">${{this.msrp}}</a></p>
                                         </div>
-                                        <p class="align-center"><a class="c-related__a button special">PURCHASE NOW</a></p>
-                                    </a>
+                                      </div>
+                                    </div>
+                                  </div>
+
                                     {{else}}
                                     <script type="text/javascript">$('.purchaselabel').hide();</script>
                                   {{/each}}
@@ -531,79 +510,119 @@
 </template>
 
 <template name="applicants">
-  <h3>Applicants</h3>
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th><p class="align-center">Applicant</p></th>
-          <th><p class="align-center">NEGOTIATE</p></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#if hasApplicant}}
-          {{#each applicants}}
-            {{ >applicantsHelper}}
-          {{/each}}
-        {{else}}
-          <tr>
-            <td colspan="6">None Applied</td>
-          </tr>
+  <p><small>Select from applicants, assets, merch, &amp; settings</small></p>
+  <ol class="breadcrumb">
+    <li><a href="#!" class="res_show_resources bold" val="res_Applicants">Role Applicants</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Resources">Leasing Assets</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Gifts">Merch</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Settings">Settings</a></li>
+  </ol>
+  <p>&nbsp;</p>
+
+
+  <div class="resources_view_toggle" id="res_Applicants">
+      <h3>Applicants</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><p class="align-center">Applicant</p></th>
+              <th><p class="align-center">CREATE CONTRACT</p></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#if hasApplicant}}
+              {{#each applicants}}
+                {{ >applicantsHelper}}
+              {{/each}}
+            {{else}}
+              <tr>
+                <td colspan="6">None Applied</td>
+              </tr>
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <div class="resources_view_toggle" style="display:none" id="res_Resources">
+      <h3>Offered Resources</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><p class="align-center">Asset</p></th>
+              <th><p class="align-center">User</p></th>
+              <th><p class="align-center">CREATE CONTRACT</p></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.project.offeredResources}}
+              <tr>
+                <td><p class="align-center">{{asset}}</p></td>
+                <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
+                <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
+              </tr>
+            {{else}}
+            <tr>
+              <td colspan="4">None Offered</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <div class="resources_view_toggle" style="display:none" id="res_Gifts">
+      <h3>Sold Gifts</h3>
+
+          <div class="media">
+            <div class="media-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Sales Date</th>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each purchases}}
+                    <tr class="fulfill_gift">
+                      <td class="">{{orderDate}}</td>
+                      <td class="center">{{gift.name}}</td>
+                      <td class="">{{totalUnits}}</td>
+                      <td class="center">${{amount}}</td>
+                      <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
+                    </tr>
+
+                  {{/each}}
+
+                  <tr>
+                    <td class="center">&nbsp;</td>
+                    <td class="center">&nbsp;</td>
+                    <td class="center">&nbsp;</td>
+                    <td><b>${{giftTotals}}</b></td>
+                    <td class="center">&nbsp;</td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+  </div>
+
+  <div class="resources_view_toggle" id="res_Settings" style="display:none">
+    <p>&nbsp;</p>
+    {{#if isWidth}}
+        <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40 alice_back" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>
         {{/if}}
-      </tbody>
-    </table>
+        <p>&nbsp;</p>
+        <a id="closeProj" class="btn btn-danger btn-lg col-sm-12 major_proj_action_buttons margin_bottom40" href="#!">DELETE CAMPAIGN</a>
   </div>
-  <br>
-  <h3>Offered Resources</h3>
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th><p class="align-center">Asset</p></th>
-          <th><p class="align-center">User</p></th>
-          <th><p class="align-center">NEGOTIATE</p></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each this.project.offeredResources}}
-          <tr>
-            <td><p class="align-center">{{asset}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-            <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
-          </tr>
-        {{else}}
-        <tr>
-          <td colspan="4">None Offered</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
-  <br>
-  <h3>Sold Gifts</h3>
-  <div class="table-responsive">
-    <table class="table margin_bottom40">
-      <thead>
-        <tr>
-          <th><p class="align-center">Name</p></th>
-          <th><p class="align-center">Purchaser</p></th>
-          <th><p class="align-center">FULFILL</p></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each this.project.giftPurchases}}
-          <tr>
-            <td><p class="align-center">{{gift.name}}</p></td>
-            <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-            <td><a class="btn btn-mini btn-warning fulfill_gift" style="width: 100%;">FULFILL</a></td>
-          </tr>
-        {{else}}
-          <tr>
-            <td colspan="3">None Sold</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
-  <br>
+
 </template>

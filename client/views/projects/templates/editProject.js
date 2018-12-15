@@ -1,5 +1,6 @@
 var gifts = [],
     osettings = {},
+    positions = {},
     currentSlug = null, 
     currentTitle = null;
 
@@ -202,8 +203,11 @@ function returnProjectCreateDetails(o) {
     };
   };
 
-  // (2) check required fields
+  // (2) remove default category value
   o.category = $('#category').find(":selected").text();
+  try {
+    if (o.category.toLowerCase().indexOf('format')>-1) delete o['category'];
+  } catch(e) { delete o['category']; }
 
   // (3) check location and continue
   o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
@@ -246,26 +250,26 @@ function returnProjectCreateDetails(o) {
   }
   
   var crew = $('.crew-val'); 
-  o.crew = [];
-  crew.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.title = $(arr[0]).text();
-    _o.description = $(arr[1]).text();
-    _o.audition = $(arr[2]).text();
-    o.crew.push(_o);
-  });
+  o.crew = positions.crew||[];
+  // crew.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.title = $(arr[0]).text();
+  //   _o.description = $(arr[1]).text();
+  //   _o.audition = $(arr[2]).text();
+  //   o.crew.push(_o);
+  // });
 
   var cast = $('.cast-val');
-  o.cast = [];
-  cast.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.role = $(arr[0]).text();
-    _o.description = $(arr[1]).text();
-    _o.audition = $(arr[2]).text();
-    o.cast.push(_o);
-  });
+  o.cast = positions.cast||[];
+  // cast.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.role = $(arr[0]).text();
+  //   _o.description = $(arr[1]).text();
+  //   _o.audition = $(arr[2]).text();
+  //   o.cast.push(_o);
+  // });
 
   var needs = $('.needs-val');
   o.needs = [];
@@ -366,6 +370,22 @@ Template.editProject.events({
   'click #file_gift': function(e) {
     $('#gift_file').click();
   },
+  'click .bread_show_resources': function(e) {
+    $('.show_resources_toggle').hide()
+    $('.bread_show_resources').removeClass('bold')
+    $(e.target).addClass('bold')
+    var v= $(e.target).attr('val')
+    var id = '#show_options_' + v
+    $(id).show()
+  },
+  'click .camp_show_resources': function(e) {
+    $('.camp_resources_toggle').hide()
+    $('.camp_show_resources').removeClass('bold')
+    $(e.target).addClass('bold')
+    var v= $(e.target).attr('val')
+    var id = '#' + v
+    $(id).show()
+  },
   'change #category': function() {
     var cat = $('#category').val();
     var meta = selectOptionsGenre.meta[cat];
@@ -428,60 +448,84 @@ Template.editProject.events({
         reader.readAsDataURL(file);
       }
   },
+  'change #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
+  'change #needs-description': function() {$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled') },
+  'change #crew-title': function() { $('#add-crew').removeClass('btn'), $('#add-crew').removeClass('disabled') },
+  'change #cast-title': function() { $('#add-cast').removeClass('btn'), $('#add-cast').removeClass('disabled') },
+  'change #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
   'click #add-crew': function(e) {
     e.preventDefault();
-    console.log('click add-crew')
-    var countRows = $('.crew-val').length||0;
+    $('#crewtabletoggle').show()
     var title = $('#crew-title').val(), 
         description = $('#crew-description').val(), 
         audition = $('#crew-audition').val() || 'N/A',
+        consideration = $('.crew_consideration:checked').map(function(a) { return $(this).val() }).get(),
+        pay_offer = $('#crew_pay_amount').val()||0,
         status = 'needed';
-    if (title && description && status) 
-      $('#crew-table').append([
-        '<tr class="crew-val after-the-fact">',
-          '<td>'+title+'</td>',
-          '<td>'+description+'</td>',
-          '<td>'+audition+'</td>',
-          '<td><button class="deleteRow button special">X</button></td></tr>'].join(''));
+    $('#crew_pay_amount').val('')
+    positions.crew = positions.crew || []
+    var o = {
+      title: title,
+      description: description,
+      audition: audition,
+      consideration: consideration,
+      pay_offer: pay_offer
+    }
+    positions.crew.push(o)
+    if (!consideration.length) return vex.dialog.alert('You must select at least one consideration / offer type for this role.');
+    var payIcons = consideration.map(function(c) { return consideration_icons[c] })
+    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="crew" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
+    $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
-    $('#crew-title').val(''), $('#crew-description').val(''), $('#crew-audition').val(''), $("#crew-radio-needed").prop("checked", true);
+    $('#crew-title').val(''), 
+    $('#crew-description').val(''),
+    $('#crew-audition').val(''), 
+    $("#crew-radio-needed").prop("checked", true);
   },
-
   'click #add-cast': function(e) {
     e.preventDefault();
-    var countRows = $('.cast-val').length||0;
+    $('#casttabletoggle').show()
     var title = $('#cast-title').val(), 
         description = $('#cast-description').val(), 
         audition = $('#cast-audition').val() || 'N/A',
+        consideration = $('.cast_consideration:checked').map(function(a) { return $(this).val() }).get(),
+        pay_offer = $('#cast_pay_amount').val()||0,
         status = 'needed';
-    if (title && description && status) 
-      $('#cast-table').append([
-        '<tr class="cast-val after-the-fact">',
-        '<td>'+title+'</td>',
-        '<td>'+description+'</td>',
-        '<td>'+audition+'</td>',
-        '<td><button class="deleteRow button special">X</button></td></tr>'].join(''));
+    $('#cast_pay_amount').val('')
+    var o = {
+      title: title,
+      description: description,
+      audition: audition,
+      consideration: consideration,
+      pay_offer: pay_offer
+    }
+    positions.cast = positions.cast || []
+    positions.cast.push(o)
+    if (!consideration.length) return vex.dialog.alert('You must select at least one consideration / offer type for this role.');
+    var payIcons = consideration.map(function(c) { return consideration_icons[c] })
+    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="cast" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
+    $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
-    $('#cast-title').val(''), description = $('#cast-description').val(''), $('#cast-audition').val(''), $("#cast-radio-needed").prop("checked", true);
+    $('#cast-title').val(''), 
+    $('#cast-description').val(''), 
+    $('#cast-audition').val(''), 
+    $("#cast-radio-needed").prop("checked", true);
   },
-
   'click #add-needs': function(e) {
     e.preventDefault();
+    $('#needstabletoggle').show()
     var cat = $('#needs-category').val(), description = $('#needs-description').val();
     if (cat.toLowerCase().indexOf('category')>-1) return;
-    if (cat && description) $('#needs-table').append([
-      '<tr class="needs-val">',
-        '<td>'+cat+'</td>',
-        '<td>'+description+'</td>',
-        '<td><button class="deleteRow button special">X</button></td></tr>'].join(''));
+    if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
   },
-
   'click #add-social': function(e) {
     e.preventDefault();
+    $('#display_link_data').show()
     var title = $('#social-title').val(), url = $('#social-url').val();
-    if (title && url) $('#social-table').append('<tr class="social-val after-the-fact"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').on('click', deleteRow);
     $('#social-title').val(''), $('#social-url').val('');
   },
@@ -505,6 +549,8 @@ Template.editProject.events({
   },
   'click #add-gift': function(e) {
     e.preventDefault();
+
+    $('#merchtabletoggle').show()
     var o = {};
     o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
     if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
@@ -514,40 +560,58 @@ Template.editProject.events({
     o.type = $('#merchtype option:selected').val();
     if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
     if (o.type==='Apparel') {
-      o.secondaryData = $('.apparelsize:checkbox:checked').map(function(el){ return $(this).val();}).get();
+
+      o.quantity = {}
+
+      $('.apparelsize').each(function() {
+        o.quantity[$(this).val()] = parseInt($('#' + $(this).attr('val')).val()||0)
+      })
+
+      for (var key in o.quantity) {
+        if (!o.quantity[key]) {
+          delete o.quantity[key]
+        };
+      }
+
+      o.secondaryData = Object.keys(o.quantity)
+
+      if (!o.secondaryData.length) return vex.dialog.alert('You should have at least one size available for sale to continue.');
+
     } else {
       o.secondaryData = $('#merch_handling').val();
+      o.quantity = {all: $('#oneoff').val()||1}
     };
     o.disclaimer = $('#merch_disclaimer').val();
     osettings.giftImage = {};
     gifts.push(o);
-    var tblRow = [
-      '<tr class="gift-val after-the-fact">',
-        '<td>'+o.name+'</td>',
-        '<td>'+o.type+'</td>',
-        '<td>'+o.description+'</td>',
-        '<td>'
-    ];
+    // console.log(gifts)
+    appendCampaignMerchTable(o);
     
-    if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
-    if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
-    tblRow = tblRow.concat([
-      '</td>',
-        '<td>'+o.msrp+'</td>',
-        '<td><button class="removeGift button special">X</button></td></tr>'
-    ]);
-    $('#gift-table').append(tblRow.join(''));
-    $('.removeGift').on('click', removeGift);
     $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
     /** set file.name to span of inner el */
     $('#gift_file_name').text('');
     $('#merch_handling').val('');
     $('#merch_disclaimer').val('');
+    $('.merch_quantity').val('');
+    $('#oneoff').val('');
     $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
-  }
+    $('#hidden_gift_name').hide();
+  },
 });
 
 Template.editProject.helpers({
+  noUserEmail: function() {
+    if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.email&&Meteor.user().notification_preferences.email.verification) {
+      return false
+    };
+
+    if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.phone&&Meteor.user().notification_preferences.phone.verification) {
+      return false
+    };
+
+    return true
+
+  },
   init: function() {
     gifts = this.gifts;
     currentSlug = this._slug;
@@ -570,7 +634,33 @@ Template.editProject.helpers({
 
 Template.editProject.rendered = function () {
   $('.deleteRow').on('click', deleteRow);
-
+  positions = {};
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = "/js/scripts.min.js";
+    document.head.appendChild(script);
+  }, 987);
+  $('#summernote').summernote({
+    toolbar: [
+      // [groupName, [list of button]]
+      ['style', ['clear', 'fontname', 'strikethrough', 'superscript', 'subscript', 'fontsize', 'color']],
+      ['para', ['paragraph', 'style']],
+      ['height', ['height']],
+      ['misc', ['undo', 'redo']],
+      ['insert', ['picture', 'video', 'table', 'hr']]
+    ],
+    height: 300,
+    minHeight: null,
+    maxHeight: null,
+    focus: false,
+    tooltip: false,
+    callbacks: {
+      onInit: function() {
+        $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+        $('.note-toolbar').css('z-index', '0');
+      }
+    }
+  });
   try {
     var newProject = JSON.parse($('#thisCurrentProject').attr('val'));
     $('#thisCurrentProject').remove();
@@ -588,17 +678,17 @@ Template.editProject.rendered = function () {
       newProject.gifts.forEach(function(g) {
         appendCampaignMerchTable(g);
       });
+      $('#merchtabletoggle').show()
     };
-
     osettings.rawbudget = newProject.rawbudget||null;
-
     if (newProject._banner||newProject.banner) {
-      var filename = newProject&&newProject.bannerFileName||null;
-      if (filename===null||filename.toLowerCase()==='this is the name of the file uploaded') return;
-      $('#banner_file_name').text(filename);
-      $('#hidden_banner_name').show();
+      (function() {
+        var filename = newProject&&newProject.bannerFileName||null;
+        if (!filename||filename===null||filename.toLowerCase()==='this is the name of the file uploaded') return;
+        $('#banner_file_name').text(filename);
+        $('#hidden_banner_name').show();
+      }())
     };
-
     if (newProject.author_list) $('#authorlist').val(newProject.author_list);
     if (newProject.description) $('#summernote').summernote('code', newProject.description);
     if (newProject.creatorsInfo) $('#creators_info').val(newProject.creatorsInfo);
@@ -612,13 +702,14 @@ Template.editProject.rendered = function () {
         $('#crew-table').append('<tr class="crew-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newProjCrewAccord').removeClass('krown-accordion');
+      $('#crewtabletoggle').show()
     };
-
     if (newProject.cast&&newProject.cast.length) {
       newProject.cast.forEach(function(c) {
         $('#cast-table').append('<tr class="cast-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newProjCastAccord').removeClass('krown-accordion');
+      $('#casttabletoggle').show()
     };
 
     if (newProject.needs&&newProject.needs.length) {
@@ -626,6 +717,7 @@ Template.editProject.rendered = function () {
         $('#needs-table').append('<tr class="needs-val"><td>'+n.category+'</td><td>'+n.description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newProjNeedsAccord').removeClass('krown-accordion');
+      $('#needstabletoggle').show()
     };
 
     if (newProject.social&&newProject.social.length) {
@@ -633,13 +725,7 @@ Template.editProject.rendered = function () {
         $('#social-table').append('<tr class="social-val"><td>'+s.name+'</td><td>'+s.address+'</td><td><button class="deleteRow button special">X</button></td></tr>');
       });
       $('#newproj_social_accord').removeClass('krown-accordion');
-    };
-
-    if (newProject._gifts&&newProject._gifts.length) {
-      newProject._gifts.forEach(function(g) {
-        appendCampaignMerchTable(g);
-      });
-      $('#newProjGiftAccord').removeClass('krown-accordion');
+      $('#display_link_data').show()
     };
 
     /**
@@ -652,6 +738,5 @@ Template.editProject.rendered = function () {
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
 
-
-  }catch (e) {console.error(e)}
+  } catch (e) {}
 };

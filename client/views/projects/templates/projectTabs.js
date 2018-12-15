@@ -363,11 +363,44 @@ var resetGridMasonFunction = function(t) {
         }), t(window).trigger("scroll")
 };
 
+/** show roles dialog */
+function displayRoleTypeDialog(list, options) {
+  vex.closeTop();
+  // console.log(list, options)
+  // console.log(new Array(10).join('1 2  '))
+  var title = 'Available Roles';
+  var isMeteorUser = Meteor.user&&Meteor.user()||false;
+  var inputHTML = list.map(function(c, idx) {
+    var typeofRole = c.ctx === 'crew' ? 'a crew position' : c.ctx === 'cast' ? 'a cast position' : 'a resource needed';
+    var _html = '<div class="vex-custom-field-wrapper" id="displayroles">';
+    _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3 style="margin-bottom: 10px;">' + (c.title||c.role||c.category) + '</h3><p style="margin-bottom: 13px;font-weight:200">'+ typeofRole +'</p><p style="margin-bottom: 5px">' + c.description + '</p>';
+    _html += '</div></div></div></div>';
+    _html += '</div>';
+    return _html;
+  }).join('');
+  if (list.length===0) inputHTML='<p>&nbsp;</p><h3>&nbsp;&nbsp;There are no roles available.</h3>';
+  vex.dialog.alert({
+      message: title,
+      input: [
+          '<style>',
+              '.vex-custom-field-wrapper {',
+                  'margin: 1em 0;',
+              '}',
+              '.vex-custom-field-wrapper > label {',
+                  'display: inline-block;',
+                  'margin-bottom: .2em;',
+              '}',
+          '</style>',
+          inputHTML
+      ].join('')
+  })
+};
+
 function doResetGrid(t) {
     setTimeout(function() {
         resetGridMasonFunction(t);
     }, 144);
-}
+};
 
 var selectOptionsQueryGenres = {
   Feature: 'mixedgenres',
@@ -381,7 +414,7 @@ var selectOptionsQueryGenres = {
   'Music Video': 'audiogenres',
   Podcast: 'podcastgenres',
   Other: 'audiogenres'
-}
+};
 
 function makeStripeCharge(options) {
   StripeCheckout.open({
@@ -404,7 +437,7 @@ function makeStripeCharge(options) {
       }
     }
   });
-}
+};
 
 Handlebars.registerHelper('each_with_index', function(array, fn) {
   var buffer, i, item, j, len;
@@ -640,6 +673,24 @@ Template.projectTabs.events({
     }
   }
 });
+
+Template.projectTab.events({
+    'click .view_roles_conv': function(e) {
+        e.preventDefault();
+        displayRoleTypeDialog( 
+          (
+            (this.crew||[]).map(function(r){ 
+              r.ctx='crew' 
+              return r
+            }).concat((this.cast||[]).map(function(r){ 
+              r.ctx='cast' 
+              return r
+            }))).concat((this.needs||[]).map(function(r){ 
+              r.ctx='need' 
+              return r
+        })));
+    }
+})
 
 Template.projectTab.helpers({
   isHomePage: function() {

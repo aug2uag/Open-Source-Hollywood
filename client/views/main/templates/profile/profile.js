@@ -290,7 +290,7 @@ Template.profile.events({
 		var was = this, o={gift:was};
 
 		var dialogInput = [
-		  '<figure class="snip1165 red">',
+		  '<figure class="snip1165">',
 		    '<img src="',
 		    was.url||was.data,
 		    '" alt="sample63"/>',

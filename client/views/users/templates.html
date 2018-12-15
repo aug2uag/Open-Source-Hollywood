@@ -444,11 +444,15 @@
 
                     <div id="pending" style="display: none;">
                       <div class="project-header">
-                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Your Active Negotiations</h3>
+                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Current Contracts</h3>
                         <hr />
                       </div>
                       <div class="project-content">
                         <ol id="comments-list">
+
+                            <!-- DISPLAY PENDING AND COMPLETED CONTRACTS (ACTIVE & ARCHIVED PROJECTS) -->
+
+                            <!-- GIVE PRINT OPTION TO PRINT OUT THE TERMS OF THE CONTRACT -->
 
                           {{#each messages}}
                           <li class="comment clearfix container" style="padding-bottom:60px">
@@ -457,7 +461,7 @@
 
                                 <div class="comment-content row">
 
-                                    <div class="comment-meta clearfix col-xs-12 col-sm-9">
+                                    <div class="comment-meta clearfix col-xs-12 col-sm-9 contents">
 
                                         <h6 class="comment-title">{{this.ownerName}}</h6>
                                         <span class="comment-date">{{this.createdAt}}</span>
