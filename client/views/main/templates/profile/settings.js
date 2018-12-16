@@ -27,7 +27,6 @@ function appendPersonalMerchTable(o) {
 
 	gifts.push(o)
 	Session.set('gifts', gifts)
-
 	saveSettings();
 
 	$('.deleteRow').off()
@@ -40,11 +39,9 @@ function appendPersonalMerchTable(o) {
 function appendResourceToTable(o) {
 	if (!didNotifyAboutAddedResource) {
 		didNotifyAboutAddedResource = true
-		vex.dialog.alert('resource added, please remember to save changes')
 		$('body').position().top += 100
 	};
-	resources.push(o)
-	Session.set('resources', resources);
+
 	$('#assets-table-toggle').show()
 	$('#needs-table').append([
 		'<tr class="needs-val">',
@@ -56,6 +53,12 @@ function appendResourceToTable(o) {
 	$('.deleteRow').off()
 	$('.deleteRow').on('click', deleteRow);
 	$("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val('');
+
+	resources.push(o)
+	Session.set('resources', resources)
+	saveSettings();
+
+	vex.dialog.alert('resource added')
 }
 
 function appendSocialToTable(o, set) {
@@ -553,6 +556,8 @@ Template.settings.events({
 		var json = resources[idx]
 		json.idx = idx
 
+		console.log(json)
+
 		var arr = [
 			'<div id="hid_idx" style="display:none" val="',json.idx,'"></div>',
 			'<form id="reset_res_add">',
@@ -595,19 +600,19 @@ Template.settings.events({
 			        '<p><small><strong>fixed</strong></small></p>',
 			    '</div>',
 			    '<div class="col-sm-9">',
-			        '<input type="number" min="0" name="title" id="edit-needs-offer-hour" value="'+(json.pricing.fixed?json.pricing.hourly:'')+'" placeholder="enter hourly price" />',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-hour" value="'+(json.pricing.hourly?json.pricing.hourly:'')+'" placeholder="enter hourly price" />',
 			    '</div>',
 			    '<div class="col-sm-3">',
 			        '<p><small>per <strong>hour</strong></small></p>',
 			    '</div>',
 			    '<div class="col-sm-9">',
-			        '<input type="number" min="0" name="title" id="edit-needs-offer-day" value="'+(json.pricing.fixed?json.pricing.daily:'')+'" placeholder="enter daily price" />',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-day" value="'+(json.pricing.daily?json.pricing.daily:'')+'" placeholder="enter daily price" />',
 			    '</div>',
 			    '<div class="col-sm-3">',
 			        '<p><small>per <strong>day</strong></small></p>',
 			    '</div>',
 			    '<div class="col-sm-9">',
-			        '<input type="number" min="0" name="title" id="edit-needs-offer-week" value="'+(json.pricing.fixed?json.pricing.weekly:'')+'" placeholder="enter weekly price" />',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-week" value="'+(json.pricing.weekly?json.pricing.weekly:'')+'" placeholder="enter weekly price" />',
 			    '</div>',
 			    '<div class="col-sm-3">',
 			        '<p><small>per <strong>week</strong></small></p>',
@@ -799,7 +804,6 @@ Template.settings.events({
 	'input #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
 	'click .removeGift': function(e) {
 		e.preventDefault()
-
 		vex.dialog.confirm({
 			message: 'please confirm you want to delete this item',
 			callback: function(d) {
@@ -811,6 +815,9 @@ Template.settings.events({
 				}
 			}
 		})
+	},
+	'click .viewGift': function() {
+		// EDIT GIFT
 	}
 });
 

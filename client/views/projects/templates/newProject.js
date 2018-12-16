@@ -6,6 +6,7 @@ var consideration_icons = {
   escrow: '<i class="glyphicon glyphicon-usd"></i>',
   time: '<i class="glyphicon glyphicon-time"></i>'
 }
+var didClickSaveNew = false
 
 var autoSaveNewProjInterval = null;
 
@@ -523,17 +524,7 @@ Template.newProject.onRendered(function() {
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
 
-  } catch(e) { console.log(e) } finally {
-
-
-    // poll input every 30 seconds
-    clearInterval(autoSaveNewProjInterval);
-    autoSaveNewProjInterval = setInterval(function(){ 
-      var o = returnProjectCreateDetails();
-      if (!o) return;
-      localStorage.setItem('projectnew', JSON.stringify(o));
-    }, 30000);
-  }
+  } catch(e) {} 
 });
 
 function showVexWithInput(message, input) {
@@ -733,6 +724,13 @@ Template.newProject.events({
     if (!o) return;
     localStorage.setItem('projectnew', JSON.stringify(o));
     vex.dialog.alert('progress saved for this session');
+    // poll input every 30 seconds
+    clearInterval(autoSaveNewProjInterval);
+    autoSaveNewProjInterval = setInterval(function(){ 
+      var o = returnProjectCreateDetails();
+      if (!o) return;
+      localStorage.setItem('projectnew', JSON.stringify(o));
+    }, 30000);
   },
   'click #create_campaign': function(e) {
     e.preventDefault();
@@ -937,19 +935,24 @@ Template.newProject.events({
     };
     o.disclaimer = $('#merch_disclaimer').val();
     osettings.giftImage = {};
+
+
+    for (var key in o.quantity) {
+      var _i = parseInt(o.quantity[key])
+      if (!Number.isInteger(_i)||_i<=0) {
+        delete o.quantity[key]
+      }
+    }
+
+    if (!Object.keys(o.quantity).length)
+      return vex.dialog.alert('there is no valid quantity for sale, please correct and try again')
+
+
+
     gifts.push(o);
     // console.log(gifts)
     appendCampaignMerchTable(o);
-    
-    $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
-    /** set file.name to span of inner el */
-    $('#gift_file_name').text('');
-    $('#merch_handling').val('');
-    $('#merch_disclaimer').val('');
-    $('.merch_quantity').val('');
-    $('#oneoff').val('');
-    $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
-    $('#hidden_gift_name').hide();
+    $('#newProjFormMerch')[0].reset()
   },
   'click .login': function(e){
     e.preventDefault();

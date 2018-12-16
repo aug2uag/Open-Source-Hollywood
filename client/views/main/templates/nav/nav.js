@@ -26,7 +26,12 @@ Template.nav.events({
   'click .menu-item': function(e) {
     if ($(window).width()<=767) $('#navbutton').click();
     $('.menu-item').removeClass('bold')
-    $(e.target).addClass('bold')
+    $('.menu-item').removeClass('c333')
+    $('.menu-item').addClass('c999')
+    var li = $(e.target).closest('li')
+    $(li).addClass('bold')
+    $(li).addClass('c333')
+    $(li).removeClass('c999')
   },
   'click #logo': function() {
     window.location.assign('/');

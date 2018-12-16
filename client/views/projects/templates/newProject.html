@@ -49,6 +49,10 @@
                     <div class="contents clearfix" style="width: 100%;">
 
                         <div id="basic" style="display: none;">
+                            <div class="project-header">
+                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Basic Information</h3>
+                              <hr />
+                            </div>
                             <form class="newProjForm">
 
                                 <div id="hiddenbudget" class="row" hidden>
@@ -187,6 +191,10 @@
                         </div>
 
                         <div id="story" style="display: none;">
+                            <div class="project-header">
+                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Campaign Background</h3>
+                              <hr />
+                            </div>
                             <ol class="breadcrumb">
                               <li><a href="#!" class="bread_show_story bold" val="about">About</a></li>
                               <li><a href="#!" class="bread_show_story" val="hist">History</a></li>
@@ -233,7 +241,10 @@
                         </div>
 
                         <div id="resources" style="display: none;">
-
+                            <div class="project-header">
+                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Your Needs</h3>
+                              <hr />
+                            </div>
                             <div class="row">
                                 <p><small>Select resource type:</small></p>
                                 <ol class="breadcrumb">
@@ -282,7 +293,7 @@
 
                                                                 <div id="crew_pay_amounth">
                                                                     <input id="crew_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="crew_pay_amount"/>
-                                                                    <label><small>pay amount for this role</small></label>
+                                                                    <label><small>payment max for this role</small></label>
                                                                 </div>
                                                                 
                                                             </div>
@@ -457,13 +468,16 @@
                         </div>
 
                         <div id="merch" style="display: none;">
-                            <form class="newProjForm">
+                            <div class="project-header">
+                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Campaign Merch</h3>
+                              <hr />
+                            </div>
+                            <form id="newProjFormMerch" class="newProjForm">
                                 <div class="krown-column-row clearfix">
                                     <div class="krown-column-container clearfix first last span12 clearfix">
                                         {{#if noUserEmail}}
                                         <h5>YOU MUST CONFIGURE EMAIL NOTIFICATIONS TO ACCESS THIS FEATURE</h5>
                                         {{else}}
-                                        <h3 class="extremeboldtext">Campaign Merchandise</h3>
                                         <div class="accordion large clearfix" id="newProjGiftAccord">
                                             <section>
                                                 <h5 class="expandnewprojecttext">Select to upload merchandise related to this project for sale to the public.</h5>
@@ -608,6 +622,10 @@
                         </div>
 
                         <div id="tokenize" style="display: none;">
+                            <div class="project-header">
+                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Finances</h3>
+                              <hr />
+                            </div>
                            <div class="row">
                                 <div class="col-sm-12">
                                     <input style="width: 80%!important;left: 10%!important;position:relative;border: 2px solid black!important;background: white!important;color:black!important;" type="submit" name="showbudget" id="showbudget" value="enter budget data" />
