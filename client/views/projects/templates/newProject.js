@@ -28,6 +28,7 @@ function appendCampaignMerchTable(o) {
   $('#gift-table').append(tblRow.join(''));
   $('.removeGift').off();
   $('.removeGift').on('click', removeGift);
+  $('#merchtabletoggle').show()
 };
 
 function setNewProjectBanner(file) {
@@ -455,7 +456,6 @@ Template.newProject.onRendered(function() {
       newProject.gifts.forEach(function(g) {
         appendCampaignMerchTable(g);
       });
-      $('#merchtabletoggle').show()
     };
     if (newProject._banner||newProject.banner) {
       (function() {
@@ -803,11 +803,11 @@ Template.newProject.events({
         reader.readAsDataURL(file);
       }
   },
-  'change #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
-  'change #needs-description': function() {$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled') },
-  'change #crew-title': function() { $('#add-crew').removeClass('btn'), $('#add-crew').removeClass('disabled') },
-  'change #cast-title': function() { $('#add-cast').removeClass('btn'), $('#add-cast').removeClass('disabled') },
-  'change #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
+  'input #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
+  'input #needs-description': function() {$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled') },
+  'input #crew-title': function() { $('#add-crew').removeClass('btn'), $('#add-crew').removeClass('disabled') },
+  'input #cast-title': function() { $('#add-cast').removeClass('btn'), $('#add-cast').removeClass('disabled') },
+  'input #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
   'click #add-crew': function(e) {
     e.preventDefault();
     $('#crewtabletoggle').show()
@@ -905,7 +905,6 @@ Template.newProject.events({
   'click #add-gift': function(e) {
     e.preventDefault();
 
-    $('#merchtabletoggle').show()
     var o = {};
     o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
     if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');

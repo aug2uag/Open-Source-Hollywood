@@ -1,4 +1,6 @@
 var gifts = [], resources = [], reels = [], social = [];
+var didNotifyAboutAddedMerch = false
+var didNotifyAboutAddedResource = false
 var osettings = {giftImage: {}, avatar: {}};
 
 
@@ -17,8 +19,27 @@ function videoURLValidation(url) {
 	}
 }
 
+function appendPersonalMerchTable(o) {
+	if (!didNotifyAboutAddedMerch) {
+		didNotifyAboutAddedMerch = true
+		$('body').position().top += 100
+	};
+
+	gifts.push(o)
+	Session.set('gifts', gifts)
+
+	saveSettings();
+
+	$('.deleteRow').off()
+	$('.deleteRow').on('click', deleteRow);
+	$('#merchtabletoggle').show()
+
+	vex.dialog.alert('your personal merchandise was added')
+};
+
 function appendResourceToTable(o) {
-	if (!$('#assets-table-toggle').is(':visible')) {
+	if (!didNotifyAboutAddedResource) {
+		didNotifyAboutAddedResource = true
 		vex.dialog.alert('resource added, please remember to save changes')
 		$('body').position().top += 100
 	};
@@ -38,10 +59,8 @@ function appendResourceToTable(o) {
 }
 
 function appendSocialToTable(o, set) {
-	if (set===true) {
-		social.push(o)
-		Session.set('social', social);
-	}
+	social.push(o)
+	Session.set('social', social);
 	$('#social-table-toggle').show()
 	$('#social-table').append('<tr class="social-val"><td>'+o.name+'</td><td>'+o.address+'</td><td><button val="social" class="deleteRow button small special">X</button></td></tr>');
 	$('.deleteRow').off()
@@ -51,10 +70,8 @@ function appendSocialToTable(o, set) {
 
 function appendMediaURLtoTable(o, set) {
 	if (!o.url) return;
-	if (set===true) {
-		reels.push(o)
-		Session.set('reels', reels);
-	}
+	reels.push(o)
+	Session.set('reels', reels);
 	$('#reel-table-toggle').show()
 	$('#reel-table').append([
 	  	'<tr class="krown-pricing-title reel-val">',
@@ -78,16 +95,9 @@ function validateUrl(url) {
 
 function deleteRow(e) {
 	e.preventDefault();
-
 	var ctx = $(e.target).attr('val')
-	console.log('in deleteRow', ctx)
 	if (ctx) {
 	  try {
-	    var idx = $($(e.target).closest('tr')).index();
-
-	    if (ctx==='gift') {
-	      gifts.splice(idx, 1);
-	    };
 
 	    if (ctx==='resource') {
 	      console.log('splice resource at',idx)
@@ -99,9 +109,7 @@ function deleteRow(e) {
 	    };
 
 	    if (ctx==='social') {
-	    	console.log('remove social at index', idx)
 	      social.splice(idx, 1);
-	      console.log(social)
 	    };
 	  } catch(e) {}
 	};
@@ -463,45 +471,53 @@ Template.settings.events({
 		};
 	},
 	'click #add-gift': function(e) {
-		e.preventDefault();
-		var o = {};
-		o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
-		if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
-		if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
-		else o.data = osettings.giftImage.data;
-		// get type
-		o.type = $('#merchtype option:selected').val();
-		if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
-		if (o.type==='Apparel') {
-		  o.secondaryData = $('.apparelsize:checkbox:checked').map(function(el){ return $(this).val();}).get();
-		} else {
-		  o.secondaryData = $('#merch_handling').val();
-		};
-		o.disclaimer = $('#merch_disclaimer').val();
-		osettings.giftImage = {};
-		gifts.push(o);
-		var tblRow = [
-		  	'<tr class="gift-val after-the-fact">',
-		    '<td>'+o.name+'</td>',
-		    '<td>'+o.type+'</td>',
-		    '<td>'+o.description+'</td>',
-		    '<td>'
-		];
+	    e.preventDefault();
+	    var o = {};
+	    o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
+	    if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
+	    if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
+	    else o.data = osettings.giftImage.data;
+	    // get type
+	    o.type = $('#merchtype option:selected').val();
+	    if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
+	    if (o.type==='Apparel') {
 
-		if (o.secondaryData) tblRow.push('<strong><small>DATA:</small></strong>&nbsp;'+o.secondaryData);
-		if (o.disclaimer) tblRow.push('<br><strong><small>DISCLAIMER:</small></strong>&nbsp;'+o.disclaimer);
-		tblRow = tblRow.concat([
-		  	'</td>',
-		    '<td>'+o.msrp+'</td>',
-		    '<td><button class="removeGift button special">X</button></td></tr>'
-		]);
-		$('#gift-table').append(tblRow.join(''));
-		$('.removeGift').on('click', removeGift);
-		$('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
-		/** set file.name to span of inner el */
-		$('#settings_add_merch_form')[0].reset();
-		$('#merch_thumbnail').hide();
-		saveSettings();
+	      o.quantity = {}
+
+	      $('.apparelsize').each(function() {
+	        o.quantity[$(this).val()] = parseInt($('#' + $(this).attr('val')).val()||0)
+	      })
+
+	      for (var key in o.quantity) {
+	        if (!o.quantity[key]) {
+	          delete o.quantity[key]
+	        };
+	      }
+
+	      o.secondaryData = Object.keys(o.quantity)
+
+	      if (!o.secondaryData.length) return vex.dialog.alert('You should have at least one size available for sale to continue.');
+
+	    } else {
+	      o.secondaryData = $('#merch_handling').val();
+	      o.quantity = {all: $('#oneoff').val()||1}
+	    };
+	    o.disclaimer = $('#merch_disclaimer').val();
+	    osettings.giftImage = {};
+	    
+	    appendPersonalMerchTable(o);
+
+	    $('#editProjForm')[0].reset()
+
+	    // $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
+	    // /** set file.name to span of inner el */
+	    // $('#gift_file_name').text('');
+	    // $('#merch_handling').val('');
+	    // $('#merch_disclaimer').val('');
+	    // $('.merch_quantity').val('');
+	    // $('#oneoff').val('');
+	    // $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
+	    // $('#hidden_gift_name').hide();
 	},
 	'input #social-title': function() { 
 		if (true) {};
@@ -532,7 +548,7 @@ Template.settings.events({
 			$('#percent_deposit_val').text($('#input-percent-need').val()||10)
 		}
 	},
-	'click .cust_res': function(e) {
+	'click .cust_resource': function(e) {
 		var idx = $($(e.target).closest('tr')).attr('idx')
 
 		var json = resources[idx]
@@ -780,12 +796,42 @@ Template.settings.events({
 				}
 			}
 		})
+	},
+	'input #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
+	'click .removeGift': function(e) {
+		e.preventDefault()
+
+		vex.dialog.confirm({
+			message: 'please confirm you want to delete this item',
+			callback: function(d) {
+				if (d) {
+					var idx = $($(e.target).closest('tr')).index();
+					gifts.splice(idx, 1);
+					Session.set('gifts', gifts)
+					saveSettings();
+				}
+			}
+		})
 	}
 });
 
 Template.settings.helpers({
+	noUserEmail: function() {
+	  if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.email&&Meteor.user().notification_preferences.email.verification) {
+	    return false
+	  };
+
+	  if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.phone&&Meteor.user().notification_preferences.phone.verification) {
+	    return false
+	  };
+
+	  return true
+	},
 	r_foo: function() {
 		return JSON.stringify(this).replace(/"/g, '\"')
+	},
+	gifts: function() {
+		return Session.get('gifts')
 	},
 	resources: function() {
 		return Session.get('resources');
@@ -1013,16 +1059,17 @@ Template.settings.rendered = function () {
 	var u = Meteor.user()
 	// console.log(JSON.stringify(u, null, 4))
 
-
 	resources = u.assets||[]
 	Session.set('resources', resources);
 
 	
 	gifts = u.gifts||[]
-	// list gifts
+	Session.set('gifts', gifts);
+	if (gifts.length) $('#merchtabletoggle').show();
 
-	social = u.social||[]
-	social.forEach(appendSocialToTable)
+
+	social = []
+	u.social.forEach(appendSocialToTable)
 
 	reels = u.reels||[]
 	Session.set('reels', reels);

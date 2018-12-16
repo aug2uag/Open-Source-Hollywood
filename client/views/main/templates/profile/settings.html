@@ -472,7 +472,7 @@
                                     <tbody>
 
                                       {{#each resources}}
-                                      <tr class="cust_res" val='{{r_foo}}' idx="{{@index}}">
+                                      <tr class="cust_resource" val='{{r_foo}}' idx="{{@index}}">
                                         <td>{{category}}</td>
                                         <td>{{name}}</td>
                                         <td>{{description}}</td>
@@ -497,127 +497,175 @@
                     </div>
 
                     <div id="personalmerch" style="display: none;">
-                          <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> YOUR PERSONAL MERCH </h3>
-                          <div class="container">
-                                <div class="krown-column-row clearfix">
-                                      <div class="krown-column-container clearfix first last span12 clearfix">
-                                          <div class="accordion large clearfix {{#if hasGifts}}opened{{/if}}">
-                                              <form id="settings_add_merch_form">
-                                                  <h5>Configure merchandise for sale on your profile page.</h5>
-                                                  <div>
-                                                    <div class="row">
-                                                      <div class="col-xs-12 col-md-5">
-                                                          <label for="title">name</label>
-                                                          <input type="text" name="title" id="gift-title" placeholder="" />
-                                                      </div>
-                                                      <div class="col-xs-12 col-md-5">
-                                                          <label for="description">description</label>
-                                                          <input type="text" name="description" id="gift-description" placeholder="" />
-                                                      </div>
-                                                      <div class="col-xs-12 col-md-2">
-                                                          <label for="merchtype">merch type</label>
-                                                          <select name="merchtype" id="merchtype" class="form-control">
-                                                              <option selected disabled>- Select -</option>
-                                                              <option value="Apparel">Apparel</option>
-                                                              <option value="Perishable">Perishable</option>
-                                                              <option value="Non-Perishable">Non-Perishable</option>
-                                                          </select>
-                                                      </div>
+                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> YOUR PERSONAL MERCH </h3>
+                        <hr>
+                        <form id="editProjForm">
+                            <div class="krown-column-row clearfix">
+                                <div class="krown-column-container clearfix first last span12 clearfix">
+                                    {{#if noUserEmail}}
+                                    <h5>YOU MUST CONFIGURE EMAIL NOTIFICATIONS TO ACCESS THIS FEATURE</h5>
+                                    {{else}}
+                                    <div class="accordion large clearfix" id="newProjGiftAccord">
+                                        <section>
+                                            <h5 class="expandnewprojecttext">Select to upload merchandise related to this project for sale to the public.</h5>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-md-5">
+                                                        <label for="title">name</label>
+                                                        <input type="text" name="title" id="gift-title" placeholder="product or service name" />
                                                     </div>
-                                                    <div class="row" id="merchtypehidden" hidden>
+                                                    <div class="col-xs-12 col-md-5">
+                                                        <label for="description">description</label>
+                                                        <input type="text" name="description" id="gift-description" placeholder="enter description here" />
+                                                    </div>
+                                                    <div class="col-xs-12 col-md-2">
+                                                        <label for="merchtype">select merch type</label>
+                                                        <select name="merchtype" id="merchtype" class="form-control">
+                                                            <option selected disabled>- Select -</option>
+                                                            <option value="Apparel">Apparel</option>
+                                                            <option value="Perishable">Perishable</option>
+                                                            <option value="Non-Perishable">Non-Perishable</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="merchtypehidden" hidden>
 
-                                                        <div id="apparelsizes" class="col-xs-3" hidden>
-                                                              <div class="checkbox">
-                                                                <label><input class="apparelsize" type="checkbox" value="XS">&nbsp;&nbsp;&nbsp;&nbsp;XS</label>
-                                                              </div>
-                                                              <div class="checkbox">
-                                                                <label><input class="apparelsize" type="checkbox" value="S">&nbsp;&nbsp;&nbsp;&nbsp;S</label>
-                                                              </div>
-                                                              <div class="checkbox">
-                                                                <label><input class="apparelsize" type="checkbox" value="M">&nbsp;&nbsp;&nbsp;&nbsp;M</label>
-                                                              </div>
-                                                              <div class="checkbox">
-                                                                <label><input class="apparelsize" type="checkbox" value="L">&nbsp;&nbsp;&nbsp;&nbsp;L</label>
-                                                              </div>
-                                                              <div class="checkbox">
-                                                                <label><input class="apparelsize" type="checkbox" value="XL">&nbsp;&nbsp;&nbsp;&nbsp;XL</label>
-                                                              </div>
-                                                              <div class="checkbox">
-                                                                <label><input class="apparelsize" type="checkbox" value="XXL">&nbsp;&nbsp;&nbsp;&nbsp;XXL</label>
-                                                              </div>
+                                                    <div id="apparelsizes" class="col-xs-3" hidden>
+                                                        <p class="b20"><small><strong>enter size &amp; unit info</strong></small></p>
+                                                        <div class="row merchbottomborder">
+                                                            <div class="col-sm-12 col-md-5">
+                                                                <div class="checkbox">
+                                                                  <input class="apparelsize input-sm" type="text" val="XS" value="XS" id="XSs" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-7">
+                                                                <input ctx="size" class="merch_quantity input-sm" id="XS" type="number" min="0" placeholder="quantity">
+                                                            </div>
                                                         </div>
-
-                                                        <div class="col-xs-3" id="perishabledetails" hidden>
-                                                              <textarea name="merch_handling" id="merch_handling" placeholder="Shelf Life and Handling Instructions" rows="6">
-                                                              </textarea>
+                                                        <div class="row merchbottomborder">
+                                                            <div class="col-sm-12 col-md-5">
+                                                                <div class="checkbox">
+                                                                  <input class="apparelsize input-sm" type="text" value="S" val="S" id="Ss" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-7">
+                                                                <input ctx="size" class="merch_quantity input-sm" id="S" type="number" min="0" placeholder="quantity">
+                                                            </div>
                                                         </div>
-
-                                                        <div class="col-xs-9">
-                                                              <textarea name="merch_disclaimer" id="merch_disclaimer" placeholder="Return Policy and Disclaimers" rows="6">
-                                                              </textarea>
+                                                        <div class="row merchbottomborder">
+                                                            <div class="col-sm-12 col-md-5">
+                                                                <div class="checkbox">
+                                                                  <input class="apparelsize input-sm" type="text" value="M" val="M" id="Ms" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-7">
+                                                                <input ctx="size" class="merch_quantity input-sm" id="M" type="number" min="0" placeholder="quantity">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row merchbottomborder">
+                                                            <div class="col-sm-12 col-md-5">
+                                                                <div class="checkbox">
+                                                                  <input class="apparelsize input-sm" type="text" value="L" val="L" id="Ls" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-7">
+                                                                <input ctx="size" class="merch_quantity input-sm" id="L" type="number" min="0" placeholder="quantity">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row merchbottomborder">
+                                                            <div class="col-sm-12 col-md-5">
+                                                                <div class="checkbox">
+                                                                  <input class="apparelsize input-sm" type="text" value="XL" val="XL" id="XLs" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-7">
+                                                                <input ctx="size" class="merch_quantity input-sm" id="XL" type="number" min="0" placeholder="quantity">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row merchbottomborder">
+                                                            <div class="col-sm-12 col-md-5">
+                                                                <div class="checkbox">
+                                                                  <input class="apparelsize input-sm" type="text" value="XXL" val="XXL" id="XXLs" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-7">
+                                                                <input ctx="size" class="merch_quantity input-sm" id="XXL" type="number" min="0" placeholder="quantity">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                      <!-- <div class="col-xs-4">
-                                                          <label for="quantity">quantity</label>
-                                                          <input type="text" name="quantity" id="gift-quantity" placeholder="" />
-                                                      </div> -->
-                                                      <div class="col-xs-6">
-                                                          <label for="msrp">price</label>
-                                                          <input type="text" name="msrp" id="gift-msrp" placeholder="" />
-                                                      </div>
-                                                      <div class="col-xs-3" style="margin-top:  25px;">
-                                                          <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
-                                                              <i class="fa fa-cloud-upload"></i> Upload Image
-                                                          </label>
-                                                          <input class="noshow-file-upload" id="gift_file" type="file"/>
-                                                          <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
-                                                      </div>
-                                                      <div class="col-xs-3">
-                                                        <img class="img-thumbnail" alt="merch_thumbnail" id="merch_thumbnail" style="display:none">
-                                                      </div>
+
+                                                    <div class="col-xs-3" id="perishabledetails" hidden>
+                                                        <textarea name="merch_handling" id="merch_handling" placeholder="" rows="6"></textarea>
+                                                        <input id="oneoff" type="number" min="0" placeholder="number of units">
                                                     </div>
-                                                    <a id="add-gift" class="button special">Add Merchandise</a>
-                                                    <br>
-                                                    <br />
-                                                    <div class="table-wrapper">
-                                                        <table>
-                                                            <thead>
-                                                              <tr>
-                                                                <th>Name</th>
-                                                                <th>Type</th>
-                                                                <th>Description</th>
-                                                                <th>Info</th>
-                                                                <th>Price</th>
-                                                                <th>DELETE</th>
-                                                              </tr>
-                                                            </thead>
-                                                            <tbody id="gift-table">
-                                                              {{#each userGifts}}
-                                                                <tr class="gift-val">
+
+                                                    <div class="col-xs-9">
+                                                        <textarea name="merch_disclaimer" id="merch_disclaimer" placeholder="Return Policy and Disclaimers" rows="6"></textarea>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <!-- <div class="col-xs-4">
+                                                        <label for="quantity">quantity</label>
+                                                        <input type="text" name="quantity" id="gift-quantity" placeholder="" />
+                                                    </div> -->
+                                                    <div class="col-xs-7">
+                                                        <label for="msrp">price</label>
+                                                        <input type="text" name="msrp" id="gift-msrp" placeholder="enter merch price here" />
+                                                    </div>
+                                                    <div class="col-xs-5" style="margin-top:  25px;">
+                                                        <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
+                                                            <i class="fa fa-cloud-upload"></i> Upload Image
+                                                        </label>
+                                                        <input class="noshow-file-upload" id="gift_file" type="file"/>
+                                                        <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
+                                                    </div>
+                                                </div>
+                                                <button id="add-gift" val="casttabletoggle" class="btn button disabled special w100 t60" style="font-size:1.3rem">Add Campaign Merch</button>
+                                                <br>
+                                                <br />
+                                                <div class="table-responsive" style="display:none" id="merchtabletoggle">
+                                                    <table class="table">
+                                                        <thead>
+                                                          <tr>
+                                                              <th>Name</th>
+                                                              <th>Type</th>
+                                                              <th>Description</th>
+                                                              <th>Info</th>
+                                                              <th>Price</th>
+                                                              <th>DELETE</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody id="gift-table">
+
+                                                          {{#each gifts}}
+
+                                                              <tr class="gift-val">
                                                                   <td>{{name}}</td>
                                                                   <td>{{type}}</td>
                                                                   <td>{{description}}</td>
-                                                                  <td>{{#if secondaryData}}<strong><small>DATA:</small></strong>&nbsp;{{secondaryData}}{{/if}}{{#if disclaimer}}<br><strong><small>DISCLAIMER:</small></strong>&nbsp;{{disclaimer}}{{/if}}</td>
+                                                                  <td>
+                                                                    <strong><small>DATA:</small></strong>&nbsp;{{secondaryData}}<br><strong><small>DISCLAIMER:</small></strong>&nbsp;{{disclaimer}}
+                                                                  </td>
                                                                   <td>{{msrp}}</td>
-                                                                  <td><button class="deleteRow button small special">X</button></td>
+                                                                  <td><button class="removeGift button special" val="gift">X</button></td>
                                                                 </tr>
-                                                              {{/each}}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                  </div>
-                                              </form>
-                                          </div>
-                                      </div>
-                                </div>
 
-                                
-                          </div>
-                          <p>&nbsp;</p>
-                          <div class="row">
-                              <a class="btn collapsible" href="/allmerch">VIEW ALL YOUR OTHER MERCH</a>
-                          </div>
+                                                          {{/each}}
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <!-- <div class="col-sm-12 t20" id="personal_merch_save" style="display:none">
+                                      <button class="btn btn-lg btn-block btn-success submit save_settings" type="submit">SAVE CHANGES</button>
+                                    </div> -->
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
                     <div id="notifications" style="display: none;">
