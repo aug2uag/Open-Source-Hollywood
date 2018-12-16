@@ -1,5 +1,7 @@
 var gifts = [], resources = [], reels = [], social = [];
 var osettings = {giftImage: {}, avatar: {}};
+
+
 function videoURLValidation(url) {
 	var vimeo = /^https:\/\/vimeo.com\/[\d]{8,}$/;
 	var youtube = /^https:\/\/youtu.be\/[A-z0-9]{9,}$/;
@@ -15,13 +17,21 @@ function videoURLValidation(url) {
 	}
 }
 
-function appendResourceToTable(o, set) {
-	if (set===true) {
-		resources.push(o)
-		Session.set('resources', resources);
-	}
+function appendResourceToTable(o) {
+	if (!$('#assets-table-toggle').is(':visible')) {
+		vex.dialog.alert('resource added, please remember to save changes')
+		$('body').position().top += 100
+	};
+	resources.push(o)
+	Session.set('resources', resources);
 	$('#assets-table-toggle').show()
-	$('#needs-table').append('<tr class="needs-val"><td>'+o.category||'N/A'+'</td><td>'+o.name||'N/A'+'</td><td>'+o.description||'N/A'+'</td><td><button val="resource" class="deleteRow button small">X</button></td></tr>');
+	$('#needs-table').append([
+		'<tr class="needs-val">',
+			'<td>'+(o.category||'N/A')+'</td>',
+			'<td>'+(o.name||'N/A')+'</td>',
+			'<td>'+(o.description||'N/A')+'</td>',
+			'<td><button val="resource" class="deleteRow button special small right">X</button></td>',
+		'</tr>'].join(''));
 	$('.deleteRow').off()
 	$('.deleteRow').on('click', deleteRow);
 	$("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val('');
@@ -45,7 +55,6 @@ function appendMediaURLtoTable(o, set) {
 		reels.push(o)
 		Session.set('reels', reels);
 	}
-	console.log(o)
 	$('#reel-table-toggle').show()
 	$('#reel-table').append([
 	  	'<tr class="krown-pricing-title reel-val">',
@@ -77,11 +86,11 @@ function deleteRow(e) {
 	    var idx = $($(e.target).closest('tr')).index();
 
 	    if (ctx==='gift') {
-	    	
 	      gifts.splice(idx, 1);
 	    };
 
 	    if (ctx==='resource') {
+	      console.log('splice resource at',idx)
 	      resources.splice(idx, 1);
 	    };
 
@@ -196,6 +205,8 @@ function saveSettings(o) {
 		if ($(el).prop('checked')) o.iam.push($(el).attr('name'));
 	});
 
+	console.log('upgradeProfile with')
+	console.log(o)
 	Meteor.call('upgradeProfile', o);
 }
 
@@ -383,6 +394,7 @@ Template.settings.events({
 	      	},
 	      	availability: $('.need-sched:checkbox:checked').map(function(el){ return $(this).val();}).get(),
 	      	paySchedule: $('.need-payopt:checkbox:checked').map(function(el){ return $(this).val();}).get(),
+	      	terms: $('#needs-terms').val()
 	      }
 
 	      if (o.paySchedule.indexOf('deposit')>-1) {
@@ -402,6 +414,7 @@ Template.settings.events({
 	      }
 
 	      appendResourceToTable(o, true)
+	      $('#reset_res_add')[0].reset()
     },
     'click #add-social': function(e) { 
       e.preventDefault();
@@ -518,10 +531,262 @@ Template.settings.events({
 			$('#percent_deposit_sign').text('%')
 			$('#percent_deposit_val').text($('#input-percent-need').val()||10)
 		}
+	},
+	'click .cust_res': function(e) {
+		var idx = $($(e.target).closest('tr')).attr('idx')
+
+		var json = resources[idx]
+		json.idx = idx
+
+		var arr = [
+			'<div id="hid_idx" style="display:none" val="',json.idx,'"></div>',
+			'<form id="reset_res_add">',
+			  '<div class="row w100">',
+			    '<div class="krown-alert">',
+			      '<label for="category">Select Category</label>',
+			      '<select class="form-control" name="category" id="edit-needs-category">',
+			        '<option value="">- Category -</option>',
+			        '<option value="Equipment">Equipment</option>',
+			        '<option value="Labor">Labor</option>',
+			        '<option value="Location">Location</option>',
+			        '<option value="Construction">Construction</option>',
+			        '<option value="Legal">Legal</option>',
+			        '<option value="Sales">Sales / Marketing</option>',
+			        '<option value="Miscellaneous">Miscellaneous</option>',
+			      '</select>',
+			    '</div>',
+			  '</div>',
+			  '<div class="row w100">',
+			    '<div class="col-xs-6">',
+			        '<label for="needs-description">name of this item</label>',
+			        '<input type="text" name="title" id="edit-needs-title" placeholder="Name" />',
+			    '</div>',
+			    '<div class="col-xs-6">',
+			        '<label for="needs-description">postal code of this item</label>',
+			        '<input type="text" name="title" id="edit-needs-location" value="" placeholder="Postal Code" />',
+			    '</div>',
+			 
+			    '<div class="col-sm-12">',
+			        '<label for="needs-description">describe your item</label>',
+			        '<input type="text" name="title" id="edit-needs-description" value="" placeholder="Description" />',
+			    '</div>',
+			    '<div class="col-sm-12 b20">',
+			        '<label for="needs-description">define pricing (in US Dollars)</label>',
+			    '</div>',
+			    '<div class="col-sm-9">',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-fixed" value="'+(json.pricing.fixed?json.pricing.fixed:'')+'" placeholder="enter hourly price" />',
+			    '</div>',
+			    '<div class="col-sm-3">',
+			        '<p><small><strong>fixed</strong></small></p>',
+			    '</div>',
+			    '<div class="col-sm-9">',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-hour" value="'+(json.pricing.fixed?json.pricing.hourly:'')+'" placeholder="enter hourly price" />',
+			    '</div>',
+			    '<div class="col-sm-3">',
+			        '<p><small>per <strong>hour</strong></small></p>',
+			    '</div>',
+			    '<div class="col-sm-9">',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-day" value="'+(json.pricing.fixed?json.pricing.daily:'')+'" placeholder="enter daily price" />',
+			    '</div>',
+			    '<div class="col-sm-3">',
+			        '<p><small>per <strong>day</strong></small></p>',
+			    '</div>',
+			    '<div class="col-sm-9">',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-week" value="'+(json.pricing.fixed?json.pricing.weekly:'')+'" placeholder="enter weekly price" />',
+			    '</div>',
+			    '<div class="col-sm-3">',
+			        '<p><small>per <strong>week</strong></small></p>',
+			    '</div>',
+			    '<div class="b40 krown-alert">',
+			      '<div class="col-xs-12 b20">',
+			          '<label for="needs-description">define offer options</label>',
+			      '</div>',
+			      '<div class="col-xs-12">',
+			        '<div class="row">',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-payopt-edit" type="checkbox" id="edit-checkbox-need-none" value="none" name="needpayopts" >',
+			            '<label for="edit-checkbox-need-none" val="none">None</label>',
+			            '<p class="needs-p"><small>handle offline</small></p>',
+			          '</div>',
+			          '<div class="col-xs-12 col-sm-8 checkbox">',
+			            '<input class="need-payopt-edit" type="checkbox" id="edit-checkbox-need-full" name="needpayopts" value="full" >',
+			            '<label for="edit-checkbox-need-full" val="full">Pay in Full</label>',
+			            '<p class="needs-p"><small>full amount</small></p>',
+			          '</div>',
+			          '<div class="col-xs-12 col-sm-8 checkbox">',
+			            '<input class="need-payopt-edit" type="checkbox" id="edit-checkbox-need-deposit" name="needpayopts" value="deposit">',
+			            '<label for="edit-checkbox-need-deposit" val="deposit"><span id="percent_deposit_val_edit">10</span><span id="percent_deposit_sign_edit">%</span> Deposit</label>',
+			            '<p class="needs-p"><small>deposit</small></p>',
+			          '</div>',
+			          '<div class="col-xs-6 checkbox b20 t20 percent_deposit_edit" style="display:none">',
+			            '<input class="user-role b20" type="number" min="0" max="100" id="input-percent-need-edit" value="10" name="needpayopts_b">',
+			            '<label for="input-percent-need"><i>change deposit</i></label>',
+			          '</div>',
+			          '<div class="col-xs-6 checkbox b20 t20 percent_deposit_edit" style="display:none">',
+			            '<input class="user-role b20" type="number" min="0" id="input-fixed-need-edit" placeholder="override percent" name="needpayopts_b">',
+			            '<label for="input-fixed-need"><i>enter fixed price</i></label>',
+			          '</div>',
+			        '</div>',
+			        '<div class="row">',
+			          '<div class="col-xs-12 b20">',
+			              '<label for="needs-description">general availability (check all that apply)</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-any" value="any" name="needschedopts" >',
+			            '<label for="edit-checkbox-need-sched-any">Available Anytime</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-any-weekdays" value="any-weekdays" name="needschedopts">',
+			            '<label for="edit-checkbox-need-sched-any-weekdays">Available Anytime (M - F)</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-am" value="am" name="needschedopts">',
+			            '<label for="edit-checkbox-need-sched-am">Available Mornings (M - F)</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-pm" value="pm" name="needschedopts">',
+			            '<label for="edit-checkbox-need-sched-pm">Available Evenings (M - F)</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-any-weekends" value="any-weekends" name="needschedopts">',
+			            '<label for="edit-checkbox-need-sched-any-weekends">Available Anytime (weekends)</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-am-wk" value="am-wk" name="needschedopts">',
+			            '<label for="edit-checkbox-need-sched-am-wk">Available Mornings (weekends)</label>',
+			          '</div>',
+			          '<div class="col-xs-8 checkbox">',
+			            '<input class="need-sched-edit" type="checkbox" id="edit-checkbox-need-sched-pm-wk" value="pm-wk" name="needschedopts">',
+			            '<label for="edit-checkbox-need-sched-pm-wk">Available Evenings (weekends)</label>',
+			          '</div>',
+			        '</div>',
+			      '</div>',
+			      '<div class="col-xs-12">',
+			        '<label for="needs-terms">Additional Terms</label>',
+			        '<textarea id="edit-needs-terms" placeholder="&nbsp;&nbsp;&nbsp;Write any additional details, terms, and conditions here."></textarea>',
+			      '</div>',
+			    '</div>',
+			  '</div>',
+			'</form>'
+		]
+
+		vex.dialog.open({
+			message: 'Edit Asset',
+			input: arr.join(''),
+		    buttons: [
+		        $.extend({}, vex.dialog.buttons.YES, { text: 'SAVE' }),
+		        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+		        $.extend({}, vex.dialog.buttons.NO, { text: 'DELETE', className:'special' , click: function($vexContent, event) {
+		            this.value = parseInt(json.idx)+1;
+		            this.close()
+		        }})
+		    ],
+			afterOpen: function() {
+				$('#edit-checkbox-need-deposit').on('click', function() { 
+					if ($('input#edit-checkbox-need-deposit').is(':checked')) { $('.percent_deposit_edit').show() } else { $('.percent_deposit_edit').hide() }
+				})
+
+				$('#edit-needs-category option[value=\''+json.category+'\']').prop('selected', true);
+				$('#edit-needs-title').val(json.name)
+				$('#edit-needs-location').val(json.location)
+				$('#edit-needs-description').val(json.description)
+
+				json.paySchedule.forEach(function(p) {
+					switch (p) {
+						case 'none': 
+							$('#edit-checkbox-need-none').prop('checked', true)
+							break
+						case 'full': 
+							$('#edit-checkbox-need-full').prop('checked', true)
+							break
+						case 'deposit': {
+							$('#edit-checkbox-need-deposit').prop('checked', true)
+							$('.percent_deposit_edit').show()
+							var elid = json.deposit.type==='percent' ? '#input-percent-need-edit' : '#input-fixed-need-edit'
+							$('#percent_deposit_val_edit').text(json.deposit.amount)
+							$('#percent_deposit_sign_edit').text(json.deposit.type==='percent'?'%':'USD')
+							$(elid).val(json.deposit.amount)
+						}
+					}
+				})
+
+				json.availability.forEach(function(a) {
+					console.log(a)
+					switch (a) {
+						case 'any':
+							$('#edit-checkbox-need-sched-any').prop('checked', true)
+							break
+						case 'any-weekdays':
+							$('#edit-checkbox-need-sched-any-weekdays').prop('checked', true)
+							break
+						case 'am':
+							$('#edit-checkbox-need-sched-am').prop('checked', true)
+							break
+						case 'pm':
+							$('#edit-checkbox-need-sched-pm').prop('checked', true)
+							break
+						case 'any-weekends':
+							$('#edit-checkbox-need-sched-any-weekends').prop('checked', true)
+							break
+						case 'am-wk':
+							$('#edit-checkbox-need-sched-am-wk').prop('checked', true)
+							break
+						case 'pm-wk':
+							$('#edit-checkbox-need-sched-pm-wk').prop('checked', true)
+							break
+					}
+				})
+
+				$('#edit-needs-terms').val(json.terms)
+			},
+			callback: function(data) {
+				if (data) {
+					if (Number.isInteger(data)) {
+						var idx = data - 1
+						var elid = '#lease-table tr:eq('+data+')'
+						$(elid).remove();
+						resources.splice(idx, 1)
+					} else {
+						var idx = parseInt($('#hid_idx').attr('val'))
+						resources[idx] = {
+					      	category: $('#edit-needs-category').val(),
+					      	name: $('#edit-needs-title').val(),
+					      	description: $('#edit-needs-description').val(),
+					      	location: $('#edit-needs-location').val(),
+					      	pricing: {
+					      		fixed: parseFloat($('#edit-needs-offer-fixed').val()),
+					      		hourly: parseFloat($('#edit-needs-offer-hour').val()),
+					      		daily: parseFloat($('#edit-needs-offer-day').val()),
+					      		weekly: parseFloat($('#edit-needs-offer-week').val())
+					      	},
+					      	availability: $('.need-sched-edit:checkbox:checked').map(function(el){ return $(this).val();}).get(),
+					      	paySchedule: $('.need-payopt-edit:checkbox:checked').map(function(el){ return $(this).val();}).get(),
+					      	terms: $('#edit-needs-terms').val()
+					    }
+
+						if (resources[idx].paySchedule.indexOf('deposit')>-1) {
+							resources[idx].deposit = {
+								type: $('#input-fixed-need').val() ? 'usd' : 'percent',
+								amount: $('#input-fixed-need').val() || $('#input-percent-need').val()
+							}
+						};
+
+					    if (!resources[idx].category||!resources[idx].name) return
+
+						if (!/^\d{5}$/.exec(resources[idx].location.trim())) return
+
+					}
+					saveSettings({showDialog:true});
+				}
+			}
+		})
 	}
 });
 
 Template.settings.helpers({
+	r_foo: function() {
+		return JSON.stringify(this).replace(/"/g, '\"')
+	},
 	resources: function() {
 		return Session.get('resources');
 	},
@@ -750,7 +1015,8 @@ Template.settings.rendered = function () {
 
 
 	resources = u.assets||[]
-	resources.forEach(appendResourceToTable)
+	Session.set('resources', resources);
+
 	
 	gifts = u.gifts||[]
 	// list gifts
@@ -759,9 +1025,8 @@ Template.settings.rendered = function () {
 	social.forEach(appendSocialToTable)
 
 	reels = u.reels||[]
-	reels.forEach(appendMediaURLtoTable)
+	Session.set('reels', reels);
 
-	console.log(social)
 
 	if ($(window).width()<580) {
 	  	setTimeout(function() {
@@ -817,7 +1082,7 @@ Template.settings.rendered = function () {
 		    callbacks: {
 		      onInit: function() {
 		        $('.note-editable').html(u.bio||'<p><span class="large">Enter your biography here.</span><br>You can copy / paste HTML, for more help visit <a href="https://en.wikipedia.org/wiki/Template:Biography" target="_blank">https://en.wikipedia.org/wiki/Template:Biography</a>.</p><p>&nbsp;</p>');
-		        $('.note-toolbar').css('z-index', '0');
+		        // $('.note-toolbar').css('z-index', '0');
 		      }
 		    }
 		});
