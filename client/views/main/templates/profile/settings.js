@@ -100,7 +100,6 @@ function deleteRow(e) {
 	  try {
 
 	    if (ctx==='resource') {
-	      console.log('splice resource at',idx)
 	      resources.splice(idx, 1);
 	    };
 
@@ -162,7 +161,6 @@ function phoneVerifyVex() {
 	        $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
 	    ],
 	    callback: function (data) {
-	    	console.log(data)
 	    	return phoneVerifyVexCB(data);
 	    }
 	});
@@ -213,8 +211,8 @@ function saveSettings(o) {
 		if ($(el).prop('checked')) o.iam.push($(el).attr('name'));
 	});
 
-	console.log('upgradeProfile with')
-	console.log(o)
+	// console.log('upgradeProfile with')
+	// console.log(o)
 	Meteor.call('upgradeProfile', o);
 }
 
@@ -500,24 +498,25 @@ Template.settings.events({
 
 	    } else {
 	      o.secondaryData = $('#merch_handling').val();
-	      o.quantity = {all: $('#oneoff').val()||1}
+	      o.quantity = {all: $('#oneoff').val()}
 	    };
 	    o.disclaimer = $('#merch_disclaimer').val();
 	    osettings.giftImage = {};
 	    
-	    appendPersonalMerchTable(o);
+	    for (var key in o.quantity) {
+	    	var _i = parseInt(o.quantity[key])
+    		if (!Number.isInteger(_i)||_i<=0) {
+    			delete o.quantity[key]
+    		}
+	    }
 
+	    if (!Object.keys(o.quantity).length)
+	    	return vex.dialog.alert('there is no valid quantity for sale, please correct and try again')
+
+
+	    appendPersonalMerchTable(o);
 	    $('#editProjForm')[0].reset()
 
-	    // $('#gift-title').val(''), $('#gift-description').val(''), $('#gift-quantity').val(''), $('#gift-msrp').val('');
-	    // /** set file.name to span of inner el */
-	    // $('#gift_file_name').text('');
-	    // $('#merch_handling').val('');
-	    // $('#merch_disclaimer').val('');
-	    // $('.merch_quantity').val('');
-	    // $('#oneoff').val('');
-	    // $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
-	    // $('#hidden_gift_name').hide();
 	},
 	'input #social-title': function() { 
 		if (true) {};
