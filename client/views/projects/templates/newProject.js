@@ -144,7 +144,7 @@ function returnProjectCreateDetails(o) {
   // });
 
   var needs = $('.needs-val');
-  o.needs = [];
+  o.needs = positions.needs||[];
   // needs.each(function(i, el) {
   //   var _o = {};
   //   var arr = $(el).children('td');
@@ -865,10 +865,15 @@ Template.newProject.events({
   },
   'click #add-needs': function(e) {
     e.preventDefault();
+    positions.needs = positions.needs || []
+    var o = {
+      category: $('#needs-category').val(),
+      description: $('#needs-description').val()
+    }
+    if (!o.category) return;
+    positions.needs.push(o)
     $('#needstabletoggle').show()
-    var cat = $('#needs-category').val(), description = $('#needs-description').val();
-    if (cat.toLowerCase().indexOf('category')>-1) return;
-    if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    $('#needs-table').append('<tr class="needs-val"><td>'+o.category+'</td><td>'+o.description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
     $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
