@@ -6,8 +6,6 @@ var consideration_icons = {
   escrow: '<i class="glyphicon glyphicon-usd"></i>',
   time: '<i class="glyphicon glyphicon-time"></i>'
 }
-var didClickSaveNew = false
-
 var autoSaveNewProjInterval = null;
 
 function appendCampaignMerchTable(o) {
@@ -440,7 +438,7 @@ Template.newProject.onRendered(function() {
   
   try {
     var newProject = JSON.parse(localStorage.getItem('projectnew'));
-    if (!newProject) {
+    if (!newProject||!autoSaveNewProjInterval) {
       $('#resetNewProjCacheBtn').hide()
       return
     };
@@ -744,6 +742,7 @@ Template.newProject.events({
       if (!err) {
         localStorage.removeItem('projectnew')
         localStorage.removeItem('projectnew_banner')
+        $('#resetNewProjCacheBtn').hide()
         setTimeout(function() {
           Router.go('Home');
         }, 987);

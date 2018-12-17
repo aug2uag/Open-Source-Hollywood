@@ -567,7 +567,7 @@ Template.settings.events({
 			      '<select class="form-control" name="category" id="edit-needs-category">',
 			        '<option value="">- Category -</option>',
 			        '<option value="Equipment">Equipment</option>',
-			        '<option value="Labor">Labor</option>',
+			        '<option value="Service">Service</option>',
 			        '<option value="Location">Location</option>',
 			        '<option value="Construction">Construction</option>',
 			        '<option value="Legal">Legal</option>',

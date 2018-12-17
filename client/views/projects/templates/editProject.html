@@ -126,7 +126,7 @@
                                     <div class="accordion large clearfix" id="newproj_social_accord">
                                         <section>
                                             <h5 class="expandnewprojecttext">Enter the name of your link and the URL</h5>
-                                            <div>
+                                            <form id="newSocialForm">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6">
                                                         <input type="text" name="title" id="social-title" placeholder="Name" />
@@ -148,10 +148,18 @@
                                                               <th>DELETE</th>
                                                           </tr>
                                                         </thead>
-                                                        <tbody id="social-table"></tbody>
+                                                        <tbody id="social-table">
+                                                            {{#each projSocial}}
+                                                                <tr class="social-val">
+                                                                        <td>{{name}}</td>
+                                                                        <td>{{address}}</td>
+                                                                        <td><button class="deleteRow button special">X</button></td>
+                                                                </tr>
+                                                            {{/each}}
+                                                        </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </section>
                                     </div>
                                 </div>
@@ -189,32 +197,33 @@
                         </form>
                     </div>
                     <div style="display: none;" class="camp_resources_toggle krown-alert krown-single-image" id="camp_Resources">
+                        <h3 class="extremeboldtext header_res_opts" id="show_options_crew2">Add Crew Positions</h3>
                         <div class="row">
                             <p><small>Select resource type:</small></p>
                             <ol class="breadcrumb">
-                              <li><a href="#!" class="bread_show_resources bold" val="crew">Crew</a></li>
-                              <li><a href="#!" class="bread_show_resources" val="cast">Cast</a></li>
-                              <li><a href="#!" class="bread_show_resources" val="needs">Assets</a></li>
+                              <li><a href="#!" class="bread_show_resources bold" val="crew" aux="Add Crew Positions">Crew</a></li>
+                              <li><a href="#!" class="bread_show_resources" val="cast" aux="Add Cast Positions">Cast</a></li>
+                              <li><a href="#!" class="bread_show_resources" val="needs" aux="Request Resources &amp; Support Positions">Assets</a></li>
                             </ol>
                             <p>&nbsp;</p>
                             <form class="newProjForm">
                                 <!-- RESOURCES -->
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_crew">
                                     <div class="">
-                                        <h3 class="extremeboldtext">Add Crew Positions</h3>
                                         <div class="accordion large clearfix" id="newProjCrewAccord">
                                             <section>
-                                                <div>
+                                                <form id="newCrewForm">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-4">
-                                                            <label><small>enter title of position</small></label>
+                                                            <label><small>role title</small></label>
                                                             <input type="text" name="title" id="crew-title" placeholder="Title" />
                                                         </div>
                                                         <div class="col-sm-12 col-md-8">
-                                                            <label><small>enter description of role</small></label>
+                                                            <label><small>role description</small></label>
                                                             <input type="text" name="title" id="crew-description" placeholder="Description" />
                                                         </div>
                                                         <div class="col-sm-12">
+                                                            <label><small>role audition details</small></label>
                                                             <input type="text" name="crew-audition" id="crew-audition" placeholder="Audition Specifications" />
                                                             <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
                                                         </div>
@@ -236,7 +245,7 @@
 
                                                                 <div id="crew_pay_amounth">
                                                                     <input id="crew_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="crew_pay_amount"/>
-                                                                    <label><small>pay amount for this role</small></label>
+                                                                    <label><small>max pay for this role</small></label>
                                                                 </div>
                                                                 
                                                             </div>
@@ -268,10 +277,37 @@
                                                                     <th>DELETE</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id="crew-table"></tbody>
+                                                            <tbody id="crew-table">
+
+                                                                {{#each projCrew}}
+                                                                    <tr class="crew-val">
+                                                                        <td>{{title}}</td>
+                                                                        <td>
+                                                                            {{description}}<br>
+                                                                            <small>eligible for:</small>
+                                                                            {{#if roleStar}}
+                                                                                &nbsp;<i class="glyphicon glyphicon-star"></i>
+                                                                            {{/if}}
+
+                                                                            {{#if roleTime}}
+                                                                                &nbsp;<i class="glyphicon glyphicon-time"></i>
+                                                                            {{/if}}
+
+                                                                            {{#if roleDollar}}
+                                                                                &nbsp;<i class="glyphicon glyphicon-usd"></i>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>{{audition}}</td>
+                                                                        <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
+                                                                    </tr>
+                                                                {{/each}}
+
+
+
+                                                            </tbody>
                                                         </table>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </section>
                                         </div>
                                     </div>
@@ -279,18 +315,21 @@
 
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_cast" style="display:none">
                                     <div class="">
-                                        <h3 class="extremeboldtext">Add Cast Positions</h3>
+                                        
                                         <div class="accordion large clearfix" id="newProjCastAccord">
                                             <section>
-                                                <div>
+                                                <form id="newCastForm">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-4">
+                                                            <label for="cast-title"><small>role title</small></label>
                                                             <input type="text" name="cast-title" id="cast-title" placeholder="Role" />
                                                         </div>
                                                         <div class="col-sm-12 col-md-8">
+                                                            <label for="cast-description"><small>role description</small></label>
                                                             <input type="text" name="cast-description" id="cast-description" placeholder="Description" />
                                                         </div>
                                                         <div class="col-sm-12">
+                                                            <label for="cast-audition"><small>role audition details</small></label>
                                                             <input type="text" name="cast-audition" id="cast-audition" placeholder="Audition Specifications" />
                                                             <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
                                                         </div>
@@ -343,10 +382,35 @@
                                                                     <th>DELETE</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id="cast-table"></tbody>
+                                                            <tbody id="cast-table">
+
+                                                                {{#each projCast}}
+                                                                    <tr class="crew-val">
+                                                                        <td>{{title}}</td>
+                                                                        <td>
+                                                                            {{description}}<br>
+                                                                            <small>eligible for:</small>
+                                                                            {{#if roleStar}}
+                                                                                &nbsp;<i class="glyphicon glyphicon-star"></i>
+                                                                            {{/if}}
+
+                                                                            {{#if roleTime}}
+                                                                                &nbsp;<i class="glyphicon glyphicon-time"></i>
+                                                                            {{/if}}
+
+                                                                            {{#if roleDollar}}
+                                                                                &nbsp;<i class="glyphicon glyphicon-usd"></i>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>{{audition}}</td>
+                                                                        <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
+                                                                    </tr>
+                                                                {{/each}}
+
+                                                            </tbody>
                                                         </table>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </section>
                                         </div>
                                     </div>
@@ -354,17 +418,17 @@
 
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_needs" style="display:none">
                                     <div class="">
-                                        <h3 class="extremeboldtext">Request Resources and Support Positions</h3>
                                         <div class="accordion large clearfix"  id="newProjNeedsAccord">
                                             <section>
-                                                <div>
+                                                <form id="newNeedsForm">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-4">
                                                             <div class="form-group">
+                                                                <label><small>select type of resource</small></label>
                                                                 <select name="category" id="needs-category" class="form-control">
                                                                   <option>- Type -</option>
                                                                   <option value="Equipment">Equipment</option>
-                                                                  <option value="Labor">Labor</option>
+                                                                  <option value="Service">Service</option>
                                                                   <option value="Location">Location</option>
                                                                   <option value="Construction">Construction</option>
                                                                   <option value="Legal">Legal</option>
@@ -381,6 +445,7 @@
                                                               </div>
                                                         </div>
                                                         <div class="col-sm-12 col-md-8">
+                                                            <label><small>description of resource</small></label>
                                                             <input type="text" name="title" id="needs-description" placeholder="Description" />
                                                         </div>
                                                     </div>
@@ -396,10 +461,20 @@
                                                                     <th>DELETE</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id="needs-table"></tbody>
+                                                            <tbody id="needs-table">
+                                                                
+                                                                {{#each projNeeds}}
+                                                                    <tr class="needs-val">
+                                                                        <td>{{cat}}</td>
+                                                                        <td>{{description}}</td>
+                                                                        <td><button class="deleteRow button special">X</button></td>
+                                                                    </tr>
+                                                                {{/each}}
+
+                                                            </tbody>
                                                         </table>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </section>
                                         </div>
                                     </div>

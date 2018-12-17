@@ -4,6 +4,12 @@ var gifts = [],
     currentSlug = null, 
     currentTitle = null;
 
+var consideration_icons = {
+  pay: '<i class="glyphicon glyphicon-star"></i>',
+  escrow: '<i class="glyphicon glyphicon-usd"></i>',
+  time: '<i class="glyphicon glyphicon-time"></i>'
+}
+
 function validateUrl(value) {
   return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
 }
@@ -272,25 +278,25 @@ function returnProjectCreateDetails(o) {
   // });
 
   var needs = $('.needs-val');
-  o.needs = [];
-  needs.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.category = $(arr[0]).text();
-    _o.description = $(arr[1]).text();
-    _o.quantity = $(arr[2]).text();
-    o.needs.push(_o);
-  });
+  o.needs = positions.needs||[];
+  // needs.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.category = $(arr[0]).text();
+  //   _o.description = $(arr[1]).text();
+  //   _o.quantity = $(arr[2]).text();
+  //   o.needs.push(_o);
+  // });
 
   var social = $('.social-val');
-  o.social = [];
-  social.each(function(i, el) {
-    var _o = {};
-    var arr = $(el).children('td');
-    _o.name = $(arr[0]).text();
-    _o.address = $(arr[1]).text();
-    o.social.push(_o);
-  });
+  o.social = positions.social||[];
+  // social.each(function(i, el) {
+  //   var _o = {};
+  //   var arr = $(el).children('td');
+  //   _o.name = $(arr[0]).text();
+  //   _o.address = $(arr[1]).text();
+  //   o.social.push(_o);
+  // });
 
   /** budget info */
   var budgetSheet = localStorage.getItem('budget');
@@ -377,6 +383,7 @@ Template.editProject.events({
     var v= $(e.target).attr('val')
     var id = '#show_options_' + v
     $(id).show()
+    $('#show_options_crew2').text($(e.target).attr('aux'))
   },
   'click .camp_show_resources': function(e) {
     $('.camp_resources_toggle').hide()
@@ -448,11 +455,11 @@ Template.editProject.events({
         reader.readAsDataURL(file);
       }
   },
-  'change #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
-  'change #needs-description': function() {$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled') },
-  'change #crew-title': function() { $('#add-crew').removeClass('btn'), $('#add-crew').removeClass('disabled') },
-  'change #cast-title': function() { $('#add-cast').removeClass('btn'), $('#add-cast').removeClass('disabled') },
-  'change #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
+  'input #gift-title': function() {$('#add-gift').removeClass('btn'), $('#add-gift').removeClass('disabled') },
+  'input #needs-description': function() {$('#add-needs').removeClass('btn'), $('#add-needs').removeClass('disabled') },
+  'input #crew-title': function() { $('#add-crew').removeClass('btn'), $('#add-crew').removeClass('disabled') },
+  'input #cast-title': function() { $('#add-cast').removeClass('btn'), $('#add-cast').removeClass('disabled') },
+  'input #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
   'click #add-crew': function(e) {
     e.preventDefault();
     $('#crewtabletoggle').show()
@@ -471,16 +478,20 @@ Template.editProject.events({
       consideration: consideration,
       pay_offer: pay_offer
     }
-    positions.crew.push(o)
+    
     if (!consideration.length) return vex.dialog.alert('You must select at least one consideration / offer type for this role.');
-    var payIcons = consideration.map(function(c) { return consideration_icons[c] })
-    if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="crew" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
-    $('.deleteRow').off();
-    $('.deleteRow').on('click', deleteRow);
-    $('#crew-title').val(''), 
-    $('#crew-description').val(''),
-    $('#crew-audition').val(''), 
-    $("#crew-radio-needed").prop("checked", true);
+    positions.crew.push(o)
+    Session.set('crew', positions.crew)
+    $('#newCrewForm')[0].reset()
+
+    // var payIcons = consideration.map(function(c) { return consideration_icons[c] })
+    // if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="crew" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
+    // $('.deleteRow').off();
+    // $('.deleteRow').on('click', deleteRow);
+    // $('#crew-title').val(''), 
+    // $('#crew-description').val(''),
+    // $('#crew-audition').val(''), 
+    // $("#crew-radio-needed").prop("checked", true);
   },
   'click #add-cast': function(e) {
     e.preventDefault();
@@ -500,34 +511,61 @@ Template.editProject.events({
       pay_offer: pay_offer
     }
     positions.cast = positions.cast || []
-    positions.cast.push(o)
+    
     if (!consideration.length) return vex.dialog.alert('You must select at least one consideration / offer type for this role.');
-    var payIcons = consideration.map(function(c) { return consideration_icons[c] })
-    if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="cast" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
+
+    positions.cast.push(o)
+    Session.set('cast', positions.cast)
+
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
-    $('#cast-title').val(''), 
-    $('#cast-description').val(''), 
-    $('#cast-audition').val(''), 
-    $("#cast-radio-needed").prop("checked", true);
+
+    $('#newCastForm')[0].reset()
+    // var payIcons = consideration.map(function(c) { return consideration_icons[c] })
+    // if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="cast" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
+    
+    // $('#cast-title').val(''), 
+    // $('#cast-description').val(''), 
+    // $('#cast-audition').val(''), 
+    // $("#cast-radio-needed").prop("checked", true);
   },
   'click #add-needs': function(e) {
     e.preventDefault();
     $('#needstabletoggle').show()
-    var cat = $('#needs-category').val(), description = $('#needs-description').val();
-    if (cat.toLowerCase().indexOf('category')>-1) return;
-    if (cat && description) $('#needs-table').append('<tr class="needs-val"><td>'+cat+'</td><td>'+description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+
+    positions.needs = positions.needs||[]
+    positions.needs.push({
+      category: $('#needs-category').val(),
+      description: $('#needs-description').val()
+    })
+
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
-    $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
+
+    Session.set('needs', positions.needs)
+
+    $('#newNeedsForm')[0].reset()
+
+    // var cat = , description = ;
+    // if (cat.toLowerCase().indexOf('category')>-1) return;
+    // if (cat && description) $('#needs-table').append();
+    // $('.deleteRow').off();
+    // $('.deleteRow').on('click', deleteRow);
+    // $("#needs-category").val($("#needs-category option:first").val()), $('#needs-description').val(''), $('#needs-quantity').val('');
   },
   'click #add-social': function(e) {
     e.preventDefault();
     $('#display_link_data').show()
-    var title = $('#social-title').val(), url = $('#social-url').val();
-    if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
-    $('.deleteRow').on('click', deleteRow);
-    $('#social-title').val(''), $('#social-url').val('');
+    positions.social = positions.social || []
+    positions.social.push({
+      name: $('#social-title').val(),
+      address: $('#social-url').val()
+    })
+    Session.set('social', positions.social)
+    $('#newSocialForm')[0].reset()
+    // if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
+    // $('.deleteRow').on('click', deleteRow);
+    // $('#social-title').val(''), $('#social-url').val('');
   },
   'change #merchtype': function(e) {
     e.preventDefault();
@@ -554,8 +592,8 @@ Template.editProject.events({
     var o = {};
     o.name = $('#gift-title').val(), o.description = $('#gift-description').val(), o.msrp = parseFloat($('#gift-msrp').val());
     if (!o.name || Number.isFinite(o.msrp) === false || o.msrp < 1) return alert('please correct the name or price information to continue');
-    if (!osettings.giftImage.data) o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
-    else o.data = osettings.giftImage.data;
+    if (osettings.giftImage&&osettings.giftImage.data) o.data = osettings.giftImage.data;
+    else o.url = 'https://s3-us-west-2.amazonaws.com/producehour/placeholder_gift.jpg';
     // get type
     o.type = $('#merchtype option:selected').val();
     if (o.type.indexOf('Select')>-1) return alert('please select merchandise type');
@@ -600,6 +638,24 @@ Template.editProject.events({
 });
 
 Template.editProject.helpers({
+  projCrew: function() {
+    return Session.get('crew')
+  },
+  projCast: function() {
+    return Session.get('cast')
+  },
+  projNeeds: function() {
+    return Session.get('needs')
+  },
+  projSocial: function() {
+    return Session.get('social')
+  },
+  roleStar: function() { if (this.consideration.indexOf('pay')>-1) { return true } return false },
+  roleTime: function() { if (this.consideration.indexOf('time')>-1) { return true } return false },
+  roleDollar: function() { if (this.consideration.indexOf('escrow')>-1) { return true } return false },
+  self: function() {
+    return JSON.stringify(this)
+  },
   noUserEmail: function() {
     if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.email&&Meteor.user().notification_preferences.email.verification) {
       return false
@@ -665,6 +721,8 @@ Template.editProject.rendered = function () {
     var newProject = JSON.parse($('#thisCurrentProject').attr('val'));
     $('#thisCurrentProject').remove();
 
+    console.log(newProject)
+
     if (newProject.videoExplainer) $('#video_explainer').val(newProject.videoExplainer);
     if (newProject.category) $("#category option[value='"+newProject.category+"']").prop('selected', true).trigger('change');
     if (newProject.zip) $('#location').val(newProject.zip);
@@ -697,36 +755,25 @@ Template.editProject.rendered = function () {
     if (newProject.needsInfo) $('#needs_info').val(newProject.needsInfo);
     if (newProject.significanceInfo) $('#significance_info').val(newProject.significanceInfo);
 
-    if (newProject.crew&&newProject.crew.length) {
-      newProject.crew.forEach(function(c) {
-        $('#crew-table').append('<tr class="crew-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
-      });
-      $('#newProjCrewAccord').removeClass('krown-accordion');
-      $('#crewtabletoggle').show()
-    };
-    if (newProject.cast&&newProject.cast.length) {
-      newProject.cast.forEach(function(c) {
-        $('#cast-table').append('<tr class="cast-val"><td>'+c.title+'</td><td>'+c.description+'</td><td>'+c.audition+'</td><td><button class="deleteRow button special">X</button></td></tr>');
-      });
-      $('#newProjCastAccord').removeClass('krown-accordion');
-      $('#casttabletoggle').show()
-    };
 
-    if (newProject.needs&&newProject.needs.length) {
-      newProject.needs.forEach(function(n) {
-        $('#needs-table').append('<tr class="needs-val"><td>'+n.category+'</td><td>'+n.description+'</td><td><button class="deleteRow button special">X</button></td></tr>');
-      });
-      $('#newProjNeedsAccord').removeClass('krown-accordion');
-      $('#needstabletoggle').show()
-    };
+    positions.crew = newProject.crew||[]
+    Session.set('crew', positions.crew)
+    if (positions.crew.length) $('#crewtabletoggle').show();
 
-    if (newProject.social&&newProject.social.length) {
-      newProject.social.forEach(function(s) {
-        $('#social-table').append('<tr class="social-val"><td>'+s.name+'</td><td>'+s.address+'</td><td><button class="deleteRow button special">X</button></td></tr>');
-      });
-      $('#newproj_social_accord').removeClass('krown-accordion');
-      $('#display_link_data').show()
-    };
+    positions.cast = newProject.cast||[]
+    Session.set('cast', positions.cast)
+    if (positions.cast.length) $('#casttabletoggle').show();
+
+    positions.needs = newProject.needs||[]
+    Session.set('needs', positions.needs)
+    
+    if (positions.needs.length) $('#needstabletoggle').show();
+
+    positions.social = newProject.social||[]
+    Session.set('social', positions.social)
+    console.log(positions.social)
+    if (positions.social.length) $('#display_link_data').show()
+
 
     /**
       1) test
