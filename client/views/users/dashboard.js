@@ -1,0 +1,406 @@
+function ConvertToCSV(json) {
+  var order = json.order
+  var csv = 'Purchaser, Email, Phone, Shipping Name, Shipping Address 1, Shipping Address 2, Order, Purchase ID, Order ID, Total Units, Total Order\n'
+  csv += [
+    order.user.name, order.email, order.phone, order.name, order.address, [order.city, order.state, order.zip].join(' '),
+    order.order.map(function(o) {
+      return ['item: ', o.key, ' - quantity: ', o.quantity].join('')
+    }).join(' ... '),
+    order.receipt.id, 
+    json._id, 
+    order.totalUnits, 
+    ['$', order.amount].join('')
+  ].join(', ')
+
+  var data, filename, link;
+
+  filename = [json._id,'.csv'].join('');
+
+  csv = 'data:text/csv;charset=utf-8,' + csv;
+  data = encodeURI(csv);
+
+  link = document.createElement('a');
+  link.setAttribute('href', data);
+  link.setAttribute('download', filename);
+  link.click();
+}
+
+function quantOrdersTable(quantOrders, o, msrp) {
+  var _order = [], totalOrder = 0
+  quantOrders.forEach(function(o) {
+    totalOrder+=o.quantity
+    _order = _order.concat([
+      '<tr><td>',
+        o.key,
+      '</td>',
+      '<td>',
+        o.quantity,
+      '</td><td class="center">--</td></tr>'
+    ])
+  })
+
+  _order = _order.concat([
+      '<tr><td class="center">&nbsp;</td><td class="center">&nbsp;</td>',
+      '<td>$',
+        totalOrder * msrp,
+      '</td></tr>'
+  ])
+
+  return _order.join('')
+}
+
+function iAmOfferee(offereeId) {
+	if (Meteor.user()._id===offereeId) return true;
+	return false
+}
+
+Template.dashboard.helpers({
+	contractLink: function() {
+		if (this.ctx&&this.ctx==='offer') {
+			return ['/message/project/', this.slug, '/', this._id].join('')
+		};
+		return ['/message/project/', this.slug, '/', this.offer.user.id].join('')
+	},
+	offerLink: function() {
+		console.log(this)
+		if (iAmOfferee(this.offeree)) {
+			return '/profile/' + this.offer.user.id
+		};
+
+		return ['/projects/',this.slug,'/',this.offeree].join('')
+	},
+	offerName: function() {
+		if (iAmOfferee(this.offeree)) {
+			return this.offer.user.name	
+		};
+		
+		return this.title||this.offer
+	},
+	offerImg: function() {
+		if (iAmOfferee(this.offeree)) {
+			return this.offer.user.avatar	
+		};
+		
+		return this.banner
+	},
+	was: function() {
+		console.log(this)
+	},
+	leaseTotals: function() {
+		console.log(this)
+		return 0
+	},
+	orderDate: function() {
+		return new Date(this.created).toDateString()
+	},
+	fulfilled: function() {
+		if (this.fulfilled) return true;
+		return false
+	},
+	giftTotals: function() {
+		if (this.giftPurchases.length<=1) {
+		  return this.giftPurchases[0]&&this.giftPurchases[0].amount||0
+		};
+		return this.giftPurchases.reduce(function(a,b) {
+		  return a.amount + b.amount
+		})
+	},
+	purchaseStatus: function() {
+		return this.status||'unfulfilled'
+	},
+	createAccount: function() {
+		Meteor.call('createBankingAccount');
+	},
+	equityCamps: function() {
+		/** 
+			if my id is in list of equity holders:
+				id:
+				details: {
+					value: percent equity
+					date assigned:
+					considerationType: author | patron | cast | crew | resource
+					considerationValue: amount | role | resource -- details
+				}
+		*/
+		var _id = Meteor.user()._id;
+		return Projects.find({
+			$or: [
+				{
+					$and: [
+			          { archived: true },
+			          { ownerId: _id }
+			        ]
+				},
+				{
+					"equity.id": _id
+				}
+			]
+	    });
+	},
+	activeCamps: function() {
+		var _id = Meteor.user()._id;
+		var _x = Projects.find({
+	        $and: [
+	          { archived: false },
+	          { usersApproved: _id }
+	        ]
+	    }).fetch();
+	    var x = _x.map(function(p) {
+	    	p.scope = 'approved';
+	    	return p;
+	    });
+
+		var _y = Projects.find({
+	        $and: [
+	          { archived: false },
+	          { ownerId: _id }
+	        ]
+	    }).fetch();
+	    var y = _y.map(function(p) {
+	    	p.scope = 'created';
+	    	return p;
+	    });
+
+	    return x.concat(y);
+	},
+	archivedCamps: function() {
+		var _id = Meteor.user()._id;
+		var _x = Projects.find({
+	        $and: [
+	          { archived: true },
+	          { usersApproved: _id }
+	        ]
+	    }).fetch();
+	    var x = _x.map(function(p) {
+	    	p.scope = 'approved';
+	    	return p;
+	    });
+
+		var _y = Projects.find({
+	        $and: [
+	          { archived: true },
+	          { ownerId: _id }
+	        ]
+	    }).fetch();
+	    var y = _y.map(function(p) {
+	    	p.scope = 'created';
+	    	return p;
+	    });
+
+	    return x.concat(y);
+	},
+	isCreated: function() {
+		if (this.scope==='created') return true;
+		return false;
+	},
+	
+	account: function() {
+		if (Meteor.user().account) return true;
+		return false;
+	},
+	bank: function() {
+		return Meteor.user()&&Meteor.user().bank||false;
+	},
+	bank_name: function() {
+		return Meteor.user().bank.bank_name;
+	},
+	account_no: function() {
+		return '********'+Meteor.user().bank.last4;
+	},
+	routing_no: function() {
+		return Meteor.user().bank.routing_number;
+	},
+	messages: function() {
+		/** 
+			THIS METHOD IS COMPLETELY FUCKED
+				- used to show each message
+				- now it's one negotiations tab (set)
+
+		  	IT SHOULD SHOW UNIQUE PROJ BY OFFERS, not messages
+		  */
+		var projects = Projects.find({
+	        $and: [
+	          {archived: false},
+	          {ownerId: Meteor.user()._id}
+	        ]
+	    }).fetch().map(function(p) {
+	    	return p._id;
+	    });
+		var messages = ProjectMessages.find({ 
+			$or: [
+				{ 
+					user: Meteor.user()._id,
+					archived: { $ne: true }
+				} , 
+				{ 
+					project: { $in: projects },
+					archived: { $ne: true }
+				}
+			] 
+		}, { 
+				sort: { createTimeActual: -1 } 
+		}).fetch();
+
+		var projs = messages.map(function(p) {
+			return p.project;
+		});
+
+		var returnArr = [], duplicatesArr = [];
+
+		for (var i = 0; i < messages.length; i++) {
+			var m = messages[i];
+			if (duplicatesArr.indexOf(m.project)===-1) {
+				returnArr.unshift(m);
+				duplicatesArr.push(m.project);
+			};
+		};
+
+		return returnArr;
+	},
+	textify: function() {
+		if (this.ownerName==='Open Source Hollywood'&&this.ownerId===Meteor.user()._id) {
+			return '';
+		};
+		return this.text;
+	},
+	receiptsList: function() {
+	    return Receipts.find({user: Meteor.user()._id}).fetch();
+	},
+	formatDate: function() {
+	    return moment(this.created).format('MMMM Do YYYY, h:mm:ss a');
+	},
+	formatTitle: function() {
+	    return this.projTitle||this.projectTitle||this.title||'undefined';
+	},
+	formatAmount: function() {
+	    return '$' + this.amount.toFixed(2);
+	},
+	formatRefund: function() {
+	    if (this.refunded) return 'REFUNDED';
+	    if (this.error) return 'REFUND ERROR, CONTACT US';
+	    return 'PAID';
+	}
+});
+
+Template.dashboard.events({
+	'click #add_account': function(e) {
+		e.preventDefault();
+		var opts = {};
+		opts.country = $('#country').val();
+		opts.currency = $('#currency').val();
+		opts.account_holder_name = $('#account_holder_name').val();
+		opts.account_holder_type = $('#account_holder_type').val();
+		opts.routing_number = $('#routing_number').val();
+		opts.account_number = $('#account_number').val();
+		opts.default_for_currency = true;
+		opts.object = 'bank_account';
+		Meteor.call('updateBanking', opts, function(err, result) {
+			console.log(err, result)
+			if (err) return vex.dialog.alert('there was an error updating your account information, please try again later or contact us if you need assistance');
+			return vex.dialog.alert(result||'account updated');
+		});
+	},
+	'click .reset_transfer': function(e) {
+		Meteor.call('deleteBanking');
+	},
+	'click .dash_show_merchant': function(e) {
+	    $('.merch_view_opts').hide()
+	    $('.dash_show_merchant').removeClass('bold')
+	    $(e.target).addClass('bold')
+	    var v= $(e.target).attr('val')
+	    var id = '#' + v
+	    $(id).show()
+	},
+	'click .dash_show_camps': function(e) {
+	    $('.camp_view_opts').hide()
+	    $('.dash_show_camps').removeClass('bold')
+	    $(e.target).addClass('bold')
+	    var v= $(e.target).attr('val')
+	    var id = '#' + v
+	    $(id).show()
+	},
+	'click .dash_show_ks': function(e) {
+	    $('.dash_ks').hide()
+	    $('.dash_show_ks').removeClass('bold')
+	    $(e.target).addClass('bold')
+	    var v= $(e.target).attr('val')
+	    var id = '#' + v
+	    $(id).show()
+	},
+	'click .fulfill_gift': function(e) {
+	    e.preventDefault();
+	    var was = this
+	    o={gift:this.order.gift}
+	    var orderSummary = [
+	      '<div class="row">',
+	        '<div class="col-sm-7">',
+	        this.order.gift.name,
+	        '<br>Order Summary</div>',
+	        '<div class="panel-body">',
+	          '<table class="table"><thead><tr><th>Type</th><th>Quantity</th><th>Total</th></tr></thead><tbody>',
+	          quantOrdersTable(this.order.order, o, this.order.gift.msrp),
+	          '</tbody></table>',
+	        '</div>',
+	      '</div>'
+	    ].join('')
+	    orderSummary = orderSummary + [
+	      '<div class="row">',
+	        '<div class="col-sm-7">Shipping Details</div>',
+	        '<div class="panel-body">',
+	          '<table class="table"><tbody>',
+	          '<tr><td>name</td><td>',this.order.name,'</td>',
+	          '<tr><td>address</td><td>',this.order.address,'</td>',
+	          '<tr><td>city</td><td>',this.order.city,'</td>',
+	          '<tr><td>state, zip</td><td>',[this.order.state, this.order.zip].join(', '),'</td>',
+	          '<tr><td>contact</td><td>',[this.order.email, this.order.phone].join('; '),'</td>',
+	          '</tbody></table>',
+	        '</div>',
+	      '</div>'
+	    ].join('')
+
+	    var buttons = [
+	        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+	    ]
+
+	    if (!was.fulfilled) {
+	      buttons.unshift($.extend({}, vex.dialog.buttons.NO, { text: 'Mark as Fulfilled', className: 'aquamarineB', click: function($vexContent, event) {
+	          this.value = 'fulfill';
+	          this.close()
+	      }}))
+	    }
+
+	    if (was.order&&Object.keys(was.order).length>5) {
+	    	buttons.unshift($.extend({}, vex.dialog.buttons.NO, { text: 'Download', className: 'lemonB', click: function($vexContent, event) {
+		        this.value = 'report';
+		        this.close()
+		    }}))
+	    };
+
+	    var user_name = this.user && this.user.name || '';
+	    var user_avatar = this.user && this.user.avatar || '';
+	    var vexOpen = true;
+	    var _vex = vex.dialog.open({
+	      title: 'Gift Fulfillment',
+	      input: orderSummary,
+	      buttons: buttons,
+	      callback: function (data) {
+	        if (!vexOpen) return;
+	        vexOpen = false;
+	          if (!data) {
+	              return
+	          }
+	          
+	          if (data==='fulfill') {
+	            Meteor.call('markMerchFulfillment', was)
+	          };
+
+	          if (data==='report') {
+	            ConvertToCSV(was)
+	          };
+
+	          _vex.close();
+	      }
+	    });
+	},
+	
+})

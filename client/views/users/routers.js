@@ -2,7 +2,6 @@ Router.route('/profile/:_id', {
   name: 'Profile',
   template: 'profile',
   layoutTemplate: 'StaticLayout',
-  bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
   waitOn: function() {
     // if (!Meteor.user()) {
     //   Router.go('Home');

@@ -1,22 +1,3 @@
-Router.route('/receipts', {
-    name: 'Receipts',
-    template: 'receipts',
-    layoutTemplate: 'StaticLayout',
-    bodyClass: '.col-xs-12,.col-sm-12,.col-md-12,.col-lg-12{margin-bottom: 20px;}',
-    waitOn: function() {
-        if (!Meteor.user()) Router.go('Home');
-        return [
-            Meteor.subscribe('getReceipts')
-        ];
-    },
-    onBeforeAction: function() {
-      $('meta[name=description]').remove();
-      $('head').append( '<meta name="description" content="Open Source Hollywood payment and transfer receipts on campaigns.">' );
-      document.title = 'Transaction Records';
-      this.next();
-    }
-});
-
 Router.route('/comms', {
     name: 'Comms',
     template: 'comms',
@@ -29,28 +10,6 @@ Router.route('/comms', {
         ];
     }
 });
-
-
-Template.receipts.helpers({
-    receiptsList: function() {
-        return Receipts.find({user: Meteor.user()._id}).fetch();
-    },
-    formatDate: function() {
-        return moment(this.created).format('MMMM Do YYYY, h:mm:ss a');
-    },
-    formatTitle: function() {
-        return this.projTitle||this.projectTitle||this.title||'undefined';
-    },
-    formatAmount: function() {
-        return '$' + this.amount.toFixed(2);
-    },
-    formatRefund: function() {
-        if (this.refunded) return 'REFUNDED';
-        if (this.error) return 'REFUND ERROR, CONTACT US';
-        return 'PAID';
-    }
-});
-
 
 Template.comms.helpers({
     comms: function() {

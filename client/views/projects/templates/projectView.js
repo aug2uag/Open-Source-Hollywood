@@ -11,6 +11,33 @@ const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHH
 var donationObject = {};
 var currentSlug, currentTitle, currentProject, me;
 
+function ConvertToCSV(json) {
+  var order = json.order
+  var csv = 'Purchaser, Email, Phone, Shipping Name, Shipping Address 1, Shipping Address 2, Order, Purchase ID, Order ID, Total Units, Total Order\n'
+  csv += [
+    order.user.name, order.email, order.phone, order.name, order.address, [order.city, order.state, order.zip].join(' '),
+    order.order.map(function(o) {
+      return ['item: ', o.key, ' - quantity: ', o.quantity].join('')
+    }).join(' ... '),
+    order.receipt.id, 
+    json._id, 
+    order.totalUnits, 
+    ['$', order.amount].join('')
+  ].join(', ')
+
+  var data, filename, link;
+
+  filename = [json._id,'.csv'].join('');
+
+  csv = 'data:text/csv;charset=utf-8,' + csv;
+  data = encodeURI(csv);
+
+  link = document.createElement('a');
+  link.setAttribute('href', data);
+  link.setAttribute('download', filename);
+  link.click();
+}
+
 function quantOrdersTable(quantOrders, o, msrp) {
   var _order = [], totalOrder = 0
   quantOrders.forEach(function(o) {
@@ -32,7 +59,7 @@ function quantOrdersTable(quantOrders, o, msrp) {
       '</td></tr>'
   ])
 
-  return _order.join()
+  return _order.join('')
 }
 
 function vexFlag(proj) {
@@ -878,27 +905,74 @@ Template.projectView.events({
   },
   'click .fulfill_gift': function(e) {
     e.preventDefault();
+    var was = this
+    o={gift:this.order.gift}
+    var orderSummary = [
+      '<div class="row">',
+        '<div class="col-sm-7">',
+        this.order.gift.name,
+        '<br>Order Summary</div>',
+        '<div class="panel-body">',
+          '<table class="table"><thead><tr><th>Type</th><th>Quantity</th><th>Total</th></tr></thead><tbody>',
+          quantOrdersTable(this.order.order, o, this.order.gift.msrp),
+          '</tbody></table>',
+        '</div>',
+      '</div>'
+    ].join('')
+    orderSummary = orderSummary + [
+      '<div class="row">',
+        '<div class="col-sm-7">Shipping Details</div>',
+        '<div class="panel-body">',
+          '<table class="table"><tbody>',
+          '<tr><td>name</td><td>',this.order.name,'</td>',
+          '<tr><td>address</td><td>',this.order.address,'</td>',
+          '<tr><td>city</td><td>',this.order.city,'</td>',
+          '<tr><td>state, zip</td><td>',[this.order.state, this.order.zip].join(', '),'</td>',
+          '<tr><td>contact</td><td>',[this.order.email, this.order.phone].join('; '),'</td>',
+          '</tbody></table>',
+        '</div>',
+      '</div>'
+    ].join('')
+
+    var buttons = [
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+    ]
+
+    if (!was.fulfilled) {
+      buttons.unshift($.extend({}, vex.dialog.buttons.NO, { text: 'Mark as Fulfilled', className: 'aquamarineB', click: function($vexContent, event) {
+          this.value = 'fulfill';
+          this.close()
+      }}))
+    }
+
+    buttons.unshift($.extend({}, vex.dialog.buttons.NO, { text: 'Download', className: 'lemonB', click: function($vexContent, event) {
+        this.value = 'report';
+        this.close()
+    }}))
+
     var user_name = this.user && this.user.name || '';
     var user_avatar = this.user && this.user.avatar || '';
     var vexOpen = true;
     var _vex = vex.dialog.open({
       title: 'Gift Fulfillment',
-      input: [
-
-      ].join(''),
-      buttons: [
-        // $.extend({}, vex.dialog.buttons.YES, { text: 'Mark as Fulfilled' }),
-        $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
-      ],
+      input: orderSummary,
+      buttons: buttons,
       callback: function (data) {
+        if (!vexOpen) return;
+        vexOpen = false;
           if (!data) {
               return
           }
-          if (vexOpen) {
-            vexOpen = false;
-            _vex.close();
-            console.log('MARK AS FULFILLED')
+          
+          if (data==='fulfill') {
+            Meteor.call('markMerchFulfillment', was)
           };
+
+          if (data==='report') {
+            ConvertToCSV(was)
+          };
+
+          _vex.close();
       }
     });
   },
@@ -981,15 +1055,16 @@ Template.projectView.events({
                   '</div>',
               '</div>',
               '<div class="col-sm-12 col-md-7">',
-                  '<input class="quantorder" type="number" min="0" val="',
-                  key,
-                  '" max="',
-                  quantityData[key],
-                  '" placeholder="enter number units here">',
                   '<label style="font-weight:300">',
                     quantityData[key],
                     '&nbsp;units available',
                   '</label>',
+                  '<input class="quantorder" type="number" min="0" val="',
+                  key,
+                  '" max="',
+                  quantityData[key],
+                  '" placeholder="how many units?">',
+                  
               '</div>',
           '</div>'
         ])
@@ -999,13 +1074,13 @@ Template.projectView.events({
       dialogInput = dialogInput.concat([
         '<div class="row merchbottomborder t20">',
             '<div class="col-sm-12">',
-                '<input class="quantorder" val="',was.name.replace('"',''),'" type="number" min="0" max="',
-                quantityData.all,
-                '" placeholder="enter number units here">',
                 '<label style="font-weight:300">',
                   quantityData.all,
                   '&nbsp;units available',
                 '</label>',
+                '<input class="quantorder" val="',was.name.replace('"',''),'" type="number" min="0" max="',
+                quantityData.all,
+                '" placeholder="how many units?">',
             '</div>',
         '</div>'
       ])
@@ -1014,7 +1089,7 @@ Template.projectView.events({
 
     dialogInput = dialogInput.concat(['</figcaption>','</figure>'])
   
-    var vex1Open = true, vex2Open = true;
+    var vex1Open = true, vex2Open = true, vex3Open = true;
     var vex1 = vex.dialog.open({
         message: [was.type, 'for sale'].join(' '),
         // message: ['   Details of ',was.name,'. Purchase below.'].join(''),
@@ -1028,7 +1103,7 @@ Template.projectView.events({
                 return
             }
 
-            var quantOrders = []
+            var quantOrders = [], totalOrder = 0
             $('.quantorder').each(function() {
               if (parseInt($(this).val())) {
                 quantOrders.push({
@@ -1045,14 +1120,16 @@ Template.projectView.events({
                 vex1.close();
                 vex.dialog.alert("You requested more items than were available. Please try again.")
                 return
-              };
+              } else {
+                totalOrder+=desiredQuant
+              }
             };
 
             var orderSummary = [
               '<div class="row">',
                 '<div class="col-sm-7">',
                 was.name,
-                '&nbsp;Order Summary</div>',
+                '<br>Order Summary</div>',
                 '<div class="panel-body">',
                   '<table class="table"><thead><tr><th>Type</th><th>Quantity</th><th>Total</th></tr></thead><tbody>',
                   quantOrdersTable(quantOrders, o, was.msrp),
@@ -1064,6 +1141,11 @@ Template.projectView.events({
             if (vex1Open) {
               vex1Open = false;
               vex1.close();
+
+              var od = {}
+              try {
+                od = JSON.parse(localStorage.getItem('orderTemplate'))
+              } catch(e) {}
 
               var dialogInput = [
                   '<style>',
@@ -1078,76 +1160,123 @@ Template.projectView.events({
                   orderSummary,
                   '<h5>Please complete your order:</h5>',
                   '<div class="vex-custom-field-wrapper">',
+                      '<label for="address-gift">Recipient Name</label>',
+                      '<div class="vex-custom-input-wrapper">',
+                          '<input type="text" class="form-control contrastback" placeholder="enter name here" id="address-name"',
+                          od.name ? ['value="', od.name, '"'].join(''):'',
+                           '>',
+                      '</div>',
+                  '</div>',
+                  '<div class="vex-custom-field-wrapper">',
                       '<label for="address-gift">Shipping Address</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. 6925 Hollywood Blvd" id="address-gift"',
+                          od.address ? ['value="', od.address, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="city-gift">City</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. Hollywood" id="city-gift"',
+                          od.city ? ['value="', od.city, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="state-gift">State</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. CA or California" id="state-gift"',
+                          od.state ? ['value="', od.state, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="zip-gift">Zip Code</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. 90028" id="zip-gift"',
+                          od.zip ? ['value="', od.zip, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="email-gift">Contact Email</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift"',
+                          od.email ? ['value="', od.email, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="email-gift">Verify Email</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift-ver">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. yours@email.com" id="email-gift-ver"',
+                          od.email ? ['value="', od.email, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>',
                   '<div class="vex-custom-field-wrapper">',
                       '<label for="phone-gift">Contact Phone</label>',
                       '<div class="vex-custom-input-wrapper">',
-                          '<input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift">',
+                          '<input type="text" class="form-control contrastback" placeholder="e.g. (310) 555-1212" id="phone-gift"',
+                          od.phone ? ['value="', od.phone, '"'].join(''):'',
+                           '>',
                       '</div>',
                   '</div>'
               ]
 
               var vex2 = vex.dialog.open({
-                message: 'Summary and Payment',
+                message: 'Order Information',
                 buttons: [
                   $.extend({}, vex.dialog.buttons.YES, { text: 'CONTINUE' }),
                   $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }),
                 ],
                 input: dialogInput.join(''),
                 callback: function (data) {
+
                     if (!data) {
                         return
                     }
                     if (vex2Open) {
+                      vex2Open = false;
+                      vex2.close();
                       try {
-                        vex2Open = false;
-                        o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val().toLowerCase().trim(), o.phone = $('#phone-gift').val();
+                        o.name = $('#address-name').val(), o.address = $('#address-gift').val(), o.city = $('#city-gift').val(), o.state = $('#state-gift').val(), o.zip = $('#zip-gift').val(), o.email = $('#email-gift').val().toLowerCase().trim(), o.phone = $('#phone-gift').val();
                         if (o.email!==$('#email-gift-ver').val().toLowerCase().trim()) return vex.dialog.alert('invalid email, your email must match');
                         if (!o.address||!o.zip||!o.email) return vex.dialog.alert('invalid order information, please include address, email, and zipcode fields and try again');
+                        localStorage.setItem('orderTemplate', JSON.stringify(o));
                         o.order = quantOrders;
                         o.amount = totalOrder * was.msrp;
                         o.totalUnits = totalOrder;
                         o.message = was.name + ' purchase';
                         o.route = 'purchaseGift';
                         o.slug = currentSlug;
-                        makeStripeCharge(o);
-                      } catch(e) {} finally {
-                        vex2.close();
-                      }
+                        var vex3 = vex.dialog.open({
+                          message: 'Confirmation & Payment',
+                          input: orderSummary + [
+                            '<div class="row">',
+                              '<div class="col-sm-7">Shipping Details</div>',
+                              '<div class="panel-body">',
+                                '<table class="table"><tbody>',
+                                '<tr><td>name</td><td>',o.name,'</td>',
+                                '<tr><td>address</td><td>',o.address,'</td>',
+                                '<tr><td>city</td><td>',o.city,'</td>',
+                                '<tr><td>state, zip</td><td>',[o.state, o.zip].join(', '),'</td>',
+                                '<tr><td>contact</td><td>',[o.email, o.phone].join('; '),'</td>',
+                                '</tbody></table>',
+                              '</div>',
+                            '</div>'
+                          ].join(''),
+                          callback: function(data) {
+                            if (!data) return;
+                            if (vex3Open) {
+                              vex3Open = false
+                              vex3.close()
+                              makeStripeCharge(o)
+                            };
+                          }
+                        })
+                      } catch(e) {}
                     };
                 }
               });
@@ -1191,6 +1320,107 @@ Template.projectView.events({
       Meteor.call('upvoteProject', this._slug);
       $('#thumbsup').addClass('active');
     }
+  },
+  'click .offer_resource': function(e) {
+    var assets = Meteor.user().assets||[]
+    if (!assets.length)
+      return vex.dialog.alert('You have not uploaded any assets, add assets in the "Profile" section.')
+
+    var cat = this.category
+    var asss = []
+    assets.forEach(function(a) {
+      if (cat===a.category) asss.push(a);
+    })
+
+    if (!asss.length)
+      return vex.dialog.alert('You do not have assets to match this type, update your assets in the "Profile" section.')
+
+
+    var asssTr = asss.map(function(a) { return [
+      '<tr>',
+          '<td>',a.name,'</td>',
+          '<td>',a.description,'</td>',
+          '<th><a href="#!" class="select_asss"><i class="assscheck fa fa-check-circle" val=\'',
+          JSON.stringify(a),
+          '\'></i></a></th>',
+      '</tr>'
+    ].join('') }).join('')
+
+
+    var asssTable = [
+      '<table class="table">',
+          '<thead>',
+            '<th>Name</th>',
+            '<th>Description</th>',
+            '<th>Select</th>',
+          '</thead>',
+          '<tbody id="gift-table">',
+          asssTr,
+          '</tbody>',
+      '</table>',
+      '<p><small><strong>Do you want to make an express offer?</strong></small></p>',
+      '<div class="col-sm-12 col-md-8">',
+          '<label><small>what is your offer for the selected assets?</small></label>',
+          '<input type="number" min="0" max="999999" name="offer" placeholder="Enter price here" />',
+      '</div>',
+      '<div class="col-sm-12 col-md-8">',
+          '<label><small>How many days is this offer good for?</small></label>',
+          '<input type="number" min="3" max="90" name="days" placeholder="Enter number of days" />',
+      '</div>',
+      '<div class="col-sm-12 col-md-8">',
+          '<label><small>Do you have a custom message?</small></label>',
+          '<input type="text" name="message" placeholder="Enter your message here" />',
+      '</div>',
+    ].join('')
+
+    var showVex1 = true
+    var _vex1 = vex.dialog.open({
+      message: ['Select ', cat, ' Asset to Offer'].join(''),
+      input: asssTable,
+        buttons: [
+            $.extend({}, vex.dialog.buttons.YES, { text: 'OFFER', className: 'aquamarineB' }),
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' }),
+        ],
+      afterOpen: function() {
+        $('.select_asss').off()
+        $('.select_asss').on('click', function(e) {
+          e.preventDefault()
+          var i = $(e.target).closest('i')
+          if ($(i).hasClass('fa-circle')) {
+            $(i).removeClass('fa-circle').addClass('fa-check-circle')
+          } else {
+            $(i).removeClass('fa-check-circle').addClass('fa-circle')
+          }
+        })
+      },
+      callback: function(data) {
+        if (showVex1&&data) {
+          showVex1 = false
+          var d = []
+          $('.assscheck.fa-check-circle').each(function() {
+            try { d.push(JSON.parse($(this).attr('val'))) } catch(e) {}
+          })
+
+          if (!d.length) {
+            _vex1.close()
+            return setTimeout(function() {
+              vex.dialog.alert('None of your assets were checked!')
+            }, 144)
+          };
+
+          data.assets = d
+          data.project = currentProject
+          data.slug = currentSlug
+          Meteor.call('offerProjectAsset', data, function(e, r) {
+            _vex1.close()
+            return setTimeout(function() {
+              vex.dialog.alert(r)
+            }, 144)
+          })
+        };
+      }
+
+    })
   }
 });
 
@@ -1236,6 +1466,22 @@ function uniqueApplicantsFromProject(ctx, project) {
 }
 
 Template.applicants.helpers({
+  barlala: function() {
+    console.log(this)
+  },
+  assetsConsolidated: function() {
+    return {
+      cat: this.assets[0].category,
+      names: this.assets.map(function(a) {
+        return a.name
+      }).join(', '),
+      express: this.expressOffer.offer ? true : false
+    }
+  },
+  fulfilled: function() {
+    if (this.fulfilled) return true;
+    return false
+  },
   giftTotals: function() {
     if (this.purchases.length<=1) {
       return this.purchases[0]&&this.purchases[0].amount||0

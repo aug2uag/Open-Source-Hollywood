@@ -349,25 +349,6 @@ Template.settings.events({
 		e.preventDefault();
 		saveSettings({showDialog:true});
 	},
-	'click #add_account': function(e) {
-		e.preventDefault();
-		var opts = {};
-		opts.country = $('#country').val();
-		opts.currency = $('#currency').val();
-		opts.account_holder_name = $('#account_holder_name').val();
-		opts.account_holder_type = $('#account_holder_type').val();
-		opts.routing_number = $('#routing_number').val();
-		opts.account_number = $('#account_number').val();
-		opts.default_for_currency = true;
-		opts.object = 'bank_account';
-		Meteor.call('updateBanking', opts, function(err, result) {
-			if (err) return vex.dialog.alert('there was an error updating your account information, please try again later or contact us if you need assistance');
-			return vex.dialog.alert(result||'account updated');
-		});
-	},
-	'click .reset_transfer': function(e) {
-		Meteor.call('deleteBanking');
-	},
 	'change #avatar_file': function (e, template) {
 	    if (e.currentTarget.files && e.currentTarget.files[0]) {
 	    	osettings.avatar = {};
@@ -594,7 +575,7 @@ Template.settings.events({
 			        '<label for="needs-description">define pricing (in US Dollars)</label>',
 			    '</div>',
 			    '<div class="col-sm-9">',
-			        '<input type="number" min="0" name="title" id="edit-needs-offer-fixed" value="'+(json.pricing.fixed?json.pricing.fixed:'')+'" placeholder="enter hourly price" />',
+			        '<input type="number" min="0" name="title" id="edit-needs-offer-fixed" value="'+(json.pricing.fixed?json.pricing.fixed:'')+'" placeholder="enter fixed price" />',
 			    '</div>',
 			    '<div class="col-sm-3">',
 			        '<p><small><strong>fixed</strong></small></p>',

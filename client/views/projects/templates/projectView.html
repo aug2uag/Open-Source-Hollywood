@@ -1,6 +1,5 @@
 <template name="applicantsHelper">
   <tr>
-    {{foobar}}
     <td style="display:flex"><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px;top:15px;position:relative;" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
 
     <td><a style="width:100%;top:15px;position:relative;" href="/message/project/{{ currentSlug }}/{{ user.id }}" val="{{thisString}}" class="btn btn-mini btn-primary {{#unless poke}}initiateNegotiate{{/unless}}">{{typeofRequest}}</a></td>
@@ -83,7 +82,7 @@
                 <div class="contents clearfix">
                     <div id="description" style="display: block;">
                         <div class="col-xs-12 col-sm-8">
-                          <div class="project-header">
+                          <div class="project-content">
 
                             {{#if isAllowed}}
 
@@ -182,13 +181,14 @@
                                                     </div>
                                                     <p>&nbsp;</p>
                                                     <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
-                                                      
-                                                      {{#if anyRolesNoAuth}}
-                                                          <a href="#" id="join-roles" class="btn btn-default" role="button">APPLY</a> 
+                                                      {{#unless isArchived}}
+                                                        {{#if anyRolesNoAuth}}
+                                                            <a href="#" id="join-roles" class="btn btn-default" role="button">APPLY</a> 
+                                                            <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
+                                                        {{else}}
                                                           <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
-                                                      {{else}}
-                                                        <a href="#" id="offer-donation" class="btn btn-default" role="button">DONATE&nbsp;</a> 
-                                                      {{/if}}
+                                                        {{/if}}
+                                                      {{/unless}}
                                                       <p>&nbsp;</p>
                                                       {{#if anyShares}}
                                                         <div class="rpdata">
@@ -206,44 +206,6 @@
                                                     <p>&nbsp;</p>
                                                 </div>
                                             </div>
-
-                                            {{#if anyRoles}}
-                                            <div class="large clearfix">
-                                                <section class="rholder">
-                                                    <h5>Project Needs</h5>
-                                                    <div>
-                                                      {{#if castLN}}
-                                                      <div class="rpdata">
-                                                          <p class="form-submit">
-                                                              <div class="id-product-total glow-offer" ><a href="#!" id="view-cast-positions" style="color:red!important">{{castLN}}</a></div>
-                                                              <div class="id-product-pledges">cast positions available</div>
-                                                          </p>
-                                                      </div>
-                                                      {{/if}}
-
-                                                      {{#if crewLN}}
-                                                      <div class="rpdata">
-                                                          <p class="form-submit">
-                                                              <div class="id-product-total glow-offer" ><a href="#!" id="view-crew-positions" style="color:red!important">{{crewLN}}</a></div>
-                                                              <div class="id-product-pledges">crew positions available</div>
-                                                          </p>
-                                                      </div>
-                                                      {{/if}}
-
-                                                      {{#if needLN}}
-                                                      <div class="rpdata">
-                                                          <p class="form-submit">
-                                                              <div class="id-product-total glow-offer" ><a href="#!" id="view-need-positions" style="color:red!important">{{needLN}}</a></div>
-                                                              <div class="id-product-pledges">resources needed</div>
-                                                          </p>
-                                                      </div>
-                                                      {{/if}}
-                                                      <p>&nbsp;</p>
-                                                    </div>
-                                                </section>
-                                            </div>
-                                            {{/if}}
-
 
                                             <div class="id-product-proposed-end" style="margin-left:10px;margin-top:5px!important;">Created
                                                 <div class="id-widget-date">
@@ -358,13 +320,14 @@
                         </aside>
 
 
-                        <div class="container-fluid col-xs-12 projviewsexn">
+                        {{#unless isOwner}}
+                        <div class="container-fluid col-xs-12 t20 projviewsexn">
                             <h2>Merchandise</h2>
                             <div class="row flex-row flex-nowrap">
                                 {{#each project.gifts}}
 
                                   <div class="col-xs-3">
-                                    <div class="well">
+                                    <div class="well mh300">
                                       <div class="thumbnail">
                                         <img src="{{this.url}}">
                                         <div class="caption">
@@ -377,27 +340,37 @@
                                     </div>
                                   </div>
 
+                                  {{else}}
+
+                                  <p class="t20 lead">None</p>
+
                                 {{/each}}
                               
                             </div>
                         </div>
 
-                        <div class="container-fluid col-xs-12 projviewsexn">
+                        <div class="container-fluid col-xs-12 t20 projviewsexn">
                             <h2>Requested Needs</h2>
                             <div class="row flex-row flex-nowrap">
                                 {{#each project.needs}}
 
                                   <div class="col-xs-3">
-                                    <div class="caption">
+                                    <div class="caption well">
                                       <h6>{{category}}</h6>
                                       <p>{{description}}</p>
+                                      <p><a class="c-related__a button special w100 t20 offer_resource">offer this resource</a></p>
                                     </div>
                                   </div>
+
+                                  {{else}}
+
+                                  <p class="t20 lead">None</p>
 
                                 {{/each}}
                               
                             </div>
                         </div>
+                        {{/unless}}
                     </div>
 
                     <div id="updates" class="project-content container" style="display: none;">
@@ -411,7 +384,7 @@
                         </h3>
                         <hr />
                       </div>
-                      {{#if isOwner}}
+                      {{#if isOwnerNoMatterWhat}}
                         <div id="respond" class="comment-respond margin_bottom40">
                           <form class="comment-form">
                               <div class="krown-column-container span12 last" style="margin-left:0">
@@ -539,13 +512,13 @@
 
 
   <div class="resources_view_toggle" id="res_Applicants">
-      <h3>Applicants</h3>
+      <h3 class="extremeboldtext">Applicants</h3>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
               <th><p class="align-center">Applicant</p></th>
-              <th><p class="align-center">CREATE CONTRACT</p></th>
+              <th><p class="align-center">ACCESS CONTRACT</p></th>
             </tr>
           </thead>
           <tbody>
@@ -564,26 +537,27 @@
   </div>
 
   <div class="resources_view_toggle" style="display:none" id="res_Resources">
-      <h3>Offered Resources</h3>
+      <h3 class="extremeboldtext">Offered Resources</h3>
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
               <th><p class="align-center">Asset</p></th>
-              <th><p class="align-center">User</p></th>
-              <th><p class="align-center">CREATE CONTRACT</p></th>
+              <th><p class="align-center">Names</p></th>
+              <th><p class="align-center">DETAILS</p></th>
             </tr>
           </thead>
           <tbody>
-            {{#each this.project.offeredResources}}
+            
+            {{#each assetOffers}}
               <tr>
-                <td><p class="align-center">{{asset}}</p></td>
-                <td><p class="align-center_min" style="display:block"><img src="{{ user.avatar }}" class="img-responsive img-thumbnail" style="max-height:50px;max-width:50px">&nbsp;&nbsp;{{user.name}}</p><a style="width:100%;max-height:40px" href="/profile/{{ user.id }}" class="btn btn-mini btn-default">PROFILE</a></td>
-                <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">SEND MSG</a></td>
+                <td><p class="align-center">{{assetsConsolidated.cat}}</p></td>
+                <td><small><strong>{{assetsConsolidated.names}}</strong></small></td>
+                <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ _id }}" class="btn btn-mini btn-primary">VIEW DETAILS</a></td>
               </tr>
             {{else}}
             <tr>
-              <td colspan="4">None Offered</td>
+              <td colspan="3">None Offered</td>
             </tr>
             {{/each}}
           </tbody>
@@ -592,7 +566,7 @@
   </div>
 
   <div class="resources_view_toggle" style="display:none" id="res_Gifts">
-      <h3>Sold Gifts</h3>
+      <h3 class="extremeboldtext">Sold Gifts</h3>
 
           <div class="media">
             <div class="media-body">
@@ -604,16 +578,18 @@
                     <th>Quantity</th>
                     <th>Total</th>
                     <th>Details</th>
+                    <th>Fulfilled</th>
                   </tr>
                 </thead>
                 <tbody>
                   {{#each purchases}}
                     <tr class="fulfill_gift">
                       <td class="">{{orderDate}}</td>
-                      <td class="center">{{gift.name}}</td>
-                      <td class="">{{totalUnits}}</td>
-                      <td class="center">${{amount}}</td>
+                      <td class="">{{order.gift.name}}</td>
+                      <td class="">{{order.totalUnits}}</td>
+                      <td class="center">${{order.amount}}</td>
                       <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
+                      <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
                     </tr>
 
                   {{/each}}

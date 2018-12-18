@@ -721,7 +721,7 @@ Template.editProject.rendered = function () {
     var newProject = JSON.parse($('#thisCurrentProject').attr('val'));
     $('#thisCurrentProject').remove();
 
-    console.log(newProject)
+    // console.log(newProject)
 
     if (newProject.videoExplainer) $('#video_explainer').val(newProject.videoExplainer);
     if (newProject.category) $("#category option[value='"+newProject.category+"']").prop('selected', true).trigger('change');
@@ -771,7 +771,7 @@ Template.editProject.rendered = function () {
 
     positions.social = newProject.social||[]
     Session.set('social', positions.social)
-    console.log(positions.social)
+    // console.log(positions.social)
     if (positions.social.length) $('#display_link_data').show()
 
 

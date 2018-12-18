@@ -738,6 +738,8 @@ Template.newProject.events({
     // create virtual account for project
     // add funds to virtual account, non-refundable
     Meteor.call('addProject', o, function(err, res) {
+      if (!err&&!res)
+        return vex.dialog.alert('there was an error, please try again');
       vex.dialog.alert(err||res);
       if (!err) {
         localStorage.removeItem('projectnew')

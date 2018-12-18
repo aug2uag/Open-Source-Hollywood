@@ -30,6 +30,15 @@ function formattedProjectRoles() {
 }
 
 Template.projectMessage.helpers({
+	init: function() {
+		was = this
+	},
+	formattedOffers: function() {
+		console.log(this.offers)
+		return this.offers.map(function(o) {
+			if (!o.ctx||o.ctx!=='offer') return o;
+		}).filter(function(o) { if (o) return o })
+	},
 	url: function() {
 		if (this.audition==='N/A') {
 			return ' this role does not have an audition ';
@@ -43,9 +52,6 @@ Template.projectMessage.helpers({
 		if (this.audition==='N/A'||was.project.ownerId===Meteor.user()._id||this.url) {
 			return 'pointer-events:none;'
 		};
-	},
-	was:function() {
-		was = this;
 	},
 	hasOffer: function() {
 		return this.offers.length > 0
@@ -94,15 +100,19 @@ Template.projectMessage.helpers({
 		var positions = was.project.cast.concat(was.project.crew);
 		for (var i = 0; i < was.offers.length; i++) {
 			var offer = was.offers[i]
+			var _position = offer.offer.position
+			// console.log(offer)
+			// console.log('^^^ OFFER  VVV POSIITON')
 			for (var j = 0; j < positions.length; j++) {
 				var position = positions[j];
-				if (position.title === offer.position||
-					position.role === offer.position) {
+				var _role = position.title||position.role
+				// console.log(position)
+				if (_position===_role) {
 					if (position.audition&&position.audition!=='N/A') agg.push({
-						title: offer.position,
+						title: _role,
 						audition: position.audition,
 						url: offer.url,
-						offer: offer
+						offer: offer.offer
 					});
 				};
 			};
@@ -164,7 +174,7 @@ Template.projectMessage.helpers({
 Template.projectMessage.events({
 	'click #rejectUser': function(e) {
 		  vex.dialog.confirm({
-	      message: "Please confirm: you are rejecting " + was.offers[0].user.name,
+	      message: "Please confirm: you are rejecting " + was.offers[0].offer.user.name,
 	      buttons: [
 	        $.extend({}, vex.dialog.buttons.YES, { text: 'Yes' }),
 	        $.extend({}, vex.dialog.buttons.NO, { text: 'No' })
@@ -307,37 +317,36 @@ Template.projectMessageOffer.helpers({
 		return !currentNegotiation.authorVerified&&!currentNegotiation.applicantVerified&&Meteor.user()._id===was.project.ownerId;
 	},
 	considerationType: function() {
-
-		console.log(this)
+		var position = this.offer.appliedFor
 		if (this.authorCounterOffer) {
-			return 'agreement is for the following positions: ' + this.position
+			return 'agreement is for the following positions: ' + position
 		} else if (this.ctx==='crew') {
 			if (this.type==='hired'&&this.pay>0) {
-				return 'requesting pay for crew position: ' + this.position||'';
+				return 'requesting pay for crew position: ' + position;
 			} else {
-				return 'requesting no pay for crew position: ' + this.position||'';
+				return 'requesting no pay for crew position: ' + position;
 			}
 		} else {
 			if (this.type==='hired'&&this.pay>0) {
-				return 'requesting pay for cast position: ' + this.position||'';
+				return 'requesting pay for cast position: ' + position;
 			} else {
-				return 'requesting no pay for cast position: ' + this.position||'';
+				return 'requesting no pay for cast position: ' + position;
 			}
 		}
 	},
 	considerationItself: function() {
-		var amount = this.amount, pay = this.pay, type = this.type;
+		var amount = this.offer.amount, pay = this.offer.pay, type = this.offer.type;
 
-		if (this.authorCounterOffer) {
-			var returnMsg = 'pay of $' + this.pay;
-			if (this.equity > 0) {
-				returnMsg += ' and equity of ' + this.equity + ' shares'
+		if (this.offer.authorCounterOffer) {
+			var returnMsg = 'pay of $' + this.offer.pay;
+			if (this.offer.equity > 0) {
+				returnMsg += ' and equity of ' + this.offer.equity + ' shares'
 			};
-			if (this.customTerms) {
-				returnMsg += '; additional terms: ' + this.customTerms
+			if (this.offer.customTerms) {
+				returnMsg += '; additional terms: ' + this.offer.customTerms
 			};
-			if (this.customLimits) {
-				returnMsg += '; further limitations: ' + this.customLimits
+			if (this.offer.customLimits) {
+				returnMsg += '; further limitations: ' + this.offer.customLimits
 			};
 			return returnMsg
 		};
@@ -345,14 +354,14 @@ Template.projectMessageOffer.helpers({
 		if (amount===0&&pay===0) {
 			return 'time donation offer';
 		} else {
+			var amount = this.offer.amount===undefined ? 0 : this.offer.amount ? this.offer.amount: 0
+			var pay = this.offer.pay===undefined ? 0 : this.offer.pay ? this.offer.pay: 0
 			if (amount>0&&type==='hired') {
-				return 'requesting $' + this.amount;
+				return 'requesting $' + amount;
 			} else {
-				return 'offering a donation of $' + this.pay;
+				return 'offering a donation of $' + pay;
 			}
 		}
-
-
 	}
 })
 
@@ -371,6 +380,78 @@ Template.projectMessage.events({
 		});
 	}
 })
+
+
+
+Template.assetsOfferDialog.events({
+	'click #submit-message': function(e) {
+		e.preventDefault();
+		var text = $('#message-box').val();
+		$('#message-box').val('');
+		console.log(this)
+		Meteor.call('addOfferMessage', {
+			user: this.user._id,
+			offer: this.offer._id,
+			text: text
+		});
+	},
+	'click #assetsagreeoffer': function(e) {
+		Meteor.call('acceptAssetsOffer', this)
+	},
+	'click #assetsrejectoffer': function(e) {
+		Meteor.call('rejectAssetsOffer', this)
+	}
+})
+
+
+
+Template.assetsOfferDialog.helpers({
+	foo: function() {
+		console.log(this)
+	},
+	isOwner: function() {
+		if (this.offer.pending===false) return false;
+		if (Meteor.user()._id===this.project.ownerId) return true;
+		return false
+	},
+	cat: function() {
+		try {
+			return this.offer.assets[0].category
+		} catch(e) {
+			Router.go('Home')
+		}
+	},
+	formattedPricing: function() {
+		var p = this.pricing
+		var a = []
+		for (var k in p) {
+			if (p[k]) {
+				a.push(['$', p[k], ' ', k].join(''))
+			}
+		}
+		return a
+	},
+	formattedAvailability: function() {
+		var normalized = {
+			any: 'anytime',
+			'any-weekdays': 'anytime weekdays',
+			am: 'mornings weekdays',
+			pm: 'evening weekdays',
+			'any-weekends': 'anytime weekends',
+			'am-wk': 'mornings weekends',
+			'pm-wk': 'evenings weekends'
+		}
+		return this.availability.map(function(a) {
+			return normalized[a]
+		})
+	},
+	messages: function() {
+		return this.offer.messages||[]
+	}
+})
+
+
+
 
 Handlebars.registerHelper('ifEveryOther', function(options) {
   var index = options.data.index + 1;

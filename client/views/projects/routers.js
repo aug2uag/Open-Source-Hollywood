@@ -5,7 +5,6 @@ Router.route('/dashboard', {
     name: 'Dashboard',
     template: 'dashboard',
     layoutTemplate: 'StaticLayout',
-    bodyClass: 'page-index chrome chrome-39 mac large-window body-webkit-scrollbars tabbed-page',
     waitOn: function() {
       if (!Meteor.user()) {
         Router.go('Home');
@@ -14,10 +13,16 @@ Router.route('/dashboard', {
       }
       return [
         Meteor.subscribe('getMe'),
+        Meteor.subscribe('myCurrentOffers'),
+        Meteor.subscribe('myCompletedOffers'),
         // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getProjectMessages'),
+        Meteor.subscribe('getReceipts'),
         Meteor.subscribe('userActiveProjects', Meteor.user()._id),
-        Meteor.subscribe('activeProjectsApproved', Meteor.user()._id)
+        Meteor.subscribe('userArchivedProjects', Meteor.user()._id),
+        Meteor.subscribe('archivedProjects', Meteor.user()._id),
+        Meteor.subscribe('activeProjectsApproved', Meteor.user()._id),
+        Meteor.subscribe('ownerReceipts', Meteor.user()._id)
       ];
     },
     onBeforeAction: function() {
@@ -35,6 +40,37 @@ Router.route('/dashboard', {
           $(route).click();
         }, $('#active').html() ? 987 : 1442);
       }, 144);
+    },
+    data: function() {
+      return {
+        giftPurchases: function() {
+          return Receipts.find({owner: Meteor.user()._id, purpose: 'gift purchase'}).fetch()
+        },
+        assetLeases: function() {
+          return Receipts.find({owner: Meteor.user()._id, purpose: 'asset lease'}).fetch()
+        },
+        currentContracts: function() {
+          var offers = Offers.find({
+            $or:[
+              { offeree: Meteor.user()._id },
+              { offeror: Meteor.user()._id }
+            ],
+            pending: {$ne: false}
+          }).fetch()
+          console.log(offers)
+          return offers
+        },
+        completedContracts: function() {
+          return Offers.find({
+            $or:[
+              { offeree: Meteor.user()._id },
+              { offeror: Meteor.user()._id }
+            ],
+            pending: false,
+            rejected: {$ne: true}
+          }).fetch()
+        },
+      }
     }
 });
 
@@ -120,10 +156,13 @@ Router.route('/projects/:slug/:uid', {
   layoutTemplate: 'StaticLayout',
   waitOn: function() {
     return [
+      Meteor.subscribe('getMe'), 
+      Meteor.subscribe('projAssetOffers', this.params.slug, this.params.uid), 
       Meteor.subscribe('getProject', this.params.slug), 
       Meteor.subscribe('gotoBoard', this.params.slug),
       Meteor.subscribe('commentsList', this.params.slug),
-      Meteor.subscribe('stringId', this.params.uid)
+      Meteor.subscribe('stringId', this.params.uid),
+      Meteor.subscribe('projReceipts', this.params.slug, this.params.uid)
     ];
   },
   data: function() {
@@ -132,11 +171,15 @@ Router.route('/projects/:slug/:uid', {
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
     var user = Users.findOne({_id: project.ownerId});
+    var assetOffers = Offers.find({slug: project.slug, offeree: project.ownerId, type: 'assets'}).fetch()
     $('meta[name=description]').remove();
     $('head').append( '<meta name="description" content="'+(project.descriptionText||project.logline||'Amazing campaign on O . S . H . (https://opensourcehollywood.org)')+'">' );
     document.title = project.title ? [project.title, 'on O . S . H . (opensourcehollywood.org).'].join(' ') : 'Campaign Details';
     return {
         uid: project._id,
+
+        assetOffers: assetOffers,
+
         perCent: function() {
           if (project.funded && project.budget) {
             var v = (project.funded/project.budget * 100 > 100 ? 100 : project.funded/project.budget * 100).toFixed(2);
@@ -145,9 +188,21 @@ Router.route('/projects/:slug/:uid', {
 
           return 'not available';
         },
+
+        purchases: function() {
+          return Receipts.find({slug: project.slug, owner: project.ownerId}).fetch()
+        },
+
         isOwner: function () {
           if (!Meteor.user()) return false;
-          return project.ownerId === Meteor.user()._id;
+          return (project.ownerId === Meteor.user()._id)&&!project.archived;
+        },
+        isOwnerNoMatterWhat: function () {
+          if (!Meteor.user()) return false;
+          return (project.ownerId === Meteor.user()._id);
+        },
+        isArchived: function() {
+          return project.archived||false
         },
         isMember: function() {
           if (!Meteor.user()) return false;
@@ -188,7 +243,6 @@ Router.route('/projects/:slug/:uid', {
         createdAt: project.createdAt,
         title: project.title,
         gifts: project.gifts,
-        purchases: project.giftPurchases||[],
         budget: function() {
           if (project.budget) {
             return '$ ' + project.budget
@@ -201,37 +255,6 @@ Router.route('/projects/:slug/:uid', {
   }
 });
 
-Router.route('/edit/projects/:slug/edit', {
-  name: 'EditProject',
-  template: 'editProject',
-  layoutTemplate: 'StaticLayout',
-  onBeforeAction: function() {
-    $('meta[name=description]').remove();
-    $('head').append( '<meta name="description" content="Open Source Hollywood edit campaign mode.">' );
-    document.title = 'Edit Campaign';
-    this.next();
-  },
-  waitOn: function() {
-    if (!Meteor.user()) {
-      Router.go('Home');
-      window.location.assign('/');
-      return
-    }
-    return [
-      Meteor.subscribe('getProject', this.params.slug), 
-      // Meteor.subscribe('connectUser'),
-      Meteor.subscribe('getMe')
-    ];
-  },
-  action: function() {
-    this.render('editProject', {
-      data: function(){
-        return Projects.findOne({slug: this.params.slug});
-      }
-    });
-  }
-});
-
 Router.route('/message/project/:slug/:uid', {
   name: 'ProjectMessage',
   template: 'projectMessage',
@@ -239,7 +262,7 @@ Router.route('/message/project/:slug/:uid', {
   onBeforeAction: function() {
     $('meta[name=description]').remove();
     $('head').append( '<meta name="description" content="Open Source Hollywood member negotiations channel.">' );
-    document.title = 'Member Negotiations';
+    document.title = 'Smart Contract Negotiations';
     this.next();
   },
   waitOn: function() {
@@ -250,6 +273,7 @@ Router.route('/message/project/:slug/:uid', {
     }
     return [
       Meteor.subscribe('getProject', this.params.slug), 
+      Meteor.subscribe('offerById', this.params.uid),
       Meteor.subscribe('getUsers'),
       Meteor.subscribe('getMe'),
       Meteor.subscribe('offers'),
@@ -261,11 +285,23 @@ Router.route('/message/project/:slug/:uid', {
     var slug = this.params.slug;
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
+    var offer = Offers.findOne({_id: this.params.uid})
+
     if (user&&project) {
-      var offers = Offers.find({uid: user._id, slug: project.slug, completed: { $ne: true } }).fetch();
+
       var receipts = Receipts.find({user: user._id, slug: project.slug}).fetch();
       var messages = ProjectMessages.find({user: this.params.uid, project: project._id, archived: {$ne: true}}).fetch();
+
+      var query = {
+        slug: project.slug,
+        pending: {$ne:false},
+        offeror: user._id
+      }
+
+      var offers = Offers.find(query).fetch();
+      // console.log(offers)
       return {
+        isAssets: false,
         project: project,
         user: user,
         offers: offers,
@@ -273,5 +309,19 @@ Router.route('/message/project/:slug/:uid', {
         messages: messages
       }
     };
+
+    if (offer&&project) {
+      var userId = Meteor.user()._id === project.ownerId ? offer.offeree : offer.offeror
+      var user = Users.findOne({_id: userId})
+      // console.log('FUCK YEAAAAAH')
+      return {
+        isAssets: true,
+        offer: offer,
+        project: project,
+        user: user
+      }
+    };
+
+    return {}
   }
 })
