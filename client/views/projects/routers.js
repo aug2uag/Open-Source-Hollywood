@@ -194,9 +194,7 @@ Router.route('/projects/:slug/:uid', {
     document.title = project.title ? [project.title, 'on O . S . H . (opensourcehollywood.org).'].join(' ') : 'Campaign Details';
     return {
         uid: project._id,
-
         assetOffers: assetOffers,
-
         perCent: function() {
           if (project.funded && project.budget) {
             var v = (project.funded/project.budget * 100 > 100 ? 100 : project.funded/project.budget * 100).toFixed(2);
@@ -205,11 +203,9 @@ Router.route('/projects/:slug/:uid', {
 
           return 'not available';
         },
-
         purchases: function() {
           return Receipts.find({slug: project.slug, owner: project.ownerId}).fetch()
         },
-
         isOwner: function () {
           if (!Meteor.user()) return false;
           return (project.ownerId === Meteor.user()._id)&&!project.archived;
@@ -244,7 +240,7 @@ Router.route('/projects/:slug/:uid', {
             return 'no genres specified';
           }
         },
-        needs: project.needs || 'watch video for details',
+        needs: project.needs||[],
         videoURL: project.videoURL,
         _bid: board._id,
         _slug: board.slug,
@@ -259,7 +255,7 @@ Router.route('/projects/:slug/:uid', {
         count: project.count,
         createdAt: project.createdAt,
         title: project.title,
-        gifts: project.gifts,
+        gifts: project.gifts||[],
         budget: function() {
           if (project.budget) {
             return '$ ' + project.budget

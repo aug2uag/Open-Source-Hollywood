@@ -209,216 +209,231 @@
                             <form class="newProjForm">
                                 <!-- RESOURCES -->
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_crew">
-                                    <div class="">
-                                        <div class="accordion large clearfix" id="newProjCrewAccord">
-                                            <section>
-                                                <form id="newCrewForm">
-                                                    <div class="row">
-                                                        <div class="col-sm-12 col-md-4">
-                                                            <label><small>role title</small></label>
-                                                            <input type="text" name="title" id="crew-title" placeholder="Title" />
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-8">
-                                                            <label><small>role description</small></label>
-                                                            <input type="text" name="title" id="crew-description" placeholder="Description" />
-                                                        </div>
-                                                        <div class="col-sm-12">
-                                                            <label><small>role audition details</small></label>
-                                                            <input type="text" name="crew-audition" id="crew-audition" placeholder="Audition Specifications" />
-                                                            <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
-                                                        </div>
+                                    <div class="table-responsive" style="display:none" id="crewtabletoggle">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Crew Title</th>
+                                                    <th>Description</th>
+                                                    <th>Audition Specs</th>
+                                                    <th>DELETE</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="crew-table">
+
+                                                {{#each projCrew}}
+                                                    <tr class="crew-val">
+                                                        <td>{{title}}</td>
+                                                        <td>
+                                                            {{description}}<br>
+                                                            <small>eligible for:</small>
+                                                            {{#if roleStar}}
+                                                                &nbsp;<i class="glyphicon glyphicon-star"></i>
+                                                            {{/if}}
+
+                                                            {{#if roleTime}}
+                                                                &nbsp;<i class="glyphicon glyphicon-time"></i>
+                                                            {{/if}}
+
+                                                            {{#if roleDollar}}
+                                                                &nbsp;<i class="glyphicon glyphicon-usd"></i>
+                                                            {{/if}}
+                                                        </td>
+                                                        <td>{{audition}}</td>
+                                                        <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
+                                                    </tr>
+                                                {{/each}}
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="accordion large clearfix" id="newProjCrewAccord">
+                                        <section>
+                                            <form id="newCrewForm">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <label><small>role title</small></label>
+                                                        <input type="text" name="title" id="crew-title" placeholder="Title" />
                                                     </div>
-
-                                                    <div class=" row t20">
-                                                        <ul class="list-card-details list-card-title" style="border-top: 1px solid;width: 350px;">
-                                                            <li><label><small>Would you pay for this position?</small></label></li>
-                                                            <li><label><small>Would you accept payment for this position?</small></label></li>
-                                                            <li><label><small>Would you accept free performance for this position?</small></label></li>
-                                                        </ul>
-                                                        <p><small>these offer options will be presented to candidates</small></p>
+                                                    <div class="col-sm-12 col-md-8">
+                                                        <label><small>role description</small></label>
+                                                        <input type="text" name="title" id="crew-description" placeholder="Description" />
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label><small>role audition details</small></label>
+                                                        <input type="text" name="crew-audition" id="crew-audition" placeholder="Audition Specifications" />
+                                                        <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
+                                                    </div>
+                                                </div>
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="crew_pay" type="checkbox" name="crew_consideration" class="crew_consideration" value="pay" checked />
-                                                                <label for="crew_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>this role is listed for paid hire</strong></small></label>
+                                                <div class=" row t20">
+                                                    <ul class="list-card-details list-card-title" style="border-top: 1px solid;width: 350px;">
+                                                        <li><label><small>Would you pay for this position?</small></label></li>
+                                                        <li><label><small>Would you accept payment for this position?</small></label></li>
+                                                        <li><label><small>Would you accept free performance for this position?</small></label></li>
+                                                    </ul>
+                                                    <p><small>these offer options will be presented to candidates</small></p>
+                                                </div>
+                                                <div class="row">
 
-                                                                <div id="crew_pay_amounth">
-                                                                    <input id="crew_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="crew_pay_amount"/>
-                                                                    <label><small>max pay for this role</small></label>
-                                                                </div>
-                                                                
+                                                        <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <input id="crew_pay" type="checkbox" name="crew_consideration" class="crew_consideration" value="pay" checked />
+                                                            <label for="crew_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>this role is listed for paid hire</strong></small></label>
+
+                                                            <div id="crew_pay_amounth">
+                                                                <input id="crew_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="crew_pay_amount"/>
+                                                                <label><small>max pay for this role</small></label>
                                                             </div>
+                                                            
+                                                        </div>
 
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="crew_time" type="checkbox" name="crew_consideration" class="crew_consideration" value="time" checked />
-                                                                <label for="crew_time">Experiential <i class="glyphicon glyphicon-time"></i>:<br><small><strong>would accept free performance for this role</strong></small></label>
-                                                            </div>
+                                                        <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <input id="crew_time" type="checkbox" name="crew_consideration" class="crew_consideration" value="time" checked />
+                                                            <label for="crew_time">Experiential <i class="glyphicon glyphicon-time"></i>:<br><small><strong>would accept free performance for this role</strong></small></label>
+                                                        </div>
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="crew_escrow" type="checkbox" name="crew_consideration" class="crew_consideration" value="escrow" checked />
-                                                                <label for="crew_escrow">Escrow Position <i class="glyphicon glyphicon-usd"></i>:<br><small><strong>would accept donation for this role</strong></small></label>
-                                                            </div>            
-                                                    </div>
-
-
-
-                                                    <button id="add-crew" val="crewtabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Crew Position</button>
-                                                    <br>
-                                                    <br />
-                                                    <div class="table-responsive" style="display:none" id="crewtabletoggle">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Crew Title</th>
-                                                                    <th>Description</th>
-                                                                    <th>Audition Specs</th>
-                                                                    <th>DELETE</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="crew-table">
-
-                                                                {{#each projCrew}}
-                                                                    <tr class="crew-val">
-                                                                        <td>{{title}}</td>
-                                                                        <td>
-                                                                            {{description}}<br>
-                                                                            <small>eligible for:</small>
-                                                                            {{#if roleStar}}
-                                                                                &nbsp;<i class="glyphicon glyphicon-star"></i>
-                                                                            {{/if}}
-
-                                                                            {{#if roleTime}}
-                                                                                &nbsp;<i class="glyphicon glyphicon-time"></i>
-                                                                            {{/if}}
-
-                                                                            {{#if roleDollar}}
-                                                                                &nbsp;<i class="glyphicon glyphicon-usd"></i>
-                                                                            {{/if}}
-                                                                        </td>
-                                                                        <td>{{audition}}</td>
-                                                                        <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
-                                                                    </tr>
-                                                                {{/each}}
+                                                        <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <input id="crew_escrow" type="checkbox" name="crew_consideration" class="crew_consideration" value="escrow" checked />
+                                                            <label for="crew_escrow">Escrow Position <i class="glyphicon glyphicon-usd"></i>:<br><small><strong>would accept donation for this role</strong></small></label>
+                                                        </div>            
+                                                </div>
 
 
 
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </form>
-                                            </section>
-                                        </div>
+                                                <button id="add-crew" val="crewtabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Crew Position</button>
+
+                                            </form>
+                                        </section>
                                     </div>
                                 </div>
 
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_cast" style="display:none">
-                                    <div class="">
-                                        
-                                        <div class="accordion large clearfix" id="newProjCastAccord">
-                                            <section>
-                                                <form id="newCastForm">
-                                                    <div class="row">
-                                                        <div class="col-sm-12 col-md-4">
-                                                            <label for="cast-title"><small>role title</small></label>
-                                                            <input type="text" name="cast-title" id="cast-title" placeholder="Role" />
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-8">
-                                                            <label for="cast-description"><small>role description</small></label>
-                                                            <input type="text" name="cast-description" id="cast-description" placeholder="Description" />
-                                                        </div>
-                                                        <div class="col-sm-12">
-                                                            <label for="cast-audition"><small>role audition details</small></label>
-                                                            <input type="text" name="cast-audition" id="cast-audition" placeholder="Audition Specifications" />
-                                                            <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
-                                                        </div>
+                                    <div class="table-responsive" style="display:none" id="casttabletoggle">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Role</th>
+                                                    <th>Description</th>
+                                                    <th>Audition Specs</th>
+                                                    <th>DELETE</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="cast-table">
+
+                                                {{#each projCast}}
+                                                    <tr class="crew-val">
+                                                        <td>{{title}}</td>
+                                                        <td>
+                                                            {{description}}<br>
+                                                            <small>eligible for:</small>
+                                                            {{#if roleStar}}
+                                                                &nbsp;<i class="glyphicon glyphicon-star"></i>
+                                                            {{/if}}
+
+                                                            {{#if roleTime}}
+                                                                &nbsp;<i class="glyphicon glyphicon-time"></i>
+                                                            {{/if}}
+
+                                                            {{#if roleDollar}}
+                                                                &nbsp;<i class="glyphicon glyphicon-usd"></i>
+                                                            {{/if}}
+                                                        </td>
+                                                        <td>{{audition}}</td>
+                                                        <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
+                                                    </tr>
+                                                {{/each}}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="accordion large clearfix" id="newProjCastAccord">
+                                        <section>
+                                            <form id="newCastForm">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <label for="cast-title"><small>role title</small></label>
+                                                        <input type="text" name="cast-title" id="cast-title" placeholder="Role" />
                                                     </div>
-
-                                                    <div class=" row t20">
-                                                        <ul class="list-card-details list-card-title" style="border-top: 1px solid;width: 350px;">
-                                                            <li><label><small>Would you pay for this position?</small></label></li>
-                                                            <li><label><small>Would you accept payment for this position?</small></label></li>
-                                                            <li><label><small>Would you accept free performance for this position?</small></label></li>
-                                                        </ul>
-                                                        <p><small>these offer options will be presented to candidates</small></p>
+                                                    <div class="col-sm-12 col-md-8">
+                                                        <label for="cast-description"><small>role description</small></label>
+                                                        <input type="text" name="cast-description" id="cast-description" placeholder="Description" />
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label for="cast-audition"><small>role audition details</small></label>
+                                                        <input type="text" name="cast-audition" id="cast-audition" placeholder="Audition Specifications" />
+                                                        <label style="position: relative;top: -30px;font-size: 0.6rem;">you can specify the user to create an audition reel or file that they would share with you on applying to this role</label>
+                                                    </div>
+                                                </div>
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="cast_pay" type="checkbox" name="cast_consideration" class="cast_consideration" value="pay" checked />
-                                                                <label for="cast_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>You will accept offers for pay for this position.</strong></small></label>
+                                                <div class=" row t20">
+                                                    <ul class="list-card-details list-card-title" style="border-top: 1px solid;width: 350px;">
+                                                        <li><label><small>Would you pay for this position?</small></label></li>
+                                                        <li><label><small>Would you accept payment for this position?</small></label></li>
+                                                        <li><label><small>Would you accept free performance for this position?</small></label></li>
+                                                    </ul>
+                                                    <p><small>these offer options will be presented to candidates</small></p>
+                                                </div>
+                                                <div class="row">
 
-                                                                <div id="cast_pay_amounth">
-                                                                    <input id="cast_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="cast_pay_amount"/>
-                                                                    <label><small>how much would you pay for this role?</small></label>
-                                                                </div>
-                                                                
+                                                        <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <input id="cast_pay" type="checkbox" name="cast_consideration" class="cast_consideration" value="pay" checked />
+                                                            <label for="cast_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>You will accept offers for pay for this position.</strong></small></label>
+
+                                                            <div id="cast_pay_amounth">
+                                                                <input id="cast_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="cast_pay_amount"/>
+                                                                <label><small>how much would you pay for this role?</small></label>
                                                             </div>
+                                                            
+                                                        </div>
 
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="cast_time" type="checkbox" name="cast_consideration" class="cast_consideration" value="time" checked />
-                                                                <label for="cast_time">Experiential <i class="glyphicon glyphicon-time"></i>:<br><small><strong>You will accept offers for time donations for this role.</strong></small></label>
-                                                            </div>
+                                                        <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <input id="cast_time" type="checkbox" name="cast_consideration" class="cast_consideration" value="time" checked />
+                                                            <label for="cast_time">Experiential <i class="glyphicon glyphicon-time"></i>:<br><small><strong>You will accept offers for time donations for this role.</strong></small></label>
+                                                        </div>
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="cast_escrow" type="checkbox" name="cast_consideration" class="cast_consideration" value="escrow" checked />
-                                                                <label for="cast_escrow">Escrow Position <i class="glyphicon glyphicon-usd"></i>:<br><small><strong>You will receive money only if you accept the offer for the role.</strong></small></label>
-                                                            </div>            
-                                                    </div>
+                                                        <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <input id="cast_escrow" type="checkbox" name="cast_consideration" class="cast_consideration" value="escrow" checked />
+                                                            <label for="cast_escrow">Escrow Position <i class="glyphicon glyphicon-usd"></i>:<br><small><strong>You will receive money only if you accept the offer for the role.</strong></small></label>
+                                                        </div>            
+                                                </div>
 
 
-                                                    <button id="add-cast" val="casttabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Cast Position</button>
-                                                    <br>
-                                                    <br />
-                                                    <div class="table-responsive" style="display:none" id="casttabletoggle">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Role</th>
-                                                                    <th>Description</th>
-                                                                    <th>Audition Specs</th>
-                                                                    <th>DELETE</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="cast-table">
+                                                <button id="add-cast" val="casttabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Cast Position</button>
 
-                                                                {{#each projCast}}
-                                                                    <tr class="crew-val">
-                                                                        <td>{{title}}</td>
-                                                                        <td>
-                                                                            {{description}}<br>
-                                                                            <small>eligible for:</small>
-                                                                            {{#if roleStar}}
-                                                                                &nbsp;<i class="glyphicon glyphicon-star"></i>
-                                                                            {{/if}}
-
-                                                                            {{#if roleTime}}
-                                                                                &nbsp;<i class="glyphicon glyphicon-time"></i>
-                                                                            {{/if}}
-
-                                                                            {{#if roleDollar}}
-                                                                                &nbsp;<i class="glyphicon glyphicon-usd"></i>
-                                                                            {{/if}}
-                                                                        </td>
-                                                                        <td>{{audition}}</td>
-                                                                        <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
-                                                                    </tr>
-                                                                {{/each}}
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </form>
-                                            </section>
-                                        </div>
+                                            </form>
+                                        </section>
                                     </div>
                                 </div>
 
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_needs" style="display:none">
                                     <div class="">
                                         <div class="accordion large clearfix"  id="newProjNeedsAccord">
+                                            <div class="table-responsive" style="display:none" id="needstabletoggle">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Category</th>
+                                                            <th>Description</th>
+                                                            <th>DELETE</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="needs-table">
+                                                        
+                                                        {{#each projNeeds}}
+                                                            <tr class="needs-val">
+                                                                <td>{{category}}</td>
+                                                                <td>{{description}}</td>
+                                                                <td><button class="deleteRow button special">X</button></td>
+                                                            </tr>
+                                                        {{/each}}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <section>
                                                 <form id="newNeedsForm">
                                                     <div class="row">
@@ -450,30 +465,6 @@
                                                         </div>
                                                     </div>
                                                     <button id="add-needs" val="casttabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Requested Resource</button>
-                                                    <br>
-                                                    <br />
-                                                    <div class="table-responsive" style="display:none" id="needstabletoggle">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Category</th>
-                                                                    <th>Description</th>
-                                                                    <th>DELETE</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="needs-table">
-                                                                
-                                                                {{#each projNeeds}}
-                                                                    <tr class="needs-val">
-                                                                        <td>{{category}}</td>
-                                                                        <td>{{description}}</td>
-                                                                        <td><button class="deleteRow button special">X</button></td>
-                                                                    </tr>
-                                                                {{/each}}
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
                                                 </form>
                                             </section>
                                         </div>
@@ -483,153 +474,150 @@
                         </div>
                     </div>
                     <div style="display: none;" class="camp_resources_toggle krown-alert krown-single-image" id="camp_Merch">
-                        <form class="newProjForm">
-                            <div class="krown-column-row clearfix">
-                                <div class="">
-                                    {{#if noUserEmail}}
-                                    <h5>YOU MUST CONFIGURE NOTIFICATIONS TO ACCESS THIS FEATURE</h5>
-                                    {{else}}
-                                    <h3 class="extremeboldtext">Campaign Merchandise</h3>
-                                    <div class="accordion large clearfix" id="newProjGiftAccord">
-                                        <section>
-                                            <div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 col-md-5">
-                                                        <label for="title">name</label>
-                                                        <input type="text" name="title" id="gift-title" placeholder="product or service name" />
+                            <form id="newProjFormMerch" class="newProjForm">
+                                <div class="krown-column-row clearfix">
+                                    <div class="krown-column-container clearfix first last span12 clearfix">
+                                        {{#if noUserEmail}}
+                                        <h5>YOU MUST CONFIGURE EMAIL NOTIFICATIONS TO ACCESS THIS FEATURE</h5>
+                                        {{else}}
+                                        <div class="table-responsive" style="display:none" id="merchtabletoggle">
+                                            <table class="table">
+                                                <thead>
+                                                  <tr>
+                                                      <th>Name</th>
+                                                      <th>Type</th>
+                                                      <th>Description</th>
+                                                      <th>Info</th>
+                                                      <th>Price</th>
+                                                      <th>DELETE</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody id="gift-table"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="accordion large clearfix" id="newProjGiftAccord">
+                                            <section>
+                                                <h5 class="expandnewprojecttext">Add or remove campaign merch for sale.</h5>
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-md-5">
+                                                            <label for="title">name</label>
+                                                            <input type="text" name="title" id="gift-title" placeholder="product or service name" />
+                                                        </div>
+                                                        <div class="col-xs-12 col-md-5">
+                                                            <label for="description">description</label>
+                                                            <input type="text" name="description" id="gift-description" placeholder="enter description here" />
+                                                        </div>
+                                                        <div class="col-xs-12 col-md-2">
+                                                            <label for="merchtype">select merch type</label>
+                                                            <select name="merchtype" id="merchtype" class="form-control">
+                                                                <option selected disabled>- Select -</option>
+                                                                <option value="Apparel">Apparel</option>
+                                                                <option value="Perishable">Perishable</option>
+                                                                <option value="Non-Perishable">Non-Perishable</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-xs-12 col-md-5">
-                                                        <label for="description">description</label>
-                                                        <input type="text" name="description" id="gift-description" placeholder="enter description here" />
-                                                    </div>
-                                                    <div class="col-xs-12 col-md-2">
-                                                        <label for="merchtype">merch type</label>
-                                                        <select name="merchtype" id="merchtype" class="form-control">
-                                                            <option selected disabled>- Select -</option>
-                                                            <option value="Apparel">Apparel</option>
-                                                            <option value="Perishable">Perishable</option>
-                                                            <option value="Non-Perishable">Non-Perishable</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="row" id="merchtypehidden" hidden>
+                                                    <div class="row" id="merchtypehidden" hidden>
 
-                                                    <div id="apparelsizes" class="col-xs-3" hidden>
-                                                        <p class="b20"><small><strong>enter size &amp; unit info</strong></small></p>
-                                                        <div class="row merchbottomborder">
-                                                            <div class="col-sm-12 col-md-5">
-                                                                <div class="checkbox">
-                                                                  <input class="apparelsize" type="text" val="XS" value="XS" id="XSs" />
+                                                        <div id="apparelsizes" class="col-xs-12 col-sm-5" hidden>
+                                                                <p class="b20"><small><strong>enter size &amp; unit info</strong></small></p>
+                                                                <div class="row merchbottomborder">
+                                                                    <div class="col-sm-12 col-md-5">
+                                                                        <div class="checkbox">
+                                                                          <input class="apparelsize" type="text" val="XS" value="XS" id="XSs" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-7">
+                                                                        <input ctx="size" class="merch_quantity input-sm" id="XS" type="number" min="0" placeholder="quantity">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-7">
-                                                                <input ctx="size" class="merch_quantity" id="XS" type="number" min="0" placeholder="quantity">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row merchbottomborder">
-                                                            <div class="col-sm-12 col-md-5">
-                                                                <div class="checkbox">
-                                                                  <input class="apparelsize" type="text" value="S" val="S" id="Ss" />
+                                                                <div class="row merchbottomborder">
+                                                                    <div class="col-sm-12 col-md-5">
+                                                                        <div class="checkbox">
+                                                                          <input class="apparelsize" type="text" value="S" val="S" id="Ss" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-7">
+                                                                        <input ctx="size" class="merch_quantity input-sm" id="S" type="number" min="0" placeholder="quantity">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-7">
-                                                                <input ctx="size" class="merch_quantity" id="S" type="number" min="0" placeholder="quantity">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row merchbottomborder">
-                                                            <div class="col-sm-12 col-md-5">
-                                                                <div class="checkbox">
-                                                                  <input class="apparelsize" type="text" value="M" val="M" id="Ms" />
+                                                                <div class="row merchbottomborder">
+                                                                    <div class="col-sm-12 col-md-5">
+                                                                        <div class="checkbox">
+                                                                          <input class="apparelsize" type="text" value="M" val="M" id="Ms" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-7">
+                                                                        <input ctx="size" class="merch_quantity input-sm" id="M" type="number" min="0" placeholder="quantity">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-7">
-                                                                <input ctx="size" class="merch_quantity" id="M" type="number" min="0" placeholder="quantity">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row merchbottomborder">
-                                                            <div class="col-sm-12 col-md-5">
-                                                                <div class="checkbox">
-                                                                  <input class="apparelsize" type="text" value="L" val="L" id="Ls" />
+                                                                <div class="row merchbottomborder">
+                                                                    <div class="col-sm-12 col-md-5">
+                                                                        <div class="checkbox">
+                                                                          <input class="apparelsize" type="text" value="L" val="L" id="Ls" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-7">
+                                                                        <input ctx="size" class="merch_quantity input-sm" id="L" type="number" min="0" placeholder="quantity">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-7">
-                                                                <input ctx="size" class="merch_quantity" id="L" type="number" min="0" placeholder="quantity">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row merchbottomborder">
-                                                            <div class="col-sm-12 col-md-5">
-                                                                <div class="checkbox">
-                                                                  <input class="apparelsize" type="text" value="XL" val="XL" id="XLs" />
+                                                                <div class="row merchbottomborder">
+                                                                    <div class="col-sm-12 col-md-5">
+                                                                        <div class="checkbox">
+                                                                          <input class="apparelsize" type="text" value="XL" val="XL" id="XLs" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-7">
+                                                                        <input ctx="size" class="merch_quantity input-sm" id="XL" type="number" min="0" placeholder="quantity">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-7">
-                                                                <input ctx="size" class="merch_quantity" id="XL" type="number" min="0" placeholder="quantity">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row merchbottomborder">
-                                                            <div class="col-sm-12 col-md-5">
-                                                                <div class="checkbox">
-                                                                  <input class="apparelsize" type="text" value="XXL" val="XXL" id="XXLs" />
+                                                                <div class="row merchbottomborder">
+                                                                    <div class="col-sm-12 col-md-5">
+                                                                        <div class="checkbox">
+                                                                          <input class="apparelsize" type="text" value="XXL" val="XXL" id="XXLs" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-7">
+                                                                        <input ctx="size" class="merch_quantity input-sm" id="XXL" type="number" min="0" placeholder="quantity">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-7">
-                                                                <input ctx="size" class="merch_quantity" id="XXL" type="number" min="0" placeholder="quantity">
-                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="col-xs-3" id="perishabledetails" hidden>
-                                                        <textarea name="merch_handling" id="merch_handling" placeholder="" rows="6"></textarea>
-                                                        <input id="oneoff" type="number" min="0" placeholder="number of units">
-                                                    </div>
+                                                        <div class="col-xs-12 col-sm-5" id="perishabledetails" hidden>
+                                                            <textarea name="merch_handling" id="merch_handling" placeholder="" rows="6"></textarea>
+                                                            <input id="oneoff" type="number" min="0" placeholder="number of units">
+                                                        </div>
 
-                                                    <div class="col-xs-9">
-                                                        <textarea name="merch_disclaimer" id="merch_disclaimer" placeholder="Return Policy and Disclaimers" rows="6"></textarea>
+                                                        <div class="col-xs-12 col-sm-7">
+                                                            <textarea name="merch_disclaimer" id="merch_disclaimer" placeholder="Return Policy and Disclaimers" rows="6"></textarea>
+                                                        </div>
                                                     </div>
-
-                                                </div>
-                                                <div class="row">
-                                                    <!-- <div class="col-xs-4">
-                                                        <label for="quantity">quantity</label>
-                                                        <input type="text" name="quantity" id="gift-quantity" placeholder="" />
-                                                    </div> -->
-                                                    <div class="col-xs-7">
-                                                        <label for="msrp">price</label>
-                                                        <input type="text" name="msrp" id="gift-msrp" placeholder="enter merch price here" />
+                                                    <div class="row">
+                                                        <!-- <div class="col-xs-4">
+                                                            <label for="quantity">quantity</label>
+                                                            <input type="text" name="quantity" id="gift-quantity" placeholder="" />
+                                                        </div> -->
+                                                        <div class="col-xs-7">
+                                                            <label for="msrp">price</label>
+                                                            <input type="text" name="msrp" id="gift-msrp" placeholder="enter merch price here" />
+                                                        </div>
+                                                        <div class="col-xs-5" style="margin-top:  25px;">
+                                                            <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
+                                                                <i class="fa fa-cloud-upload"></i> Upload Image
+                                                            </label>
+                                                            <input class="noshow-file-upload" id="gift_file" type="file"/>
+                                                            <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-xs-5" style="margin-top:  25px;">
-                                                        <label for="file-upload" class="custom-file-upload margin_bottom20" id="file_gift">
-                                                            <i class="fa fa-cloud-upload"></i> Upload Image
-                                                        </label>
-                                                        <input class="noshow-file-upload" id="gift_file" type="file"/>
-                                                        <div id="hidden_gift_name" class="hidden-filename"><i class="fa fa-check"></i>&nbsp;<span id="gift_file_name"></span></div>
-                                                    </div>
+                                                    <button id="add-gift" val="casttabletoggle" class="btn button disabled special w100 t60" style="font-size:1.3rem">Add Campaign Merch</button>
                                                 </div>
-                                                <button id="add-gift" val="casttabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Campaign Merch</button>
-                                                <br>
-                                                <br />
-                                                <div class="table-responsive" style="display:none" id="merchtabletoggle">
-                                                    <table class="table">
-                                                        <thead>
-                                                          <tr>
-                                                              <th>Name</th>
-                                                              <th>Type</th>
-                                                              <th>Description</th>
-                                                              <th>Info</th>
-                                                              <th>Price</th>
-                                                              <th>DELETE</th>
-                                                          </tr>
-                                                        </thead>
-                                                        <tbody id="gift-table"></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </section>
+                                            </section>
+                                        </div>
+                                        {{/if}}
                                     </div>
-                                    {{/if}}
                                 </div>
-                            </div>
-                        </form>
+                            </form>
                     </div>
                     <div class="row t40">
                         <div class="col-xs-10 col-xs-offset-1 krown-flickr t60">
