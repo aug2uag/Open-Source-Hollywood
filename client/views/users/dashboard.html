@@ -12,26 +12,132 @@
             <div id="project-container" class="krown-tabs responsive-on clearfix">
 
                 <ul class="titles clearfix" id="settings_menu">
-                    <li class="opened">
+                    <li class="">
+                        <h5>ACTIVE CONTRACTS</h5></li>
+                    <li class="">
                         <h5>CAMPAIGNS</h5></li>
                     <li class="">
-                        <h5>MERCHANT</h5></li>
+                        <h5>MERCHANT CENTER</h5></li>
                     <li class="">
-                        <h5>HOLDINGS</h5></li>
-                    <li class="">
-                        <h5>CONTRACTS</h5></li>
+                        <h5>YOUR PORTFOLIO</h5></li>
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
+                        <option>ACTIVE CONTRACTS</option>
                         <option>CAMPAIGNS</option>
-                        <option>MERCHANT</option>
-                        <option>HOLDINGS</option>
-                        <option>CONTRACTS</option>
+                        <option>MERCHANT CENTER</option>
+                        <option>YOUR PORTFOLIO</option>
                       </select>
                       <span class="tabs-select-inner" style="display: block; white-space: nowrap;">SELECT</span></span>
                     </div>
                 </ul>
 
                 <div class="contents clearfix" style="width: 100%;">
+
+                    <div id="pending" style="display: none;">
+                      <div class="project-header">
+                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Current Contracts</h3>
+                        <hr />
+                      </div>
+                      <p><small>Select section:</small></p>
+                      <ol class="breadcrumb">
+                        <li><a href="#!" class="dash_show_ks bold" val="view_pending_ks">Pending</a></li>
+                        <li><a href="#!" class="dash_show_ks" val="view_completed_ks">Completed</a></li>
+                        <li><a href="#!" class="dash_show_ks" val="view_messages_ks">Messages</a></li>
+                      </ol>
+                      <p>&nbsp;</p>
+                      <div class="dash_ks project-content" id="view_pending_ks">
+                          {{#each currentContracts}}
+                          <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <p class="panel-title">{{offerName}}</p>
+                              </div>
+                              <div class="panel-body">
+                                    <a href="{{offerLink}}" class="thumbnail">
+                                      <img src="{{offerImg}}" alt="applicant avatar">
+                                    </a>
+                                    <p class="lead f08">
+                                      {{offer.message}}
+                                    </p>
+                              </div>
+                              <div class="panel-footer">
+                                <a href="{{contractLink}}" class="btn">ACCESS CONTRACT</a>
+                              </div>
+                            </div>
+                          </div>
+
+                          {{else}}
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <h5>NO PENDING CONTRACTS TO SHOW</h5>
+                          {{/each}}
+      
+                      </div>
+
+                      <div class="dash_ks project-content" id="view_completed_ks" style="display:none">
+
+                          {{#each completedContracts}}
+                          <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <p class="panel-title">{{offerName}}</p>
+                              </div>
+                              <div class="panel-body">
+                                    <a href="{{offerLink}}" class="thumbnail">
+                                      <img src="{{offerImg}}" alt="applicant avatar">
+                                    </a>
+                                    <p class="lead f08">
+                                      {{offer.message}}
+                                    </p>
+                              </div>
+                              <div class="panel-footer">
+                                <a href="/message/project/{{ slug }}/{{ offer.user.id }}" class="btn">VIEW CONTRACT</a>
+                              </div>
+                            </div>
+                          </div>
+
+                          {{else}}
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <h5>NO COMPLETED CONTRACTS TO SHOW</h5>
+                          {{/each}}
+                      </div>
+
+                      <div class="dash_ks project-content" id="view_messages_ks" style="display:none">
+                        <ol id="comments-list">
+
+                            <!-- DISPLAY PENDING AND COMPLETED CONTRACTS (ACTIVE & ARCHIVED PROJECTS) -->
+
+                            <!-- GIVE PRINT OPTION TO PRINT OUT THE TERMS OF THE CONTRACT -->
+
+                          {{#each messages}}
+                          <li class="comment clearfix container" style="padding-bottom:60px">
+
+                                <div class="comment-avatar"><img alt="avatar" src="{{this.ownerAvatar}}" srcset="{{this.ownerAvatar}}" class="avatar avatar-65 photo avatar-default" height="65" width="65"></div>
+
+                                <div class="comment-content row">
+
+                                    <div class="comment-meta clearfix col-xs-12 col-sm-9 contents">
+
+                                        <h6 class="comment-title">{{this.ownerName}}</h6>
+                                        <span class="comment-date">{{this.createdAt}}</span>
+                                        <span class="comment-date" style="margin-top:10px;word-break:break-word;width:100px;">campaign:<br>{{this.title}}</span>
+                                        {{textify}}
+
+                                    </div>
+
+                                    <a href="/message/project/{{ this.slug }}/{{ this.user }}" class="button special" style="margin-top:30px;display:table-caption;">ACCESS</a>
+
+                                </div>
+                          </li>
+                          {{else}}
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <h5>NO PENDING CONTRACTS TO SHOW</h5>
+                          {{/each}}
+                        </ol>
+                      </div>
+                    </div>
 
                     <div id="active" style="display: none;">
                       <div class="project-header">
@@ -76,7 +182,7 @@
 
                     <div id="merchant" style="display: none;">
                       <div class="project-header">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Merchant Center</h3>
+                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Merchant Sales &amp; Transactions</h3>
                         <hr />
                       </div>   
                       <div class="project-content">
@@ -228,7 +334,6 @@
                             {{/if}}
                         </div>
 
-
                         <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_merch" style="display:none">
                           <h4>SOLD MERCHANDISE</h4>
                           <div class="table-wrapper">
@@ -236,6 +341,7 @@
                               <thead>
                                 <tr>
                                   <th>Sales Date</th>
+                                  <th>Channel</th>
                                   <th>Item</th>
                                   <th>Quantity</th>
                                   <th>Total</th>
@@ -247,6 +353,7 @@
                                 {{#each giftPurchases}}
                                   <tr class="fulfill_gift">
                                     <td class="">{{orderDate}}</td>
+                                    <td class="">{{orderChannel}}</td>
                                     <td class="">{{order.gift.name}}</td>
                                     <td class="">{{order.totalUnits}}</td>
                                     <td class="center">${{order.amount}}</td>
@@ -291,7 +398,6 @@
                                     <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
                                     <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
                                   </tr>
-
                                 {{/each}}
 
                                 <tr>
@@ -316,11 +422,11 @@
 
                     <div id="equity" style="display: none;">
                       <div class="project-header">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Your Campaign Holdings</h3>
+                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Your Portfolio of Campaign Holdings</h3>
                         <hr />
                       </div>   
                       <div class="project-content">
-                        <p>This list contains finished campaigns where you own a portion of distribution interests.</p>
+                        <p>This list contains finished campaigns where you own a portion of ownership or distribution interests.</p>
                         <div class="krown-id-grid default clearfix" style="position: relative;">
                           {{#each equityCamps}}
                             {{> equityTab}}
@@ -335,111 +441,6 @@
                       </div>
                     </div>
 
-                    <div id="pending" style="display: none;">
-                      <div class="project-header">
-                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Current Contracts</h3>
-                        <hr />
-                      </div>
-                      <p><small>Select section:</small></p>
-                      <ol class="breadcrumb">
-                        <li><a href="#!" class="dash_show_ks bold" val="view_pending_ks">Pending</a></li>
-                        <li><a href="#!" class="dash_show_ks" val="view_completed_ks">Completed</a></li>
-                        <li><a href="#!" class="dash_show_ks" val="view_messages_ks">Messages</a></li>
-                      </ol>
-                      <p>&nbsp;</p>
-                      <div class="dash_ks project-content" id="view_pending_ks">
-                          {{#each currentContracts}}
-                          <div class="col-xs-12 col-sm-6 col-md-4">
-                            <div class="panel panel-default">
-                              <div class="panel-heading">
-                                <p class="panel-title">{{offerName}}</p>
-                              </div>
-                              <div class="panel-body">
-                                    <a href="{{offerLink}}" class="thumbnail">
-                                      <img src="{{offerImg}}" alt="applicant avatar">
-                                    </a>
-                                    <p class="lead f08">
-                                      {{offer.message}}
-                                    </p>
-                              </div>
-                              <div class="panel-footer">
-                                <a href="{{contractLink}}" class="btn">ACCESS CONTRACT</a>
-                              </div>
-                            </div>
-                          </div>
-
-                          {{else}}
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <h5>NO PENDING CONTRACTS TO SHOW</h5>
-                          {{/each}}
-      
-                      </div>
-
-                      <div class="dash_ks project-content" id="view_completed_ks" style="display:none">
-
-                          {{#each completedContracts}}
-                          <div class="col-xs-12 col-sm-6 col-md-4">
-                            <div class="panel panel-default">
-                              <div class="panel-heading">
-                                <p class="panel-title">{{offerName}}</p>
-                              </div>
-                              <div class="panel-body">
-                                    <a href="{{offerLink}}" class="thumbnail">
-                                      <img src="{{offerImg}}" alt="applicant avatar">
-                                    </a>
-                                    <p class="lead f08">
-                                      {{offer.message}}
-                                    </p>
-                              </div>
-                              <div class="panel-footer">
-                                <a href="/message/project/{{ slug }}/{{ offer.user.id }}" class="btn">VIEW CONTRACT</a>
-                              </div>
-                            </div>
-                          </div>
-
-                          {{else}}
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <h5>NO COMPLETED CONTRACTS TO SHOW</h5>
-                          {{/each}}
-                      </div>
-
-                      <div class="dash_ks project-content" id="view_messages_ks" style="display:none">
-                        <ol id="comments-list">
-
-                            <!-- DISPLAY PENDING AND COMPLETED CONTRACTS (ACTIVE & ARCHIVED PROJECTS) -->
-
-                            <!-- GIVE PRINT OPTION TO PRINT OUT THE TERMS OF THE CONTRACT -->
-
-                          {{#each messages}}
-                          <li class="comment clearfix container" style="padding-bottom:60px">
-
-                                <div class="comment-avatar"><img alt="avatar" src="{{this.ownerAvatar}}" srcset="{{this.ownerAvatar}}" class="avatar avatar-65 photo avatar-default" height="65" width="65"></div>
-
-                                <div class="comment-content row">
-
-                                    <div class="comment-meta clearfix col-xs-12 col-sm-9 contents">
-
-                                        <h6 class="comment-title">{{this.ownerName}}</h6>
-                                        <span class="comment-date">{{this.createdAt}}</span>
-                                        <span class="comment-date" style="margin-top:10px;word-break:break-word;width:100px;">campaign:<br>{{this.title}}</span>
-                                        {{textify}}
-
-                                    </div>
-
-                                    <a href="/message/project/{{ this.slug }}/{{ this.user }}" class="button special" style="margin-top:30px;display:table-caption;">NEGOTIATE</a>
-
-                                </div>
-                          </li>
-                          {{else}}
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
-                          <h5>NO PENDING CONTRACTS TO SHOW</h5>
-                          {{/each}}
-                        </ol>
-                      </div>
-                    </div>
                 </div>
             </div>
         </div>

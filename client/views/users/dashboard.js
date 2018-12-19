@@ -55,6 +55,10 @@ function iAmOfferee(offereeId) {
 }
 
 Template.dashboard.helpers({
+	orderChannel: function() {
+		if (this.slug==='personal merchandise') return 'personal merch';
+		return this.title
+	},
 	contractLink: function() {
 		if (this.ctx&&this.ctx==='offer') {
 			return ['/message/project/', this.slug, '/', this._id].join('')
@@ -87,8 +91,12 @@ Template.dashboard.helpers({
 		console.log(this)
 	},
 	leaseTotals: function() {
-		console.log(this)
-		return 0
+		if (this.assetLeases.length<=1) {
+		  return this.assetLeases[0]&&this.assetLeases[0].amount||0
+		};
+		return this.assetLeases.reduce(function(a,b) {
+		  return a.amount + b.amount
+		})
 	},
 	orderDate: function() {
 		return new Date(this.created).toDateString()

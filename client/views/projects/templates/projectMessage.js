@@ -30,11 +30,17 @@ function formattedProjectRoles() {
 }
 
 Template.projectMessage.helpers({
+	zoo: function() {
+		console.log(this)
+	},
 	init: function() {
 		was = this
 	},
+	archivedOffer: function() {
+		console.log(this)
+		return true
+	},
 	formattedOffers: function() {
-		console.log(this.offers)
 		return this.offers.map(function(o) {
 			if (!o.ctx||o.ctx!=='offer') return o;
 		}).filter(function(o) { if (o) return o })
@@ -191,7 +197,7 @@ Template.projectMessage.events({
 
 	'click #counterk': function(e) {
 		e.preventDefault();
-		console.log('clicked counterk')
+		// console.log('clicked counterk')
 		var counteroffer = {
 			negotiationTerms: $('#negotiationTerms').val(),
 			negotiationDamages: $('#negotiationDamages').val(),
@@ -388,7 +394,7 @@ Template.assetsOfferDialog.events({
 		e.preventDefault();
 		var text = $('#message-box').val();
 		$('#message-box').val('');
-		console.log(this)
+		// console.log(this)
 		Meteor.call('addOfferMessage', {
 			user: this.user._id,
 			offer: this.offer._id,
@@ -396,7 +402,9 @@ Template.assetsOfferDialog.events({
 		});
 	},
 	'click #assetsagreeoffer': function(e) {
-		Meteor.call('acceptAssetsOffer', this)
+		Meteor.call('acceptAssetsOffer', this, function(e, r) {
+			vex.dialog.alert(e||r)
+		})
 	},
 	'click #assetsrejectoffer': function(e) {
 		Meteor.call('rejectAssetsOffer', this)

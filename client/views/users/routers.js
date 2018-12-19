@@ -3,11 +3,6 @@ Router.route('/profile/:_id', {
   template: 'profile',
   layoutTemplate: 'StaticLayout',
   waitOn: function() {
-    // if (!Meteor.user()) {
-    //   Router.go('Home');
-    //   window.location.assign('/');
-    //   return
-    // }
     return [
       Meteor.subscribe('getUser', this.params._id), 
       Meteor.subscribe('projectsList'), 

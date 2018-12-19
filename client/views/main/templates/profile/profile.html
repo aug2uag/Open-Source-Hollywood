@@ -1,4 +1,5 @@
 <template name="profile">
+	{{init}}
 	<div id="content" class="clearfix ">
 
     <div class="clearfix wrapper">
@@ -129,7 +130,7 @@
 		                            <div class="row flex-row flex-nowrap">
 		                                {{#each gifts}}
 
-		                                  <div class="col-xs-12 col-sm-6 col-md-4">
+		                                  <div class="col-xs-12 col-md-6">
 		                                    <div class="well mh300">
 		                                      <div class="thumbnail">
 		                                        <img src="{{this.url}}">
@@ -156,10 +157,10 @@
 
 		                        <div class="container-fluid col-xs-12 t20 projviewsexn">
 		                            <h2>Assets</h2>
-		                            <div class="row flex-row flex-nowrap">
+		                            <div class="row flex-nowrap">
 		                                {{#each assets}}
 
-		                                  <div class="col-xs-12 col-sm-6 col-md-4">
+		                                  <div class="col-xs-12 col-md-6">
 		                                    <div class="well">
 		                                      <div class="thumbnail">
 		                                        <div class="caption">

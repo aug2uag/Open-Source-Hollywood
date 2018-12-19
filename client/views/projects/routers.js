@@ -47,7 +47,7 @@ Router.route('/dashboard', {
           return Receipts.find({owner: Meteor.user()._id, purpose: 'gift purchase'}).fetch()
         },
         assetLeases: function() {
-          return Receipts.find({owner: Meteor.user()._id, purpose: 'asset lease'}).fetch()
+          return Receipts.find({owner: Meteor.user()._id, purpose: 'resource leasing'}).fetch()
         },
         currentContracts: function() {
           var offers = Offers.find({
@@ -105,29 +105,46 @@ Router.route('/discover', {
     this.next();
   },
   onAfterAction: function() {
-    
-    
+    var user = Meteor.user();
+    if (user&&user.didOnboard===false&&onboardDialogShowing===false) {
+      $('.noclick').show()
+      onboardDialogShowing = true;
       setTimeout(function() {
-        var user = Meteor.user();
-        if (user&&user.didOnboard===false&&onboardDialogShowing===false) {
-          Meteor.call('onboardNewUser');
-          onboardDialogShowing = true;
-          var vx = vex.dialog.alert({
-            message: 'Welcome to Open Source Hollywood!',
-            input: [
-              '<div> ',
-                '<h6>&nbsp;</h6>',
-                '<p>To get started, update your profile!</p>',
-                '<small>&nbsp;</small><br>',
-                '<small>Others can view your works and experiences from your profile.</small>',
-                '<small>You may configure notifications and know about important events relating to your campaigns.</small><br>',
-                '<a class="btn btn-default btn-group-justified btn-lg" href="/settings">Click here to update your profile!</a>',
-              '</div>'
-            ].join('')
-          });
-        };
+        var vx = vex.dialog.alert({
+          message: 'Welcome to Open Source Hollywood!',
+          buttons: [
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+          ],
+          input: [
+            '<div> ',
+              '<h6>&nbsp;</h6>',
+              '<p>To get started, update your profile!</p>',
+              '<small>&nbsp;</small><br>',
+              '<small>Others can view your works and experiences from your profile.</small>',
+              '<small>You may configure notifications and know about important events relating to your campaigns.</small><br>',
+              '<a id="dosetpro" class="btn btn-default btn-group-justified btn-lg" href="/settings">Click here to update your profile!</a>',
+            '</div>'
+          ].join(''),
+          afterOpen: function() {
+            $('#dosetpro').on('click', function() {
+              vx.close()
+              setTimeout(function() {
+                vex.dialog.confirm({
+                  input: 'Configure email and phone notifications for enhanced options! Would you like to configure now?',
+                  callback: function(data) {
+                    if (data) {
+                      $('#gotoemailpref').click()
+                    };
+                  }
+                })
+              })
+            })
+          }
+        })
+        Meteor.call('onboardNewUser');
+        $('.noclick').hide()
       }, 4181);
-    
+    };
   }
 });
 

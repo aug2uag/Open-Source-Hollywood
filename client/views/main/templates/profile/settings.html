@@ -13,22 +13,22 @@
 
                 <ul class="titles clearfix" id="settings_menu">
                     <li class="opened">
-                        <h5>PROFILE</h5></li>
+                        <h5>EDIT PROFILE</h5></li>
                     <li class="">
-                        <h5>ASSETS</h5></li>
+                        <h5>RESOURCES FOR LEASE</h5></li>
                     <li class="">
-                        <h5>MERCH</h5></li>
+                        <h5>YOUR MERCH</h5></li>
                     <li id="not1" class="">
-                        <h5>NOTIFICATIONS</h5></li>
+                        <h5>NOTIFICATIONS&nbsp;<span class="fw700">!</span></h5></li>
                     <li class="">
                         <h5>MESSAGES</h5></li>
 
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
-                        <option>PROFILE</option>
-                        <option>ASSETS</option>
-                        <option>MERCH</option>
-                        <option id="not2">NOTIFICATIONS</option>
+                        <option>EDIT PROFILE</option>
+                        <option>RESOURCES FOR LEASE</option>
+                        <option>YOUR MERCH</option>
+                        <option id="not2">NOTIFICATIONS&nbsp;<span class="fw700">!</span></option>
                         <option>MESSAGES</option>
                       </select>
                       <span class="tabs-select-inner" style="display: block; white-space: nowrap;">SELECT</span></span>
@@ -41,7 +41,7 @@
 
                         <div class="col-sm-4 col-xs-12 project-header">
 
-                            <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> EDIT PROFILE {{#unless emailValue}}<small><strong><a href="#!" id="gotoemailpref" class="btn animated bounce" style="border-color:steelblue;color:royalblue;margin-left: 20px;">CONFIGURE YOUR NOTIFICATIONS!</a></strong></small>{{/unless}} </h3>
+                            <h3 class="comments_title" style="text-align:left;margin-top:20px;"> EDIT PROFILE {{#unless emailValue}}<small><strong><a href="#!" id="gotoemailpref" class="btn animated bounce" style="border-color:steelblue;color:royalblue;margin-left: 20px;">CONFIGURE YOUR NOTIFICATIONS!</a></strong></small>{{/unless}} </h3>
                             <hr />
                             <div class="row b40" style="width: 100%;">
                               <img id="image_avatar" class="img-thumbnail krown-box" src="{{ avatar }}" alt="avatar"  style="max-height:200px;width:auto;">
@@ -269,7 +269,7 @@
                     </div>
 
                     <div id="assets" style="display: none;">
-                          <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> ASSETS FOR LEASE</h3>
+                          <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> LIST YOUR ASSETS FOR LEASE</h3>
                           <hr />
 
                           <p><small>Select section:</small></p>
@@ -281,7 +281,7 @@
                           <p>&nbsp;</p>
 
 
-                          <div class="res_opt_set" id="lease1">
+                          <div class="res_opt_set krown-column-container" id="lease1">
                             <form id="reset_res_add">
                               <div class="row w100">
                                 <div class="krown-alert">
@@ -452,7 +452,7 @@
                           </div>
 
 
-                          <div class="res_opt_set" style="display:none" id="lease2">
+                          <div class="res_opt_set krown-column-container" style="display:none" id="lease2">
                             <!-- SHOW RESOURCES IN TABLE, SELECT TO VIEW DETAILS AND EDIT -->
                             <div class="table-responsive b40" id="assets-table-toggle">
                                 <table class="table table-sm" id="lease-table">
@@ -485,16 +485,16 @@
 
 
 
-                          <div class="res_opt_set" style="display:none" id="lease3">
+                          <div class="res_opt_set krown-column-container" style="display:none" id="lease3">
                             <h5>doo</h5>
                           </div>
 
                     </div>
 
                     <div id="personalmerch" style="display: none;">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> YOUR PERSONAL MERCH </h3>
+                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> PERSONAL MERCH FOR SALE </h3>
                         <hr>
-                        <form id="editProjForm">
+                        <form id="editProjForm" class="krown-pricing-column">
                             <div class="krown-column-row clearfix">
                                 <div class="krown-column-container clearfix first last span12 clearfix">
                                     {{#if noUserEmail}}
@@ -666,7 +666,7 @@
                     <div id="notifications" style="display: none;">
 
                         <div class="project-header">
-                          <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Configure Notifications</h3>
+                          <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Configure Email &amp; Phone Notifications</h3>
                           <hr />
                         </div>
                         <div class="project-content">
@@ -727,11 +727,10 @@
                         <hr />
                       </div>
                       <div class="project-content">
-                        <ol id="comments-list">
+                        <div id="comments-list" class="row">
 
                           {{#each messages}}
-                          <li class="comment clearfix container" style="padding-bottom:60px">
-
+                              <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="comment-avatar"><img alt="avatar" src="{{this.ownerAvatar}}" srcset="{{this.ownerAvatar}}" class="avatar avatar-65 photo avatar-default" height="65" width="65"></div>
 
                                 <div class="comment-content row">
@@ -746,17 +745,14 @@
                                     </div>
 
                                     <a href="/message/project/{{ this.slug }}/{{ this.user }}" class="button special" style="margin-top:30px;display:table-caption;">NEGOTIATE</a>
-
                                 </div>
-                          </li>
+                              </div>
                           {{else}}
-                          <p>&nbsp;</p>
-                          <p>&nbsp;</p>
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
                           <h5>NO MESSAGES TO SHOW</h5>
                           {{/each}}
-                        </ol>
+                        </div>
                       </div>
                     </div>
 

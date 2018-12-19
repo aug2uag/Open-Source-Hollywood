@@ -26,7 +26,11 @@
             {{/if}}
             <h2 class="subtitle">{{project.logline}}</h2>
         </header>
+        {{#if isAllowed}}
 
+            <a href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100" style="color: #333!important;background-color: #fff!important;border: 0.5px solid #333!important;"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
+
+        {{/if}}
         <div class="normal-content ">
             <div id="project-container" class="krown-tabs responsive-on clearfix">
                 <ul class="titles clearfix">
@@ -83,12 +87,6 @@
                     <div id="description" style="display: block;">
                         <div class="col-xs-12 col-sm-8">
                           <div class="project-content">
-
-                            {{#if isAllowed}}
-
-                                <a href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
-
-                            {{/if}}
 
                             {{#if project.videoExplainer}}
                             <div class="video-container">

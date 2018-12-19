@@ -48,15 +48,17 @@ function quantOrdersTable(quantOrders, o, msrp) {
       '</td>',
       '<td>',
         o.quantity,
-      '</td><td class="center">--</td></tr>'
+      '</td><td class="">&nbsp;$',
+        o.quantity*msrp,
+      '</td></tr>'
     ])
   })
 
   _order = _order.concat([
       '<tr><td class="center">&nbsp;</td><td class="center">&nbsp;</td>',
-      '<td>$',
+      '<td class="center"><b>$',
         totalOrder * msrp,
-      '</td></tr>'
+      '</b></td></tr>'
   ])
 
   return _order.join('')

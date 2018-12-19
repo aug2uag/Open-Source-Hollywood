@@ -341,6 +341,8 @@ Template.settings.events({
 			    osettings.giftImage.data = readerEvt.target.result;
 			    $('#merch_thumbnail').attr('src', osettings.giftImage.data);
 			    $('#merch_thumbnail').show();
+			    $('#gift_file_name').text(file.name)
+			    $('#hidden_gift_name').show()
 			}; 
 			reader.readAsDataURL(file);
 		}
@@ -440,16 +442,16 @@ Template.settings.events({
 		if (giftType.indexOf('Select')>-1) return alert('please select merchandise type');
 		$('#merchtypehidden').show();
 		if (giftType==='Apparel') {
-		  $('#apparelsizes').show();
-		  $('#perishabledetails').hide();
+			$('#apparelsizes').show();
+			$('#perishabledetails').hide();
 		} else if (giftType==='Perishable') {
-		  $('#apparelsizes').hide();
-		  $('#merch_handling').prop("placeholder", "Shelf Life and Handling Instructions");
-		  $('#perishabledetails').show();
+			$('#apparelsizes').hide();
+			$('#merch_handling').prop("placeholder", "Shelf Life and Handling Instructions");
+			$('#perishabledetails').show();
 		} else {
-		  $('#apparelsizes').hide();
-		  $('#merch_handling').prop("placeholder", "Details and Handling Instructions");
-		  $('#perishabledetails').show();
+			$('#apparelsizes').hide();
+			$('#merch_handling').prop("placeholder", "Details and Handling Instructions");
+			$('#perishabledetails').show();
 		};
 	},
 	'click #add-gift': function(e) {
@@ -498,8 +500,14 @@ Template.settings.events({
 	    	return vex.dialog.alert('there is no valid quantity for sale, please correct and try again')
 
 
-	    appendPersonalMerchTable(o);
+	    appendPersonalMerchTable(o)
 	    $('#editProjForm')[0].reset()
+	    $('#merchtype').change()
+	 	["XSs", "Ss", "Ms", "Ls", "XLs", "XXLs"].forEach(function(el) {
+	 		var id = '#' + el
+	 		var val = el.substr(0, el.length-1)
+	 		$(id).val(val)
+	 	})
 
 	},
 	'input #social-title': function() { 
