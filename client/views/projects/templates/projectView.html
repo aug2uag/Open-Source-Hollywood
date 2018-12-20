@@ -216,29 +216,28 @@
 
                                         <!-- end product-wrapper -->
 
-                                        <div class="separator">&nbsp;
-                                            <div id="project-p-author" class="panel clearfix">
+                                        <div id="project-p-author" class="panel clearfix">
 
-                                                <div class="comment-avatar">
-                                                    <img alt="" src="{{project.ownerAvatar}}" class="avatar avatar-65 photo" height="65" width="65"> 
-                                                </div>
+                                            <div >
+                                                <img alt="" src="{{project.ownerAvatar}}" class="btn-block" height="65" width="65" style="padding-bottom: 13px;"> 
+                                            </div>
 
-                                                <div class="comment-content">
+                                            <div >
 
-                                                    <span>Project by</span>
+                                                <span style="margin-bottom: 0.1px;">Project by</span>
 
-                                                    <h6>{{project.ownerName}}</h6>
+                                                <h6>{{project.ownerName}}</h6>
 
-                                                    <ul class="author-meta">
+                                                <ul class="author-meta">
 
-                                                        <li><a href="/profile/{{project.ownerId}}">View Profile</a></li>
+                                                    <li><a href="/profile/{{project.ownerId}}">View Profile</a></li>
 
-                                                    </ul>
-
-                                                </div>
+                                                </ul>
 
                                             </div>
+
                                         </div>
+
                                         <div class="id-widget-wrap nofloat">
                                           <div class="id-widget id-full">
                                               <div class="id-product-infobox">
@@ -439,24 +438,33 @@
 
                     <div id="backers" class="project-content" style="display: none;">
                       <div class="project-header">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Community ({{backers}})</h3>
+                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Community ({{numBackers}})</h3>
                         <hr />
                       </div>
-                        <ol id="comments-list">
-                            {{#each this.project.donations}}
-                                <li class="comment clearfix">
-                                    <div class="comment-content">
-                                        <div class="comment-meta clearfix">
-                                            <h6 class="comment-title">{{user.name}}</h6>
-                                            <div>
-                                                <img alt="" src="{{user.avatar}}" class="avatar avatar-65 photo" height="65" width="65"> 
-                                            </div>
-                                        </div>
-                                        <strong class="comment-price">${{amount}}</strong>
-                                    </div>
-                                </li>
+                        <div class="row">
+                            {{#each backers}}
+                               <div class="col-lg-3 col-xs-12 col-sm-6 col-md-4">
+
+                                  <div class="card hovercard">
+                                      <div class="cardheader">
+
+                                      </div>
+                                      <div class="avatar">
+                                          <img alt="" src="{{avatar}}">
+                                      </div>
+                                      <div class="info">
+                                          <div class="title">
+                                              <a href="/profile/{{ _id }}">{{firstName}} {{lastName}}</a>
+                                          </div>
+                                          {{#each iam}}
+                                            <div class="desc">{{this}}</div>
+                                          {{/each}}
+                                          
+                                      </div>
+                                  </div>
+                               </div>
                             {{/each}}
-                        </ol>
+                        </div>
                     </div>
 
                     <div id="manage" class="project-content" style="display: none;">

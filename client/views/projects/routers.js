@@ -173,18 +173,27 @@ Router.route('/projects/:slug/:uid', {
   layoutTemplate: 'StaticLayout',
   waitOn: function() {
     return [
-      Meteor.subscribe('getMe'), 
-      Meteor.subscribe('projAssetOffers', this.params.slug, this.params.uid), 
-      Meteor.subscribe('getProject', this.params.slug), 
+      Meteor.subscribe('getMe'),
+      Meteor.subscribe('projAssetOffers', this.params.slug, this.params.uid),
+      Meteor.subscribe('getProject', this.params.slug),
+      Meteor.subscribe('getUsers'),
       Meteor.subscribe('gotoBoard', this.params.slug),
       Meteor.subscribe('commentsList', this.params.slug),
       Meteor.subscribe('stringId', this.params.uid),
-      Meteor.subscribe('projReceipts', this.params.slug, this.params.uid)
+      Meteor.subscribe('projReceipts', this.params.slug)
     ];
   },
   data: function() {
     var slug = this.params.slug;
     var project = Projects.findOne({slug: slug});
+    
+    var backers
+    try {
+      backers = Users.find({ _id: { $in: project.backers||[] }}).fetch()
+    } catch (e) {} finally {
+      backers = backers || []
+    }
+
     var board = Boards.findOne({slug: slug});
     if (!board || !project) return;
     var user = Users.findOne({_id: project.ownerId});
@@ -195,6 +204,7 @@ Router.route('/projects/:slug/:uid', {
     return {
         uid: project._id,
         assetOffers: assetOffers,
+        backers: backers,
         perCent: function() {
           if (project.funded && project.budget) {
             var v = (project.funded/project.budget * 100 > 100 ? 100 : project.funded/project.budget * 100).toFixed(2);
@@ -204,7 +214,9 @@ Router.route('/projects/:slug/:uid', {
           return 'not available';
         },
         purchases: function() {
-          return Receipts.find({slug: project.slug, owner: project.ownerId}).fetch()
+          var r =  Receipts.find({slug: project.slug}).fetch()
+          console.log(r)
+          return r
         },
         isOwner: function () {
           if (!Meteor.user()) return false;

@@ -418,6 +418,9 @@ function displayRoleTypeDialog(list, options) {
 };
 
 Template.projectView.helpers({
+  hello: function() {
+    console.log(this)
+  },
   hasGifts: function() {
     return this.project.gifts&&this.project.gifts.length
   },
@@ -426,7 +429,7 @@ Template.projectView.helpers({
     if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
   },
   numBackers: function() {
-    return this.project.donations&&this.project.donations.length||0;
+    return this.backers&&this.backers.length||0;
   },
   hasEquity: function() {
     if (this.project.equityInfo&&
@@ -487,9 +490,6 @@ Template.projectView.helpers({
   },
   formattedUpdateDate: function() {
     return moment(this.date).format('MM-DD-YYYY');
-  },
-  backers: function() {
-    return this.project.donations&&this.project.donations.length||0;
   },
   castLN: function() {
     return this.project.cast.filter(function(e){if(e.status==='needed')return true}).length;
@@ -1326,7 +1326,7 @@ Template.projectView.events({
   'click .offer_resource': function(e) {
     var assets = Meteor.user().assets||[]
     if (!assets.length)
-      return vex.dialog.alert('You have not uploaded any assets, add assets in the "Profile" section.')
+      return vex.dialog.alert('You have not uploaded any assets, add assets in the "Settings" section.')
 
     var cat = this.category
     var asss = []
@@ -1335,18 +1335,20 @@ Template.projectView.events({
     })
 
     if (!asss.length)
-      return vex.dialog.alert('You do not have assets to match this type, update your assets in the "Profile" section.')
+      return vex.dialog.alert('You do not have assets to match this type, update your assets in the "Settings" section.')
 
 
-    var asssTr = asss.map(function(a) { return [
-      '<tr>',
-          '<td>',a.name,'</td>',
-          '<td>',a.description,'</td>',
-          '<th><a href="#!" class="select_asss"><i class="assscheck fa fa-check-circle" val=\'',
-          JSON.stringify(a),
-          '\'></i></a></th>',
-      '</tr>'
-    ].join('') }).join('')
+    var asssTr = asss.map(function(a) { 
+      return [
+        '<tr>',
+            '<td>',a.name,'</td>',
+            '<td>',a.description,'</td>',
+            '<th><a href="#!" class="select_asss"><i class="assscheck fa fa-check-circle" val="',
+            JSON.stringify(a).replace(/'/g, "\\'").replace(/"/g, '\\"'),
+            '"></i></a></th>',
+        '</tr>'
+      ].join('') 
+    }).join('')
 
 
     var asssTable = [
@@ -1400,7 +1402,7 @@ Template.projectView.events({
           showVex1 = false
           var d = []
           $('.assscheck.fa-check-circle').each(function() {
-            try { d.push(JSON.parse($(this).attr('val'))) } catch(e) {}
+            try { d.push(JSON.parse($(this).attr('val'))) } catch(e) { console.log(e) }
           })
 
           if (!d.length) {
@@ -1485,12 +1487,15 @@ Template.applicants.helpers({
     return false
   },
   giftTotals: function() {
-    if (this.purchases.length<=1) {
-      return this.purchases[0]&&this.purchases[0].amount||0
+    var totalAmount = 0
+    var purchases = this.purchases()
+    for (var i = 0; i < purchases.length; i++) {
+      var p = purchases[i]
+      console.log(p)
+      if (p.purpose==='gift purchase') totalAmount += parseFloat(p.amount)
     };
-    return this.purchases.reduce(function(a,b) {
-      return a.amount + b.amount
-    })
+
+    return totalAmount
   },
   orderDate: function() {
     return new Date(this.created).toDateString()
