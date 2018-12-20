@@ -418,9 +418,6 @@ function displayRoleTypeDialog(list, options) {
 };
 
 Template.projectView.helpers({
-  hello: function() {
-    console.log(this)
-  },
   hasGifts: function() {
     return this.project.gifts&&this.project.gifts.length
   },
@@ -1338,14 +1335,18 @@ Template.projectView.events({
       return vex.dialog.alert('You do not have assets to match this type, update your assets in the "Settings" section.')
 
 
-    var asssTr = asss.map(function(a) { 
+    function addslashes( str ) {
+        return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+    }
+
+    var asssTr = asss.map(function(a, idx) { 
       return [
         '<tr>',
             '<td>',a.name,'</td>',
             '<td>',a.description,'</td>',
-            '<th><a href="#!" class="select_asss"><i class="assscheck fa fa-check-circle" val="',
-            JSON.stringify(a).replace(/'/g, "\\'").replace(/"/g, '\\"'),
-            '"></i></a></th>',
+            "<th><a href='#!' class='select_asss'><i class='assscheck fa fa-check-circle' val='",
+            idx,
+            "'></i></a></th>",
         '</tr>'
       ].join('') 
     }).join('')
@@ -1402,7 +1403,7 @@ Template.projectView.events({
           showVex1 = false
           var d = []
           $('.assscheck.fa-check-circle').each(function() {
-            try { d.push(JSON.parse($(this).attr('val'))) } catch(e) { console.log(e) }
+            try { d.push(asss[parseInt($(this).attr('val'))]) } catch(e) { console.log(e) }
           })
 
           if (!d.length) {
@@ -1470,9 +1471,6 @@ function uniqueApplicantsFromProject(ctx, project) {
 }
 
 Template.applicants.helpers({
-  barlala: function() {
-    console.log(this)
-  },
   assetsConsolidated: function() {
     return {
       cat: this.assets[0].category,
@@ -1491,7 +1489,6 @@ Template.applicants.helpers({
     var purchases = this.purchases()
     for (var i = 0; i < purchases.length; i++) {
       var p = purchases[i]
-      console.log(p)
       if (p.purpose==='gift purchase') totalAmount += parseFloat(p.amount)
     };
 
@@ -1502,9 +1499,6 @@ Template.applicants.helpers({
   },
   isWidth: function() {
     return $(window).width() >= 770;
-  },
-  giftFoo: function() {
-    console.log(this)
   },
   anon: function() {
     return this.user.id==='anon';

@@ -38,6 +38,7 @@ Template.projectMessage.helpers({
 	},
 	archivedOffer: function() {
 		console.log(this)
+		if (this.offer&&this.offer.pending) return false
 		return true
 	},
 	formattedOffers: function() {

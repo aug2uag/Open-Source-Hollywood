@@ -336,7 +336,7 @@ Router.route('/message/project/:slug/:uid', {
     };
 
     if (offer&&project) {
-      var userId = Meteor.user()._id === project.ownerId ? offer.offeree : offer.offeror
+      var userId = Meteor.user()._id === project.ownerId ? offer.offeror : offer.offeree
       var user = Users.findOne({_id: userId})
       // console.log('FUCK YEAAAAAH')
       return {
