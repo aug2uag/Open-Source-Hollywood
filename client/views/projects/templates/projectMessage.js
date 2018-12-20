@@ -31,13 +31,16 @@ function formattedProjectRoles() {
 
 Template.projectMessage.helpers({
 	zoo: function() {
-		console.log(this)
+		// console.log(this)
 	},
 	init: function() {
 		was = this
 	},
 	archivedOffer: function() {
-		console.log(this)
+		// console.log(this)
+		// case active asset negotiate
+		if (this.isAssets&&this.offer&&this.offer.pending) return false
+		// case active role negotiate
 		if (this.offer&&this.offer.pending) return false
 		return true
 	},

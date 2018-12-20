@@ -57,7 +57,6 @@ Router.route('/dashboard', {
             ],
             pending: {$ne: false}
           }).fetch()
-          console.log(offers)
           return offers
         },
         completedContracts: function() {
@@ -215,7 +214,6 @@ Router.route('/projects/:slug/:uid', {
         },
         purchases: function() {
           var r =  Receipts.find({slug: project.slug}).fetch()
-          console.log(r)
           return r
         },
         isOwner: function () {

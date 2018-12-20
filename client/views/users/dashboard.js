@@ -66,7 +66,7 @@ Template.dashboard.helpers({
 		return ['/message/project/', this.slug, '/', this.offer.user.id].join('')
 	},
 	offerLink: function() {
-		console.log(this)
+		// console.log(this)
 		if (iAmOfferee(this.offeree)) {
 			return '/profile/' + this.offer.user.id
 		};
