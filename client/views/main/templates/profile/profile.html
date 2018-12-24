@@ -28,6 +28,9 @@
 										<p>Joined: {{createdAt}} </p>
 									</div>
 								</div>
+								<div >
+									<a href="#" id="offer-donation" class="btn btn-default krown-pricing-content" role="button">DONATE&nbsp;</a> 
+								</div>
 								<div style="display: inline-block;margin-left: 20px;">
 									{{ #if hasWebsite }}
 										<p><a href="{{ website }}" target="_blank">{{website}}</a></p>
@@ -154,6 +157,7 @@
 
                             <section>
                                	{{#if hasAssets}}
+                               	{{#if currentUser}}
 
 		                        <div class="container-fluid col-xs-12 t20 projviewsexn">
 		                            <h2>Assets</h2>
@@ -208,7 +212,7 @@
 		                              
 		                            </div>
 		                        </div>
-
+		                        {{/if}}
 	                            {{/if}}
                             </section>
                         </div>

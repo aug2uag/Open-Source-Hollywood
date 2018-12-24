@@ -318,6 +318,7 @@
 
 
                         {{#unless isOwner}}
+                        {{#if hasGifts}}
                         <div class="container-fluid col-xs-12 t20 projviewsexn">
                             <h2>Merchandise</h2>
                             <div class="row flex-row flex-nowrap">
@@ -345,7 +346,8 @@
                               
                             </div>
                         </div>
-
+                        {{/if}}
+                        {{#if currentUser}}
                         <div class="container-fluid col-xs-12 t20 projviewsexn">
                             <h2>Requested Needs</h2>
                             <div class="row flex-row flex-nowrap">
@@ -367,6 +369,7 @@
                               
                             </div>
                         </div>
+                        {{/if}}
                         {{/unless}}
                     </div>
 

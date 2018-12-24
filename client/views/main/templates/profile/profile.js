@@ -1,4 +1,4 @@
-var currUID
+var currUID, currAvatar, currName
 
 Handlebars.registerHelper('eachProperty', function(context, options) {
     var ret = "";
@@ -51,7 +51,7 @@ function makeStripeCharge(options) {
       if (_token) {
         options.token = _token;
         if (Meteor.user()) {
-          Meteor.call('userMerchSale', options, function(err, result) {
+          Meteor.call(options.route, options, function(err, result) {
             if (err) return vex.dialog.alert('your payment failed');
             vex.dialog.alert(result)
           });
@@ -101,14 +101,13 @@ function makeStripeCharge(options) {
               } 
               data.date = new Date();
               options.anonymous_verification = data;
-              Meteor.call('userMerchSale', options, function(err, result) {
+              Meteor.call(options.route, options, function(err, result) {
                 if (err) return vex.dialog.alert('your payment failed');
                 vex.dialog.alert(result)
               });
             }
           });
         }
-        
       } else {
         vex.dialog.alert('your payment did not succeed');
       }
@@ -203,6 +202,9 @@ function vexFlag(usr) {
 Template.profile.helpers({
 	init: function() {
 		currUID = this._id
+    currAvatar = this.avatar
+    currName = (this.firstName||'' + ' ' + this.lastName||'').trim()
+    if (!currName) currName = 'O . S . H . artist'
 	},
 	giftIMG: function() {
 		return this.url||this.data
@@ -286,7 +288,7 @@ Template.profile.helpers({
 		});	
 	},
 	shareData: function() {
-	    ShareIt.configure({
+    ShareIt.configure({
 	        sites: {
 	            'facebook': {
 	                'appId': '1790348544595983'
@@ -595,7 +597,7 @@ Template.profile.events({
                         o.amount = totalOrder * was.msrp;
                         o.totalUnits = totalOrder;
                         o.message = was.name + ' purchase';
-                        o.route = 'purchaseGift';
+                        o.route = 'userMerchSale';
                         o.slug = 'personal merch';
                         var vex3 = vex.dialog.open({
                           message: 'Confirmation & Payment',
@@ -639,6 +641,210 @@ Template.profile.events({
           }, 0)
         }
     });
+  },
+  /** DONATIONS */
+  'click #offer-donation': function(e) {
+    e.preventDefault();
+    /** prompt enter donation amount */
+    /**
+
+      donate time or money
+      time => choose cast crew resource, choose item
+      money => express or conditional
+      express => enter amount
+      conditional => select role (show cast and crew roles)
+
+     */
+
+    var was = this;
+
+
+    /** express donation dialog (0a) */
+    function displayExpressDonationDialog() {
+      vex.closeTop();
+      var dialogInput = [
+          '<style>',
+              '.vex-custom-field-wrapper {',
+                  'margin: 1em 0;',
+              '}',
+              '.vex-custom-field-wrapper > label {',
+                  'display: inline-block;',
+                  'margin-bottom: .2em;',
+              '}',
+          '</style>',
+          '<div class="vex-custom-field-wrapper">',
+              '<label for="date">Amount to donate (USD).</label>',
+              '<div class="vex-custom-input-wrapper">',
+                  '<input name="donation" type="number" />',
+              '</div>',
+          '</div>'
+      ]
+
+      if (Meteor.user()) {
+        dialogInput = dialogInput.concat([
+          '<div class="vex-custom-field-wrapper t20">',
+              // set checkbox to show subscription options
+              // frequency, amount
+              '<div class="container">',
+                  '<form>',
+                  '<div class="span4">',
+                      '<div class="">',
+                        '<p>Would you like to make subscription payments?</p>',
+                        '<div class="col-xs-12 col-sm-6 col-md-4 checkbox">',
+                          '<input type="checkbox" id="checkbox-Subscribe" name="Subscribe">',
+                          '<label for="checkbox-Subscribe">Subscribe</label>',
+                        '</div>',
+                      '</div>',
+                      '<div class="t60 showSubscribeDates nodisplay">',
+                          '<div class="form-inline">',
+                              '<label class="control-label">',
+                                  'How frequently?</label>',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Daily" type="radio">Daily',
+                              '</label>&nbsp;',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Weekly" type="radio">Weekly',
+                              '</label>&nbsp;',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Monthly" type="radio" checked>Monthly',
+                              '</label>&nbsp;',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Annually" type="radio">Annually',
+                              '</label>',
+                          '</div>',
+                      '</div>',
+                      '<div class="alert alert-info small showSubscribeDates nodisplay t20">',
+                        '<p><span id="subscriptionfreq">Monthly</span> selected</p>',
+                      '</div>',
+                  '</div>',
+                  '</form>',
+              '</div>',
+
+          '</div>'
+        ])
+      } 
+
+      dialogInput = dialogInput.concat([
+        '<div class="vex-custom-field-wrapper t20">',
+          '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+        '</div>'
+      ])
+
+      vex.dialog.open({
+        message: 'Enter donation amount.',
+        input: dialogInput.join(''),
+        callback: expressDonationHandler,
+        afterOpen: function() {
+          $('#checkbox-Subscribe').off()
+          $('#checkbox-Subscribe').on('change', function() {
+            if($(this).prop('checked')) {
+              $('.showSubscribeDates').show()
+            } else {
+              $('.showSubscribeDates').hide()
+            }
+          })
+
+          $('#checkbox-SubscriptionDate').off()
+          $('#checkbox-SubscriptionDate').on('change',function() {
+            if($(this).prop('checked')) {
+              $('.showSubscribeDatesInput').show()
+            } else {
+              $('.showSubscribeDatesInput').hide()
+            }
+          })
+
+          $('.subscription_opt').off()
+          $('.subscription_opt').on('change', function() {
+            $('#subscriptionfreq').text($(this).val())
+          })
+        }
+      });
+    }
+
+    /** express donation final handler (0b) */
+    function expressDonationHandler(data) {
+      console.log('in expressDonationHandler 1')
+      console.log(data)
+      if (!data) return
+      if (!data.donation) return alert('There is no donation amount specified.');
+
+      var amt = Math.abs(parseInt(data.donation));
+      data.amount = amt
+
+      console.log('in expressDonationHandler 2')
+
+      // is it subscription?
+      if ($('#checkbox-Subscribe').prop('checked')) {
+
+        // user must be registered
+        if (!Meteor.user()) {
+          return alert('This feature is only available for registered users.')
+        };
+        // user must be a customer
+        if (!Meteor.user().customer) {
+          return alert('You must update your profile for this feature to be available.')
+        };
+
+
+        data.frequency = $('.subscription_opt:checked').val()
+        data.subscription = true
+
+        // create plan and make purchase
+        var mapVals = {
+          'Daily': 'day',
+          'Weekly': 'week',
+          'Monthly': 'month',
+          'Annually': 'year'
+        }
+
+        data.frequency = mapVals[data.frequency]
+        data.route = 'createSubscriptionDonation'
+
+      } else {
+        data.route = 'donateToProject'
+      }
+
+      var donationObject = {};
+      if (Meteor.user()) {
+        donationObject = {
+          first: Meteor.user().firstName,
+          last: Meteor.user().lastName,
+          email: Meteor.user().email,
+          id: Meteor.user()._id,
+          amount: data.amount
+        }
+      } else {
+        donationObject = {
+          first: 'anonymous',
+          last: 'patron',
+          id: 'anon_donation',
+          amount: data.amount
+        }
+      }
+
+      data.message = 'Donation to ' + currName
+      data.description = 'O . S . H . $' + data.amount + ' donation to ' + currName
+      data.type = 'user'
+      data.user = currUID
+      data.name = currName
+      data.avatar = currAvatar
+      data.donationObject = donationObject
+
+      console.log(new Array(100).join('@ '))
+      console.log(data)
+
+      makeStripeCharge(data);
+    }
+
+
+    function timeDateDonateConfig() {
+      $('.dtm').on('click', function(e) {
+        e.preventDefault();
+          displayMoneyTypeDialog();
+      })
+    }
+
+    displayExpressDonationDialog()
   },
   'click .request_asset': function(e) {
   	console.log(this)

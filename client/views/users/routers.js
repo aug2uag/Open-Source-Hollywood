@@ -5,7 +5,9 @@ Router.route('/profile/:_id', {
   waitOn: function() {
     return [
       Meteor.subscribe('getUser', this.params._id), 
+      Meteor.subscribe('allSubscribers'),
       Meteor.subscribe('projectsList'), 
+      Meteor.subscribe('getMe'),
       // Meteor.subscribe('connectUser')
     ];
   },
@@ -32,6 +34,8 @@ Router.route('/settings', {
       }
       return [
         Meteor.subscribe('getMe'),
+        Meteor.subscribe('mySubscriptions'),
+        Meteor.subscribe('allSubscribers'),
         // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getProjectMessages'),
         Meteor.subscribe('userActiveProjects', Meteor.user()._id),

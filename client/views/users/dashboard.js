@@ -55,6 +55,31 @@ function iAmOfferee(offereeId) {
 }
 
 Template.dashboard.helpers({
+	stringify: function() {
+		return JSON.stringify(this)
+	},
+	subType: function() {
+		if (this.type==='user') return 'fa-user'
+		return 'fa-sitemap'
+	},
+	subLink: function() {
+		if (this.type==='user') return '/profile/' + this.user
+		return '/projects/' + this.slug  + '/' + this.projectOwnerId
+	},
+	subURL: function() {
+		return this.avatar||this.banner
+	},
+	subDescription: function() {
+		return this.description.replace('O . S . H . ', '')
+	},
+	subFreq: function() {
+		return {
+			day: 'Daily Subscription',
+			week: 'Weekly Subscription',
+			month: 'Monthly Subscription',
+			year: 'Annual Subscription'
+		}[this.frequency]
+	},
 	orderChannel: function() {
 		if (this.slug==='personal merchandise') return 'personal merch';
 		return this.title
@@ -291,6 +316,9 @@ Template.dashboard.helpers({
 });
 
 Template.dashboard.events({
+	'click .showSubDetail': function(e) {
+		console.log(this)
+	},
 	'click #add_account': function(e) {
 		e.preventDefault();
 		var opts = {};
@@ -310,6 +338,14 @@ Template.dashboard.events({
 	},
 	'click .reset_transfer': function(e) {
 		Meteor.call('deleteBanking');
+	},
+	'click .dash_show_subs': function(e) {
+	    $('.dash_show_subs_el').hide()
+	    $('.dash_show_subs').removeClass('bold')
+	    $(e.target).addClass('bold')
+	    var v= $(e.target).attr('val')
+	    var id = '#' + v
+	    $(id).show()
 	},
 	'click .dash_show_merchant': function(e) {
 	    $('.merch_view_opts').hide()
@@ -411,4 +447,48 @@ Template.dashboard.events({
 	    });
 	},
 	
+})
+
+Template.dashboard.onRendered(function(){
+	/* Create the popover with Header Content and Footer */
+	$('.popover-markup>[data-toggle="popover"]').popover({
+	  html: true,
+	  title: function() {
+	    return $(this).parent().find('.head').html();
+	  },
+	  /********** 
+	    In the content method, return a class 'popover-content1' wrapping the actual 'contents', 
+	    concatenated with a class 'popover-footer' wrapping the footer.
+	  ************/
+	  content: function() {
+
+
+	  	setTimeout(function() {
+	  		$('.delSub').off()
+	  		$('.delSub').on('click', function(e) {
+	  			Meteor.call('cancelSubscription', JSON.parse($(e.target).attr('val')), function(err, res) {
+	  				console.log(err, res)
+	  				vex.dialog.alert(err||res||'there was an error, please contact us with ID #' + Meteor.user()._id)
+	  			})
+	  		})
+	  	}, 1597)
+
+
+	      return '<div class="popover-content1">' + $(this).parent().find('.content').html()||'- inactive -' +
+	        '</div>';
+	    }    
+	});
+
+	/**
+	  Allow the popover to be closed by clicking anywhere outside it.
+	**/
+	$('body').on('click', function(e) {
+	  $('.popover-markup>[data-toggle="popover"]').each(function() {
+	    //the 'is' for buttons that trigger popups
+	    //the 'has' for icons within a button that triggers a 
+	    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+	      $(this).popover('hide');
+	    }
+	  });
+	});
 })

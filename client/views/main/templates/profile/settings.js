@@ -834,6 +834,7 @@ Template.settings.helpers({
 	init: function() {
 		Session.set('resources', resources)
 		Session.set('gifts', gifts)
+		Meteor.call('createBankingAccount');
 	},
 	giftPurchases: function() {
 		return Meteor.user().giftPurchases||[]

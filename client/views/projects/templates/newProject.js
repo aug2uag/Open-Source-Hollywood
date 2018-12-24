@@ -634,9 +634,10 @@ Template.newProject.events({
         data.agreement2 = $("#agreement2").is(':checked');
         data.agreement3 = $("#agreement3").is(':checked');
         data.agreement4 = $("#agreement4").is(':checked');
-        if (!data.rev_fullname) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!data.rev_province) return alert('please fill out all information and agree to all conditions to continue, please try again');
-        if (!data.rev_contact) return alert('please fill out all information and agree to all conditions to continue, please try again');
+        if (!data) return
+        if (!data.rev_fullname) return alert('please fill out all information and agree to all conditions to continue, missing name information');
+        if (!data.rev_province) return alert('please fill out all information and agree to all conditions to continue, missing your location information');
+        if (!data.rev_contact) return alert('please fill out all information and agree to all conditions to continue, missing your contact information');
         if (!data.agreement1) return alert('please agree to all terms to continue');
         if (!data.agreement2) return alert('please agree to all terms to continue');
         if (!data.agreement3) return alert('please agree to all terms to continue');
@@ -738,17 +739,15 @@ Template.newProject.events({
     // create virtual account for project
     // add funds to virtual account, non-refundable
     Meteor.call('addProject', o, function(err, res) {
-      if (!err&&!res)
-        return vex.dialog.alert('there was an error, please try again');
-      vex.dialog.alert(err||res);
+      vex.dialog.alert(err||res||'there was an error, please try again');
       if (!err) {
         localStorage.removeItem('projectnew')
         localStorage.removeItem('projectnew_banner')
         $('#resetNewProjCacheBtn').hide()
         setTimeout(function() {
           Router.go('Home');
-        }, 987);
-      };
+        }, 4181);
+      }
     });
   },
   'change #banner_file': function (e, template) {

@@ -15,6 +15,8 @@ Router.route('/dashboard', {
         Meteor.subscribe('getMe'),
         Meteor.subscribe('myCurrentOffers'),
         Meteor.subscribe('myCompletedOffers'),
+        Meteor.subscribe('mySubscriptions'),
+        Meteor.subscribe('allSubscribers'),
         // Meteor.subscribe('connectUser'),
         Meteor.subscribe('getProjectMessages'),
         Meteor.subscribe('getReceipts'),
@@ -48,6 +50,17 @@ Router.route('/dashboard', {
         },
         assetLeases: function() {
           return Receipts.find({owner: Meteor.user()._id, purpose: 'resource leasing'}).fetch()
+        },
+        subscriptions: function() {
+          return Subscriptions.find({ owner: Meteor.user()._id })
+        },
+        subscribers: function() {
+          return Subscriptions.find({ 
+            $or: [
+              { user: Meteor.user()._id },
+              { projectOwnerId: Meteor.user()._id }
+            ]
+          })
         },
         currentContracts: function() {
           var offers = Offers.find({
@@ -127,6 +140,7 @@ Router.route('/discover', {
           afterOpen: function() {
             $('#dosetpro').on('click', function() {
               vx.close()
+              if (user.notification_preferences&&user.notification_preferences.email) return
               setTimeout(function() {
                 vex.dialog.confirm({
                   input: 'Configure email and phone notifications for enhanced options! Would you like to configure now?',

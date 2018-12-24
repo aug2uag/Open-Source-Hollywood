@@ -419,7 +419,7 @@ function displayRoleTypeDialog(list, options) {
 
 Template.projectView.helpers({
   hasGifts: function() {
-    return this.project.gifts&&this.project.gifts.length
+    return this.project.gifts&&this.project.gifts.length||false
   },
   thumbsupactive: function() {
     // if me in upvote 'active' : null
@@ -616,101 +616,18 @@ Template.projectView.helpers({
 });
 
 Template.projectView.events({
-  'click #view-need-positions': function(e) {
-    /** display all cast positions */
-    var projectNeeds = this.project.needs;
-    var isMeteorUser = Meteor.user&&Meteor.user()||false;
-    var inputHTML = projectNeeds.map(function(c, idx) {
-        var _html = '<div class="vex-custom-field-wrapper">';
-        _html += '<div class="row"><div class="col-sm-12"><div class="thumbnail"><div class="caption"><h3>' + c.category + '</h3><p>' + c.description + '</p>';
-        if (isMeteorUser) _html += '<div class="btn-toolbar"><a href="#" class="btn btn-default btn-group apply-pay" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Request Pay</a><a href="#" class="btn btn-default btn-group apply-time" role="button" idx="'+idx+'" ctx="' + c.ctx + '">Donate Time</a></div>'
-        _html += '</div></div></div></div>';
-        _html += '</div>';
-        return _html;
-    }).join('');
-    vex.dialog.alert({
-        message: 'View and offer resources for project NEEDS:',
-        contentCSS: { width: '100%', overflow: 'auto' },
-        input: [
-            '<style>',
-                '.vex-custom-field-wrapper {',
-                    'margin: 1em 0;',
-                '}',
-                '.vex-custom-field-wrapper > label {',
-                    'display: inline-block;',
-                    'margin-bottom: .2em;',
-                '}',
-            '</style>',
-            inputHTML
-        ].join(''),
-        callback: function () { },
-        afterOpen: function() {
-          var was = this;
-          setTimeout(function() {
-              // Either of these lines will do the trick, depending on what browsers you need to support.
-              was.rootEl.scrollTop = 0;
-              was.contentEl.scrollIntoView(true);
-              $(was.$vex).scrollTop(0)
-          }, 0)
-          $('.apply-pay').on('click', function(e) {
-            var needItem = projectNeeds[parseInt($(this).attr('idx'))];
-            vex.closeAll();
-            /** ask user to define how much pay for resource */
-            innerVexApply({
-              message: 'How much for your resource.',
-              label: 'Amount of money (USD).',
-            }, function(data) {
-              var amt = data.donation || 0;
-              amt = Math.abs(parseInt(amt));
-              if (amt) {
-                /** send offer to user, email user */
-                Meteor.call("lendResource", {
-                  slug: currentSlug,
-                  asset: needItem.category,
-                  offer: amt
-                });
-                vex.dialog.alert('resource offer submitted');
-              };
-            });
-          });
-
-          $('.apply-time').on('click', function(e) {
-            var needItem = projectNeeds[parseInt($(this).attr('idx'))];
-            Meteor.call("lendResource", {
-              slug: currentSlug,
-              asset: needItem.category,
-              offer: 0
-            });
-            vex.dialog.alert('resource offer submitted');
-          });
-
-        }
-    })
-  },
-  'click .dologin': function(e) {
+  /** AUTHENTICATE */
+  'click .login': function(e) {
     e.preventDefault();
-    $('.login').click();
+    goDiscovery();
   },
+  /** FLAG */
   'click #reportthis': function(e) {
     e.preventDefault();
     /** show vex dialog */
     vexFlag(this);
   },
-  'click #view-roles': function(e) {
-    e.preventDefault();
-    displayRoleTypeDialog( 
-      (
-        (this.project.crew||[]).map(function(r){ 
-          r.ctx='crew' 
-          return r
-        }).concat((this.project.cast||[]).map(function(r){ 
-          r.ctx='cast' 
-          return r
-        }))), {
-      title: 'You must be signed in to apply or offer resources.',
-      signin: true
-    });
-  },
+  /** ROLES */
   'click #join-roles': function(e) {
     e.preventDefault();
     /**
@@ -734,6 +651,7 @@ Template.projectView.events({
       apply_time: true
     });
   },
+  /** DONATIONS */
   'click #offer-donation': function(e) {
     e.preventDefault();
     /** prompt enter donation amount */
@@ -771,8 +689,52 @@ Template.projectView.events({
           '</div>'
       ]
 
+      if (Meteor.user()) {
+        dialogInput = dialogInput.concat([
+          '<div class="vex-custom-field-wrapper t20">',
+              // set checkbox to show subscription options
+              // frequency, amount
+              '<div class="container">',
+                  '<form>',
+                  '<div class="span4">',
+                      '<div class="">',
+                        '<p>Would you like to make subscription payments?</p>',
+                        '<div class="col-xs-12 col-sm-6 col-md-4 checkbox">',
+                          '<input type="checkbox" id="checkbox-Subscribe" name="Subscribe">',
+                          '<label for="checkbox-Subscribe">Subscribe</label>',
+                        '</div>',
+                      '</div>',
+                      '<div class="t60 showSubscribeDates nodisplay">',
+                          '<div class="form-inline">',
+                              '<label class="control-label">',
+                                  'How frequently?</label>',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Daily" type="radio">Daily',
+                              '</label>&nbsp;',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Weekly" type="radio">Weekly',
+                              '</label>&nbsp;',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Monthly" type="radio" checked>Monthly',
+                              '</label>&nbsp;',
+                              '<label class="radio">',
+                                  '<input name="subscription_opt" class="subscription_opt" value="Annually" type="radio">Annually',
+                              '</label>',
+                          '</div>',
+                      '</div>',
+                      '<div class="alert alert-info small showSubscribeDates nodisplay t20">',
+                        '<p><span id="subscriptionfreq">Monthly</span> selected</p>',
+                      '</div>',
+                  '</div>',
+                  '</form>',
+              '</div>',
+
+          '</div>'
+        ])
+      }
+
       dialogInput = dialogInput.concat([
-        '<div class="vex-custom-field-wrapper">',
+        '<div class="vex-custom-field-wrapper t20">',
           '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
         '</div>'
       ])
@@ -780,42 +742,103 @@ Template.projectView.events({
       vex.dialog.open({
         message: 'Enter donation amount.',
         input: dialogInput.join(''),
-        callback: expressDonationHandler
+        callback: expressDonationHandler,
+        afterOpen: function() {
+          $('#checkbox-Subscribe').off()
+          $('#checkbox-Subscribe').on('change', function() {
+            if($(this).prop('checked')) {
+              $('.showSubscribeDates').show()
+            } else {
+              $('.showSubscribeDates').hide()
+            }
+          })
+
+          $('#checkbox-SubscriptionDate').off()
+          $('#checkbox-SubscriptionDate').on('change',function() {
+            if($(this).prop('checked')) {
+              $('.showSubscribeDatesInput').show()
+            } else {
+              $('.showSubscribeDatesInput').hide()
+            }
+          })
+
+          $('.subscription_opt').off()
+          $('.subscription_opt').on('change', function() {
+            $('#subscriptionfreq').text($(this).val())
+          })
+        }
       });
     }
 
     /** express donation final handler (0b) */
     function expressDonationHandler(data) {
-      if (!data||!data.donation) return;
+      if (!data) return
+      if (!data.donation) return alert('There is no donation amount specified.');
+
       var amt = Math.abs(parseInt(data.donation));
-      if (amt>0) {
-        var donationObject = {};
-        if (Meteor.user()) {
-          donationObject = {
-            first: Meteor.user().firstName,
-            last: Meteor.user().lastName,
-            email: Meteor.user().email,
-            id: Meteor.user()._id,
-            amount: amt
-          }
-        } else {
-          donationObject = {
-            first: 'anonymous',
-            last: 'patron',
-            id: 'anon_donation',
-            amount: amt
-          }
+      data.amount = amt
+
+      // is it subscription?
+      if ($('#checkbox-Subscribe').prop('checked')) {
+
+        // user must be registered
+        if (!Meteor.user()) {
+          return alert('This feature is only available for registered users.')
+        };
+        // user must be a customer
+        if (!Meteor.user().customer) {
+          return alert('You must update your profile for this feature to be available.')
+        };
+
+
+        data.frequency = $('.subscription_opt:checked').val()
+        data.subscription = true
+
+        // create plan and make purchase
+        var mapVals = {
+          'Daily': 'day',
+          'Weekly': 'week',
+          'Monthly': 'month',
+          'Annually': 'year'
         }
-        makeStripeCharge({
-          amount: amt,
-          message: 'Donation to ' + currentTitle,
-          description: '$' + amt + ' donated',
-          donationObject: donationObject,
-          route: 'donateToProject',
-          slug: currentSlug
-        });
+
+        data.frequency = mapVals[data.frequency]
+        data.route = 'createSubscriptionDonation'
+
+      } else {
+        data.route = 'donateToProject'
       }
+
+      var donationObject = {};
+      if (Meteor.user()) {
+        donationObject = {
+          first: Meteor.user().firstName,
+          last: Meteor.user().lastName,
+          email: Meteor.user().email,
+          id: Meteor.user()._id,
+          amount: data.amount
+        }
+      } else {
+        donationObject = {
+          first: 'anonymous',
+          last: 'patron',
+          id: 'anon_donation',
+          amount: data.amount
+        }
+      }
+
+      data.message = 'Donation to ' + currentTitle
+      data.description = 'O . S . H . $' + data.amount + ' donation to ' + currentTitle
+      data.type = 'project'
+      data.slug = currentSlug
+      data.title = currentTitle
+      data.projectOwnerId = currentProject.ownerId
+      data.banner = currentProject.banner
+      data.donationObject = donationObject
+
+      makeStripeCharge(data);
     }
+
 
     function timeDateDonateConfig() {
       $('.dtm').on('click', function(e) {
@@ -826,6 +849,7 @@ Template.projectView.events({
 
     displayExpressDonationDialog()
   },
+  /** SHARES */
   'click #buy-shares': function(e) {
     e.preventDefault();
     /** vex dialog how many shares to purchase, purchase */
@@ -882,6 +906,7 @@ Template.projectView.events({
       }
     });
   },
+  /** EDIT / UPDATE */
   'click #submit-update': function(e) {
     e.preventDefault();
     /** unshift text and date */
@@ -898,10 +923,7 @@ Template.projectView.events({
       $('#update-box').val('');
     };
   },
-  'click .login': function(e) {
-    e.preventDefault();
-    goDiscovery();
-  },
+  /** FULFILL GIFT */
   'click .fulfill_gift': function(e) {
     e.preventDefault();
     var was = this
@@ -975,41 +997,7 @@ Template.projectView.events({
       }
     });
   },
-  'click #donation_btn': function(e) {
-    e.preventDefault();
-    var was = this;
-
-    var dialogInput = [
-      '<label for="application_offer" style="display:break;">Please verify payment for $'+donationObject.amount+'</label>'
-    ]
-
-    var intmodal = vex.dialog.open({
-      title: 'Your Donation',
-      message: dialogInput.join(''),
-      buttons: {
-        danger:  {
-          label: 'Cancel',
-          className: "btn-danger",
-          callback: function() { intmodal.modal('hide') }
-        },
-        success: {
-          label: "PROCEED",
-          className: "btn-success",
-          callback: function() {
-            intmodal.modal('hide')
-            makeStripeCharge({
-              amount: donationObject.amount,
-              message: 'Donation to ' + currentTitle,
-              description: '$' + donationObject.amount + ' donated',
-              donationObject: donationObject,
-              route: 'donateToProject',
-              slug: was._slug
-            });
-          }
-        }
-      }
-    });
-  },
+  /** BUY GIFT */
   'click .purchase_gift': function(e) {
     e.preventDefault();
     var was = this, o={gift:was};
@@ -1292,6 +1280,7 @@ Template.projectView.events({
         }
     });
   },
+  /** ARCHIVE */
   "click #closeProj": function () {
     vex.dialog.confirm({
       message: 'Are you sure you want to close this project?',
@@ -1301,16 +1290,14 @@ Template.projectView.events({
       }
     });
   },
-  "click .start": function () {
-    var was = this;
-    Meteor.call("startProject", was._slug);
-  },
+  /** COMMENTS */
   'click #submit-comment': function(e) {
     e.preventDefault();
     var text = document.getElementById('comment-box').value;
     document.getElementById('comment-box').innerHTML = '';
     Meteor.call('addProjectComment', this._slug, 0, text);
   },
+  /** LIKE */
   'click #thumbsup': function() {
     if ($('#thumbsup').hasClass('active')) {
       Meteor.call('downvoteProject', this._slug);
@@ -1320,6 +1307,7 @@ Template.projectView.events({
       $('#thumbsup').addClass('active');
     }
   },
+  /** ASSETS OFFER */
   'click .offer_resource': function(e) {
     var assets = Meteor.user().assets||[]
     if (!assets.length)
