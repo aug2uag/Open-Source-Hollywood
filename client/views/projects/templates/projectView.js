@@ -421,6 +421,9 @@ Template.projectView.helpers({
   hasGifts: function() {
     return this.project.gifts&&this.project.gifts.length||false
   },
+  hasNeeds: function() {
+    return this.project.needs&&this.project.needs.length||false
+  },
   thumbsupactive: function() {
     // if me in upvote 'active' : null
     if (this.project.upvotedUsers.indexOf(Meteor.user()._id)>-1) return 'active';
