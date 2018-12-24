@@ -341,7 +341,8 @@ Template.profile.helpers({
 			'am-wk': 'mornings weekends',
 			'pm-wk': 'evenings weekends'
 		}
-		return this.availability.map(function(a) {
+    var availability = this.availability||[]
+		return availability.map(function(a) {
 			return normalized[a]
 		})
 	},
@@ -723,6 +724,14 @@ Template.profile.events({
           '</div>'
         ])
       } 
+
+      if (!Meteor.user()) {
+        dialogInput = dialogInput.concat([
+          '<div class="vex-custom-field-wrapper t20 b20">',
+            '<h4>Login to make subscription donation to this member.</h4>',
+          '</div>'
+        ])
+      };
 
       dialogInput = dialogInput.concat([
         '<div class="vex-custom-field-wrapper t20">',

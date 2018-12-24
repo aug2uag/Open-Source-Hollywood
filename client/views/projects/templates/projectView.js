@@ -736,6 +736,14 @@ Template.projectView.events({
         ])
       }
 
+      if (!Meteor.user()) {
+        dialogInput = dialogInput.concat([
+          '<div class="vex-custom-field-wrapper t20 b20">',
+            '<h4>Login to make subscription donation to this campaign.</h4>',
+          '</div>'
+        ])
+      };
+
       dialogInput = dialogInput.concat([
         '<div class="vex-custom-field-wrapper t20">',
           '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
