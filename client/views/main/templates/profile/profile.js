@@ -728,7 +728,7 @@ Template.profile.events({
       if (!Meteor.user()) {
         dialogInput = dialogInput.concat([
           '<div class="vex-custom-field-wrapper t20 b20">',
-            '<h4>Login to make subscription donation to this member.</h4>',
+            '<h4>Login to make subscription donation to this member!</h4>',
           '</div>'
         ])
       };
@@ -772,15 +772,15 @@ Template.profile.events({
 
     /** express donation final handler (0b) */
     function expressDonationHandler(data) {
-      console.log('in expressDonationHandler 1')
-      console.log(data)
+      // console.log('in expressDonationHandler 1')
+      // console.log(data)
       if (!data) return
       if (!data.donation) return alert('There is no donation amount specified.');
 
       var amt = Math.abs(parseInt(data.donation));
       data.amount = amt
 
-      console.log('in expressDonationHandler 2')
+      // console.log('in expressDonationHandler 2')
 
       // is it subscription?
       if ($('#checkbox-Subscribe').prop('checked')) {
@@ -839,8 +839,8 @@ Template.profile.events({
       data.avatar = currAvatar
       data.donationObject = donationObject
 
-      console.log(new Array(100).join('@ '))
-      console.log(data)
+      // console.log(new Array(100).join('@ '))
+      // console.log(data)
 
       makeStripeCharge(data);
     }

@@ -739,7 +739,7 @@ Template.projectView.events({
       if (!Meteor.user()) {
         dialogInput = dialogInput.concat([
           '<div class="vex-custom-field-wrapper t20 b20">',
-            '<h4>Login to make subscription donation to this campaign.</h4>',
+            '<h4>Login to make subscription donation to this campaign!</h4>',
           '</div>'
         ])
       };
