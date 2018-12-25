@@ -280,7 +280,175 @@ Template.projectMessage.events({
 	'change .auditionURL': function(e) {
 		this.url = $(e.target).val() || null;
 		Meteor.call('addAuditionURL', this);
-	}
+	},
+	'click #assetsmakeoffer': function() {
+
+		var that = this
+
+
+		function evalThisOffer(_offer) {
+
+			console.log('in evalThisOffer')
+			console.log(_offer)
+			var _o = {
+				hourly: [], 
+				daily: [], 
+				weekly: []
+			}
+
+			/*
+
+				assets each:
+
+					fixed: NaN, 
+					hourly: 10, 
+					daily: 50, 
+					weekly: 100
+
+
+
+
+			*/
+
+
+			_offer.assets.forEach(function(a) {
+				for (var key in a.pricing) {
+					if (a.pricing[key]) 
+						if (_o[key])
+							_o[key].push(a.pricing[key])
+				}	
+			})
+
+
+			for (var key in _o) {
+				_o[key] = (function() {
+					var max = 0
+					for (var i = 0; i < _o[key].length; i++) {
+						if (!max||_o[key][i] > max) max = _o[key][i];
+					};
+					return max
+				}())
+			}
+
+
+
+			console.log(_o)
+
+
+	        Meteor.call('foodaddy', {
+	        	offer: this.offer
+	        })
+		}
+
+
+
+
+
+
+
+
+        var h = $('#hours_ass').val()
+        var sd = $('#start_date_ass').val()
+        var st = $('#start_time_ass').val()
+        var ed = $('#end_date_ass').val()
+        var et = $('#end_time_ass').val()
+        var escrow = 0
+
+        var assets = this.offer.assets
+        var payOptions, hours, days, weeks, remHours, remDays
+
+        if (h) {
+        	console.log('calculate hours')
+        } else {
+
+        	if (!sd||!ed) {
+        		return vex.dialog.alert('Please include start and end dates.')
+        	};
+
+
+        	console.log('calculate hours')
+        	console.log(sd, st, ed, et)
+
+        	// is end date after start date ?
+        	var d1 = new Date(sd)
+        	var d2 = new Date(ed)
+        	var d = new Date()
+
+        	if (d1>d2) {
+        		return vex.dialog.alert('End date must be later than start date')
+        	};
+
+        	if (d>d1) {
+        		return vex.dialog.alert('Start date must be 1 day in the future')
+        	};
+
+        	// set hours
+
+
+        	// calculate days, weeks
+        	var delta = d2 - d1
+        	console.log('delta', delta)
+        	console.log('\n-- --')
+        	 x = 172800000
+        	var seconds = delta/1000
+        	hours = parseFloat((seconds * 0.000277778).toFixed(2))
+        	console.log('hours', hours)
+        	weeks = 0, remDays = 0, days = 0, remHours = 0
+
+        	if (hours > 24) {
+        		days = hours/24
+		    	console.log('days', days)
+		    	remHours = hours%24
+		    	console.log('remHours', remHours)	
+        	};
+
+        	if (days > 7) {
+        		weeks = days / 7
+        		remDays = days%7
+        	};
+        	
+
+        	if (days > 0) {
+
+        		// calculate daily + rem hourly
+
+
+
+        	} else {
+
+        		// calculate hourly
+
+
+        	}
+
+
+
+
+
+
+
+        }
+        console.log(this)
+
+        evalThisOffer({
+        	assets: assets,
+        	payOptions: payOptions,
+        	weeks: weeks,
+        	days: days,
+        	remDays: remDays,
+        	hours: hours,
+        	remHours: remHours
+        })
+
+
+        // match approved assets to list of assets
+
+        // if payment owed, get token, else make offer update
+
+
+
+
+    }
 })
 
 Template.projectMessageOffer.helpers({
@@ -393,6 +561,32 @@ Template.projectMessage.events({
 
 
 
+Template.assetsOfferDialog.onRendered(function() {
+	setTimeout(function() {
+		$('.calendar').flatpickr();
+	
+		$('.clock').flatpickr(
+		{
+			enableTime: true,
+			noCalendar: true,
+
+			enableSeconds: false, // disabled by default
+
+			time_24hr: false, // AM/PM time picker is used by default
+
+			// default format
+			dateFormat: "H:i", 
+
+			// initial values for time. don't use these to preload a date
+			defaultHour: 12,
+			defaultMinute: 0
+
+			// Preload time with defaultDate instead:
+			// defaultDate: "3:30"
+		});
+	}, 1597)
+})
+
 Template.assetsOfferDialog.events({
 	'click #submit-message': function(e) {
 		e.preventDefault();
@@ -421,7 +615,11 @@ Template.assetsOfferDialog.helpers({
 	foo: function() {
 		console.log(this)
 	},
-	isOwner: function() {
+	timeDefined: function() {
+		var timeDefined = this.schedule ? true:false
+		return timeDefined
+	},
+	isOfferee: function() {
 		if (this.offer.pending===false) return false;
 		if (Meteor.user()._id===this.project.ownerId) return true;
 		return false

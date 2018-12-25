@@ -751,7 +751,6 @@ Template.projectView.events({
       ])
 
       vex.dialog.open({
-        message: 'Enter donation amount.',
         input: dialogInput.join(''),
         callback: expressDonationHandler,
         afterOpen: function() {
@@ -1335,7 +1334,7 @@ Template.projectView.events({
 
 
     function addslashes( str ) {
-        return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+      return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
     }
 
     var asssTr = asss.map(function(a, idx) { 
@@ -1349,7 +1348,6 @@ Template.projectView.events({
         '</tr>'
       ].join('') 
     }).join('')
-
 
     var asssTable = [
       '<table class="table">',
@@ -1423,7 +1421,6 @@ Template.projectView.events({
           })
         };
       }
-
     })
   }
 });

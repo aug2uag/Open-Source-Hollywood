@@ -15,21 +15,21 @@
                     <li class="opened">
                         <h5>EDIT PROFILE</h5></li>
                     <li class="">
-                        <h5>RESOURCES FOR LEASE</h5></li>
+                        <h5>ASSETS FOR LEASE</h5></li>
                     <li class="">
-                        <h5>YOUR MERCH</h5></li>
+                        <h5>MERCH FOR SALE</h5></li>
                     <li id="not1" class="">
-                        <h5>NOTIFICATIONS&nbsp;<span class="fw700">!</span></h5></li>
+                        <h5>REAL-TIME NOTIFICATIONS</h5></li>
                     <li class="">
-                        <h5>MESSAGES</h5></li>
+                        <h5>MESSAGES LIST</h5></li>
 
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                         <option>EDIT PROFILE</option>
-                        <option>RESOURCES FOR LEASE</option>
-                        <option>YOUR MERCH</option>
-                        <option id="not2">NOTIFICATIONS&nbsp;<span class="fw700">!</span></option>
-                        <option>MESSAGES</option>
+                        <option>ASSETS FOR LEASE</option>
+                        <option>MERCH FOR SALE</option>
+                        <option id="not2">REAL-TIME NOTIFICATIONS</option>
+                        <option>MESSAGES LIST</option>
                       </select>
                       <span class="tabs-select-inner" style="display: block; white-space: nowrap;">SELECT</span></span>
                     </div>
@@ -41,7 +41,7 @@
 
                         <div class="col-sm-4 col-xs-12 project-header">
 
-                            <h3 class="comments_title" style="text-align:left;margin-top:20px;"> EDIT PROFILE {{#unless emailValue}}<small><strong><a href="#!" id="gotoemailpref" class="btn animated bounce" style="border-color:steelblue;color:royalblue;margin-left: 20px;">CONFIGURE YOUR NOTIFICATIONS!</a></strong></small>{{/unless}} </h3>
+                            <h3 class="comments_title" style="text-align:left;margin-top:20px;"> UPDATE YOUR PROFILE {{#unless emailValue}}<small><strong><a href="#!" id="gotoemailpref" class="btn animated bounce" style="border-color:steelblue;color:royalblue;margin-left: 20px;">CONFIGURE YOUR NOTIFICATIONS!</a></strong></small>{{/unless}} </h3>
                             <hr />
                             <div class="row b40" style="width: 100%;">
                               <img id="image_avatar" class="img-thumbnail krown-box" src="{{ avatar }}" alt="avatar"  style="max-height:200px;width:auto;">
@@ -66,19 +66,19 @@
                         </div>
 
                         <div class="col-sm-8 krown-pricing-column krown-pricing-content col-xs-12 project-content t20" style="z-index: 299;">
-                            <p><small>Select section to edit:</small></p>
+                            <p><small>These data show on your profile:</small></p>
                             <ol class="breadcrumb">
-                              <li><a href="#!" class="res_show_setting bold" val="set_Portfolio">Portfolio</a></li>
-                              <li><a href="#!" class="res_show_setting" val="set_Bio">Biography</a></li>
-                              <li><a href="#!" class="res_show_setting" val="set_Social">Social Media</a></li>
-                              <li><a href="#!" class="res_show_setting" val="set_Interests">Interests</a></li>
+                              <li><a href="#!" class="res_show_setting bold" val="set_Portfolio">1) Portfolio</a></li>
+                              <li><a href="#!" class="res_show_setting" val="set_Bio">2) Biography</a></li>
+                              <li><a href="#!" class="res_show_setting" val="set_Social">3) Social Media</a></li>
+                              <li><a href="#!" class="res_show_setting" val="set_Interests">4) Interests</a></li>
                             </ol>
                             <p>&nbsp;</p>
 
                             <div class="krown-column-row clearfix b40">
                                 <div id="set_Portfolio" class="settings_view_toggle krown-column-container clearfix first last span12 clearfix" >
-                                    <h4 style="text-align: left"> Reels, Demos, &amp; Portfolios </h4>
-                                    <p class="mini">These are the media displayed on carousel in your profile page. <strong>YouTube or Vimeo</strong> links for videos and valid URLs only. For help <a id="vidurl" href="#!">click or tap here</a>. </p>
+                                    <h4 style="text-align: left"> 1) Your Portfolio </h4>
+                                    <p class="mini">Enter the URL of your works and they will display as a carousel on your profile. <strong>YouTube or Vimeo</strong> links for videos and valid URLs only please. For help <a id="vidurl" href="#!">select here <i class="fa fa-help"></i></a>. </p>
                                     <div class="row" style="width:  100%;">
                                         <div class="col-xs-6">
                                             <input type="text" name="reel-name" id="reel-name" value="" placeholder="name or identifier" />
@@ -112,6 +112,7 @@
                                     </div>
                                 </div>
                                 <div id="set_Bio" class="settings_view_toggle krown-column-container clearfix first last span12 clearfix" style="display:none">
+                                    <h4 style="text-align: left"> 2) Your Biography </h4>
                                     <section class="krown-box light-2 clearfix">
                                       <div class="row form-horizontal has-warning h4">
                                         <div id="summernote"></div>
@@ -120,7 +121,7 @@
                                     </section>
                                 </div>
                                 <div id="set_Social" class="settings_view_toggle krown-column-container clearfix first last span12 clearfix" style="display:none">
-                                    <h4 style="text-align: left"><strong>Social Media &amp; Links</strong></h4>
+                                    <h4 style="text-align: left"><strong>3) Social Media Links</strong></h4>
                                     <div class="row" style="width:  100%;">
                                         <div class="col-sm-12">
                                             <input type="text" name="title" id="social-title" value="" placeholder="Name" />
@@ -147,8 +148,8 @@
                                     </div>
                                 </div>
                                 <div id="set_Interests" class="settings_view_toggle krown-column-container clearfix first last span12 clearfix" style="display:none">
-                                    <section class="krown-box light-2 clearfix">
-                                        <h5>Specialties &amp; Interests</h5>
+                                    <h4 style="text-align: left"> 4) Specialties &amp; Interests </h4>
+                                    <section class="krown-box light-2 clearfix t20">
                                         <div class="row form-horizontal has-warning h4">
 
                                           <div class="col-xs-12 col-sm-6 col-md-4 checkbox">
@@ -272,7 +273,7 @@
                           <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> LIST YOUR ASSETS FOR LEASE</h3>
                           <hr />
 
-                          <p><small>Select section:</small></p>
+                          <p><small>Create or View Assets:</small></p>
                           <ol class="breadcrumb">
                             <li><a href="#!" class="res_show_opt bold" val="lease1">New Resource</a></li>
                             <li><a href="#!" class="res_show_opt" val="lease2">View &amp; Edit</a></li>
@@ -452,7 +453,7 @@
                           </div>
 
 
-                          <div class="res_opt_set krown-column-container" style="display:none" id="lease2">
+                          <div class="res_opt_set span12" style="display:none" id="lease2">
                             <!-- SHOW RESOURCES IN TABLE, SELECT TO VIEW DETAILS AND EDIT -->
                             <div class="table-responsive b40" id="assets-table-toggle">
                                 <table class="table table-sm" id="lease-table">
@@ -485,14 +486,14 @@
 
 
 
-                          <div class="res_opt_set krown-column-container" style="display:none" id="lease3">
+                          <div class="res_opt_set span12" style="display:none" id="lease3">
                             <h5>doo</h5>
                           </div>
 
                     </div>
 
                     <div id="personalmerch" style="display: none;">
-                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> PERSONAL MERCH FOR SALE </h3>
+                        <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;"> YOUR PERSONAL MERCH FOR SALE </h3>
                         <hr>
                         <form id="editProjForm" class="krown-pricing-column">
                             <div class="krown-column-row clearfix">
@@ -502,7 +503,7 @@
                                     {{else}}
                                     <div class="accordion large clearfix" id="newProjGiftAccord">
                                         <section>
-                                            <h5 class="expandnewprojecttext">Select to upload merchandise related to this project for sale to the public.</h5>
+                                            <h5 class="expandnewprojecttext">Enter to upload merchandise related to this project for sale to the public.</h5>
                                             <div>
                                                 <div class="row">
                                                     <div class="col-xs-12 col-md-5">
@@ -670,7 +671,7 @@
                           <hr />
                         </div>
                         <div class="project-content">
-                          <p>Configuring notifications to get messages in <strong>REAL-TIME</strong>!!! Needed to sell merch and other money related transactions.</p>
+                          <p>Configuring notifications is needed to sell merch and some other money related transactions.</p>
                           <hr class="margin_bottom40">
                           <div class="row" style="width:100%">
                             <div class="col-xs-3">

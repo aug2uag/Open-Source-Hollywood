@@ -305,6 +305,7 @@
                               <th>description</th>
                               <th>pricing</th>
                               <th>availability</th>
+                              <th>accept</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -326,6 +327,20 @@
                                   {{/each}}
                                 </table>
                               </td>
+                              <td>
+
+                                  <input class="hidden radio-label" type="radio" name="accept-offers" id="yes-button" checked="checked" />
+                                  <label class="button-label" for="yes-button">
+                                    <h1 class="button-lbl-offset">Yes</h1>
+                                  </label>
+
+                                  <input class="hidden radio-label" type="radio" name="accept-offers" id="no-button"
+                                    />
+                                  <label class="button-label" for="no-button">
+                                    <h1 class="button-lbl-offset">No</h1>
+                                  </label>
+
+                              </td>
                             </tr>
                           {{/each}}
                           </tbody>
@@ -335,20 +350,55 @@
                 </div>
             </section>
 
-            {{#if isOwner}}
-            <section class="t20">
+            {{#if isOfferee}}
+            
+            {{#unless timeDefined}}
+                <h3>Set Request Schedule:</h3>
+                  <div class="row">
 
+                      <div class="form-group col-xs-6 col-md-2">
+                        <label>Choose Start Date</label>
+                        <input class="form-control calendar set_time_ass" type="date" id="start_date_ass">
+                      </div>
+                      <div class=" form-group col-xs-6 col-md-2">
+                        <label>Choose Start Time </label>
+                        <input class="form-control clock set_time_ass" type="time" id="start_time_ass">
+                      </div>
+
+                  </div>
+
+                  <div class="row">
+
+                      <div class="form-group col-xs-6 col-md-2">
+                        <label>Choose End Date</label>
+                        <input class="form-control calendar set_time_ass" type="date" id="end_date_ass">
+                      </div>
+                      <div class=" form-group col-xs-6 col-md-2">
+                        <label>Choose End Time </label>
+                        <input class="form-control clock set_time_ass" type="time" id="end_time_ass">
+                      </div>
+
+                  </div>
+                  <p>&nbsp;</p>
+
+                  <div class="row">
+
+                      <div class="form-group col-xs-6 col-md-2">
+                        <label>or Enter Total Hours</label>
+                        <input class="form-control" type="number" min="0" max="999" id="hours_ass">
+                      </div>
+                  </div>
+            {{/unless}}
+            <section class="t20">
                 <div class="krown-column-row clearfix btn-group">
                   <div class="krown-column-container clearfix last span6 btn-group-justified">
-                      <a class="btn btn-block bg-green btn-lg white" id="assetsagreeoffer">ACCEPT</a>
+                      <a class="btn btn-block bg-red btn-lg white {{#unless timeDefined}}disabled{{/unless}}" id="assetsrejectoffer">REJECT</a>
                   </div>
                   <div class="krown-column-container clearfix last span6 btn-group-justified">
-                      <a class="btn btn-block bg-red btn-lg white" id="assetsrejectoffer">REJECT</a>
+                      <a class="btn btn-block bg-green btn-lg white {{#unless timeDefined}}disabled{{/unless}}" id="assetsmakeoffer">APPROVE OFFER</a>
                   </div>
                 </div>
-
             </section>
-
             {{/if}}
         </div>
       </div>
@@ -408,11 +458,9 @@
                     </div>
                   </div>
               
-              <div class="krown-column-container clearfix last clearfix">
-                <a class="btn btn-group-justified btn-info btn-lg w100" style="white-space: normal!important;word-wrap:break-word!important;" id="counterk">COUNTER-OFFER WITH TERMS ABOVE</a>
-              </div>
-
-
+                  <div class="krown-column-container clearfix last clearfix">
+                    <a class="btn btn-group-justified btn-info btn-lg w100" style="white-space: normal!important;word-wrap:break-word!important;" id="counterk">COUNTER-OFFER WITH TERMS ABOVE</a>
+                  </div>
               </section>
             </div>
         </div>
@@ -427,5 +475,44 @@
 
         {{> messageBox}}
     </div>
+
+    <script type="text/javascript">
+
+      function hoursAss() {
+          $('.set_time_ass').each(function() {
+            $(this).val('')
+          })
+          $('#assetsrejectoffer').removeClass('disabled')
+          $('#assetsmakeoffer').removeClass('disabled')
+      }
+
+      function timeAss() {
+          $('#hours_ass').val('')
+          var n = []
+          $('.set_time_ass').each(function() {
+            if ($(this).val()) n.push(true)
+          })
+          var d1 = $('#start_date_ass').val()
+          var d2 = $('#end_date_ass').val()
+          if (d1&&d2) {
+            $('#assetsrejectoffer').removeClass('disabled')
+            $('#assetsmakeoffer').removeClass('disabled')
+          } else {
+            console.log('n length =', n.length)
+            $('#assetsrejectoffer').addClass('disabled')
+            $('#assetsmakeoffer').addClass('disabled')
+          }
+      }
+
+      $('#hours_ass').off()
+      $('#hours_ass').on('input', hoursAss)
+      $('#hours_ass').on('change', hoursAss)
+
+      $('.set_time_ass').off()
+      $('.set_time_ass').on('input', timeAss)
+      $('.set_time_ass').on('change', timeAss)
+
+
+    </script>
 
 </template>

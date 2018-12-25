@@ -28,7 +28,7 @@
         </header>
         {{#if isAllowed}}
 
-            <a href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100" style="color: #333!important;background-color: #fff!important;border: 0.5px solid #333!important;"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
+            <a href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100" style="color: #333!important;background-color: #fff!important;border: 0.5px solid #333!important;max-width: 830px;"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
 
         {{/if}}
         <div class="normal-content ">
@@ -45,7 +45,7 @@
                           <h5>Community</h5></li>
                       <li class="">
                           <h5>Manage</h5></li>
-                      <li class="">
+                      <li class="gotoedit">
                           <h5>Edit</h5></li>
                       <div class="tabs-select">
                         <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
@@ -55,7 +55,7 @@
                             <option>Comments</option>
                             <option>Community</option>
                             <option>Manage</option>
-                            <option>Edit</option>
+                            <option class="gotoedit">Edit</option>
                           </select>
                           <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Campaign</span>
                         </span> 
@@ -468,6 +468,8 @@
                                       </div>
                                   </div>
                                </div>
+                            {{else}}
+                            {{#unless isOwner}}<h3 id="comments-title"><a style="color: #000000;" onclick="$('#offer-donation').click();">Donate and be the First Backer!</a></h3>{{/unless}}
                             {{/each}}
                         </div>
                     </div>
@@ -514,17 +516,77 @@
 <template name="applicants">
   <p><small>Select from applicants, assets, merch, &amp; settings</small></p>
   <ol class="breadcrumb">
-    <li><a href="#!" class="res_show_resources bold" val="res_Applicants">Role Applicants</a></li>
-    <li><a href="#!" class="res_show_resources" val="res_Resources">Leasing Assets</a></li>
-    <li><a href="#!" class="res_show_resources" val="res_Gifts">Merch</a></li>
-    <li><a href="#!" class="res_show_resources" val="res_Settings">Settings</a></li>
+    <li><a href="#!" class="res_show_resources bold" val="res_Active" id="gores_Active">Overview</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Applicants" id="gores_Applicants">Role Applicants</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Resources" id="gores_Resources">Leasing Assets</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Gifts" id="gores_Gifts">Merch</a></li>
+    <li><a href="#!" class="res_show_resources" val="res_Settings" id="gores_Settings">Settings</a></li>
   </ol>
   <p>&nbsp;</p>
 
+  <div class="resources_view_toggle" id="res_Active">
 
-  <div class="resources_view_toggle" id="res_Applicants">
+    <!-- active negotiations -->
+    <div class="table-responsive" style="overflow: hidden;">
+      <table class="table">
+
+        <tbody>
+
+          
+          <tr colspan="3"><a class="btn btn-lg" onclick="$('#gores_Applicants').click();">APPLICANTS</a></tr>
+          {{#each applicants}}
+            <tr>
+              <td><p class="align-center">{{user.name}}</p></td>
+              <td><small><strong>{{ thisString }}</strong></small></td>
+              <td class="center"><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ user.id }}" class="btn btn-mini btn-primary">VIEW DETAILS</a></td>
+            </tr>
+            {{else}}
+            <tr>
+              <td colspan="3">No role applicants</td>
+            </tr>
+          {{/each}}
+
+          
+          <tr colspan="3"><a class="btn btn-lg" onclick="$('#gores_Resources').click();">ASSETS</a></tr>
+          {{#each assetOffers}}
+            <tr>
+              <td><p class="align-center">{{assetsConsolidated.cat}}</p></td>
+              <td><small><strong>{{assetsConsolidated.names}}</strong></small></td>
+              <td class="center"><a href="/message/project/{{ currentSlug }}/{{ _id }}" class="btn btn-mini btn-primary w100">VIEW DETAILS</a></td>
+            </tr>
+            {{else}}
+            <tr>
+              <td colspan="3">No assets offers</td>
+            </tr>
+          {{/each}}
+
+          
+          <tr colspan="3"><a class="btn btn-lg" onclick="$('#gores_Gifts').click();">SOLD GIFTS</a></tr>
+          {{#each purchases}}
+            <tr>
+              <td class="">{{order.gift.name}}</td>
+              <td class="">( x{{order.totalUnits}})</td>
+              <td class="center">${{order.amount}}</td>
+            </tr>
+            {{else}}
+            <tr>
+              <td colspan="3">No sold gifts</td>
+            </tr>
+          {{/each}}
+
+        </tbody>
+      </table>
+      <p>&nbsp;</p>
+      <button onclick="$('.gotoedit').click();" class="w100 btn btn-lg krown-btn btn-warning">EDIT CAMPAIGN</button>
+
+      <p>&nbsp;</p>
+      <button onclick="(function(){$('#gores_Settings').click();setTimeout(function(){$('#closeProj').click()},337);}())" class="w100 btn btn-lg krown-btn btn-danger">DELETE CAMPAIGN</button>
+    </div>
+  </div>
+
+  <div class="resources_view_toggle nodisplay" id="res_Applicants">
       <h3 class="extremeboldtext">Applicants</h3>
-      <div class="table-responsive">
+      <div class="table-responsive" style="overflow: hidden;">
         <table class="table">
           <thead>
             <tr>
@@ -547,9 +609,9 @@
       </div>
   </div>
 
-  <div class="resources_view_toggle" style="display:none" id="res_Resources">
+  <div class="resources_view_toggle nodisplay" id="res_Resources">
       <h3 class="extremeboldtext">Offered Resources</h3>
-      <div class="table-responsive">
+      <div class="table-responsive" style="overflow: hidden;">
         <table class="table">
           <thead>
             <tr>
@@ -576,7 +638,7 @@
       </div>
   </div>
 
-  <div class="resources_view_toggle" style="display:none" id="res_Gifts">
+  <div class="resources_view_toggle nodisplay" id="res_Gifts">
       <h3 class="extremeboldtext">Sold Gifts</h3>
 
           <div class="media">
@@ -606,11 +668,8 @@
                   {{/each}}
 
                   <tr>
-                    <td class="center">&nbsp;</td>
-                    <td class="center">&nbsp;</td>
-                    <td class="center">&nbsp;</td>
-                    <td><b>${{giftTotals}}</b></td>
-                    <td class="center">&nbsp;</td>
+                    <td colspan="4" style="text-align: right;"><b>Total Sales: ${{giftTotals}}</b></td>
+                    <td colspan="2">&nbsp;</td>
                   </tr>
                   
                 </tbody>
@@ -621,7 +680,7 @@
 
   </div>
 
-  <div class="resources_view_toggle" id="res_Settings" style="display:none">
+  <div class="resources_view_toggle nodisplay" id="res_Settings">
     <p>&nbsp;</p>
     {{#if isWidth}}
         <a id="boardButton" class="btn btn-default btn-lg col-sm-12 major_proj_action_buttons margin_bottom40 alice_back" href="/boards/{{_bid}}/{{_slug}}">Access Board</a>

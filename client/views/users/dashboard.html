@@ -38,12 +38,12 @@
 
                     <div id="pending" style="display: none;">
                       <div class="project-header">
-                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Current Contracts</h3>
+                        <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Current &amp; Active Contracts</h3>
                         <hr />
                       </div>
-                      <p><small>Select section:</small></p>
+                      <p><small>Select between Active and Completed Contracts:</small></p>
                       <ol class="breadcrumb">
-                        <li><a href="#!" class="dash_show_ks bold" val="view_pending_ks">Pending</a></li>
+                        <li><a href="#!" class="dash_show_ks bold" val="view_pending_ks">Active</a></li>
                         <li><a href="#!" class="dash_show_ks" val="view_completed_ks">Completed</a></li>
                         <li><a href="#!" class="dash_show_ks" val="view_messages_ks">Messages</a></li>
                       </ol>
@@ -72,7 +72,7 @@
                           {{else}}
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
-                          <h5>NO PENDING CONTRACTS TO SHOW</h5>
+                          <h5>NO ACTIVE CONTRACTS TO SHOW</h5>
                           {{/each}}
       
                       </div>
@@ -377,43 +377,66 @@
                         </div>
 
                         <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_lease" style="display:none">
-                          <h4>LEASED ASSETS</h4>
-                          <div class="table-wrapper">
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th>Sales Date</th>
-                                  <th>Name</th>
-                                  <th># Units</th>
-                                  <th>Total</th>
-                                  <th>Details</th>
-                                  <th>Status</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {{#each assetLeases}}
-                                  <tr class="fulfill_gift">
-                                    <td class="">{{orderDate}}</td>
-                                    <td class="">{{order.gift.name}}</td>
-                                    <td class="">{{order.totalUnits}}</td>
-                                    <td class="center">${{order.amount}}</td>
-                                    <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
-                                    <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
+                          
+                          <div class="col-xs-12 col-sm-6">
+                            <h4>LEASED ASSETS</h4>
+                            <div class="table-wrapper">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>Sales Date</th>
+                                    <th>Name</th>
+                                    <th># Units</th>
+                                    <th>Total</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
                                   </tr>
-                                {{/each}}
+                                </thead>
+                                <tbody>
+                                  {{#each assetLeases}}
+                                    <tr class="fulfill_gift">
+                                      <td class="">{{orderDate}}</td>
+                                      <td class="">{{order.gift.name}}</td>
+                                      <td class="">{{order.totalUnits}}</td>
+                                      <td class="center">${{order.amount}}</td>
+                                      <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
+                                      <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
+                                    </tr>
+                                  {{/each}}
 
-                                <tr>
-                                  <td class="center">&nbsp;</td>
-                                  <td class="center">&nbsp;</td>
-                                  <td class="center">&nbsp;</td>
-                                  <td class="center">&nbsp;</td>
-                                  <td><b>${{leaseTotals}}</b></td>
-                                  <td class="center">&nbsp;</td>
-                                </tr>
-                                
-                              </tbody>
-                            </table>
+                                  <tr>
+                                    <td colspan="4" style="text-align: right;"><b>Total Amount: ${{leaseTotals}}</b></td>
+                                    <td colspan="2">&nbsp;</td>
+                                  </tr>
+                                  
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
+                          
+                          <div class="col-xs-12 col-sm-6">
+                            <h4>CURRENT OFFERS</h4>
+                            <div class="table-wrapper">
+                              <table class="table">
+                                <tbody>
+
+                                  {{#each currentContracts}}
+
+                                    <tr class="">
+                                      <td class="">{{offerName}}</td>
+                                      <td class="">{{offer.message}}</td>
+                                      <td class="">{{order.totalUnits}}</td>
+                                      <td class="center"><a href="{{contractLink}}" class="btn">ACCESS CONTRACT</a></td>
+                                    </tr>
+
+                                  {{else}}
+                                    <tr><td>There are no current negotiations.</td></tr>
+                                  {{/each}}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
                         </div>
                         
                         <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_hx" style="display:none">

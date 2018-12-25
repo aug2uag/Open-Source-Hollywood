@@ -740,7 +740,6 @@ Template.profile.events({
       ])
 
       vex.dialog.open({
-        message: 'Enter donation amount.',
         input: dialogInput.join(''),
         callback: expressDonationHandler,
         afterOpen: function() {

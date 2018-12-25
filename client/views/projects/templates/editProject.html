@@ -11,11 +11,12 @@
                     <ol class="breadcrumb">
                         <li><a href="#!" class="camp_show_resources bold" val="camp_Basic">Basic Info</a></li>
                         <li><a href="#!" class="camp_show_resources" val="camp_Story">Story</a></li>
-                        <li><a href="#!" class="camp_show_resources" val="camp_Resources">Resources</a></li>
+                        <li><a href="#!" class="camp_show_resources" val="camp_Resources">Roles &amp; Assets</a></li>
                         <li><a href="#!" class="camp_show_resources" val="camp_Merch">Merch</a></li>
                     </ol>
                     <p>&nbsp;</p>
                     <div class="camp_resources_toggle krown-alert krown-single-image" id="camp_Basic">
+                        <h3 class="extremeboldtext">Edit Basic Info</h3>
                         <form id="editProjBasic">
                             <div class="row">
                                 <div id="hiddenbudget" class="row" hidden>
@@ -38,18 +39,29 @@
 
                             <div class="row">
                                 <div class="form-group">
+                                  <label for="phase">What Phase is this Campaign?</label>
+                                  <select name="phase" id="phase" class="form-control">
+                                        <option>- Select Phase -</option>
+                                        <option value="Concept">Concept</option>
+                                        <option value="Pre-Production">Pre-Production</option>
+                                        <option value="Production">Production</option>
+                                        <option value="Post-Production">Post-Production</option>
+                                  </select>
+                                </div>
+
+                                <div class="form-group">
                                   <label for="category">Select Category&nbsp;<strong><small>( required for categorization )</small></strong></label>
                                   <select name="category" id="category" class="form-control">
-                                    <option>- Campaign Format -</option>
-                                    <option value="Feature">Feature</option>
-                                    <option value="Short">Short</option>
-                                    <option value="Series">Series</option>
-                                    <option value="Animation">Animation</option>
-                                    <option value="Live Performance">Live Performance</option>
-                                    <option value="Writing">Writing</option>
-                                    <option value="Art &amp; Illustrations">Art &amp; Illustrations</option>
-                                    <option value="Podcast">Podcast</option>
-                                    <option value="Other">Other</option>
+                                        <option>- Campaign Format -</option>
+                                        <option value="Feature">Feature</option>
+                                        <option value="Short">Short</option>
+                                        <option value="Series">Series</option>
+                                        <option value="Animation">Animation</option>
+                                        <option value="Live Performance">Live Performance</option>
+                                        <option value="Writing">Writing</option>
+                                        <option value="Art &amp; Illustrations">Art &amp; Illustrations</option>
+                                        <option value="Podcast">Podcast</option>
+                                        <option value="Other">Other</option>
                                   </select>
                                 </div>
 
@@ -196,16 +208,16 @@
                             </div>
                         </form>
                     </div>
-                    <div style="display: none;" class="camp_resources_toggle krown-alert krown-single-image" id="camp_Resources">
-                        <h3 class="extremeboldtext header_res_opts" id="show_options_crew2">Add Crew Positions</h3>
+                    <div style="display: none;" class="camp_resources_toggle krown-alert krown-single-image multicampsxn" id="camp_Resources">
+                        
                         <div class="row">
-                            <p><small>Select resource type:</small></p>
+                            <p><small>Select area to edit:</small></p>
                             <ol class="breadcrumb">
                               <li><a href="#!" class="bread_show_resources bold" val="crew" aux="Add Crew Positions">Crew</a></li>
                               <li><a href="#!" class="bread_show_resources" val="cast" aux="Add Cast Positions">Cast</a></li>
-                              <li><a href="#!" class="bread_show_resources" val="needs" aux="Request Resources &amp; Support Positions">Assets</a></li>
+                              <li><a href="#!" class="bread_show_resources" val="needs" aux="Request Resources &amp; Support Positions">Other Needs</a></li>
                             </ol>
-                            <p>&nbsp;</p>
+                            <h3 class="extremeboldtext header_res_opts" id="show_options_crew2">Add Crew Positions</h3>
                             <form class="newProjForm">
                                 <!-- RESOURCES -->
                                 <div class="krown-column-row clearfix show_resources_toggle" id="show_options_crew">
@@ -474,6 +486,8 @@
                         </div>
                     </div>
                     <div style="display: none;" class="camp_resources_toggle krown-alert krown-single-image" id="camp_Merch">
+                            <h3 class="extremeboldtext">Edit Campaign Merch</h3>
+
                             <form id="newProjFormMerch" class="newProjForm">
                                 <div class="krown-column-row clearfix">
                                     <div class="krown-column-container clearfix first last span12 clearfix">
@@ -497,7 +511,6 @@
                                         </div>
                                         <div class="accordion large clearfix" id="newProjGiftAccord">
                                             <section>
-                                                <h5 class="expandnewprojecttext">Add or remove campaign merch for sale.</h5>
                                                 <div>
                                                     <div class="row">
                                                         <div class="col-xs-12 col-md-5">
