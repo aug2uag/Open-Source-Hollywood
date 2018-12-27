@@ -68,9 +68,9 @@
 
                                 <!-- GENRES -->
                                 <div class="row">
-                                    <div class="form-group">
+                                    <div class="form-group col-xs-12 col-sm-4">
                                       <label for="phase">What Phase is this Campaign?</label>
-                                      <select name="phase" id="phase" class="form-control">
+                                  <select name="phase" id="phase" class="form-control">
                                             <option>- Select Phase -</option>
                                             <option value="Concept">Concept</option>
                                             <option value="Pre-Production">Pre-Production</option>
@@ -78,9 +78,9 @@
                                             <option value="Post-Production">Post-Production</option>
                                       </select>
                                     </div>
-                                    
-                                    <div class="form-group">
-                                      <label for="category">Select Category&nbsp;<strong><small>( required for categorization )</small></strong></label>
+
+                                    <div class="form-group col-xs-12 col-sm-4">
+                                      <label for="category">Select Category</label>
                                       <select name="category" id="category" class="form-control">
                                         <option>- Campaign Format -</option>
                                         <option value="Feature">Feature</option>
@@ -96,7 +96,13 @@
                                     </div>
 
 
-                                    <div class="form-group" id="hidden_genre" hidden>
+                                    <div class="form-group col-xs-0 col-sm-4" id="hide_genre">
+                                      <label for="genre">Select Genre</label>
+                                      <input placeholder="Waiting on select Category" class="form-control disabled" readonly>
+                                      
+                                    </div> 
+
+                                    <div class="form-group col-xs-12 col-sm-4" id="hidden_genre" hidden>
                                       <label for="genre">Select Genre</label>
                                       <select name="genre" id="genre" class="form-control">
                                       </select>

@@ -2,7 +2,7 @@
   <div id="content" class="clearfix layout-fixed-width">
     <div class="clearfix wrapper">
       {{#if archivedOffer}}
-          {{zoo}}
+          {{rejected}}
           <header id="page-title">
               <h1 class="title">LALALOO</h1>
               <h2 class="subtitle">Establish rights for {{userName}} in campaign "{{project.title}}"</h2>
@@ -240,11 +240,6 @@
   </tr>
 </template>
 
-
-<template name="projectMessagePayment">
-
-</template>
-
 <template name="assetsOfferDialog">
     {{foo}}
 
@@ -329,14 +324,14 @@
                               </td>
                               <td>
 
-                                  <input class="hidden radio-label" type="radio" name="accept-offers" id="yes-button" checked="checked" />
-                                  <label class="button-label" for="yes-button">
+                                  <input class="hidden radio-label yes-button" type="radio" name="accept-offers{{@index}}" id="yes-button{{@index}}" checked="checked" val="{{stringify}}"/>
+                                  <label class="button-label" for="yes-button{{@index}}">
                                     <h1 class="button-lbl-offset">Yes</h1>
                                   </label>
 
-                                  <input class="hidden radio-label" type="radio" name="accept-offers" id="no-button"
-                                    />
-                                  <label class="button-label" for="no-button">
+                                  <input class="hidden radio-label no-button" type="radio" name="accept-offers{{@index}}" id="no-button{{@index}}"
+                                    val="{{stringify}}"/>
+                                  <label class="button-label" for="no-button{{@index}}">
                                     <h1 class="button-lbl-offset">No</h1>
                                   </label>
 
@@ -385,14 +380,14 @@
 
                       <div class="form-group col-xs-6 col-md-2">
                         <label>or Enter Total Hours</label>
-                        <input class="form-control" type="number" min="0" max="999" id="hours_ass">
+                        <input class="form-control" type="number" min="1" max="999" id="hours_ass">
                       </div>
                   </div>
             {{/unless}}
             <section class="t20">
                 <div class="krown-column-row clearfix btn-group">
                   <div class="krown-column-container clearfix last span6 btn-group-justified">
-                      <a class="btn btn-block bg-red btn-lg white {{#unless timeDefined}}disabled{{/unless}}" id="assetsrejectoffer">REJECT</a>
+                      <a class="btn btn-block bg-red btn-lg white" id="assetsrejectoffer">REJECT</a>
                   </div>
                   <div class="krown-column-container clearfix last span6 btn-group-justified">
                       <a class="btn btn-block bg-green btn-lg white {{#unless timeDefined}}disabled{{/unless}}" id="assetsmakeoffer">APPROVE OFFER</a>
@@ -511,8 +506,5 @@
       $('.set_time_ass').off()
       $('.set_time_ass').on('input', timeAss)
       $('.set_time_ass').on('change', timeAss)
-
-
     </script>
-
 </template>

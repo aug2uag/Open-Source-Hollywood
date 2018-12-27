@@ -548,7 +548,8 @@
 
           
           <tr colspan="3"><a class="btn btn-lg" onclick="$('#gores_Resources').click();">ASSETS</a></tr>
-          {{#each assetOffers}}
+          {{#each activeOffers}}
+          {{aaa}}
             <tr>
               <td><p class="align-center">{{assetsConsolidated.cat}}</p></td>
               <td><small><strong>{{assetsConsolidated.names}}</strong></small></td>
@@ -622,15 +623,17 @@
           </thead>
           <tbody>
             
-            {{#each assetOffers}}
+            {{#each activeOffers}}
               <tr>
                 <td><p class="align-center">{{assetsConsolidated.cat}}</p></td>
                 <td><small><strong>{{assetsConsolidated.names}}</strong></small></td>
-                <td><a style="width:100%" href="/message/project/{{ currentSlug }}/{{ _id }}" class="btn btn-mini btn-primary">VIEW DETAILS</a></td>
+                <td class="center">
+                  <a style="width:100%" href="/message/project/{{ currentSlug }}/{{ _id }}" class="btn btn-mini btn-primary">VIEW DETAILS</a>
+                </td>
               </tr>
             {{else}}
             <tr>
-              <td colspan="3">None Offered</td>
+              <td colspan="3">None Offered or Requested</td>
             </tr>
             {{/each}}
           </tbody>

@@ -45,6 +45,15 @@ function setNewProjectBanner(file) {
 function returnProjectCreateDetails(o) {
   o = o || {};
 
+  o.phase = $('#phase').val()
+  console.log(o)
+  try {
+    if (!o.phase||o.phase.indexOf('Select')>-1) throw new Error
+  } catch (e) {
+    return vex.dialog.alert('Please define what phase your project is in.');
+  }
+  
+
   // (1) check video sanity
   /** 
       check youtube / vimeo format
@@ -76,12 +85,12 @@ function returnProjectCreateDetails(o) {
 
   // (2) remove default category value
   o.category = $('#category').find(":selected").text();
-  try {
-    if (o.category.toLowerCase().indexOf('format')>-1) delete o['category'];
-  } catch(e) { delete o['category']; }
+  if (o.category.indexOf('Format')>-1) return vex.dialog.alert('Please select a valid category and genre.');
 
   // (3) check location and continue
   o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
+  if (!/\d{5}$/.exec(o.zip)) return vex.dialog.alert('Please enter a valid zip code.');
+
   o.title = $('#title').val() || 'untitled';
   o.logline = $('#logline').val() || 'eligible for support';
   o.genre = $('#genre').find(":selected").text();
@@ -776,10 +785,12 @@ Template.newProject.events({
       .remove()
       .end()
       .append(opts)
+      $('#hide_genre').hide()
       $('#hidden_genre').show();
     } else {
       /** hide genres */
       $('#hidden_genre').hide();
+      $('#hide_genre').show()
     }
   },
   'change #gift_file': function (e, template) {

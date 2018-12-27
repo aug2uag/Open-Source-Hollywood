@@ -1467,6 +1467,14 @@ function uniqueApplicantsFromProject(ctx, project) {
 }
 
 Template.applicants.helpers({
+  aaa: function() {
+    console.log(this)
+  },
+  activeOffers: function() {
+    return this.assetOffers.filter(function(o) {
+      if (!o.rejected&&!o.approved) return o;
+    })
+  },
   assetsConsolidated: function() {
     return {
       cat: this.assets[0].category,

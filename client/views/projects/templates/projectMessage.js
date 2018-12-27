@@ -30,8 +30,8 @@ function formattedProjectRoles() {
 }
 
 Template.projectMessage.helpers({
-	zoo: function() {
-		// console.log(this)
+	rejected: function() {
+		Router.go('Dashboard')
 	},
 	init: function() {
 		was = this
@@ -285,42 +285,87 @@ Template.projectMessage.events({
 
 		var that = this
 
-
+		/**
+			@function 
+			calculate costs
+			collect pay
+			make request
+		  */
 		function evalThisOffer(_offer) {
 
-			console.log('in evalThisOffer')
-			console.log(_offer)
 			var _o = {
 				hourly: [], 
 				daily: [], 
-				weekly: []
+				weekly: [],
+				payment: []
 			}
 
+
+			var items = []
+			var fixed = 0
+			var maxDepositPercent = 0
+			var maxDepositFixed = 0
+
+
+			_offer.assets = $('.yes-button:checked').map(function() {
+				return JSON.parse($(this).attr('val'))
+			}).get()
+
+			if (!_offer.assets||!_offer.assets.length) {
+				// handle no offers selected
+				return vex.dialog.confirm('Would you like to reject this offer?', function(a) {
+					if (a) {
+						$('#assetsrejectoffer').click()
+						return setTimeout(function() {
+							Router.go('Dashboard')
+						}, 987)
+					};
+				})
+			}
+
+
 			/*
-
 				assets each:
-
 					fixed: NaN, 
 					hourly: 10, 
 					daily: 50, 
 					weekly: 100
-
-
-
-
 			*/
 
-
 			_offer.assets.forEach(function(a) {
+				items.push({
+					category: a.category,
+					item: a.name,
+					description: a.description
+				})
+
+
+				if (a.deposit) {
+					console.log(a)
+					if (a.deposit.type==='percent') {
+						maxDepositPercent = Math.max(a.deposit.amount, maxDepositPercent)
+					} else {
+						maxDepositFixed = Math.max(a.deposit.amount, maxDepositFixed)
+					}
+				};
+
+
 				for (var key in a.pricing) {
-					if (a.pricing[key]) 
+					if (a.pricing[key])
 						if (_o[key])
 							_o[key].push(a.pricing[key])
-				}	
+						else
+							fixed += a.pricing[key]
+				}
+				// get pricing options
+				a.paySchedule.forEach(function(_a) {
+					if (_o.payment.indexOf(_a)===-1)
+						_o.payment.push(_a)
+				})
 			})
 
-
 			for (var key in _o) {
+				if (key==='payment') continue
 				_o[key] = (function() {
 					var max = 0
 					for (var i = 0; i < _o[key].length; i++) {
@@ -330,24 +375,167 @@ Template.projectMessage.events({
 				}())
 			}
 
+			_offer.offer = _o
+	        
+
+	        var totalWeeks = _offer.weeks
+	        var totalDays = _offer.days + _offer.remDays
+	        var totalHours = _offer.hours + _offer.remHours
 
 
-			console.log(_o)
+	        var weeklyPrice = _offer.offer.weekly
+	        var dailyPrice = _offer.offer.daily
+	        var hourlyPrice = _offer.offer.hourly
 
 
-	        Meteor.call('foodaddy', {
-	        	offer: this.offer
+	        var weeklyCost = weeklyPrice * totalWeeks
+	        var dailyCost = dailyPrice * totalDays
+	        var hourlyCost = hourlyPrice * totalHours
+
+	        // show request summary, expected charges, and amount owed now
+	        // 1) only one pay mode? do it, else choose payment mode
+			var dialogContent = [
+	            '<div class="row">',
+	              '<div class="col-sm-7">Confirm Request for this Asset</div>',
+	              '<p>&nbsp;</p>',
+	              '<p class="krown-column-container small">Items</p>',
+	              '<div class="panel-body">',
+	                '<table class="table"><tbody>'
+	        ]
+
+	        items.forEach(function(i) {
+	        	dialogContent = dialogContent.concat([
+	        		'<tr>',
+	        			'<td>', i.category, '</td>',
+	        			'<td>', i.item, '</td>',
+	        			'<td>', i.description, '</td>',
+	        		'</tr>',
+	        	])
 	        })
+
+	        dialogContent = dialogContent.concat([
+	            '</tbody></table>',
+	              '</div>'
+	        ])
+
+	        if (weeklyCost||dailyCost||hourlyCost||fixed) {
+		        // show pricing
+		        dialogContent = dialogContent.concat([
+		        	'<p class="krown-column-container small">Estimated Cost</p>',
+		            '<div class="panel-body">',
+		                '<table class="table"><tbody>'
+		        ])
+
+		        if (weeklyCost) {
+
+		        	dialogContent = dialogContent.concat([
+		        		'<tr>',
+		        			'<td>Weekly Pricing</td>',
+		        			'<td>', weeklyCost, '</td>',
+		        		'</tr>',
+		        	])
+
+		        } else if (dailyCost) {
+
+		        	dialogContent = dialogContent.concat([
+		        		'<tr>',
+		        			'<td>Daily Pricing</td>',
+		        			'<td>', dailyCost, '</td>',
+		        		'</tr>',
+		        	])
+
+		        } else if (hourlyCost) {
+
+		        	dialogContent = dialogContent.concat([
+		        		'<tr>',
+		        			'<td>Hourly Pricing</td>',
+		        			'<td>', hourlyCost, '</td>',
+		        		'</tr>',
+		        	])
+
+		        } else if (fixed) {
+
+		        	dialogContent = dialogContent.concat([
+		        		'<tr>',
+		        			'<td>Fixed Pricing</td>',
+		        			'<td>', fixed, '</td>',
+		        		'</tr>',
+		        	])
+
+		        }
+
+		        dialogContent = dialogContent.concat([
+		            '</tbody></table>',
+		              '</div>'
+		        ])
+	        }
+
+
+	        dialogContent = dialogContent.concat([
+	        	'</div>'
+	        ])
+
+
+	        // payment options
+		    var buttons = []
+		    var payMaps = { none: 0 }
+
+		    if (_offer.offer.payment.indexOf('full')>-1) {
+		    	var fullAmount = weeklyCost||dailyCost||hourlyCost||fixed||0
+		    	payMaps.full = fullAmount
+				buttons.push($.extend({}, vex.dialog.buttons.NO, { 
+					text: ['Pay Escrow in Full ($', fullAmount,')'].join(''), 
+					className: 'aquamarineB krown-alert', 
+					click: function($vexContent, event) {
+						this.value = 'full'
+						this.price = fullAmount
+						this.close()
+				}}))
+		    }
+
+
+		    if (_offer.offer.payment.indexOf('deposit')>-1) {
+
+		    	// define max per-cent
+		    	var depositAmount = maxDepositFixed ? maxDepositFixed : maxDepositPercent
+		    	payMaps.deposit = depositAmount
+		    	console.log(maxDepositFixed, maxDepositPercent)
+		    	if (depositAmount>0) {
+		    		buttons.push($.extend({}, vex.dialog.buttons.NO, { 
+			    		text: ['Pay Partial Deposit ($', depositAmount,')'].join(''),
+			    		className: 'lemonB krown-alert', 
+			    		click: function($vexContent, event) {
+					        this.value = 'deposit'
+					        this.close()
+				    }}))
+		    	};
+		    };
+
+
+		    if (!buttons.length||_offer.offer.payment.indexOf('none')>-1) {
+		    	buttons.push($.extend({}, vex.dialog.buttons.NO, { 
+		    		text: 'Arrange without Payment', 
+		    		className: 'thistle krown-alert', 
+		    		click: function($vexContent, event) {
+				        this.value = 'none'
+				        this.close()
+			    }}))
+		    };
+
+		    buttons.push($.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }))
+
+			vex.dialog.open({
+				input: dialogContent.join(''),
+				buttons: buttons,
+				callback: function(data) {
+					console.log(data)
+					console.log(payMaps[data])
+					// Meteor.call('foodaddy', _offer)
+				}
+			})
 		}
 
-
-
-
-
-
-
-
-        var h = $('#hours_ass').val()
+        var h = parseInt($('#hours_ass').val())
         var sd = $('#start_date_ass').val()
         var st = $('#start_time_ass').val()
         var ed = $('#end_date_ass').val()
@@ -357,17 +545,11 @@ Template.projectMessage.events({
         var assets = this.offer.assets
         var payOptions, hours, days, weeks, remHours, remDays
 
-        if (h) {
-        	console.log('calculate hours')
-        } else {
+        if (!h) {
 
         	if (!sd||!ed) {
         		return vex.dialog.alert('Please include start and end dates.')
         	};
-
-
-        	console.log('calculate hours')
-        	console.log(sd, st, ed, et)
 
         	// is end date after start date ?
         	var d1 = new Date(sd)
@@ -382,72 +564,31 @@ Template.projectMessage.events({
         		return vex.dialog.alert('Start date must be 1 day in the future')
         	};
 
-        	// set hours
-
-
-        	// calculate days, weeks
         	var delta = d2 - d1
-        	console.log('delta', delta)
-        	console.log('\n-- --')
-        	 x = 172800000
         	var seconds = delta/1000
         	hours = parseFloat((seconds * 0.000277778).toFixed(2))
-        	console.log('hours', hours)
         	weeks = 0, remDays = 0, days = 0, remHours = 0
 
         	if (hours > 24) {
         		days = hours/24
-		    	console.log('days', days)
 		    	remHours = hours%24
-		    	console.log('remHours', remHours)	
         	};
 
         	if (days > 7) {
         		weeks = days / 7
         		remDays = days%7
         	};
-        	
-
-        	if (days > 0) {
-
-        		// calculate daily + rem hourly
-
-
-
-        	} else {
-
-        		// calculate hourly
-
-
-        	}
-
-
-
-
-
-
-
         }
-        console.log(this)
 
         evalThisOffer({
-        	assets: assets,
-        	payOptions: payOptions,
-        	weeks: weeks,
-        	days: days,
-        	remDays: remDays,
-        	hours: hours,
-        	remHours: remHours
+        	assets: assets||[],
+        	payOptions: payOptions||{},
+        	weeks: parseInt(weeks||0),
+        	days: parseInt(days||0),
+        	remDays: parseInt(remDays||0),
+        	hours: parseInt(hours||h||0),
+        	remHours: parseInt(remHours||0)
         })
-
-
-        // match approved assets to list of assets
-
-        // if payment owed, get token, else make offer update
-
-
-
-
     }
 })
 
@@ -584,7 +725,7 @@ Template.assetsOfferDialog.onRendered(function() {
 			// Preload time with defaultDate instead:
 			// defaultDate: "3:30"
 		});
-	}, 1597)
+	}, 987)
 })
 
 Template.assetsOfferDialog.events({
@@ -614,6 +755,10 @@ Template.assetsOfferDialog.events({
 Template.assetsOfferDialog.helpers({
 	foo: function() {
 		console.log(this)
+	},
+	stringify: function() {
+		console.log(this)
+		return JSON.stringify(this)
 	},
 	timeDefined: function() {
 		var timeDefined = this.schedule ? true:false
