@@ -1468,7 +1468,7 @@ function uniqueApplicantsFromProject(ctx, project) {
 
 Template.applicants.helpers({
   aaa: function() {
-    console.log(this)
+    // console.log(this)
   },
   activeOffers: function() {
     return this.assetOffers.filter(function(o) {

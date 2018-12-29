@@ -1,4 +1,30 @@
 var was;
+var offereeDecision;
+
+const StripePublicKey = 'pk_test_imJVPoEtdZBiWYKJCeMZMt5A'//'pk_live_GZZIrMTVcHHwJDUni09o09sq';
+
+function makeStripeCharge(options) {
+  StripeCheckout.open({
+    key: StripePublicKey,
+    amount: Math.abs(Math.floor(options.stripePaid*100))<1?1:Math.abs(Math.floor(options.stripePaid*100)),
+    currency: 'usd',
+    name: options.message,
+    bitcoin: true,
+    description: options.description || 'opensourcehollywood.org',
+    panelLabel: 'Pay Now',
+    token: function(_token) {
+      if (_token) {
+        options.token = _token;
+		Meteor.call(options.route, options, function(err, result) {
+			if (err) return vex.dialog.alert('your payment failed');
+			vex.dialog.alert(result)
+		});
+      } else {
+        vex.dialog.alert('your payment did not succeed');
+      }
+    }
+  });
+};
 
 function getCurrentNegotiation() {
 	var negotiatedRoles = was.project.negotiations || [];
@@ -300,12 +326,10 @@ Template.projectMessage.events({
 				payment: []
 			}
 
-
 			var items = []
 			var fixed = 0
 			var maxDepositPercent = 0
 			var maxDepositFixed = 0
-
 
 			_offer.assets = $('.yes-button:checked').map(function() {
 				return JSON.parse($(this).attr('val'))
@@ -313,25 +337,28 @@ Template.projectMessage.events({
 
 			if (!_offer.assets||!_offer.assets.length) {
 				// handle no offers selected
-				return vex.dialog.confirm('Would you like to reject this offer?', function(a) {
-					if (a) {
-						$('#assetsrejectoffer').click()
-						return setTimeout(function() {
-							Router.go('Dashboard')
-						}, 987)
-					};
+				return vex.dialog.confirm({
+					message: 'None of the assets were marked accepted above.\n\noWould you like to reject this offer?', 
+					callback: function(a) {
+						if (a) {
+							$('#assetsrejectoffer').click()
+							return setTimeout(function() {
+								Router.go('Dashboard')
+							}, 987)
+						};
+					}
 				})
 			}
 
 
 			/*
-				assets each:
+				assets each =>
+
 					fixed: NaN, 
 					hourly: 10, 
 					daily: 50, 
 					weekly: 100
 			*/
-
 			_offer.assets.forEach(function(a) {
 				items.push({
 					category: a.category,
@@ -341,7 +368,6 @@ Template.projectMessage.events({
 
 
 				if (a.deposit) {
-					console.log(a)
 					if (a.deposit.type==='percent') {
 						maxDepositPercent = Math.max(a.deposit.amount, maxDepositPercent)
 					} else {
@@ -375,18 +401,15 @@ Template.projectMessage.events({
 				}())
 			}
 
-			_offer.offer = _o
-	        
+			_offer.order = _o
 
 	        var totalWeeks = _offer.weeks
 	        var totalDays = _offer.days + _offer.remDays
 	        var totalHours = _offer.hours + _offer.remHours
 
-
-	        var weeklyPrice = _offer.offer.weekly
-	        var dailyPrice = _offer.offer.daily
-	        var hourlyPrice = _offer.offer.hourly
-
+	        var weeklyPrice = _offer.order.weekly
+	        var dailyPrice = _offer.order.daily
+	        var hourlyPrice = _offer.order.hourly
 
 	        var weeklyCost = weeklyPrice * totalWeeks
 	        var dailyCost = dailyPrice * totalDays
@@ -470,18 +493,17 @@ Template.projectMessage.events({
 		        ])
 	        }
 
-
 	        dialogContent = dialogContent.concat([
 	        	'</div>'
 	        ])
 
-
 	        // payment options
 		    var buttons = []
 		    var payMaps = { none: 0 }
+		    var fullAmount = weeklyCost||dailyCost||hourlyCost||fixed||0
 
-		    if (_offer.offer.payment.indexOf('full')>-1) {
-		    	var fullAmount = weeklyCost||dailyCost||hourlyCost||fixed||0
+		    if (_offer.order.payment.indexOf('full')>-1) {
+		    	
 		    	payMaps.full = fullAmount
 				buttons.push($.extend({}, vex.dialog.buttons.NO, { 
 					text: ['Pay Escrow in Full ($', fullAmount,')'].join(''), 
@@ -493,11 +515,10 @@ Template.projectMessage.events({
 				}}))
 		    }
 
-
-		    if (_offer.offer.payment.indexOf('deposit')>-1) {
+		    if (_offer.order.payment.indexOf('deposit')>-1) {
 
 		    	// define max per-cent
-		    	var depositAmount = maxDepositFixed ? maxDepositFixed : maxDepositPercent
+		    	var depositAmount = maxDepositFixed ? maxDepositFixed : (maxDepositPercent/100) * fullAmount
 		    	payMaps.deposit = depositAmount
 		    	console.log(maxDepositFixed, maxDepositPercent)
 		    	if (depositAmount>0) {
@@ -509,10 +530,9 @@ Template.projectMessage.events({
 					        this.close()
 				    }}))
 		    	};
-		    };
+		    }
 
-
-		    if (!buttons.length||_offer.offer.payment.indexOf('none')>-1) {
+		    if (!buttons.length||_offer.order.payment.indexOf('none')>-1) {
 		    	buttons.push($.extend({}, vex.dialog.buttons.NO, { 
 		    		text: 'Arrange without Payment', 
 		    		className: 'thistle krown-alert', 
@@ -520,7 +540,7 @@ Template.projectMessage.events({
 				        this.value = 'none'
 				        this.close()
 			    }}))
-		    };
+		    }
 
 		    buttons.push($.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }))
 
@@ -528,9 +548,23 @@ Template.projectMessage.events({
 				input: dialogContent.join(''),
 				buttons: buttons,
 				callback: function(data) {
-					console.log(data)
-					console.log(payMaps[data])
-					// Meteor.call('foodaddy', _offer)
+					if (payMaps[data]) {
+
+						Object.assign(_offer, {
+							stripePaid: payMaps[data],
+							message: 'Asset Lease Payment',
+							description: ['Lease Offer', _offer.assets.length,'assets'].join(' '),
+							route: 'leaseRequest',
+						})
+						console.log(_offer)
+						// console.log(JSON.stringify(_offer, null, 4))
+						makeStripeCharge(_offer)
+					} else {
+						_offer.free = true
+						Meteor.call('leaseRequest', _offer, function(err, res) {
+							console.log(err, res)
+						})
+					}
 				}
 			})
 		}
@@ -540,10 +574,14 @@ Template.projectMessage.events({
         var st = $('#start_time_ass').val()
         var ed = $('#end_date_ass').val()
         var et = $('#end_time_ass').val()
+        var offereeContact = {
+        	phone: $('#phone_contact').val(),
+        	email: $('#email_contact').val()
+        }
         var escrow = 0
 
         var assets = this.offer.assets
-        var payOptions, hours, days, weeks, remHours, remDays
+        var payOptions, hours, days, weeks, remHours, remDays, startDate, endDate
 
         if (!h) {
 
@@ -552,42 +590,50 @@ Template.projectMessage.events({
         	};
 
         	// is end date after start date ?
-        	var d1 = new Date(sd)
-        	var d2 = new Date(ed)
+        	startDate = new Date(sd)
+        	endDate = new Date(ed)
         	var d = new Date()
 
-        	if (d1>d2) {
+        	if (startDate>endDate) {
         		return vex.dialog.alert('End date must be later than start date')
         	};
 
-        	if (d>d1) {
+        	if (d>startDate) {
         		return vex.dialog.alert('Start date must be 1 day in the future')
         	};
 
-        	var delta = d2 - d1
+        	var delta = endDate - startDate
         	var seconds = delta/1000
         	hours = parseFloat((seconds * 0.000277778).toFixed(2))
         	weeks = 0, remDays = 0, days = 0, remHours = 0
 
-        	if (hours > 24) {
-        		days = hours/24
-		    	remHours = hours%24
-        	};
+        	if (delta === 0) {
+        		days = 1
+        	} else {
+	        	if (hours > 24) {
+	        		days = hours/24
+			    	remHours = hours%24
+	        	};
 
-        	if (days > 7) {
-        		weeks = days / 7
-        		remDays = days%7
-        	};
+	        	if (days > 7) {
+	        		weeks = days / 7
+	        		remDays = days%7
+	        	};
+        	}
         }
 
         evalThisOffer({
+        	offer: that.offer,
         	assets: assets||[],
         	payOptions: payOptions||{},
         	weeks: parseInt(weeks||0),
         	days: parseInt(days||0),
         	remDays: parseInt(remDays||0),
         	hours: parseInt(hours||h||0),
-        	remHours: parseInt(remHours||0)
+        	remHours: parseInt(remHours||0),
+        	startDate: startDate,
+        	endDate: endDate,
+        	offereeContact: offereeContact
         })
     }
 })
@@ -729,6 +775,18 @@ Template.assetsOfferDialog.onRendered(function() {
 })
 
 Template.assetsOfferDialog.events({
+	'click #assetsrevokeoffer': function(e) {
+		var _was = this
+		vex.dialog.confirm({
+			input: 'Please verify you want to revoke this offer.',
+			callback: function(d) {
+				console.log(d)
+				if (d) {
+					Meteor.call('revokeLeaseRequest', _was.offer)
+				};
+			}
+		})
+	},
 	'click #submit-message': function(e) {
 		e.preventDefault();
 		var text = $('#message-box').val();
@@ -753,11 +811,20 @@ Template.assetsOfferDialog.events({
 
 
 Template.assetsOfferDialog.helpers({
-	foo: function() {
-		console.log(this)
+	init: function() {
+		// Session.set('offereeDecision', this.offereeDecision||false)
+	},
+	pendingDetails: function() {
+		var msg = ''
+		if (this.offer.receipt) {
+			msg = ['You have $', (this.offer.receipt.amount/100), ' in escrow.'].join('')
+		} else {
+			'The other party is contemplating your offer.'
+		}
+
+		return msg
 	},
 	stringify: function() {
-		console.log(this)
 		return JSON.stringify(this)
 	},
 	timeDefined: function() {

@@ -744,12 +744,13 @@ Template.newProject.events({
     e.preventDefault();
     var o = returnProjectCreateDetails({showDialog: true});
     if (!o) return;
+    localStorage.setItem('projectnew', JSON.stringify(o));
 
     // create virtual account for project
     // add funds to virtual account, non-refundable
     Meteor.call('addProject', o, function(err, res) {
       vex.dialog.alert(err||res||'there was an error, please try again');
-      if (!err) {
+      if (res) {
         localStorage.removeItem('projectnew')
         localStorage.removeItem('projectnew_banner')
         $('#resetNewProjCacheBtn').hide()
