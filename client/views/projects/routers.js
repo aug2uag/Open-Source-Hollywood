@@ -68,7 +68,11 @@ Router.route('/dashboard', {
               { offeree: Meteor.user()._id },
               { offeror: Meteor.user()._id }
             ],
-            pending: {$ne: false}
+            $and:[
+              { pending: {$ne: false} },
+              { rejected: {$ne: true} },
+              { accepted: {$ne: true} }
+            ]
           }).fetch()
           return offers
         },
@@ -79,7 +83,7 @@ Router.route('/dashboard', {
               { offeror: Meteor.user()._id }
             ],
             pending: false,
-            rejected: {$ne: true}
+            accepted: true
           }).fetch()
         },
       }

@@ -225,8 +225,7 @@ Template.dashboard.helpers({
 	isCreated: function() {
 		if (this.scope==='created') return true;
 		return false;
-	},
-	
+	},	
 	account: function() {
 		if (Meteor.user().account) return true;
 		return false;

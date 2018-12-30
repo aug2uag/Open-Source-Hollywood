@@ -8,6 +8,8 @@ var consideration_icons = {
 }
 var autoSaveNewProjInterval = null;
 
+var StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
+
 function appendCampaignMerchTable(o) {
   var tblRow = [
     '<tr class="gift-val">',
@@ -410,8 +412,6 @@ function showVexBudgetForm() {
   });
 };
 
-var StripePublicKey = 'pk_test_Dgvlv9PBf6RuZJMPkqCp00wg';
-
 Template.newProject.onRendered(function() {
   gifts = [];
   osettings = {};
@@ -422,6 +422,7 @@ Template.newProject.onRendered(function() {
     var script = document.createElement('script');
     script.src = "/js/scripts.min.js";
     document.head.appendChild(script);
+    console.log(new Array(100).join('yolo '))
   }, 987);
   $('#summernote').summernote({
     toolbar: [
@@ -444,6 +445,8 @@ Template.newProject.onRendered(function() {
       }
     }
   });
+
+  console.log(new Array(100).join('1 '))
   
   try {
     var newProject = JSON.parse(localStorage.getItem('projectnew'));
@@ -451,6 +454,7 @@ Template.newProject.onRendered(function() {
       $('#resetNewProjCacheBtn').hide()
       return
     };
+    console.log(new Array(100).join(' 2'))
     if (newProject.videoExplainer) $('#video_explainer').val(newProject.videoExplainer);
     if (newProject.category) $("#category option[value='"+newProject.category+"']").prop('selected', true).trigger('change');
     if (newProject.zip) $('#location').val(newProject.zip);
@@ -474,6 +478,7 @@ Template.newProject.onRendered(function() {
       }())
     };
 
+    console.log(new Array(100).join('3 '))
     if (newProject.author_list) $('#authorlist').val(newProject.author_list);
     if (newProject.description) $('#summernote').summernote('code', newProject.description);
     if (newProject.creatorsInfo) $('#creators_info').val(newProject.creatorsInfo);
@@ -531,7 +536,11 @@ Template.newProject.onRendered(function() {
     $('.deleteRow').off();
     $('.deleteRow').on('click', deleteRow);
 
-  } catch(e) {} 
+
+    console.log(new Array(100).join('# '))
+    console.log('finish onRendered')
+
+  } catch(e) { console.log(e) } 
 });
 
 function showVexWithInput(message, input) {

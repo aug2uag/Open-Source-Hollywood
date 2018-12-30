@@ -55,9 +55,77 @@ function formattedProjectRoles() {
 	return roles;
 }
 
+Template.assetsOfferDialogHeader.helpers({
+	cat: function() {
+		try {
+			this.offer = this.offer || this.offers[0]
+			return this.offer.assets[0].category
+		} catch(e) {
+			Router.go('Home')
+		}
+	},
+})
+
+Template.offerAssetsActive.helpers({
+	offerAssets: function() {
+		console.log(this)
+		this.offer = this.offer||this.offers[0]
+
+		return this.offer.assets
+	}
+})
+
+Template.offerAssetsArchived.helpers({
+	offerAssets: function() {		
+		this.offer = this.offer||this.offers[0]
+		this.consideration = this.offer.consideration
+		Session.set('consideration', this.consideration)
+
+		return this.offer.assets
+	},
+	consideration: function() {
+		return Session.get('consideration')
+	},
+	considerationTotalHours: function() {
+		return this.consideration.hours + this.consideration.remHours
+	},
+	considerationTotalDays: function() {
+		return this.consideration.days + this.consideration.remDays
+	},
+	considerationTotalWeeks: function() {
+		return this.consideration.weeks
+	},
+	considerationDateStart: function() {
+		return this.consideration.startDate&&moment(this.consideration.startDate).format('MMMM Do, YYYY')||'N / A'
+	},
+	considerationDateEnd: function() {
+		return this.consideration.endDate&&moment(this.consideration.endDate).format('MMMM Do, YYYY')||'N / A'
+	},
+	considerationContact: function() {
+		this.consideration.offereeContact = this.consideration.offereeContact || {}
+		this.consideration.offereeContact.email = this.consideration.offereeContact.email || 'N / A'
+		this.consideration.offereeContact.phone = this.consideration.offereeContact.phone || 'N / A'
+		return this.consideration.offereeContact
+	},
+	considerationSummary: function() {
+		if (this.consideration.receipt) {
+			return ['$', (this.consideration.receipt.amount/100), ' paid towards this request.'].join('')
+		} 
+		return 'There was no money paid towards this offer.'
+	}
+})
+
 Template.projectMessage.helpers({
+	isAssets: function() {
+
+		if (this.isAssets) return true
+		if (this.offers&&this.offers[0]&&this.offers[0].type==='assets') return true
+		if (this.offer&&this.offer.type==='assets') return true
+
+		return false
+	},
 	rejected: function() {
-		Router.go('Dashboard')
+		// Router.go('Dashboard')
 	},
 	init: function() {
 		was = this
@@ -65,6 +133,9 @@ Template.projectMessage.helpers({
 	archivedOffer: function() {
 		// console.log(this)
 		// case active asset negotiate
+		try {	
+			if (this.offers[0].accepted||this.offers[0].rejected) return true;
+		} catch(e) {}
 		if (this.isAssets&&this.offer&&this.offer.pending) return false
 		// case active role negotiate
 		if (this.offer&&this.offer.pending) return false
@@ -209,7 +280,7 @@ Template.projectMessage.helpers({
 
 Template.projectMessage.events({
 	'click #rejectUser': function(e) {
-		  vex.dialog.confirm({
+		vex.dialog.confirm({
 	      message: "Please confirm: you are rejecting " + was.offers[0].offer.user.name,
 	      buttons: [
 	        $.extend({}, vex.dialog.buttons.YES, { text: 'Yes' }),
@@ -222,9 +293,8 @@ Template.projectMessage.events({
 	          setTimeout(function() { history.back() }, 1597);
 	        };
 	      }
-	  });
+	  	});
 	},
-
 	'click #counterk': function(e) {
 		e.preventDefault();
 		// console.log('clicked counterk')
@@ -241,7 +311,6 @@ Template.projectMessage.events({
 
 		vex.dialog.alert('your counter offer was sent')
 		setTimeout(function() { history.back() }, 1597);
-
 	},
 	'click #authorfinalizek': function(e) {
 		e.preventDefault();
@@ -338,7 +407,7 @@ Template.projectMessage.events({
 			if (!_offer.assets||!_offer.assets.length) {
 				// handle no offers selected
 				return vex.dialog.confirm({
-					message: 'None of the assets were marked accepted above.\n\noWould you like to reject this offer?', 
+					message: 'None of the assets were marked accepted above.\n\nWould you like to reject this offer?', 
 					callback: function(a) {
 						if (a) {
 							$('#assetsrejectoffer').click()
@@ -553,7 +622,7 @@ Template.projectMessage.events({
 						Object.assign(_offer, {
 							stripePaid: payMaps[data],
 							message: 'Asset Lease Payment',
-							description: ['Lease Offer', _offer.assets.length,'assets'].join(' '),
+							description: ['$', payMaps[data], ' offer (', _offer.assets.length,' assets)'].join(''),
 							route: 'leaseRequest',
 						})
 						console.log(_offer)
@@ -635,7 +704,19 @@ Template.projectMessage.events({
         	endDate: endDate,
         	offereeContact: offereeContact
         })
-    }
+    },
+	'click #submit-message': function(e) {
+		e.preventDefault();
+		var text = $('#message-box').val();
+		$('#message-box').val('');
+		Meteor.call('addProjectMessage', {
+			user: this.user._id,
+			project: this.project._id,
+			slug: this.project.slug,
+			title: this.project.title,
+			text: text
+		});
+	}
 })
 
 Template.projectMessageOffer.helpers({
@@ -730,24 +811,6 @@ Template.projectMessageOffer.helpers({
 	}
 })
 
-
-Template.projectMessage.events({
-	'click #submit-message': function(e) {
-		e.preventDefault();
-		var text = $('#message-box').val();
-		$('#message-box').val('');
-		Meteor.call('addProjectMessage', {
-			user: this.user._id,
-			project: this.project._id,
-			slug: this.project.slug,
-			title: this.project.title,
-			text: text
-		});
-	}
-})
-
-
-
 Template.assetsOfferDialog.onRendered(function() {
 	setTimeout(function() {
 		$('.calendar').flatpickr();
@@ -775,6 +838,52 @@ Template.assetsOfferDialog.onRendered(function() {
 })
 
 Template.assetsOfferDialog.events({
+	'click #offerorrejectoffer': function(e) {
+		Meteor.call('rejectLeaseRequest', this.offer, function(err, res) {
+			vex.dialog.alert(err||res)
+		})
+	},
+	'click #offeroracceptoffer': function(e) {
+		Meteor.call('approveLeaseRequest', this.offer, function(err, res) {
+			vex.dialog.alert(err||res)
+		})
+	},
+	'click #edit_eo': function(e) {
+		var _was = this
+	    vex.dialog.open({
+	      message: 'Edit your express offer.',
+	      input: [
+	          '<style>',
+	              '.vex-custom-field-wrapper {',
+	                  'margin: 1em 0;',
+	              '}',
+	              '.vex-custom-field-wrapper > label {',
+	                  'display: inline-block;',
+	                  'margin-bottom: .2em;',
+	              '}',
+	          '</style>',
+	          '<div class="vex-custom-field-wrapper">',
+	              '<div class="vex-custom-input-wrapper t40">',
+	              	'<label for="offer">enter new amount here</label>',
+	              	'<input type="number" min="0" max="9999" placeholder="', this.offer.expressOffer.offer||'','" name="offer">',
+	              '</div>',
+	              '<div class="vex-custom-input-wrapper t20">',
+	              '<label for="offer">enter new details here</label>',
+	              	'<input type="text" placeholder="', this.offer.expressOffer.message||'','" name="message">',
+	              '</div>',
+	          '</div>'
+	      ].join(''),
+	      callback: function (data) { 
+	      	console.log(data)
+	      	if (data&&(data.offer||data.message)) {
+	      		Meteor.call('editExpressOffer', _was.offer._id, data)
+	      	};
+	      }
+	    });
+	},
+	'click #assetsexpressoffer': function(e) {
+		console.log('express offer accept')
+	},
 	'click #assetsrevokeoffer': function(e) {
 		var _was = this
 		vex.dialog.confirm({
@@ -808,11 +917,58 @@ Template.assetsOfferDialog.events({
 	}
 })
 
-
-
 Template.assetsOfferDialog.helpers({
+	yolo: function() {
+		console.log(this)
+	},
+	firstAction: function() {
+		this.offer = this.offer||this.offers[0]
+		return !(this.offer.offereeDecision||false)
+	},
+	formattedOfferorAssetNames: function() {
+		return this.offer.assets.map(function(a){ return a.name}).join(', ')
+	},
+	totalOfferorHours: function() {
+		return this.offer.consideration.hours + this.offer.consideration.remHours
+	},
+	totalOfferorDays: function() {
+		return this.offer.consideration.days + this.offer.consideration.remDays
+	},
+	totalOfferorWeeks: function() {
+		return this.offer.consideration.weeks
+	},
+	offerorOfferAmount: function() {
+		if (this.offer.receipt) {
+			return '$' + (this.offer.receipt.amount/100)
+		};
+		return '$0'
+	},
+	offerorPanel: function() {
+		console.log('offerorPanel')
+		console.log(this)
+	},
+	eoEditable: function() {
+		return this.offer.pending||false
+	},
 	init: function() {
 		// Session.set('offereeDecision', this.offereeDecision||false)
+	},
+	expressOffer: function() {
+		var expressOffer = this.expressOffer || this.offer.expressOffer || {}
+		console.log(expressOffer)
+		if (expressOffer.offer) {
+			var expiration = this.expirationDate || this.offer.expirationDate || null
+			if (expiration) {
+				if (expiration < new Date()) return null
+			}
+
+			return expressOffer
+		}
+
+		return false
+	},
+	offereeOption: function() {
+		console.log(this)
 	},
 	pendingDetails: function() {
 		var msg = ''
@@ -835,13 +991,6 @@ Template.assetsOfferDialog.helpers({
 		if (this.offer.pending===false) return false;
 		if (Meteor.user()._id===this.project.ownerId) return true;
 		return false
-	},
-	cat: function() {
-		try {
-			return this.offer.assets[0].category
-		} catch(e) {
-			Router.go('Home')
-		}
 	},
 	formattedPricing: function() {
 		var p = this.pricing
@@ -871,9 +1020,6 @@ Template.assetsOfferDialog.helpers({
 		return this.offer.messages||[]
 	}
 })
-
-
-
 
 Handlebars.registerHelper('ifEveryOther', function(options) {
   var index = options.data.index + 1;

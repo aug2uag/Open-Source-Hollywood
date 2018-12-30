@@ -1,4 +1,4 @@
-var currUID, currAvatar, currName
+var currUID, currAvatar, currName, assetMultiDialogOpen = false, v2DialogOpen = false
 
 Handlebars.registerHelper('eachProperty', function(context, options) {
     var ret = "";
@@ -856,6 +856,420 @@ Template.profile.events({
   },
   'click .request_asset': function(e) {
   	console.log(this)
+
+    var _was = this
+
+
+    if (assetMultiDialogOpen) return;
+    var dialogHTML = [
+        '<h3>Set Request Schedule:</h3>',
+        '<div class="row">',
+            '<div class="form-group col-xs-6">',
+              '<label>Choose Start Date</label>',
+              '<input class="form-control calendar set_time_ass" type="date" name="start_date_ass">',
+            '</div>',
+            '<div class=" form-group col-xs-6">',
+              '<label>Choose Start Time </label>',
+              '<input class="form-control clock set_time_ass" type="time" name="start_time_ass">',
+            '</div>',
+        '</div>',
+        '<div class="row">',
+            '<div class="form-group col-xs-6">',
+              '<label>Choose End Date</label>',
+              '<input class="form-control calendar set_time_ass" type="date" name="end_date_ass">',
+            '</div>',
+            '<div class=" form-group col-xs-6">',
+              '<label>Choose End Time </label>',
+              '<input class="form-control clock set_time_ass" type="time" name="end_time_ass">',
+            '</div>',
+        '</div>',
+        '<p>&nbsp;</p>',
+        '<div class="row">',
+            '<div class="form-group col-xs-12">',
+              '<label>or Enter Total Hours</label>',
+              '<input class="form-control" type="number" min="1" max="999" name="hours_ass">',
+            '</div>',
+        '</div>',
+        '<div class="t20 row">',
+            '<p class="callout">Your contact</p>',
+            '<div class="form-group col-xs-6">',
+              '<label>Phone</label>',
+              '<input class="form-control" type="text" name="phone_contact">',
+            '</div>',
+            '<div class=" form-group col-xs-6">',
+              '<label>Email </label>',
+              '<input class="form-control" type="text" name="email_contact">',
+            '</div>',
+        '</div>'
+    ]
+
+
+    var v1 = vex.dialog.open({
+      input: dialogHTML.join(''),
+      callback: function(data) {
+        if (assetMultiDialogOpen) return;
+        assetMultiDialogOpen = true
+        if (!data) {
+          assetMultiDialogOpen = false
+          v2DialogOpen = false
+          return
+        };
+        console.log('callback')
+        console.log(data)
+        v1.close()
+        function evalThisOffer(_offer) {
+              if (v2DialogOpen) return;
+              var _o = {
+                hourly: [], 
+                daily: [], 
+                weekly: [],
+                payment: []
+              }
+
+              var items = []
+              var fixed = 0
+              var maxDepositPercent = 0
+              var maxDepositFixed = 0
+
+              _offer.assets.forEach(function(a) {
+                items.push({
+                  category: a.category,
+                  item: a.name,
+                  description: a.description
+                })
+                if (a.deposit) {
+                  if (a.deposit.type==='percent') {
+                    maxDepositPercent = Math.max(a.deposit.amount, maxDepositPercent)
+                  } else {
+                    maxDepositFixed = Math.max(a.deposit.amount, maxDepositFixed)
+                  }
+                };
+                for (var key in a.pricing) {
+                  if (a.pricing[key])
+                    if (_o[key])
+                      _o[key].push(a.pricing[key])
+                    else
+                      fixed += a.pricing[key]
+                }
+                // get pricing options
+                a.paySchedule.forEach(function(_a) {
+                  if (_o.payment.indexOf(_a)===-1)
+                    _o.payment.push(_a)
+                })
+              })
+
+              for (var key in _o) {
+                if (key==='payment') continue
+                _o[key] = (function() {
+                  var max = 0
+                  for (var i = 0; i < _o[key].length; i++) {
+                    if (!max||_o[key][i] > max) max = _o[key][i];
+                  };
+                  return max
+                }())
+              }
+
+              _offer.order = _o
+
+              var totalWeeks = _offer.weeks
+              var totalDays = _offer.days + _offer.remDays
+              var totalHours = _offer.hours + _offer.remHours
+
+              var weeklyPrice = _offer.order.weekly
+              var dailyPrice = _offer.order.daily
+              var hourlyPrice = _offer.order.hourly
+
+              var weeklyCost = weeklyPrice * totalWeeks
+              var dailyCost = dailyPrice * totalDays
+              var hourlyCost = hourlyPrice * totalHours
+
+              // show request summary, expected charges, and amount owed now
+              // 1) only one pay mode? do it, else choose payment mode
+              var dialogContent = [
+                  '<div class="row">',
+                    '<div class="col-sm-7">Confirm Request for this Asset</div>',
+                    '<p>&nbsp;</p>',
+                    '<p class="krown-column-container small">Items</p>',
+                    '<div class="panel-body">',
+                      '<table class="table"><tbody>'
+              ]
+
+              items.forEach(function(i) {
+                dialogContent = dialogContent.concat([
+                  '<tr>',
+                    '<td>', i.category, '</td>',
+                    '<td>', i.item, '</td>',
+                    '<td>', i.description, '</td>',
+                  '</tr>',
+                ])
+              })
+
+              dialogContent = dialogContent.concat([
+                  '</tbody></table>',
+                    '</div>'
+              ])
+
+              if (weeklyCost||dailyCost||hourlyCost||fixed) {
+                // show pricing
+                dialogContent = dialogContent.concat([
+                  '<p class="krown-column-container small">Estimated Cost</p>',
+                    '<div class="panel-body">',
+                        '<table class="table"><tbody>'
+                ])
+
+                if (weeklyCost) {
+
+                  dialogContent = dialogContent.concat([
+                    '<tr>',
+                      '<td>Weekly Pricing</td>',
+                      '<td>', weeklyCost, '</td>',
+                    '</tr>',
+                  ])
+
+                } else if (dailyCost) {
+
+                  dialogContent = dialogContent.concat([
+                    '<tr>',
+                      '<td>Daily Pricing</td>',
+                      '<td>', dailyCost, '</td>',
+                    '</tr>',
+                  ])
+
+                } else if (hourlyCost) {
+
+                  dialogContent = dialogContent.concat([
+                    '<tr>',
+                      '<td>Hourly Pricing</td>',
+                      '<td>', hourlyCost, '</td>',
+                    '</tr>',
+                  ])
+
+                } else if (fixed) {
+
+                  dialogContent = dialogContent.concat([
+                    '<tr>',
+                      '<td>Fixed Pricing</td>',
+                      '<td>', fixed, '</td>',
+                    '</tr>',
+                  ])
+
+                }
+
+                dialogContent = dialogContent.concat([
+                    '</tbody></table>',
+                      '</div>'
+                ])
+              }
+
+              dialogContent = dialogContent.concat([
+                '</div>'
+              ])
+
+              // payment options
+              var buttons = []
+              var payMaps = { none: 0 }
+              var fullAmount = weeklyCost||dailyCost||hourlyCost||fixed||0
+
+              if (_offer.order.payment.indexOf('full')>-1) { 
+                payMaps.full = fullAmount
+                buttons.push($.extend({}, vex.dialog.buttons.NO, { 
+                    text: ['Pay Escrow in Full ($', fullAmount,')'].join(''), 
+                    className: 'aquamarineB krown-alert', 
+                    click: function($vexContent, event) {
+                      this.value = 'full'
+                      this.price = fullAmount
+                      this.close()
+                }}))
+              }
+
+              if (_offer.order.payment.indexOf('deposit')>-1) {
+
+                // define max per-cent
+                var depositAmount = maxDepositFixed ? maxDepositFixed : (maxDepositPercent/100) * fullAmount
+                payMaps.deposit = depositAmount
+                if (depositAmount>0) {
+                  buttons.push($.extend({}, vex.dialog.buttons.NO, { 
+                    text: ['Pay Partial Deposit ($', depositAmount,')'].join(''),
+                    className: 'lemonB krown-alert', 
+                    click: function($vexContent, event) {
+                        this.value = 'deposit'
+                        this.close()
+                  }}))
+                };
+              }
+
+              if (!buttons.length||_offer.order.payment.indexOf('none')>-1) {
+                buttons.push($.extend({}, vex.dialog.buttons.NO, { 
+                  text: 'Arrange without Payment', 
+                  className: 'thistle krown-alert', 
+                  click: function($vexContent, event) {
+                      this.value = 'none'
+                      this.close()
+                }}))
+              }
+
+              buttons.push($.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' }))
+
+              var v2 = vex.dialog.open({
+                input: dialogContent.join(''),
+                buttons: buttons,
+                callback: function(data) {
+                  if (v2DialogOpen) return;
+                  v2DialogOpen = true
+                  if (payMaps[data]) {
+
+                    Object.assign(_offer, {
+                      stripePaid: payMaps[data],
+                      message: 'Asset Lease Payment',
+                      description: ['$', payMaps[data], ' offer (', _offer.assets.length,' assets)'].join(''),
+                      route: 'directLeaseOffer',
+                    })
+
+                    // console.log(JSON.stringify(_offer, null, 4))
+                    makeStripeCharge(_offer)
+                  } else {
+                    _offer.free = true
+                    v2.close()
+                    Meteor.call('directLeaseOffer', _offer, function(err, res) {
+                      console.log(err, res)
+                    })
+                  }
+                  v2DialogOpen = false
+                  assetMultiDialogOpen = false
+                }
+              })
+        }
+
+        var h = parseInt(data.hours_ass)
+        var sd = data.start_date_ass
+        var st = data.start_time_ass
+        var ed = data.end_date_ass
+        var et = data.end_time_ass
+        var offereeContact = {
+          phone: data.phone_contact,
+          email: data.email_contact
+        }
+        var escrow = 0
+
+        var payOptions, hours, days, weeks, remHours, remDays, startDate, endDate
+
+        if (!h) {
+
+          if (!sd||!ed) {
+            return vex.dialog.alert('Please include start and end dates.')
+          };
+
+          // is end date after start date ?
+          startDate = new Date(sd)
+          endDate = new Date(ed)
+          var d = new Date()
+
+          if (startDate>endDate) {
+            return vex.dialog.alert('End date must be later than start date')
+          };
+
+          if (d>startDate) {
+            return vex.dialog.alert('Start date must be 1 day in the future')
+          };
+
+          var delta = endDate - startDate
+          var seconds = delta/1000
+          hours = parseFloat((seconds * 0.000277778).toFixed(2))
+          weeks = 0, remDays = 0, days = 0, remHours = 0
+
+          if (delta === 0) {
+            days = 1
+          } else {
+            if (hours > 24) {
+              days = hours/24
+            remHours = hours%24
+            };
+
+            if (days > 7) {
+              weeks = days / 7
+              remDays = days%7
+            };
+          }
+        }
+
+        evalThisOffer({
+          assets: [_was],
+          payOptions: payOptions||{},
+          weeks: parseInt(weeks||0),
+          days: parseInt(days||0),
+          remDays: parseInt(remDays||0),
+          hours: parseInt(hours||h||0),
+          remHours: parseInt(remHours||0),
+          startDate: startDate,
+          endDate: endDate,
+          offereeContact: offereeContact,
+          user: {
+            avatar: currAvatar,
+            id: currUID,
+            name: currName  
+          }
+        })
+      },
+      afterOpen: function() {
+        setTimeout(function() {
+          $('.calendar').flatpickr();
+        
+          $('.clock').flatpickr(
+          {
+            enableTime: true,
+            noCalendar: true,
+
+            enableSeconds: false, // disabled by default
+
+            time_24hr: false, // AM/PM time picker is used by default
+
+            // default format
+            dateFormat: "H:i", 
+
+            // initial values for time. don't use these to preload a date
+            defaultHour: 12,
+            defaultMinute: 0
+
+            // Preload time with defaultDate instead:
+            // defaultDate: "3:30"
+          });
+
+          function hoursAss() {
+              $('.set_time_ass').each(function() {
+                $(this).val('')
+              })
+              $('#assetsrejectoffer').removeClass('disabled')
+              $('#assetsmakeoffer').removeClass('disabled')
+          }
+
+          function timeAss() {
+              $('#hours_ass').val('')
+              var n = []
+              $('.set_time_ass').each(function() {
+                if ($(this).val()) n.push(true)
+              })
+              var d1 = $('#start_date_ass').val()
+              var d2 = $('#end_date_ass').val()
+              if (d1&&d2) {
+                $('#assetsrejectoffer').removeClass('disabled')
+                $('#assetsmakeoffer').removeClass('disabled')
+              } else {
+                console.log('n length =', n.length)
+                $('#assetsrejectoffer').addClass('disabled')
+                $('#assetsmakeoffer').addClass('disabled')
+              }
+          }
+
+          $('#hours_ass').off()
+          $('#hours_ass').on('input', hoursAss)
+          $('#hours_ass').on('change', hoursAss)
+
+          $('.set_time_ass').off()
+          $('.set_time_ass').on('input', timeAss)
+          $('.set_time_ass').on('change', timeAss)
+        }, 144)
+      }
+    })
   }
 })
 
