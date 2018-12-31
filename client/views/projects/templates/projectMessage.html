@@ -7,7 +7,9 @@
         {{#if isAssets}}
         {{> assetsOfferDialogHeader}}
         {{ > offerAssetsArchived }}
+        {{#if project}}
         {{> assetsOfferDialogFooter}}
+        {{/if}}
           
         {{else}}
           <h3>foo</h3>
@@ -197,7 +199,9 @@
                     </div>
                 </div>
             </div>
+            {{#if project}}
             {{ > assetsOfferDialogFooter }}
+            {{/if}}
             {{/if}}
             
         {{else}}
