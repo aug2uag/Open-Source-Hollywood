@@ -86,6 +86,13 @@ Template.dashboard.helpers({
 	},
 	contractLink: function() {
 		if (this.ctx&&this.ctx==='offer') {
+			if (!this.slug) {
+				if (iAmOfferee(this.offeree)) {
+					return ['/message/project/', this.offeror, '/', this._id].join('')
+				} else {
+					return ['/message/project/', this.offeree, '/', this._id].join('')
+				}
+			};
 			return ['/message/project/', this.slug, '/', this._id].join('')
 		};
 		return ['/message/project/', this.slug, '/', this.offer.user.id].join('')
@@ -96,17 +103,35 @@ Template.dashboard.helpers({
 			return '/profile/' + this.offer.user.id
 		};
 
+		if (!this.slug) {
+			if (iAmOfferee(this.offeree)) {
+				return '/profile/' + this.offeror
+			} else {
+				return '/profile/' + this.offeree
+			}
+		};
+
 		return ['/projects/',this.slug,'/',this.offeree].join('')
 	},
 	offerName: function() {
 		if (iAmOfferee(this.offeree)) {
 			return this.offer.user.name	
 		};
+
+		if (this.title) return this.title
+
+		if (this.offer) {
+			if (this.offer.user&&this.offer.user.name) {
+				return [this.offer.user.name, this.offer.message].join(' ')
+			};
+
+			if (this.offer.message) return this.offer.message;
+		};
 		
-		return this.title||this.offer
+		return 'Active Contract Negotiation'
 	},
 	offerImg: function() {
-		if (iAmOfferee(this.offeree)) {
+		if (iAmOfferee(this.offeree)||!this.slug) {
 			return this.offer.user.avatar	
 		};
 		

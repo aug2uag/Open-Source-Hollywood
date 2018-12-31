@@ -197,16 +197,7 @@
                     </div>
                 </div>
             </div>
-            <div class="normal-content no-boxed t40">
-
-                {{#each messages}}
-                  <div class="first span12 clearfix">
-                      {{> comment}}
-                  </div>
-                {{/each}}
-
-                {{> messageBox}}
-            </div>
+            {{ > assetsOfferDialogFooter }}
             {{/if}}
             
         {{else}}
@@ -256,7 +247,7 @@
           </div>
         </div>
       </div>
-
+      {{#if project}}
       <div class="col-xs-12 col-md-6">
         <!-- PROJECT -->
         <div class="project-header">
@@ -275,11 +266,12 @@
           </div>
         </div>
       </div>
+      {{/if}}
     </div>
 </template>
 
 <template name="assetsOfferDialogFooter">
-    <div class="normal-content no-boxed t40">
+    <div class="normal-content no-boxed t40" style="display: inline-flex;">
 
         {{#each messages}}
           <div class="first span12 clearfix">
@@ -290,6 +282,7 @@
         {{> messageBox}}
     </div>
 </template>
+
 
 <template name="offerAssetsActive">
   <section class="t20">
@@ -303,6 +296,7 @@
                   <tr>
                     <th>asset</th>
                     <th>description</th>
+                    {{foo}}
                     <th>pricing</th>
                     <th>availability</th>
                     <th>accept</th>
@@ -426,178 +420,165 @@
     {{> assetsOfferDialogHeader}}
     <div class="krown-column-container clearfix first last span12 clearfix">
       <div class="krown-accordion accordion large clearfix t40">
-          
-          {{ > offerAssetsActive }}
-
+          {{#if notPendingNotOffereeDecision}}
+            {{ > offerAssetsActive }}
+          {{/if}}
           {{#if firstAction}}
-          {{yolo}}
-          <section>
-            <div class="krown-column-container clearfix first last span12 clearfix">
-                <h3 class="extremeboldtext">Express Offer</h3>
-                <div class="table-responsive-lg">
-                  <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Offer</th>
-                          <th scope="col">Description</th>
-                          {{#unless isOfferee}}
-                          <th scope="col">Edit</th>
-                          {{/unless}}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>${{expressOffer.offer}}</td>
-                          <td>{{expressOffer.message}}</td>
-                          {{#unless isOfferee}}
-                          <td>
-                            {{#if eoEditable}}
-                            <a href="#!" class="btn btn-warning" id="edit_eo"><i class="glyphicon glyphicon-edit"></i></a>
-                            {{else}}
-                            <small>not editable</small>
-                            {{/if}}
-                          </td>
-                          {{/unless}}
-                        </tr>
-                      </tbody>
-                  </table>
-                </div>
-            </div>
-          </section>
-
-
-          {{#if isOfferee}}
-          <div class="krown-column-row clearfix btn-group">
-                <div class="krown-column-container clearfix last span6 btn-group-justified">
-                    <a class="btn btn-block bg-green btn-lg white" id="assetsexpressoffer">APPROVE EXPRESS OFFER</a>
-                </div>
-          </div>
-          {{/if}}
-          {{else}}
-
-          {{#unless isOfferee}}
-
-          <!-- show offer, amount paid, time requested  -->
-          <div class="krown-column-container clearfix first span12 clearfix">
-            <section class="krown-box light-1 clearfix">
-            <h5>APPLICANTS OFFER</h5>
-            <p>{{ offer.consideration.description }}</p>
-            <table class="table table-striped table-responsive">
-              <thead>
-                <tr>
-                  <th>assets</th>
-                  <th>hours</th>
-                  <th>days</th>
-                  <th>weeks</th>
-                  <th>total paid</th>
-                </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td>{{ formattedOfferorAssetNames }}</td>
-                <td>{{ totalOfferorHours }}</td>
-                <td>{{ totalOfferorDays }}</td>
-                <td>{{ totalOfferorWeeks }}</td>
-                <td>{{ offerorOfferAmount }}</td>
-              </tr>
-              </tbody>
-            </table>
+            <section>
+              <div class="krown-column-container clearfix first last span12 clearfix">
+                  <h3 class="extremeboldtext">Express Offer</h3>
+                  <div class="table-responsive-lg">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Offer</th>
+                            <th scope="col">Description</th>
+                            {{#unless isOfferee}}
+                            <th scope="col">Edit</th>
+                            {{/unless}}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>${{expressOffer.offer}}</td>
+                            <td>{{expressOffer.message}}</td>
+                            {{#unless isOfferee}}
+                            <td>
+                              {{#if eoEditable}}
+                              <a href="#!" class="btn btn-warning" id="edit_eo"><i class="glyphicon glyphicon-edit"></i></a>
+                              {{else}}
+                              <small>not editable</small>
+                              {{/if}}
+                            </td>
+                            {{/unless}}
+                          </tr>
+                        </tbody>
+                    </table>
+                  </div>
+              </div>
             </section>
-          </div>
-
-          {{#if offer.offereeDecision}}
+            {{#if isOfferee}}
             <div class="krown-column-row clearfix btn-group">
-                  <div class="krown-column-container clearfix last span4 btn-group-justified">
-                      <a class="btn btn-block bg-red btn-lg white" id="offerorrejectoffer">REJECT</a>
-                  </div>
-                  <div class="krown-column-container clearfix last span4 btn-group-justified">
-                      <a class="btn btn-block bg-green btn-lg white" id="offeroracceptoffer">APPROVE OFFER</a>
+                  <div class="krown-column-container clearfix last span6 btn-group-justified">
+                      <a class="btn btn-block bg-green btn-lg white" id="assetsexpressoffer">APPROVE EXPRESS OFFER</a>
                   </div>
             </div>
-          {{/if}}
-
-
-
-          {{/unless}}
-
-          {{/if}}
-
-
-          {{#if isOfferee}}
-          
-          {{#unless offer.offereeDecision}}
-              {{ offereeOption }}
-              <h3>Set Request Schedule:</h3>
-              <div class="row">
-
-                  <div class="form-group col-xs-6 col-md-2">
-                    <label>Choose Start Date</label>
-                    <input class="form-control calendar set_time_ass" type="date" id="start_date_ass">
-                  </div>
-                  <div class=" form-group col-xs-6 col-md-2">
-                    <label>Choose Start Time </label>
-                    <input class="form-control clock set_time_ass" type="time" id="start_time_ass">
-                  </div>
-              </div>
-
-              <div class="row">
-
-                  <div class="form-group col-xs-6 col-md-2">
-                    <label>Choose End Date</label>
-                    <input class="form-control calendar set_time_ass" type="date" id="end_date_ass">
-                  </div>
-                  <div class=" form-group col-xs-6 col-md-2">
-                    <label>Choose End Time </label>
-                    <input class="form-control clock set_time_ass" type="time" id="end_time_ass">
-                  </div>
-              </div>
-              <p>&nbsp;</p>
-
-              <div class="row">
-
-                  <div class="form-group col-xs-6 col-md-2">
-                    <label>or Enter Total Hours</label>
-                    <input class="form-control" type="number" min="1" max="999" id="hours_ass">
-                  </div>
-              </div>
-          
-
-              <div class="t20 row">
-                  <p>Your contact</p>
-                  <div class="form-group col-xs-6 col-md-2">
-                    <label>Phone</label>
-                    <input class="form-control" type="text" id="phone_contact">
-                  </div>
-                  <div class=" form-group col-xs-6 col-md-2">
-                    <label>Email </label>
-                    <input class="form-control" type="text" id="email_contact">
-                  </div>
-              </div>
-
-
-              <div class="krown-column-row clearfix btn-group">
-                    <div class="krown-column-container clearfix last span6 btn-group-justified">
-                        <a class="btn btn-block bg-red btn-lg white" id="assetsrejectoffer">REJECT</a>
-                    </div>
-                    <div class="krown-column-container clearfix last span6 btn-group-justified">
-                        <a class="btn btn-block bg-green btn-lg white {{#unless timeDefined}}disabled{{/unless}}" id="assetsmakeoffer">APPROVE OFFER</a>
-                    </div>
-              </div>
+            {{/if}}
           {{else}}
-
-            {{#unless offer.decided}}
-              <div class="t20 row">
-                  <h4>Waiting approval</h4>
-                  <p>{{pendingDetails}}</p>
-                  <div class="krown-column-row clearfix btn-group">
-                    <div class="krown-column-container clearfix last span10 btn-group-justified">
-                        <a class="btn btn-block bg-red btn-lg white" id="assetsrevokeoffer">REVOKE OFFER</a>
-                    </div>
-                  </div>
+            {{#unless isOfferee}}
+              <!-- show offer, amount paid, time requested  -->
+              <div class="krown-column-container clearfix first span12 clearfix">
+                <section class="krown-box light-1 clearfix">
+                <h5>APPLICANTS OFFER</h5>
+                <p>{{ offer.consideration.description }}</p>
+                <table class="table table-striped table-responsive">
+                  <thead>
+                    <tr>
+                      <th>assets</th>
+                      <th>hours</th>
+                      <th>days</th>
+                      <th>weeks</th>
+                      <th>total paid</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>{{ formattedOfferorAssetNames }}</td>
+                    <td>{{ totalOfferorHours }}</td>
+                    <td>{{ totalOfferorDays }}</td>
+                    <td>{{ totalOfferorWeeks }}</td>
+                    <td>{{ offerorOfferAmount }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+                </section>
               </div>
-              {{/unless}}
-          {{/unless}}
+              {{#if offer.offereeDecision}}
+                <div class="krown-column-row clearfix btn-group">
+                      <div class="krown-column-container clearfix last span4 btn-group-justified">
+                          <a class="btn btn-block bg-red btn-lg white" id="offerorrejectoffer">REJECT</a>
+                      </div>
+                      <div class="krown-column-container clearfix last span4 btn-group-justified">
+                          <a class="btn btn-block bg-green btn-lg white" id="offeroracceptoffer">APPROVE OFFER</a>
+                      </div>
+                </div>
+              {{/if}}
+            {{/unless}}
+          {{/if}}
+          
+          {{#if isOfferee}}
+            {{#unless offer.offereeDecision}}
+                {{ offereeOption }}
+                <h3>Set Request Schedule:</h3>
+                <div class="row">
 
+                    <div class="form-group col-xs-6 col-md-2">
+                      <label>Choose Start Date</label>
+                      <input class="form-control calendar set_time_ass" type="date" id="start_date_ass">
+                    </div>
+                    <div class=" form-group col-xs-6 col-md-2">
+                      <label>Choose Start Time </label>
+                      <input class="form-control clock set_time_ass" type="time" id="start_time_ass">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-xs-6 col-md-2">
+                      <label>Choose End Date</label>
+                      <input class="form-control calendar set_time_ass" type="date" id="end_date_ass">
+                    </div>
+                    <div class=" form-group col-xs-6 col-md-2">
+                      <label>Choose End Time </label>
+                      <input class="form-control clock set_time_ass" type="time" id="end_time_ass">
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+
+                <div class="row">
+
+                    <div class="form-group col-xs-6 col-md-2">
+                      <label>or Enter Total Hours</label>
+                      <input class="form-control" type="number" min="1" max="999" id="hours_ass">
+                    </div>
+                </div>
+            
+
+                <div class="t20 row">
+                    <p>Your contact</p>
+                    <div class="form-group col-xs-6 col-md-2">
+                      <label>Phone</label>
+                      <input class="form-control" type="text" id="phone_contact">
+                    </div>
+                    <div class=" form-group col-xs-6 col-md-2">
+                      <label>Email </label>
+                      <input class="form-control" type="text" id="email_contact">
+                    </div>
+                </div>
+
+
+                <div class="krown-column-row clearfix btn-group">
+                      <div class="krown-column-container clearfix last span6 btn-group-justified">
+                          <a class="btn btn-block bg-red btn-lg white" id="assetsrejectoffer">REJECT</a>
+                      </div>
+                      <div class="krown-column-container clearfix last span6 btn-group-justified">
+                          <a class="btn btn-block bg-green btn-lg white {{#unless timeDefined}}disabled{{/unless}}" id="assetsmakeoffer">APPROVE OFFER</a>
+                      </div>
+                </div>
+            {{else}}
+
+              {{#unless offer.decided}}
+                  <div class="t20 row">
+                      <h4>Waiting approval</h4>
+                      <p>{{pendingDetails}}</p>
+                      <div class="krown-column-row clearfix btn-group">
+                        <div class="krown-column-container clearfix last span10 btn-group-justified">
+                            <a class="btn btn-block bg-red btn-lg white" id="assetsrevokeoffer">REVOKE OFFER</a>
+                        </div>
+                      </div>
+                  </div>
+              {{/unless}}
+            {{/unless}}
           {{/if}}
       </div>
     </div>
@@ -664,7 +645,9 @@
         </div>
     </div>
 
+    {{#if project}}
     {{> assetsOfferDialogFooter}}
+    {{/if}}
 
     <script type="text/javascript">
 

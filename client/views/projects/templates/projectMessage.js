@@ -72,6 +72,9 @@ Template.offerAssetsActive.helpers({
 		this.offer = this.offer||this.offers[0]
 
 		return this.offer.assets
+	},
+	foo: function() {
+		console.log(this)
 	}
 })
 
@@ -621,7 +624,7 @@ Template.projectMessage.events({
 
 						Object.assign(_offer, {
 							stripePaid: payMaps[data],
-							message: 'Asset Lease Payment',
+							message: 'Asset Escrow Payment',
 							description: ['$', payMaps[data], ' offer (', _offer.assets.length,' assets)'].join(''),
 							route: 'leaseRequest',
 						})
@@ -891,7 +894,9 @@ Template.assetsOfferDialog.events({
 			callback: function(d) {
 				console.log(d)
 				if (d) {
-					Meteor.call('revokeLeaseRequest', _was.offer)
+					Meteor.call('revokeLeaseRequest', _was.offer, function(err, res) {
+						vex.dialog.alert(err||res)
+					})
 				};
 			}
 		})
@@ -918,8 +923,13 @@ Template.assetsOfferDialog.events({
 })
 
 Template.assetsOfferDialog.helpers({
-	yolo: function() {
-		console.log(this)
+	notPendingNotOffereeDecision: function() {
+		try {
+			var isOffereeDeciding = this.offer.offereeDecision||false
+			return !isOffereeDeciding
+		} catch(e) {
+			return true
+		}
 	},
 	firstAction: function() {
 		this.offer = this.offer||this.offers[0]
@@ -988,8 +998,9 @@ Template.assetsOfferDialog.helpers({
 		return timeDefined
 	},
 	isOfferee: function() {
+		console.log(this)
 		if (this.offer.pending===false) return false;
-		if (Meteor.user()._id===this.project.ownerId) return true;
+		if (Meteor.user()._id===this.offer.offeree) return true;
 		return false
 	},
 	formattedPricing: function() {

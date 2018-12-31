@@ -1120,7 +1120,7 @@ Template.profile.events({
 
                     Object.assign(_offer, {
                       stripePaid: payMaps[data],
-                      message: 'Asset Lease Payment',
+                      message: 'Asset Escrow Payment',
                       description: ['$', payMaps[data], ' offer (', _offer.assets.length,' assets)'].join(''),
                       route: 'directLeaseOffer',
                     })
