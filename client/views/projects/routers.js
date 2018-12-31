@@ -323,17 +323,11 @@ Router.route('/message/project/:slug/:uid', {
     ];
   },
   data: function() {
-    console.log(new Array(100).join('! '))
     var slug = this.params.slug;
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
     if (!user) user = Users.findOne({_id: slug});
     var offer = Offers.findOne({_id: this.params.uid})
-
-    console.log(new Array(100).join('~ '))
-    console.log(user)
-    console.log(new Array(100).join('# '))
-    console.log(offer)
 
     if (user&&project) {
 
