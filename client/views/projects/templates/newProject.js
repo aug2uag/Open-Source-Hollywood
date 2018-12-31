@@ -763,6 +763,7 @@ Template.newProject.events({
         localStorage.removeItem('projectnew')
         localStorage.removeItem('projectnew_banner')
         $('#resetNewProjCacheBtn').hide()
+        clearInterval(autoSaveNewProjInterval);
         setTimeout(function() {
           Router.go('Home');
         }, 4181);
