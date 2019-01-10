@@ -122,45 +122,46 @@ Router.route('/discover', {
   },
   onAfterAction: function() {
     var user = Meteor.user();
-    if (user&&user.didOnboard===false&&onboardDialogShowing===false) {
-      $('.noclick').show()
-      onboardDialogShowing = true;
-      setTimeout(function() {
-        var vx = vex.dialog.alert({
-          message: 'Welcome to Open Source Hollywood!',
-          buttons: [
-            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
-          ],
-          input: [
-            '<div> ',
-              '<h6>&nbsp;</h6>',
-              '<p>To get started, update your profile!</p>',
-              '<small>&nbsp;</small><br>',
-              '<small>Others can view your works and experiences from your profile.</small>',
-              '<small>You may configure notifications and know about important events relating to your campaigns.</small><br>',
-              '<a id="dosetpro" class="btn btn-default btn-group-justified btn-lg" href="/settings">Click here to update your profile!</a>',
-            '</div>'
-          ].join(''),
-          afterOpen: function() {
-            $('#dosetpro').on('click', function() {
-              vx.close()
-              if (user.notification_preferences&&user.notification_preferences.email) return
-              setTimeout(function() {
-                vex.dialog.confirm({
-                  input: 'Configure email and phone notifications for enhanced options! Would you like to configure now?',
-                  callback: function(data) {
-                    if (data) {
-                      $('#gotoemailpref').click()
-                    };
-                  }
-                })
-              })
-            })
-          }
-        })
-        Meteor.call('onboardNewUser');
-        $('.noclick').hide()
-      }, 4181);
+    if (user&&user.didOnboard===false&&onboardDialogShowing===false||!user.iamRoles.length) {
+      Router.go('Config')
+      // $('.noclick').show()
+      // onboardDialogShowing = true;
+      // setTimeout(function() {
+      //   var vx = vex.dialog.alert({
+      //     message: 'Welcome to Open Source Hollywood!',
+      //     buttons: [
+      //       $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+      //     ],
+      //     input: [
+      //       '<div> ',
+      //         '<h6>&nbsp;</h6>',
+      //         '<p>To get started, update your profile!</p>',
+      //         '<small>&nbsp;</small><br>',
+      //         '<small>Others can view your works and experiences from your profile.</small>',
+      //         '<small>You may configure notifications and know about important events relating to your campaigns.</small><br>',
+      //         '<a id="dosetpro" class="btn btn-default btn-group-justified btn-lg" href="/settings">Click here to update your profile!</a>',
+      //       '</div>'
+      //     ].join(''),
+      //     afterOpen: function() {
+      //       $('#dosetpro').on('click', function() {
+      //         vx.close()
+      //         if (user.notification_preferences&&user.notification_preferences.email) return
+      //         setTimeout(function() {
+      //           vex.dialog.confirm({
+      //             input: 'Configure email and phone notifications for enhanced options! Would you like to configure now?',
+      //             callback: function(data) {
+      //               if (data) {
+      //                 $('#gotoemailpref').click()
+      //               };
+      //             }
+      //           })
+      //         })
+      //       })
+      //     }
+      //   })
+      //   Meteor.call('onboardNewUser');
+      //   $('.noclick').hide()
+      // }, 4181);
     };
   }
 });
@@ -373,5 +374,40 @@ Router.route('/message/project/:slug/:uid', {
     };
 
     return {}
+  }
+})
+
+Router.route('/config', {
+  name: 'Config',
+  template: 'config',
+  layoutTemplate: 'StaticLayout',
+  waitOn: function() {
+    localStorage.removeItem('redirectURL');
+    return [
+      Meteor.subscribe('getMe'), 
+      // Meteor.subscribe('connectUser')
+    ];
+  },
+  onBeforeAction: function() {
+    $('meta[name=description]').remove();
+    document.title = 'Configure Account';
+    this.next();
+  }
+})
+
+Router.route('/profile', {
+  name: 'MyProfile',
+  template: 'myProfile',
+  layoutTemplate: 'StaticLayout',
+  waitOn: function() {
+    return [
+      Meteor.subscribe('getMe'), 
+      // Meteor.subscribe('connectUser')
+    ];
+  },
+  onBeforeAction: function() {
+    $('meta[name=description]').remove();
+    document.title = 'My Profile';
+    this.next();
   }
 })
