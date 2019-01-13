@@ -1,4 +1,5 @@
 <template name="dashboard">
+  {{was}}
     <div id="content" class="clearfix ">
 
     <div class="clearfix wrapper">
@@ -14,21 +15,21 @@
                 <ul class="titles clearfix" id="settings_menu">
                     <li class="">
                         <h5>ACTIVE CONTRACTS</h5></li>
-                    <li class="">
+                    <li class="switch_campaigns">
                         <h5>CAMPAIGNS</h5></li>
-                    <li class="">
+                    <li class="switch_merchant">
                         <h5>MERCHANT CENTER</h5></li>
-                    <li class="">
+                    <li class="switch_subscriptions">
                         <h5>SUBSCRIPTIONS</h5></li>
                     <li class="">
-                        <h5>YOUR PORTFOLIO</h5></li>
+                        <h5>CAMPAIGN HOLDINGS</h5></li>
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                         <option>ACTIVE CONTRACTS</option>
-                        <option>CAMPAIGNS</option>
-                        <option>MERCHANT CENTER</option>
-                        <option>SUBSCRIPTIONS</option>
-                        <option>YOUR PORTFOLIO</option>
+                        <option class="switch_campaigns">CAMPAIGNS</option>
+                        <option class="switch_merchant">MERCHANT CENTER</option>
+                        <option class="switch_subscriptions">SUBSCRIPTIONS</option>
+                        <option class="">CAMPAIGN HOLDINGS</option>
                       </select>
                       <span class="tabs-select-inner" style="display: block; white-space: nowrap;">SELECT</span></span>
                     </div>
@@ -80,25 +81,26 @@
                       <div class="dash_ks project-content" id="view_completed_ks" style="display:none">
 
                           {{#each completedContracts}}
-                          <div class="col-xs-12 col-sm-6 col-md-4">
-                            <div class="panel panel-default">
-                              <div class="panel-heading">
-                                <p class="panel-title">{{offerName}}</p>
+                            {{#if contractLink}}
+                              <div class="col-xs-12 col-sm-6 col-md-4">
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <p class="panel-title">{{offerName}}</p>
+                                  </div>
+                                  <div class="panel-body">
+                                        <a href="{{offerLink}}" class="thumbnail">
+                                          <img src="{{offerImg}}" alt="applicant avatar">
+                                        </a>
+                                        <p class="lead f08">
+                                          {{offer.message}}
+                                        </p>
+                                  </div>
+                                  <div class="panel-footer">
+                                    <a href="{{contractLink}}" class="btn">VIEW CONTRACT</a>
+                                  </div>
+                                </div>
                               </div>
-                              <div class="panel-body">
-                                    <a href="{{offerLink}}" class="thumbnail">
-                                      <img src="{{offerImg}}" alt="applicant avatar">
-                                    </a>
-                                    <p class="lead f08">
-                                      {{offer.message}}
-                                    </p>
-                              </div>
-                              <div class="panel-footer">
-                                <a href="{{contractLink}}" class="btn">VIEW CONTRACT</a>
-                              </div>
-                            </div>
-                          </div>
-
+                            {{/if}}
                           {{else}}
                           <p>&nbsp;</p>
                           <p>&nbsp;</p>
@@ -374,6 +376,9 @@
                               </tbody>
                             </table>
                           </div>
+                          <p>&nbsp;</p>
+                          <p><small>To edit campaign merch, please visit EDIT section of your campaign.</small></p>
+                          <a class="button" href="/settings" onlick="setTimeout(function(){simulateClick(document.getElementsByClassName('.switch_personal')[0]) }, 987)">EDIT PERSONAL MERCH</a>
                         </div>
 
                         <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_lease" style="display:none">

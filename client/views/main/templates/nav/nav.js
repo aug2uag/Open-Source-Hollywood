@@ -22,7 +22,7 @@ Template.nav.helpers({
   },
   view: function() {
     try {
-      if (Meteor.user().iamRoles.indexOf('producer')===-1) {
+      if (Meteor.user().iamRoles.indexOf('view')>-1||Meteor.user().iamRoles.indexOf('roles')>-1||Meteor.user().iamRoles.indexOf('assets')>-1||Meteor.user().iamRoles.indexOf('assets')>-1) {
         return true
       };
     } catch(e) {}
@@ -44,9 +44,47 @@ Template.nav.helpers({
     } catch(e) {}
     return false
   },
+  assets: function() {
+    try {
+      if (Meteor.user().iamRoles.indexOf('assets')>-1) {
+        return true
+      };
+    } catch(e) {}
+    return false
+  },
 })
 
 Template.nav.events({
+  'click .switchnavDashboard': function(e) {
+    var switchNav = $(e.target).attr('val')
+    setTimeout(function() {
+      // localStorage.setItem($(e.target).attr('val'), 'switchnavDashboard')
+      if (switchNav) {
+          var o = {
+            'projects': 'switch_campaigns',
+            
+            'merchant': 'switch_merchant',
+            'subscriptions': 'switch_subscriptions'
+          }[switchNav]
+          simulateClick(document.getElementsByClassName(o)[0])
+          // localStorage.removeItem('switchnavDashboard')
+      };
+    }, 987)
+  },
+  'click .switchnavSettings': function(e) {
+    var switchNav = $(e.target).attr('val')
+    setTimeout(function() {
+      // localStorage.setItem($(e.target).attr('val'), 'switchnavSettings')
+      if (switchNav) {
+          var o = {
+            'personal': 'switch_personal',
+            'assets': 'switch_assets'
+          }[switchNav]
+          simulateClick(document.getElementsByClassName(o)[0])
+          // localStorage.removeItem('switchnavSettings')
+      };
+    }, 667)
+  },
   'click .menu-item': function(e) {
     if ($(window).width()<=767) $('#navbutton').click();
     $('.menu-item').removeClass('bold')

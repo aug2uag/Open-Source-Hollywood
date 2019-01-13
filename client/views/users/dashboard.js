@@ -1,3 +1,5 @@
+
+
 function ConvertToCSV(json) {
   var order = json.order
   var csv = 'Purchaser, Email, Phone, Shipping Name, Shipping Address 1, Shipping Address 2, Order, Purchase ID, Order ID, Total Units, Total Order\n'
@@ -95,7 +97,10 @@ Template.dashboard.helpers({
 			};
 			return ['/message/project/', this.slug, '/', this._id].join('')
 		};
-		return ['/message/project/', this.slug, '/', this.offer.user.id].join('')
+		// console.log(this)
+		var userId = typeof this.user === 'string' ? this.user : this.offer&&this.offer.user ? this.offer.user.id : ''
+		if (!userId) return false;
+		return ['/message/project/', this.slug, '/', userId].join('')
 	},
 	offerLink: function() {
 		// console.log(this)
@@ -138,7 +143,11 @@ Template.dashboard.helpers({
 		return this.banner
 	},
 	was: function() {
-		console.log(this)
+		setTimeout(function() {
+			// var switchNav = localStorage.getItem('switchnavDashboard')
+			// console.log('switchNav', switchNav)
+			
+		}, 667)
 	},
 	leaseTotals: function() {
 		if (this.assetLeases.length<=1) {

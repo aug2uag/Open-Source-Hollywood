@@ -214,6 +214,8 @@ function saveSettings(o) {
 		if ($(el).prop('checked')) o.iam.push($(el).attr('name'));
 	});
 
+	o.iamRoles= $('.user_roles:checked').map(function(){return $(this).val()}).get()
+
 	// console.log('upgradeProfile with')
 	// console.log(o)
 	Meteor.call('upgradeProfile', o);
@@ -811,6 +813,30 @@ Template.settings.events({
 });
 
 Template.settings.helpers({
+	artist: function() {
+		try {
+		  if (Meteor.user().iamRoles.indexOf('producer')>-1||Meteor.user().iamRoles.indexOf('roles')>-1) {
+		    return true
+		  };
+		} catch(e) {}
+		return false
+	},
+	producer: function() {
+		var user = Meteor.user()
+		return user.iamRoles&&user.iamRoles.indexOf('producer')>-1||false
+	},
+	actor: function() {
+		var user = Meteor.user()
+		return user.iamRoles&&user.iamRoles.indexOf('roles')>-1||false
+	},
+	assets: function() {
+		var user = Meteor.user()
+		return user.iamRoles&&user.iamRoles.indexOf('assets')>-1||false
+	},
+	viewer: function() {
+		var user = Meteor.user()
+		return user.iamRoles&&user.iamRoles.indexOf('view')>-1||false
+	},
 	noUserEmail: function() {
 	  if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.email&&Meteor.user().notification_preferences.email.verification) {
 	    return false
@@ -835,6 +861,9 @@ Template.settings.helpers({
 		Session.set('resources', resources)
 		Session.set('gifts', gifts)
 		Meteor.call('createBankingAccount');
+		if (Meteor.user().iamRoles&&Meteor.user().iamRoles.indexOf('producer')>-1) $('#roundedTwo1').prop('checked', true)
+		if (Meteor.user().iamRoles&&Meteor.user().iamRoles.indexOf('roles')>-1) $('#roundedTwo2').prop('checked', true)
+		if (Meteor.user().iamRoles&&Meteor.user().iamRoles.indexOf('view')>-1) $('#roundedTwo3').prop('checked', true)
 	},
 	giftPurchases: function() {
 		return Meteor.user().giftPurchases||[]
@@ -1055,6 +1084,11 @@ Template.settings.rendered = function () {
 	var u = Meteor.user()
 	// console.log(JSON.stringify(u, null, 4))
 
+	var iamRoles = u.iamRoles
+	if (iamRoles.indexOf('producer')>-1) $('#iamproducer').prop('checked', true)
+	if (iamRoles.indexOf('roles')>-1) $('#iamroles').prop('checked', true)	
+	if (iamRoles.indexOf('view')>-1) $('#iamviewer').prop('checked', true)
+
 	resources = u.assets||[]
 	Session.set('resources', resources);
 
@@ -1148,7 +1182,9 @@ Template.config.events = {
 				callback: function(data) {
 					if (data) {
 						Router.go('MyProfile')
-					};
+					} else {
+						Router.go('Home')
+					}
 				}
 			})
 		})

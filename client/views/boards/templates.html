@@ -1,4 +1,5 @@
 <template name="board">
+    {{onboarded}}
     {{# if this }}
         <div id="page-wrapper" class="board-wrapper {{# unless session 'sidebarIsOpen' }}disabled-all-widgets{{/ unless }}" style="background: transparent;">
             <div class="board-header clearfix js-board-header">

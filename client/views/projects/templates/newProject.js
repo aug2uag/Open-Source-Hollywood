@@ -91,7 +91,7 @@ function returnProjectCreateDetails(o) {
 
   // (3) check location and continue
   o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
-  if (!/\d{5}$/.exec(o.zip)) return vex.dialog.alert('Please enter a valid zip code.');
+  if (!/\d{5}$/.exec(o.zip)) return vex.dialog.alert('Please enter a valid zip code for your location.');
 
   o.title = $('#title').val() || 'untitled';
   o.logline = $('#logline').val() || 'eligible for support';
@@ -112,7 +112,7 @@ function returnProjectCreateDetails(o) {
       .replace(/&nbsp;|<br>/g, " ")
       .trim();
 
-    if (plainText&&plainText!=='Enter your campaign description here. You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.') {
+    if (plainTextplainText.indexOf('your campaign description here.')===-1) {
       o.description = descriptionText;
       o.descriptionText = plainText;
     } else {
@@ -422,7 +422,6 @@ Template.newProject.onRendered(function() {
     var script = document.createElement('script');
     script.src = "/js/scripts.min.js";
     document.head.appendChild(script);
-    console.log(new Array(100).join('yolo '))
   }, 987);
   $('#summernote').summernote({
     toolbar: [
@@ -440,13 +439,17 @@ Template.newProject.onRendered(function() {
     tooltip: false,
     callbacks: {
       onInit: function() {
-        $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
+        $('.note-editable').html('<p>Enter your campaign description here. Do not include details that are sensitive. The information here will be displayed publicly.</p>');
         $('.note-toolbar').css('z-index', '0');
+        $('.note-editable').off()
+        $('.note-editable').on('click', function() {
+          if ($('.note-editable').html().indexOf('your campaign description here.')>-1) $('.note-editable').html('');
+        })
       }
     }
   });
 
-  console.log(new Array(100).join('1 '))
+  // console.log(new Array(100).join('1 '))
   
   try {
     var newProject = JSON.parse(localStorage.getItem('projectnew'));
@@ -454,7 +457,7 @@ Template.newProject.onRendered(function() {
       $('#resetNewProjCacheBtn').hide()
       return
     };
-    console.log(new Array(100).join(' 2'))
+    // console.log(new Array(100).join(' 2'))
     if (newProject.videoExplainer) $('#video_explainer').val(newProject.videoExplainer);
     if (newProject.category) $("#category option[value='"+newProject.category+"']").prop('selected', true).trigger('change');
     if (newProject.zip) $('#location').val(newProject.zip);
@@ -478,7 +481,7 @@ Template.newProject.onRendered(function() {
       }())
     };
 
-    console.log(new Array(100).join('3 '))
+    // console.log(new Array(100).join('3 '))
     if (newProject.author_list) $('#authorlist').val(newProject.author_list);
     if (newProject.description) $('#summernote').summernote('code', newProject.description);
     if (newProject.creatorsInfo) $('#creators_info').val(newProject.creatorsInfo);
@@ -537,8 +540,8 @@ Template.newProject.onRendered(function() {
     $('.deleteRow').on('click', deleteRow);
 
 
-    console.log(new Array(100).join('# '))
-    console.log('finish onRendered')
+    // console.log(new Array(100).join('# '))
+    // console.log('finish onRendered')
 
   } catch(e) { console.log(e) } 
 });
@@ -555,6 +558,7 @@ function showVexWithInput(message, input) {
 
 Template.newProject.events({
   'click .oshchx': function(e) {
+    console.log('in oshchx')
     $(e.target).find('input').click()
     if ($(e.target).val()==='pay') {
       if ($(e.target).prop('checked')) {

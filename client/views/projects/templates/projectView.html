@@ -28,7 +28,7 @@
         </header>
         {{#if isAllowed}}
 
-            <a href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100" style="color: #333!important;background-color: #fff!important;border: 0.5px solid #333!important;max-width: 830px;"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
+            <a id="access_board_convenience" href="/boards/{{project.bid}}/{{project.slug}}" class="btn-lg krown-button w100" style="color: #333!important;background-color: #fff!important;border: 0.5px solid #333!important;max-width: 830px;"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;ACCESS BOARD</a>
 
         {{/if}}
         <div class="normal-content ">
@@ -37,24 +37,24 @@
                   {{#if isOwner}}
                       <li class="opened">
                           <h5>Campaign</h5></li>
-                      <li class="">
+                      <li class="goto_proj_updates">
                           <h5>Updates</h5></li>
-                      <li class="">
+                      <li class="goto_proj_comments">
                           <h5>Comments</h5></li>
-                      <li class="">
+                      <li class="goto_proj_community">
                           <h5>Community</h5></li>
-                      <li class="">
+                      <li class="goto_proj_manage">
                           <h5>Manage</h5></li>
                       <li class="gotoedit">
                           <h5>Edit</h5></li>
                       <div class="tabs-select">
                         <span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                           <select style="opacity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
-                            <option>Campaign</option>
-                            <option>Updates</option>
-                            <option>Comments</option>
-                            <option>Community</option>
-                            <option>Manage</option>
+                            <option class="">Campaign</option>
+                            <option class="goto_proj_updates">Updates</option>
+                            <option class="goto_proj_comments">Comments</option>
+                            <option class="goto_proj_community">Community</option>
+                            <option class="goto_proj_manage">Manage</option>
                             <option class="gotoedit">Edit</option>
                           </select>
                           <span class="tabs-select-inner" style="display: block; white-space: nowrap;">Campaign</span>
@@ -253,6 +253,13 @@
                             </div>
                             <!--if show author -->
                             {{else}}
+
+<!-- 
+goto_proj_updates
+goto_proj_comments
+goto_proj_community
+goto_proj_manage 
+-->
                             <div class="id-widget-wrap nofloat">
                                 <div class="id-widget id-full">
                                     <div class="id-product-infobox">
@@ -262,30 +269,47 @@
                                                 <div class="rholder">
                                                   <div class="rpdata">
                                                         <div class="id-progress-raised">${{fundedNumber}}</div>
-                                                        <div class="id-product-funding">funds raised</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_manage">backers</a></div>
                                                   </div>
                                                   <p>&nbsp;</p>
                                                   <div class="rpdata">
                                                         <div class="id-progress-raised"> {{numUpdates}}</div>
-                                                        <div class="id-product-funding">updates</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_updates">updates</a></div>
                                                   </div>
                                                   <p>&nbsp;</p>
                                                   <div class="rpdata">
                                                         <div class="id-progress-raised"> {{numComments}}</div>
-                                                        <div class="id-product-funding">comments</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_comments">comments</a></div>
                                                   </div>
                                                   <p>&nbsp;</p>
                                                   <div class="rpdata">
                                                         <div class="id-progress-raised"> {{numBackers}}</div>
-                                                        <div class="id-product-funding">backers</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_community">backers</a></div>
+                                                  </div>
+                                                  <p>&nbsp;</p>
+                                                  <div class="rpdata">
+                                                        <div class="id-progress-raised"> {{numCast}}</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_edit_roles">cast positions</a></div>
+                                                  </div>
+                                                  <p>&nbsp;</p>
+                                                  <div class="rpdata">
+                                                        <div class="id-progress-raised"> {{numCrew}}</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_edit_roles">crew positions</a></div>
+                                                  </div>
+                                                  <p>&nbsp;</p>
+                                                  <div class="rpdata">
+                                                        <div class="id-progress-raised"> {{numGifts}}</div>
+                                                        <div class="id-product-funding"> <a href="#" class=" goto_edit_merch">merchandise</a></div>
                                                   </div>
                                                   <p>&nbsp;</p>
                                                   <p>&nbsp;</p>
-                                                  <h4>CAMPAIGN EQUITY</h4>
+                                                  <h4>TOKENS</h4>
+                                                  <p><small>eligible for assignment</small></p>
                                                   {{#if hasEquity}}
                                                   <div class="rpdata">
                                                         <div class="id-progress-raised"> {{this.project.totalShares}}</div>
                                                         <div class="id-product-funding">total public</div>
+                                                        <p><small>eligible for public auction</small></p>
                                                   </div>
                                                   <p>&nbsp;</p>
                                                   <div class="rpdata">
@@ -608,6 +632,8 @@
           </tbody>
         </table>
       </div>
+      <p>&nbsp;</p>
+      <a class="button goto_edit_roles" href="#" >EDIT ROLES</a>
   </div>
 
   <div class="resources_view_toggle nodisplay" id="res_Resources">
@@ -639,6 +665,7 @@
           </tbody>
         </table>
       </div>
+      <a class="button goto_edit_roles">EDIT CAMPAIGN REQUESTS</a>
   </div>
 
   <div class="resources_view_toggle nodisplay" id="res_Gifts">
@@ -680,6 +707,7 @@
 
             </div>
           </div>
+          <a class="button goto_edit_merch">EDIT CAMPAIGN MERCH</a>
 
   </div>
 

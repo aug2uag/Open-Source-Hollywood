@@ -122,7 +122,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <label for="location">location&nbsp;<small><strong>( required for location matching )</strong></small></label>
-                                        <input type="text" name="location" id="location" placeholder="campaign location zip code (e.g. 91204)" />
+                                        <input type="text" name="location" id="location" placeholder="enter ZIP (e.g. 91204)" />
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <label for="website">website</label>
@@ -500,7 +500,7 @@
                                 <div class="krown-column-row clearfix">
                                     <div class="krown-column-container clearfix first last span12 clearfix">
                                         {{#if noUserEmail}}
-                                        <h5>YOU MUST CONFIGURE EMAIL NOTIFICATIONS TO ACCESS THIS FEATURE</h5>
+                                        <h5><a href="/settings" onclick="setTimeout(function(){simulateClick(document.getElementsByClassName('switch_not')[0])},987)">YOU MUST CONFIGURE EMAIL NOTIFICATIONS TO ACCESS THIS FEATURE</a></h5>
                                         {{else}}
                                         <div class="accordion large clearfix" id="newProjGiftAccord">
                                             <section>
@@ -784,6 +784,10 @@
             localStorage.removeItem('projectnew')
             localStorage.removeItem('projectnew_banner')
             window.location.reload()
+        }
+
+        function clearDeafultText (argument) {
+            if ($('.note-editable').html().indexOf('your campaign here.')>-1) $('.note-editable').html('');
         }
 
     </script>

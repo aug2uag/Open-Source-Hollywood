@@ -10,6 +10,13 @@ var consideration_icons = {
   time: '<i class="glyphicon glyphicon-time"></i>'
 }
 
+function statusShowAddedResource() {
+  $('.addingstatus').show()
+  setTimeout(function() {
+    $('.addingstatus').hide()
+  }, 1597)
+}
+
 function validateUrl(value) {
   return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
 }
@@ -373,6 +380,16 @@ function appendCampaignMerchTable(o) {
 };
 
 Template.editProject.events({
+  'click .oshchx': function(e) {
+    $(e.target).find('input').click()
+    if ($(e.target).val()==='pay') {
+      if ($(e.target).prop('checked')) {
+        $('#crew_pay_amounth').show()
+      } else {
+        $('#crew_pay_amounth').hide()
+      }
+    };
+  },
   'click #file_gift': function(e) {
     $('#gift_file').click();
   },
@@ -462,6 +479,7 @@ Template.editProject.events({
   'input #social-title': function() { $('#add-social').removeClass('btn'), $('#add-social').removeClass('disabled') },
   'click #add-crew': function(e) {
     e.preventDefault();
+    statusShowAddedResource()
     $('#crewtabletoggle').show()
     var title = $('#crew-title').val(), 
         description = $('#crew-description').val(), 
@@ -495,6 +513,7 @@ Template.editProject.events({
   },
   'click #add-cast': function(e) {
     e.preventDefault();
+    statusShowAddedResource()
     $('#casttabletoggle').show()
     var title = $('#cast-title').val(), 
         description = $('#cast-description').val(), 
@@ -531,6 +550,7 @@ Template.editProject.events({
   },
   'click #add-needs': function(e) {
     e.preventDefault();
+    statusShowAddedResource()
     $('#needstabletoggle').show()
 
     positions.needs = positions.needs||[]

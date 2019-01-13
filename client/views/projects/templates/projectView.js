@@ -418,6 +418,15 @@ function displayRoleTypeDialog(list, options) {
 };
 
 Template.projectView.helpers({
+  numCast: function() {
+    return this.project.cast.length
+  },
+  numCrew: function() {
+    return this.project.crew.length
+  },
+  numGifts: function(){
+    return this.project.gifts.length
+  },
   hasGifts: function() {
     return this.project.gifts&&this.project.gifts.length||false
   },
@@ -619,6 +628,34 @@ Template.projectView.helpers({
 });
 
 Template.projectView.events({
+  'click .goto_edit_merch': function() {
+    simulateClick(document.getElementsByClassName('gotoedit')[0])
+    setTimeout(function() {
+      simulateClick(document.getElementById('editmyprojmerch'))
+    })
+  },
+  'click .goto_edit_roles': function() {
+    simulateClick(document.getElementsByClassName('gotoedit')[0])
+    setTimeout(function() {
+      simulateClick(document.getElementById('editmyprojroles'))
+    })
+  },
+
+  'click .goto_updates': function() {
+    simulateClick(document.getElementsByClassName('goto_proj_updates')[0])
+  },
+
+  'click .goto_comments': function() {
+    simulateClick(document.getElementsByClassName('goto_proj_comments')[0])
+  },
+
+  'click .goto_community': function() {
+    simulateClick(document.getElementsByClassName('goto_proj_community')[0])
+  },
+
+  'click .goto_manage': function() {
+    $('#access_board_convenience').click()
+  },
   /** AUTHENTICATE */
   'click .login': function(e) {
     e.preventDefault();
@@ -1467,6 +1504,7 @@ function uniqueApplicantsFromProject(ctx, project) {
 }
 
 Template.applicants.helpers({
+
   aaa: function() {
     // console.log(this)
   },
