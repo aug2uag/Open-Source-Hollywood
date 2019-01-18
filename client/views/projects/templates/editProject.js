@@ -12,9 +12,6 @@ var consideration_icons = {
 
 function statusShowAddedResource() {
   $('.addingstatus').show()
-  setTimeout(function() {
-    $('.addingstatus').hide()
-  }, 1597)
 }
 
 function validateUrl(value) {
@@ -380,15 +377,23 @@ function appendCampaignMerchTable(o) {
 };
 
 Template.editProject.events({
-  'click .oshchx': function(e) {
-    $(e.target).find('input').click()
-    if ($(e.target).val()==='pay') {
+  'click #cast_oshx': function(e) {
+    var val = $(e.target).attr('val')
+    if (val==='skip') return;
+      if ($(e.target).prop('checked')) {
+        $('#cast_pay_amounth').show()
+      } else {
+        $('#cast_pay_amounth').hide()
+      }
+  },
+  'click #crew_oshx': function(e) {
+    var val = $(e.target).attr('val')
+    if (val==='skip') return;
       if ($(e.target).prop('checked')) {
         $('#crew_pay_amounth').show()
       } else {
         $('#crew_pay_amounth').hide()
       }
-    };
   },
   'click #file_gift': function(e) {
     $('#gift_file').click();
@@ -485,9 +490,9 @@ Template.editProject.events({
         description = $('#crew-description').val(), 
         audition = $('#crew-audition').val() || 'N/A',
         consideration = $('.crew_consideration:checked').map(function(a) { return $(this).val() }).get(),
-        pay_offer = $('#crew_pay_amount').val()||0,
+        pay_offer = $('#oshchx_crew').val()||0,
         status = 'needed';
-    $('#crew_pay_amount').val('')
+    $('#oshchx_crew').val('')
     positions.crew = positions.crew || []
     var o = {
       title: title,
@@ -519,9 +524,9 @@ Template.editProject.events({
         description = $('#cast-description').val(), 
         audition = $('#cast-audition').val() || 'N/A',
         consideration = $('.cast_consideration:checked').map(function(a) { return $(this).val() }).get(),
-        pay_offer = $('#cast_pay_amount').val()||0,
+        pay_offer = $('#oshchx_cast').val()||0,
         status = 'needed';
-    $('#cast_pay_amount').val('')
+    $('#oshchx_cast').val('')
     var o = {
       title: title,
       description: description,

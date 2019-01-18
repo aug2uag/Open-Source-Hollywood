@@ -72,6 +72,17 @@
                               <a class="btn btn-block bg-navy btn-lg white" id="counterofferbtn">COUNTER</a>
                           </div> -->
                         </div>
+                        {{else}}
+
+                        {{#if ownerInitAgreementAplicantNote}}
+                          <p class="h6">author is in the process of deciding your offer</p>
+                        {{/if}}
+
+                        {{#if roleConsideration}}
+                        <div class="clearfix btn-group-justified t20">
+                              <a class="btn btn-block bg-red btn-lg white" id="revokeOffer">REVOKE YOUR OFFER</a>
+                          </div>
+                        {{/if}}
                       {{/if}}
 
                       {{#if needsApplicantAction}}
@@ -85,9 +96,7 @@
                         </div>
                       {{/if}}
 
-                      {{#if ownerInitAgreementAplicantNote}}
-                        <p class="h6">author is in the process of deciding your offer</p>
-                      {{/if}}
+                      
 
                       {{#if applicantInCounter}}
                         <p class="h6">applicant is in process of accepting or rejecting your counter offer</p>
@@ -275,7 +284,7 @@
 </template>
 
 <template name="assetsOfferDialogFooter">
-    <div class="normal-content no-boxed t40" style="display: inline-flex;">
+    <div class="normal-content no-boxed" >
 
         {{#each messages}}
           <div class="first span12 clearfix">
@@ -283,7 +292,11 @@
           </div>
         {{/each}}
 
-        {{> messageBox}}
+        <div class="container">
+          <div class="row">
+            {{> messageBox}}
+          </div>
+        </div>
     </div>
 </template>
 

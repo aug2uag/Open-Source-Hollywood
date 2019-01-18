@@ -557,16 +557,19 @@ function showVexWithInput(message, input) {
 }
 
 Template.newProject.events({
-  'click .oshchx': function(e) {
-    console.log('in oshchx')
-    $(e.target).find('input').click()
-    if ($(e.target).val()==='pay') {
+  'click #cast_oshx': function(e) {
+      if ($(e.target).prop('checked')) {
+        $('#cast_pay_amounth').show()
+      } else {
+        $('#cast_pay_amounth').hide()
+      }
+  },
+  'click #crew_oshx': function(e) {
       if ($(e.target).prop('checked')) {
         $('#crew_pay_amounth').show()
       } else {
         $('#crew_pay_amounth').hide()
       }
-    };
   },
   'click .bread_show_resources': function(e) {
     $('.show_resources_toggle').hide()
@@ -761,6 +764,7 @@ Template.newProject.events({
 
     // create virtual account for project
     // add funds to virtual account, non-refundable
+    console.log('call addProject')
     Meteor.call('addProject', o, function(err, res) {
       vex.dialog.alert(err||res||'there was an error, please try again');
       if (res) {
@@ -839,9 +843,9 @@ Template.newProject.events({
         description = $('#crew-description').val(), 
         audition = $('#crew-audition').val() || 'N/A',
         consideration = $('.crew_consideration:checked').map(function(a) { return $(this).val() }).get(),
-        pay_offer = $('#crew_pay_amount').val()||0,
+        pay_offer = $('#oshchx_crew').val()||0,
         status = 'needed';
-    $('#crew_pay_amount').val('')
+    $('#oshchx_crew').val('')
     positions.crew = positions.crew || []
     var o = {
       title: title,
@@ -868,9 +872,9 @@ Template.newProject.events({
         description = $('#cast-description').val(), 
         audition = $('#cast-audition').val() || 'N/A',
         consideration = $('.cast_consideration:checked').map(function(a) { return $(this).val() }).get(),
-        pay_offer = $('#cast_pay_amount').val()||0,
+        pay_offer = $('#oshchx_cast').val()||0,
         status = 'needed';
-    $('#cast_pay_amount').val('')
+    $('#oshchx_cast').val('')
     var o = {
       title: title,
       description: description,

@@ -299,31 +299,33 @@
                                                         <div class=" row t20">
                                                             <ul class="list-card-details list-card-title" style="border-top: 1px solid;width: 350px;">
                                                                 <li><label><small>Would you pay for this position?</small></label></li>
-                                                                <li><label><small>Would you accept payment for this position?</small></label></li>
-                                                                <li><label><small>Would you accept free performance for this position?</small></label></li>
+                                                                <li><label><small>Request pay for this role.</small></label></li>
+                                                                <li><label><small>Accept free performance.</small></label></li>
                                                             </ul>
                                                             <p><small>these offer options will be presented to candidates</small></p>
                                                         </div>
                                                         <div class="row">
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                <input id="crew_pay" type="checkbox" name="crew_consideration" class="crew_consideration" value="pay" checked />
-                                                                <label for="crew_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>this role is listed for paid hire</strong></small></label>
+                                                            <div class="col-sm-12 col-md-4 b20" >
+                                                                <div class="row" id="crew_oshx">
+                                                                    <input id="crew_pay" type="checkbox" name="crew_consideration" class="crew_consideration" value="pay" checked />
+                                                                    <label for="crew_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>this role is listed for paid hire</strong></small></label>
+                                                                </div>
 
-                                                                <div id="crew_pay_amounth">
-                                                                    <input id="crew_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="crew_pay_amount"/>
-                                                                    <label><small>payment max for this role</small></label>
+                                                                <div id="crew_pay_amounth" class="row">
+                                                                    <input id="oshchx_crew" class="t40 mb0" type="number" min="0" max="9999" placeholder="enter max amount here" name="crew_pay_amount"/>
+                                                                    <label><small>max pay for this role</small></label>
                                                                 </div>
                                                                 
                                                             </div>
 
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <div class="col-sm-12 col-md-4 b20">
                                                                 <input id="crew_time" type="checkbox" name="crew_consideration" class="crew_consideration" value="time" checked />
                                                                 <label for="crew_time">Experiential <i class="glyphicon glyphicon-time"></i>:<br><small><strong>would accept free performance for this role</strong></small></label>
                                                             </div>
 
-                                                            <div class="col-sm-12 col-md-4 oshchx b20">
+                                                            <div class="col-sm-12 col-md-4 b20">
                                                                 <input id="crew_escrow" type="checkbox" name="crew_consideration" class="crew_consideration" value="escrow" checked />
                                                                 <label for="crew_escrow">Escrow Position <i class="glyphicon glyphicon-usd"></i>:<br><small><strong>would accept donation for this role</strong></small></label>
                                                             </div>           
@@ -379,31 +381,33 @@
                                                         <div class=" row t20">
                                                             <ul class="list-card-details list-card-title" style="border-top: 1px solid;width: 350px;">
                                                                 <li><label><small>Would you pay for this position?</small></label></li>
-                                                                <li><label><small>Would you accept payment for this position?</small></label></li>
-                                                                <li><label><small>Would you accept free performance for this position?</small></label></li>
+                                                                <li><label><small>Request pay for this role.</small></label></li>
+                                                                <li><label><small>Accept free performance.</small></label></li>
                                                             </ul>
                                                             <p><small>these offer options will be presented to candidates</small></p>
                                                         </div>
                                                         <div class="row">
 
-                                                                <div class="col-sm-12 col-md-4 oshchx b20">
-                                                                    <input id="cast_pay" type="checkbox" name="cast_consideration" class="cast_consideration" value="pay" checked />
-                                                                    <label for="cast_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>You will accept offers for pay for this position.</strong></small></label>
+                                                                <div class="col-sm-12 col-md-4 b20" >
+                                                                    <div class="row" id="cast_oshx">
+                                                                        <input id="cast_pay" type="checkbox" name="cast_consideration" class="cast_consideration" value="pay" checked />
+                                                                        <label for="cast_pay">Paid Position <i class="glyphicon glyphicon-star"></i>:<br><small><strong>this role is listed for paid hire</strong></small></label>
+                                                                    </div>
 
-                                                                    <div id="cast_pay_amounth">
-                                                                        <input id="cast_pay_amount" class="t40 mb0" type="text" placeholder="enter amount here" name="cast_pay_amount"/>
-                                                                        <label><small>how much would you pay for this role?</small></label>
+                                                                    <div id="cast_pay_amounth" class="row">
+                                                                        <input id="oshchx_cast" class="t40 mb0" type="number" min="0" max="9999" placeholder="enter max amount here" name="cast_pay_amount"/>
+                                                                        <label><small>max pay for this role</small></label>
                                                                     </div>
                                                                     
                                                                 </div>
 
 
-                                                                <div class="col-sm-12 col-md-4 oshchx b20">
+                                                                <div class="col-sm-12 col-md-4 b20">
                                                                     <input id="cast_time" type="checkbox" name="cast_consideration" class="cast_consideration" value="time" checked />
                                                                     <label for="cast_time">Experiential <i class="glyphicon glyphicon-time"></i>:<br><small><strong>You will accept offers for time donations for this role.</strong></small></label>
                                                                 </div>
 
-                                                                <div class="col-sm-12 col-md-4 oshchx b20">
+                                                                <div class="col-sm-12 col-md-4 b20">
                                                                     <input id="cast_escrow" type="checkbox" name="cast_consideration" class="cast_consideration" value="escrow" checked />
                                                                     <label for="cast_escrow">Escrow Position <i class="glyphicon glyphicon-usd"></i>:<br><small><strong>You will receive money only if you accept the offer for the role.</strong></small></label>
                                                                 </div>            

@@ -134,14 +134,16 @@ Template.projectMessage.helpers({
 		was = this
 	},
 	archivedOffer: function() {
-		// console.log(this)
+		console.log(this)
 		// case active asset negotiate
 		try {	
 			if (this.offers[0].accepted||this.offers[0].rejected) return true;
+			if (this.isAssets&&this.offer&&this.offer.pending) return false
+			if (this.offers[0]&&this.offers[0].pending) return false
+			// case active role negotiate
+			if (this.offer&&this.offer.pending) return false
 		} catch(e) {}
-		if (this.isAssets&&this.offer&&this.offer.pending) return false
-		// case active role negotiate
-		if (this.offer&&this.offer.pending) return false
+
 		return true
 	},
 	formattedOffers: function() {
@@ -278,6 +280,17 @@ Template.projectMessage.helpers({
 		var value = negotiationHelper('equities');
 		if (value) return value;
 		return '0';
+	},
+	roleConsideration: function() {
+		try {
+			if (this.offers[0].receipts.length) {
+				if (this.offers[0].purpose === 'apply') {
+					return true
+				};
+			};
+			
+		} catch(e){}
+		return false
 	}
 })
 
@@ -293,6 +306,22 @@ Template.projectMessage.events({
 	        if (result) {
 	          Meteor.call('rejectUserFromProject', was.offers);
 	          vex.dialog.alert('applicant rejected');
+	          setTimeout(function() { history.back() }, 1597);
+	        };
+	      }
+	  	});
+	},
+	'click #revokeOffer': function(e) {
+		vex.dialog.confirm({
+	      message: "Please confirm: you are revoking " + was.offers[0].offer.user.name,
+	      buttons: [
+	        $.extend({}, vex.dialog.buttons.YES, { text: 'Yes' }),
+	        $.extend({}, vex.dialog.buttons.NO, { text: 'No' })
+	      ],
+	      callback: function (result) {
+	        if (result) {
+	          Meteor.call('rejectUserFromProject', was.offers);
+	          vex.dialog.alert('your offer was revoked');
 	          setTimeout(function() { history.back() }, 1597);
 	        };
 	      }
