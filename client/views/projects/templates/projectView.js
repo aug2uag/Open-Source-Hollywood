@@ -427,6 +427,9 @@ Template.projectView.helpers({
   numGifts: function(){
     return this.project.gifts.length
   },
+  numNeeds: function(){
+    return this.project.gifts.length
+  },
   hasGifts: function() {
     return this.project.gifts&&this.project.gifts.length||false
   },
@@ -501,13 +504,13 @@ Template.projectView.helpers({
     return moment(this.date).format('MM-DD-YYYY');
   },
   castLN: function() {
-    return this.project.cast.filter(function(e){if(e.status==='needed')return true}).length;
+    return this.project.cast.length
   },
   crewLN: function() {
-    return this.project.crew.filter(function(e){if(e.status==='needed')return true}).length;
+    return this.project.crew.length
   },
   needLN: function() {
-    return this.project.needs.length;
+    return this.project.needs.length
   },
   anyRoles: function() {
     return Meteor.user()&&(this.project.needs.length>0||this.project.cast.length>0||this.project.crew.length>0);

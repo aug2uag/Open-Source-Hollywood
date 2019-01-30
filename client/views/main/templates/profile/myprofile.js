@@ -1144,7 +1144,11 @@ Template.myProfile.rendered = function () {
 		    callbacks: {
 		      onInit: function() {
 		        $('.note-editable').html(u.bio||'<p><span class="large">Enter your biography here.</span><br>You can copy / paste HTML, for more help visit <a href="https://en.wikipedia.org/wiki/Template:Biography" target="_blank">https://en.wikipedia.org/wiki/Template:Biography</a>.</p><p>&nbsp;</p>');
-		        // $('.note-toolbar').css('z-index', '0');
+		        $('.note-toolbar').css('z-index', '0');
+		        $('.note-editable').off()
+		        $('.note-editable').on('click', function() {
+		          if ($('.note-editable').html().indexOf('your biography here.')>-1) $('.note-editable').html('');
+		        })
 		      }
 		    }
 		});

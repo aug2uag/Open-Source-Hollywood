@@ -562,14 +562,14 @@
                         <div class="col-md-6 col-md-offset-3">
                             <form id="msform">
                                 <!-- progressbar -->
-                                <ul id="progressbar">
+                                <!-- <ul id="progressbar">
                                     <li class="active">Roles</li>
                                     <li>Your Info</li>
-                                </ul>
+                                </ul> -->
                                 <!-- fieldsets -->
                                 <fieldset>
                                     <h2 class="fs-title">Choose Your Roles</h2>
-                                    <h3 class="fs-subtitle">You can update this anytime.</h3>
+                                    <h3 class="fs-subtitle">You can update this in your settings anytime after.</h3>
                                     <section title=".roundedTwo">
                                       <!-- .roundedTwo -->
                                       <div class="roundedTwo">
@@ -604,8 +604,14 @@
                                 </fieldset>
                                 <fieldset>
                                     <h2 class="fs-title">Configure Notifications</h2>
+                                    {{#unless needsEmail}}
+                                    <h3 class="fs-subtitle">Optional phone notifications.</h3>
+
+                                    {{else}}
                                     <h3 class="fs-subtitle">Enter your email and phone information.</h3>
                                     <input type="text" name="email" placeholder="Email"/>
+                                    {{/unless}}
+
                                     <input type="text" name="phone" placeholder="Phone"/>
                                     <input id="submit" type="submit" name="submit" class="submit action-button" value="Submit"/>
                                 </fieldset>

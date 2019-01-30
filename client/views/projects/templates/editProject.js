@@ -195,7 +195,7 @@ function removeGift(e) {
 
 function returnProjectCreateDetails(o) {
   o = o || {};
-
+  o.phase = $('#phase').val()
   o.videoExplainer = $('#video_explainer').val();
   if (o.videoExplainer) {
     var vimeo = /^https:\/\/vimeo.com\/[\d]{8,}$/;
@@ -261,46 +261,15 @@ function returnProjectCreateDetails(o) {
   
   var crew = $('.crew-val'); 
   o.crew = positions.crew||[];
-  // crew.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.title = $(arr[0]).text();
-  //   _o.description = $(arr[1]).text();
-  //   _o.audition = $(arr[2]).text();
-  //   o.crew.push(_o);
-  // });
 
   var cast = $('.cast-val');
   o.cast = positions.cast||[];
-  // cast.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.role = $(arr[0]).text();
-  //   _o.description = $(arr[1]).text();
-  //   _o.audition = $(arr[2]).text();
-  //   o.cast.push(_o);
-  // });
 
   var needs = $('.needs-val');
   o.needs = positions.needs||[];
-  // needs.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.category = $(arr[0]).text();
-  //   _o.description = $(arr[1]).text();
-  //   _o.quantity = $(arr[2]).text();
-  //   o.needs.push(_o);
-  // });
 
   var social = $('.social-val');
   o.social = positions.social||[];
-  // social.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.name = $(arr[0]).text();
-  //   _o.address = $(arr[1]).text();
-  //   o.social.push(_o);
-  // });
 
   /** budget info */
   var budgetSheet = localStorage.getItem('budget');
@@ -454,6 +423,7 @@ Template.editProject.events({
   },
   'click .update_campaign': function(e) {
     e.preventDefault();
+    $('.addingstatus').hide()
     var o = returnProjectCreateDetails({slug: currentSlug});
     Meteor.call('editProject', o);
     vex.dialog.alert("Project updated!");
@@ -739,6 +709,10 @@ Template.editProject.rendered = function () {
       onInit: function() {
         $('.note-editable').html('<p><span class="large">Enter your campaign description here.</span><br>You can copy / paste text from another source here or use the menu above to format text and insert images from a valid URL.</p><p>&nbsp;</p>');
         $('.note-toolbar').css('z-index', '0');
+        $('.note-editable').off()
+        $('.note-editable').on('click', function() {
+          if ($('.note-editable').html().indexOf('your campaign description here.')>-1) $('.note-editable').html('');
+        })
       }
     }
   });
@@ -754,6 +728,7 @@ Template.editProject.rendered = function () {
     if (newProject.title&&newProject.title!=='untitled') $('#title').val(newProject.title);
     if (newProject.logline&&newProject.logline!=='eligible for support') $('#logline').val(newProject.logline);
     if (newProject.genre) $("#genre option[value='"+newProject.genre+"']").prop('selected', true);
+    if (newProject.phase) $('#phase').val(newProject.phase);
     if (newProject.website) $('#website').val(newProject.website);
     if (newProject.production_company) $('#prodorg').val(newProject.production_company);
     if (newProject.gifts&&newProject.gifts.length) {

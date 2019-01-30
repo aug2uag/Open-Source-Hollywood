@@ -732,6 +732,22 @@ Template.settingsTab.helpers({
   }
 });
 
+Template.settingsTab.events({
+    'click .editcampconv': function(e) {
+        // these nasty doubles are because of CSS artifacts
+        // dirty workaround for intended behavior
+        setTimeout(function() {
+          simulateClick(document.getElementsByClassName('gotoedit')[0])
+          setTimeout(function() {
+              simulateClick(document.getElementsByClassName('gotoedit')[0])
+              setTimeout(function() {
+                  simulateClick(document.getElementsByClassName('gotoedit')[0])
+                }, 144)
+            }, 667)
+        }, 987)
+    }
+})
+
 Template.approvedTab.helpers({
   projectDonated: function() {
     return '$'+(Number.isInteger(parseInt(this.funded)) ? this.funded : 0)+' BUDGET';

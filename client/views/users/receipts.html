@@ -1,4 +1,5 @@
 <template name="main_receipts">
+  {{foo}}
   <div id="content" class="clearfix ">
     <div class="clearfix wrapper">
 
@@ -10,7 +11,7 @@
 
           <div class="krown-column-row clearfix">
              <div class="krown-column-container clearfix first span12 clearfix">
-                {{#if receiptsNil}}
+                {{#unless ln}}
                   <h5>You have no transactions.</h5>
                 {{else}}
                 <div class="table-responsive">
@@ -24,7 +25,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                    {{#each receiptsList}}
+                    {{#each receipts}}
                       <tr>
                         <td>{{formatDate}}</td>
                         <td>{{formatTitle}}</td>
@@ -39,7 +40,7 @@
                     </tbody>             
                   </table>
                 </div>
-                {{/if}}
+                {{/unless}}
              </div>
            </div>
         </div>

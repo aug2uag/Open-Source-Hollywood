@@ -1,4 +1,14 @@
 <template name="newProject">
+    <div id="preloader" class="nodisplay">
+    
+        <svg class="center-block loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
+             <circle cx="170" cy="170" r="160" stroke="#E2007C"/>
+             <circle cx="170" cy="170" r="135" stroke="#404041"/>
+             <circle cx="170" cy="170" r="110" stroke="#E2007C"/>
+             <circle cx="170" cy="170" r="85" stroke="#404041"/>
+        </svg>
+        
+    </div>
     <div id="content" class="clearfix ">
         <div class="clearfix wrapper">
         {{#if currentUser}}
@@ -25,8 +35,8 @@
                     <ul class="titles clearfix" id="settings_menu">
                         <li class="opened">
                             <h5>BASIC INFO</h5></li>
-                        <li class="">
-                            <h5>BACK STORY</h5></li>
+                        <!-- <li class="">
+                            <h5>BACK STORY</h5></li> -->
                         <li class="">
                             <h5>PRODUCTION NEEDS</h5></li>
                         <li class="">
@@ -37,7 +47,7 @@
                         <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                           <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
                             <option>BASIC INFO</option>
-                            <option>BACK STORY</option>
+                            <!-- <option>BACK STORY</option> -->
                             <option>PRODUCTION NEEDS</option>
                             <option>PROJECT MERCH</option>
                             <option>FINANCIALS</option>
@@ -207,7 +217,7 @@
                             </form>
                         </div>
 
-                        <div id="story" class="nodisplay">
+                        <!-- <div id="story" class="nodisplay">
                             <div class="project-header">
                               <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Campaign Background &amp; History</h3>
                               <hr />
@@ -221,7 +231,6 @@
                               <li><a href="#!" class="bread_show_story" val="sig">Significance</a></li>
                             </ol>
                             <form class="newProjForm">
-                                <!-- STORY -->
                                 <div class="krown-column-row clearfix">
                                     <h3 class="extremeboldtext">Additional Information</h3>
                                     <div class="row story_toggler" id="story_about">
@@ -256,7 +265,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> -->
 
                         <div id="resources" class="nodisplay">
                             <div class="project-header">
@@ -650,7 +659,7 @@
 
                         <div id="tokenize" class="nodisplay">
                             <div class="project-header">
-                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Convert Your Campaign to Tokens</h3>
+                              <h3 class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Campaign Financial Data</h3>
                               <hr />
                             </div>
                            <div class="row">
@@ -658,8 +667,9 @@
                                     <input style="width: 80%!important;left: 10%!important;position:relative;border: 2px solid black!important;background: white!important;color:black!important;" type="submit" name="showbudget" id="showbudget" value="enter budget data" />
                                 </div>
                             </div>
-                            <form class="newProjForm t40">
-                                <!-- TOKENIZATION -->
+                            <!-- TOKENIZATION -->
+                            <!-- <form class="newProjForm t40">
+                                
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <input style="width: 80%!important;left: 10%!important;position:relative;border: 2px solid black!important;background: white!important;color:black!important;" type="submit" name="showrevsharing" id="showrevsharing" value="enable revenue sharing" />
@@ -692,7 +702,7 @@
                                 <div class="row">
                                     <div id="equitydisplay" class="col-sm-12 margin_bottom40" style="font-weight:700;top:-20px" hidden>Your project is assigned <span id="numshares"></span> shares representing <span id="numpercent"></span>% all future revenues of your campaign at $<span id="shareval"></span> minimum price per share.</div>
                                 </div>
-                            </form>
+                            </form> -->
                         </div>
 
                     </div>

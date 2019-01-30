@@ -351,7 +351,7 @@ Router.route('/config', {
   onAfterAction: function() {
     var user = Meteor.user()
     if (!user) Router.go('Home');
-    if (user.iamRoles&&user.iamRoles.length) Router.go('Home');
+    try { if (user.iamRoles&&user.iamRoles.length) Router.go('Home'); } catch(e) {}
   }
 })
 

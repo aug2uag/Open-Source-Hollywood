@@ -48,13 +48,7 @@ function returnProjectCreateDetails(o) {
   o = o || {};
 
   o.phase = $('#phase').val()
-  console.log(o)
-  try {
-    if (!o.phase||o.phase.indexOf('Select')>-1) throw new Error
-  } catch (e) {
-    return vex.dialog.alert('Please define what phase your project is in.');
-  }
-  
+
 
   // (1) check video sanity
   /** 
@@ -87,11 +81,10 @@ function returnProjectCreateDetails(o) {
 
   // (2) remove default category value
   o.category = $('#category').find(":selected").text();
-  if (o.category.indexOf('Format')>-1) return vex.dialog.alert('Please select a valid category and genre.');
+  // if (o.category.indexOf('Format')>-1) return vex.dialog.alert('Please select a valid category and genre.');
 
   // (3) check location and continue
   o.zip = $('#location').val() && $('#location').val().replace(' ', '') || '';
-  if (!/\d{5}$/.exec(o.zip)) return vex.dialog.alert('Please enter a valid zip code for your location.');
 
   o.title = $('#title').val() || 'untitled';
   o.logline = $('#logline').val() || 'eligible for support';
@@ -134,36 +127,12 @@ function returnProjectCreateDetails(o) {
   
   var crew = $('.crew-val'); 
   o.crew = positions.crew||[];
-  // crew.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.title = $(arr[0]).text();
-  //   _o.description = $(arr[1]).text();
-  //   _o.audition = $(arr[2]).text();
-  //   o.crew.push(_o);
-  // });
 
   var cast = $('.cast-val');
   o.cast = positions.cast||[];
-  // cast.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.role = $(arr[0]).text();
-  //   _o.description = $(arr[1]).text();
-  //   _o.audition = $(arr[2]).text();
-  //   o.cast.push(_o);
-  // });
 
   var needs = $('.needs-val');
   o.needs = positions.needs||[];
-  // needs.each(function(i, el) {
-  //   var _o = {};
-  //   var arr = $(el).children('td');
-  //   _o.category = $(arr[0]).text();
-  //   _o.description = $(arr[1]).text();
-  //   _o.quantity = $(arr[2]).text();
-  //   o.needs.push(_o);
-  // });
 
   var social = $('.social-val');
   o.social = [];
@@ -543,7 +512,7 @@ Template.newProject.onRendered(function() {
     // console.log(new Array(100).join('# '))
     // console.log('finish onRendered')
 
-  } catch(e) { console.log(e) } 
+  } catch(e) { } 
 });
 
 function showVexWithInput(message, input) {
@@ -760,12 +729,13 @@ Template.newProject.events({
     e.preventDefault();
     var o = returnProjectCreateDetails({showDialog: true});
     if (!o) return;
-    localStorage.setItem('projectnew', JSON.stringify(o));
 
     // create virtual account for project
     // add funds to virtual account, non-refundable
     console.log('call addProject')
+    $('#preloader').show()
     Meteor.call('addProject', o, function(err, res) {
+      $('#preloader').hide()
       vex.dialog.alert(err||res||'there was an error, please try again');
       if (res) {
         localStorage.removeItem('projectnew')

@@ -61,12 +61,17 @@ Template.nav.events({
       // localStorage.setItem($(e.target).attr('val'), 'switchnavDashboard')
       if (switchNav) {
           var o = {
-            'projects': 'switch_campaigns',
-            
+            'projects': 'switch_campaigns',            
             'merchant': 'switch_merchant',
             'subscriptions': 'switch_subscriptions'
           }[switchNav]
           simulateClick(document.getElementsByClassName(o)[0])
+          setTimeout(function() {
+            simulateClick(document.getElementsByClassName(o)[0])
+            setTimeout(function() {
+              simulateClick(document.getElementsByClassName(o)[0])
+            }, 144)
+          }, 337)
           // localStorage.removeItem('switchnavDashboard')
       };
     }, 987)
@@ -81,9 +86,15 @@ Template.nav.events({
             'assets': 'switch_assets'
           }[switchNav]
           simulateClick(document.getElementsByClassName(o)[0])
+          setTimeout(function() {
+            simulateClick(document.getElementsByClassName(o)[0])
+            setTimeout(function() {
+              simulateClick(document.getElementsByClassName(o)[0])
+            }, 144)
+          }, 337)
           // localStorage.removeItem('switchnavSettings')
       };
-    }, 667)
+    }, 987)
   },
   'click .menu-item': function(e) {
     if ($(window).width()<=767) $('#navbutton').click();
