@@ -732,63 +732,60 @@ Template.projectView.events({
           '</div>'
       ]
 
-      if (Meteor.user()) {
-        dialogInput = dialogInput.concat([
-          '<div class="vex-custom-field-wrapper t20">',
-              // set checkbox to show subscription options
-              // frequency, amount
-              '<div class="container">',
-                  '<form>',
-                  '<div class="span4">',
-                      '<div class="">',
-                        '<p>Would you like to make subscription payments?</p>',
-                        '<div class="col-xs-12 col-sm-6 col-md-4 checkbox">',
-                          '<input type="checkbox" id="checkbox-Subscribe" name="Subscribe">',
-                          '<label for="checkbox-Subscribe">Subscribe</label>',
-                        '</div>',
-                      '</div>',
-                      '<div class="t60 showSubscribeDates nodisplay">',
-                          '<div class="form-inline">',
-                              '<label class="control-label">',
-                                  'How frequently?</label>',
-                              '<label class="radio">',
-                                  '<input name="subscription_opt" class="subscription_opt" value="Daily" type="radio">Daily',
-                              '</label>&nbsp;',
-                              '<label class="radio">',
-                                  '<input name="subscription_opt" class="subscription_opt" value="Weekly" type="radio">Weekly',
-                              '</label>&nbsp;',
-                              '<label class="radio">',
-                                  '<input name="subscription_opt" class="subscription_opt" value="Monthly" type="radio" checked>Monthly',
-                              '</label>&nbsp;',
-                              '<label class="radio">',
-                                  '<input name="subscription_opt" class="subscription_opt" value="Annually" type="radio">Annually',
-                              '</label>',
-                          '</div>',
-                      '</div>',
-                      '<div class="alert alert-info small showSubscribeDates nodisplay t20">',
-                        '<p><span id="subscriptionfreq">Monthly</span> selected</p>',
-                      '</div>',
-                  '</div>',
-                  '</form>',
-              '</div>',
+      // collect subscription donations on campaign
+      // if (Meteor.user()) {
+      //   dialogInput = dialogInput.concat([
+      //     '<div class="vex-custom-field-wrapper t20">',
+      //         '<div class="container">',
+      //             '<form>',
+      //             '<div class="span4">',
+      //                 '<div class="">',
+      //                   '<p>Would you like to make subscription payments?</p>',
+      //                   '<div class="col-xs-12 col-sm-6 col-md-4 checkbox">',
+      //                     '<input type="checkbox" id="checkbox-Subscribe" name="Subscribe">',
+      //                     '<label for="checkbox-Subscribe">Subscribe</label>',
+      //                   '</div>',
+      //                 '</div>',
+      //                 '<div class="t60 showSubscribeDates nodisplay">',
+      //                     '<div class="form-inline">',
+      //                         '<label class="control-label">',
+      //                             'How frequently?</label>',
+      //                         '<label class="radio">',
+      //                             '<input name="subscription_opt" class="subscription_opt" value="Daily" type="radio">Daily',
+      //                         '</label>&nbsp;',
+      //                         '<label class="radio">',
+      //                             '<input name="subscription_opt" class="subscription_opt" value="Weekly" type="radio">Weekly',
+      //                         '</label>&nbsp;',
+      //                         '<label class="radio">',
+      //                             '<input name="subscription_opt" class="subscription_opt" value="Monthly" type="radio" checked>Monthly',
+      //                         '</label>&nbsp;',
+      //                         '<label class="radio">',
+      //                             '<input name="subscription_opt" class="subscription_opt" value="Annually" type="radio">Annually',
+      //                         '</label>',
+      //                     '</div>',
+      //                 '</div>',
+      //                 '<div class="alert alert-info small showSubscribeDates nodisplay t20">',
+      //                   '<p><span id="subscriptionfreq">Monthly</span> selected</p>',
+      //                 '</div>',
+      //             '</div>',
+      //             '</form>',
+      //         '</div>',
 
-          '</div>'
-        ])
-      }
+      //     '</div>'
+      //   ])
+      // } else {
+      //   dialogInput = dialogInput.concat([
+      //     '<div class="vex-custom-field-wrapper t20 b20">',
+      //       '<h4>Login to make subscription donation to this campaign!</h4>',
+      //     '</div>'
+      //   ])
+      // };
 
-      if (!Meteor.user()) {
-        dialogInput = dialogInput.concat([
-          '<div class="vex-custom-field-wrapper t20 b20">',
-            '<h4>Login to make subscription donation to this campaign!</h4>',
-          '</div>'
-        ])
-      };
-
-      dialogInput = dialogInput.concat([
-        '<div class="vex-custom-field-wrapper t20">',
-          '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
-        '</div>'
-      ])
+      // dialogInput = dialogInput.concat([
+      //   '<div class="vex-custom-field-wrapper t20">',
+      //     '<p>We are currently in test mode. You can make all your transactions with a test credit card number 4000 0000 0000 0077 exp 02/22 cvc 222 for your transactions.</p>',
+      //   '</div>'
+      // ])
 
       vex.dialog.open({
         input: dialogInput.join(''),

@@ -563,6 +563,10 @@ Template.newProject.events({
     e.preventDefault();
     showVexBudgetForm();
   },
+  'click .showbudget': function(e) {
+    e.preventDefault();
+    showVexBudgetForm();
+  },
   'click #showrevsharing': function(e) {
     e.preventDefault();
     /** sign agreement form and show fields */
