@@ -4,7 +4,8 @@
 
         <header id="page-title">
             <h1 class="title">Settings</h1>
-            <h2 class="subtitle">Update personal and account information. Notifications &amp; messages.</h2></header>
+            <h2 class="subtitle">Update personal and account information. Notifications &amp; messages.</h2>
+        </header>
 
         <div class="normal-content ">
 
@@ -680,6 +681,18 @@
 <template name="myProfile">
   <div id="content" class="clearfix ">
     <div class="clearfix wrapper">
+    <header id="page-title">
+        <div class="row">
+            <div class="col-xs-9">
+                <h1 class="title">Edit Profile</h1>
+                <h2 class="subtitle">Update by section and personal merch here</h2>
+            </div>
+
+            <div class="col-xs-3">
+                <a onclick="resetNewProjCache()" id="resetNewProjCacheBtn" class="button krown-box right" style="{{#unless cachedNewProject}}display: none;{{/unless}}">RESET</a>
+            </div>
+        </div>
+    </header>
       <div class="krown-tabs responsive-on clearfix">
         <ul class="titles clearfix" id="settings_menu">
             <li class="opened">

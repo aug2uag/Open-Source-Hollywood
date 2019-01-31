@@ -12,7 +12,24 @@
         {{/if}}
           
         {{else}}
-          <h3>foo</h3>
+          
+
+
+
+
+          <!-- define state -->
+
+
+
+
+
+          <!-- handle display for state -->
+
+
+
+
+
+
         {{/if}}
 
       {{else}}
@@ -60,11 +77,13 @@
 
                     {{#if hasOffer}}
 
+                    {{#if isHired}}
                     <section class="t20">
 
                       <a href="https://www.irs.gov/pub/irs-pdf/fw9.pdf" style="width: 80%!important;left: 10%!important;position:relative;border: 2px solid black!important;background: white!important;color:black!important;" target="_blank">Access W9 Form</a>
 
                     </section>
+                    {{/if}}
 
 
                     <section class="t20">
@@ -80,35 +99,32 @@
                               <a class="btn btn-block bg-navy btn-lg white" id="counterofferbtn">COUNTER</a>
                           </div> -->
                         </div>
-                        {{else}}
+                      {{else}}
 
                         {{#if ownerInitAgreementAplicantNote}}
                           <p class="h6">author is in the process of deciding your offer</p>
                         {{/if}}
 
-                        {{#if roleConsideration}}
-                        <div class="clearfix btn-group-justified t20">
+                          <div class="clearfix btn-group-justified t20">
                               <a class="btn btn-block bg-red btn-lg white" id="revokeOffer">REVOKE YOUR OFFER</a>
                           </div>
-                        {{/if}}
+
+
+
+                          {{#if needsApplicantAction}}
+                            <div class="krown-column-row clearfix btn-group">
+                              <div class="krown-column-container clearfix last span6 btn-group-justified">
+                                  <a class="btn btn-block bg-green btn-lg white" id="applicantfinalizek">ACCEPT</a>
+                              </div>
+                              <div class="krown-column-container clearfix last span6 btn-group-justified">
+                                  <a class="btn btn-block bg-red btn-lg white" id="applicantrejectoffer">REJECT</a>
+                              </div>
+                            </div>
+                          {{/if}}
+
+
                       {{/if}}
 
-                      {{#if needsApplicantAction}}
-                        <div class="krown-column-row clearfix btn-group">
-                          <div class="krown-column-container clearfix last span6 btn-group-justified">
-                              <a class="btn btn-block bg-green btn-lg white" id="applicantfinalizek">ACCEPT</a>
-                          </div>
-                          <div class="krown-column-container clearfix last span6 btn-group-justified">
-                              <a class="btn btn-block bg-red btn-lg white" id="applicantrejectoffer">REJECT</a>
-                          </div>
-                        </div>
-                      {{/if}}
-
-                      
-
-                      {{#if applicantInCounter}}
-                        <p class="h6">applicant is in process of accepting or rejecting your counter offer</p>
-                      {{/if}}
 
                     </section>
 

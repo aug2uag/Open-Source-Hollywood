@@ -291,6 +291,13 @@ Template.projectMessage.helpers({
 			
 		} catch(e){}
 		return false
+	},
+	isHired: function() {
+		try {
+			if (this.offers[0].offer.type==='hired') return true;
+		} catch(e) {} finally { 
+			return false
+		}
 	}
 })
 
@@ -313,14 +320,14 @@ Template.projectMessage.events({
 	},
 	'click #revokeOffer': function(e) {
 		vex.dialog.confirm({
-	      message: "Please confirm: you are revoking " + was.offers[0].offer.user.name,
+	      message: "Please confirm: you are revoking " + was.project.title,
 	      buttons: [
 	        $.extend({}, vex.dialog.buttons.YES, { text: 'Yes' }),
 	        $.extend({}, vex.dialog.buttons.NO, { text: 'No' })
 	      ],
 	      callback: function (result) {
 	        if (result) {
-	          Meteor.call('rejectUserFromProject', was.offers);
+	          Meteor.call('revokeOffer', was.offers);
 	          vex.dialog.alert('your offer was revoked');
 	          setTimeout(function() { history.back() }, 1597);
 	        };

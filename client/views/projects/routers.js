@@ -252,6 +252,118 @@ Router.route('/projects/:slug/:uid', {
   }
 });
 
+Router.route('/edit/projects/:slug/:uid', {
+  name: 'editProject',
+  template: 'editProjectMaster',
+  layoutTemplate: 'StaticLayout',
+  waitOn: function() {
+    return [
+      Meteor.subscribe('getMe'),
+      Meteor.subscribe('projAssetOffers', this.params.slug, this.params.uid),
+      Meteor.subscribe('getProject', this.params.slug),
+      Meteor.subscribe('getUsers'),
+      Meteor.subscribe('gotoBoard', this.params.slug),
+      Meteor.subscribe('commentsList', this.params.slug),
+      Meteor.subscribe('stringId', this.params.uid),
+      Meteor.subscribe('projReceipts', this.params.slug)
+    ];
+  },
+  data: function() {
+    var slug = this.params.slug;
+    var project = Projects.findOne({slug: slug});
+    
+    var backers
+    try {
+      backers = Users.find({ _id: { $in: project.backers||[] }}).fetch()
+    } catch (e) {} finally {
+      backers = backers || []
+    }
+
+    var board = Boards.findOne({slug: slug});
+    if (!board || !project) return;
+    var user = Users.findOne({_id: project.ownerId});
+    var assetOffers = Offers.find({slug: project.slug, offeree: project.ownerId, type: 'assets'}).fetch()
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="'+(project.descriptionText||project.logline||'Amazing campaign on O . S . H . (https://opensourcehollywood.org)')+'">' );
+    document.title = project.title ? [project.title, 'on O . S . H . (opensourcehollywood.org).'].join(' ') : 'Campaign Details';
+    return {
+        uid: project._id,
+        assetOffers: assetOffers,
+        backers: backers,
+        perCent: function() {
+          if (project.funded && project.budget) {
+            var v = (project.funded/project.budget * 100 > 100 ? 100 : project.funded/project.budget * 100).toFixed(2);
+            return v + ' %';
+          };
+
+          return 'not available';
+        },
+        purchases: function() {
+          var r =  Receipts.find({slug: project.slug}).fetch()
+          return r
+        },
+        isOwner: function () {
+          if (!Meteor.user()) return false;
+          return (project.ownerId === Meteor.user()._id)&&!project.archived;
+        },
+        isOwnerNoMatterWhat: function () {
+          if (!Meteor.user()) return false;
+          return (project.ownerId === Meteor.user()._id);
+        },
+        isArchived: function() {
+          return project.archived||false
+        },
+        isMember: function() {
+          if (!Meteor.user()) return false;
+          if (project.ownerId === Meteor.user()._id) return true;
+          var falsy = false;
+          project.usersApproved.forEach(function(u) {
+            if (u.id === Meteor.user()._id) return falsy = true;
+          });
+          return falsy;
+        },
+        numComments: function() {
+          return Comments.find({projectId: slug}).count();
+        },
+        projectComments: function () {
+          return Comments.find({projectId: slug});
+        },
+        submittedAgo: moment(project.createTimeActual, moment.ISO_8601).fromNow(),
+        processedGenres: function() {
+          if (project.genres.length > 0) {
+            return project.genres.join(', ');
+          } else {
+            return 'no genres specified';
+          }
+        },
+        needs: project.needs||[],
+        videoURL: project.videoURL,
+        _bid: board._id,
+        _slug: board.slug,
+        isLive: project.isLive,
+        project: project,
+        ownerName: project.ownerName,
+        logline: project.logline,
+        ownerAvatar: project.ownerAvatar,
+        ownerId: project.ownerId,
+        details: project.details,
+        funded: project.funded,
+        count: project.count,
+        createdAt: project.createdAt,
+        title: project.title,
+        gifts: project.gifts||[],
+        budget: function() {
+          if (project.budget) {
+            return '$ ' + project.budget
+          }
+          return 'none specified';
+        },
+        duration: project.duration,
+        applied: project.applied
+    }
+  }
+});
+
 Router.route('/message/project/:slug/:uid', {
   name: 'ProjectMessage',
   template: 'projectMessage',

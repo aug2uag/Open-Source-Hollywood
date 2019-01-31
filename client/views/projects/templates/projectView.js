@@ -641,6 +641,7 @@ Template.projectView.events({
     simulateClick(document.getElementsByClassName('gotoedit')[0])
     setTimeout(function() {
       simulateClick(document.getElementById('editmyprojroles'))
+      $("html, body").animate({ scrollTop: "300px" });
     })
   },
 

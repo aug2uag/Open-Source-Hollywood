@@ -65,11 +65,13 @@ Template.nav.events({
             'merchant': 'switch_merchant',
             'subscriptions': 'switch_subscriptions'
           }[switchNav]
+          $('#preloader').show()
           simulateClick(document.getElementsByClassName(o)[0])
           setTimeout(function() {
             simulateClick(document.getElementsByClassName(o)[0])
             setTimeout(function() {
               simulateClick(document.getElementsByClassName(o)[0])
+              $('#preloader').hide()
             }, 144)
           }, 337)
           // localStorage.removeItem('switchnavDashboard')
@@ -85,11 +87,13 @@ Template.nav.events({
             'personal': 'switch_personal',
             'assets': 'switch_assets'
           }[switchNav]
+          $('#preloader').show()
           simulateClick(document.getElementsByClassName(o)[0])
           setTimeout(function() {
             simulateClick(document.getElementsByClassName(o)[0])
             setTimeout(function() {
               simulateClick(document.getElementsByClassName(o)[0])
+              $('#preloader').hide()
             }, 144)
           }, 337)
           // localStorage.removeItem('switchnavSettings')

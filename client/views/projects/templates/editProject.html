@@ -657,3 +657,28 @@
     {{/if}}
 
 </template>
+
+
+<template name="editProjectMaster">
+    <div id="content" class="clearfix ">
+        <div class="clearfix wrapper">
+            <header id="page-title">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <h1 class="title">Edit Campaign</h1>
+                        <h2 class="subtitle">Remember to save for changes to take effect</h2>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <a onclick="resetNewProjCache()" id="resetNewProjCacheBtn" class="button krown-box right" style="{{#unless cachedNewProject}}display: none;{{/unless}}">RESET</a>
+                    </div>
+                </div>
+            </header>
+            <div class="normal-content ">
+                <div id="project-container" class="krown-tabs responsive-on clearfix">
+                    {{ > editProject }}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
