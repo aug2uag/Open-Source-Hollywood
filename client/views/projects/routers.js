@@ -395,7 +395,7 @@ Router.route('/message/project/:slug/:uid', {
     var project = Projects.findOne({slug: this.params.slug});
     var user = Users.findOne({_id: this.params.uid});
     if (!user) user = Users.findOne({_id: slug});
-    var offer = Offers.findOne({_id: this.params.uid})
+    var offer = Offers.findOne({_id: this.params.uid, parties: Meteor.user()._id})
 
     if (user&&project) {
 
@@ -441,6 +441,55 @@ Router.route('/message/project/:slug/:uid', {
     };
 
     return {}
+  }
+})
+
+Router.route('/transaction/:uid', {
+  name: 'ProjectOffer',
+  template: 'projectMessage',
+  layoutTemplate: 'StaticLayout',
+  onBeforeAction: function() {
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="Open Source Hollywood member negotiations channel.">' );
+    document.title = 'Smart Contract Negotiations';
+    this.next();
+  },
+  waitOn: function() {
+    if (!Meteor.user()) {
+      Router.go('Home');
+      window.location.assign('/');
+      return
+    }
+    return [
+      Meteor.subscribe('offers'),
+      Meteor.subscribe('getMe'),
+      Meteor.subscribe('projectsList'), 
+      Meteor.subscribe('getReceipts'),
+      Meteor.subscribe('getProjectMessages')
+    ];
+  },
+  data: function() {
+    var receipt = Receipts.findOne({_id: this.params.uid, parties: Meteor.user()._id})
+    if (!receipt) return;
+    var offer = Offers.findOne({_id: receipt.offer, parties: Meteor.user()._id})
+    if (!offer) return;
+    var project = Projects.findOne({slug: receipt.slug})
+    if (!project) return;
+    console.log(new Array(1000).join('@'))
+    console.log({_id: receipt.offer, parties: Meteor.user()._id})
+    console.log(offer)
+    var userId = Meteor.user()._id === project.ownerId ? offer.offeror : offer.offeree
+    var user = Users.findOne({_id: userId})
+    // console.log('FUCK YEAAAAAH')
+    var messages = ProjectMessages.find({user: this.params.uid, project: project._id, archived: {$ne: true}}).fetch();
+    return {
+      isAssets: offer.type==='asset' ? true : false,
+      project: project,
+      user: user,
+      offers: [offer],
+      receipts: [receipt],
+      messages: messages
+    }
   }
 })
 

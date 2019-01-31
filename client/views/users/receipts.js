@@ -35,11 +35,10 @@ Template.main_receipts.helpers({
 		return 'charge'
 	},
 	formatLink: function() {
-		if (this.link) return this.link;
-		return '#'
+		return ['/transaction/',this._id].join('')
 	},
 	formatLinkTitle: function() {
 		if (this.linkTitle) return this.linkTitle;
-		return ''
+		return 'view details'
 	},
 })
