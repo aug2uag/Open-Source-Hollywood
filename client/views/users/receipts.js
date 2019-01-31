@@ -22,6 +22,24 @@ Template.main_receipts.helpers({
 		if (this.refund) {
 			return 'refund'
 		};
+
+		if (this.type==='credit'&&this.purpose==='donation') {
+			return 'donation'
+		};
+
+		if (this.purpose==='apply') {
+			if (this.pending) return 'pending decision';
+			return 'donation for role'
+		};
+
 		return 'charge'
+	},
+	formatLink: function() {
+		if (this.link) return this.link;
+		return '#'
+	},
+	formatLinkTitle: function() {
+		if (this.linkTitle) return this.linkTitle;
+		return ''
 	},
 })

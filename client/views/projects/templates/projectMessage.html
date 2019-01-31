@@ -63,7 +63,7 @@
                                   </thead>
                                   <tbody>
                                   {{#each formattedOffers}}
-                                    {{>projectMessageOffer}}
+                                    {{>projectMessageOffer index=@index details=this}}
                                   {{else}}
                                     <tr colspan="3">NO OFFERS TO SHOW</tr>
                                   {{/each}}
@@ -252,10 +252,10 @@
     <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationItself}}</td>
     {{#if myProject}}
       <div class="radio" style="left: 20px;">
-        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}" value="accept" checked>Accept</label>
+        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}{{index}}" value="accept" checked>Accept</label>
       </div>
       <div class="radio disabled" style="left: 20px;">
-        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}" value="decline">Decline</label>
+        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}{{index}}" value="decline">Decline</label>
       </div>
       {{/if}}
   </tr>
