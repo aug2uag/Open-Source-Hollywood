@@ -3,15 +3,25 @@ Template.main_receipts.helpers({
 		console.log(this)
 	},
 	formatDate: function() {
-		return 'foo'
+		return moment(this.created).format('MMMM Do, YYYY')
 	},
 	formatTitle: function() {
-		return 'foo'
+		var leading = [this.purpose, 'for'].join(' ')
+		if (this.purpose==='apply') leading = 'application donation for ';
+
+		if (this.type==='credit'&&this.purpose==='donation') {
+			return ['you received a donation from', this.name, 'for', this.title].join(' ')
+		};
+
+		return [leading, this.title].join(' ')
 	},
 	formatAmount: function() {
-		return 'foo'
+		return this.amount
 	},
-	formatRefund: function() {
-		return 'foo'
+	formatStatus: function() {
+		if (this.refund) {
+			return 'refund'
+		};
+		return 'charge'
 	},
 })
