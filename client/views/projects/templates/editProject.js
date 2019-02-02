@@ -632,6 +632,8 @@ Template.editProject.events({
     $('#oneoff').val('');
     $('.apparelsize:checkbox:checked').each(function(idx, el){ return $(el).prop("checked", false);})
     $('#hidden_gift_name').hide();
+
+    $('#update_campaign').click()
   },
 });
 

@@ -13,8 +13,8 @@
             <div id="project-container" class="krown-tabs responsive-on clearfix">
 
                 <ul class="titles clearfix" id="settings_menu">
-                    <li class="">
-                        <h5>ACTIVE CONTRACTS</h5></li>
+                    <!-- <li class="">
+                        <h5>ACTIVE CONTRACTS</h5></li> -->
                     <li class="switch_campaigns">
                         <h5>YOUR ACTIVE CAMPAIGNS</h5></li>
                     <li class="switch_merchant">
@@ -25,7 +25,7 @@
                         <h5>CAMPAIGN HOLDINGS</h5></li> -->
                     <div class="tabs-select"><span class="tabs-select-cover" style="display: inline-block; position: relative; top: 0px; left: 0px; z-index: 0; vertical-align: middle; text-align: left; width: 198px;">
                       <select style="opagomaincity: 0; visibility: visible; position: absolute; top: 0px; left: 0px; display: inline; z-index: 1;">
-                        <option>ACTIVE CONTRACTS</option>
+                        <!-- <option>ACTIVE CONTRACTS</option> -->
                         <option class="switch_campaigns">CAMPAIGNS</option>
                         <option class="switch_merchant">MERCHANT CENTER</option>
                         <!-- <option class="switch_subscriptions">SUBSCRIPTIONS</option> -->
@@ -37,7 +37,7 @@
 
                 <div class="contents clearfix" style="width: 100%;">
 
-                    <div id="pending" style="display: none;">
+                    <!-- <div id="pending" style="display: none;">
                       <div class="project-header">
                         <h3 id="comments-title00-messages" class="comments_title" style="text-align:left;margin-left:20px;margin-top:20px;">Current &amp; Active Contracts</h3>
                         <hr />
@@ -111,10 +111,6 @@
                       <div class="dash_ks project-content" id="view_messages_ks" style="display:none">
                         <ol id="comments-list">
 
-                            <!-- DISPLAY PENDING AND COMPLETED CONTRACTS (ACTIVE & ARCHIVED PROJECTS) -->
-
-                            <!-- GIVE PRINT OPTION TO PRINT OUT THE TERMS OF THE CONTRACT -->
-
                           {{#each messages}}
                           <li class="comment clearfix container" style="padding-bottom:60px">
 
@@ -142,7 +138,7 @@
                           {{/each}}
                         </ol>
                       </div>
-                    </div>
+                    </div> -->
 
                     <div id="active" style="display: none;">
                       <div class="project-header">
@@ -194,13 +190,82 @@
 
                         <p><small>Select section:</small></p>
                         <ol class="breadcrumb">
-                          <li><a href="#!" class="dash_show_merchant bold" val="view_acct_link">Account Link</a></li>
-                          <li><a href="#!" class="dash_show_merchant" val="view_tx_merch">Merchandise</a></li>
+                          <li><a href="#!" class="dash_show_merchant bold" val="view_tx_merch">Merchandise</a></li>
                           <li><a href="#!" class="dash_show_merchant" val="view_tx_lease">Leases</a></li>
-                          <li><a href="#!" class="dash_show_merchant" val="view_tx_hx">Transactions</a></li>
+                          <li><a href="#!" class="dash_show_merchant" val="view_acct_link">Account Link</a></li>
+                          <!-- <li><a href="#!" class="dash_show_merchant" val="view_tx_hx">Transactions</a></li> -->
                         </ol>
                         <p>&nbsp;</p>
-                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_acct_link">
+                        
+
+                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_merch" >
+                          {{> soldMerch}}
+                        </div>
+
+                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_lease" style="display:none">
+                          
+                          <div class="col-xs-12 col-sm-6">
+                            <h4>LEASED ASSETS</h4>
+                            <div class="table-wrapper">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>Sales Date</th>
+                                    <th>Name</th>
+                                    <th># Units</th>
+                                    <th>Total</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {{#each assetLeases}}
+                                    <tr class="fulfill_gift">
+                                      <td class="">{{orderDate}}</td>
+                                      <td class="">{{order.gift.name}}</td>
+                                      <td class="">{{order.totalUnits}}</td>
+                                      <td class="center">${{order.amount}}</td>
+                                      <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
+                                      <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
+                                    </tr>
+                                  {{/each}}
+
+                                  <tr>
+                                    <td colspan="4" style="text-align: right;"><b>Total Amount: ${{leaseTotals}}</b></td>
+                                    <td colspan="2">&nbsp;</td>
+                                  </tr>
+                                  
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          
+                          <div class="col-xs-12 col-sm-6">
+                            <h4>CURRENT OFFERS</h4>
+                            <div class="table-wrapper">
+                              <table class="table">
+                                <tbody>
+
+                                  {{#each currentContracts}}
+
+                                    <tr class="">
+                                      <td class="">{{offerName}}</td>
+                                      <td class="">{{offer.message}}</td>
+                                      <td class="">{{order.totalUnits}}</td>
+                                      <td class="center"><a href="{{contractLink}}" class="btn">ACCESS CONTRACT</a></td>
+                                    </tr>
+
+                                  {{else}}
+                                    <tr><td>There are no current negotiations.</td></tr>
+                                  {{/each}}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_acct_link" style="display:none">
                           {{#if account}}
                             {{#unless bank}}
                             <p>Link your bank account to receive transfers from all your incoming funds.</p>
@@ -338,115 +403,10 @@
                             {{createAccount}}
                             {{/if}}
                         </div>
-
-                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_merch" style="display:none">
-                          <h4>SOLD MERCHANDISE</h4>
-                          <div class="table-wrapper">
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th>Sales Date</th>
-                                  <th>Channel</th>
-                                  <th>Item</th>
-                                  <th>Quantity</th>
-                                  <th>Total</th>
-                                  <th>Details</th>
-                                  <th>Fulfilled</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {{#each giftPurchases}}
-                                  <tr class="fulfill_gift">
-                                    <td class="">{{orderDate}}</td>
-                                    <td class="">{{orderChannel}}</td>
-                                    <td class="">{{order.gift.name}}</td>
-                                    <td class="">{{order.totalUnits}}</td>
-                                    <td class="center">${{order.amount}}</td>
-                                    <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
-                                    <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
-                                  </tr>
-
-                                {{/each}}
-
-                                <tr>
-                                  <td colspan="6"><b>${{giftTotals}}</b></td>
-                                  <td class="center">&nbsp;</td>
-                                </tr>
-                                
-                              </tbody>
-                            </table>
-                          </div>
-                          <p>&nbsp;</p>
-                          <p><small>To edit campaign merch, please visit EDIT section of your campaign.</small></p>
-                          <a class="button" href="/settings" onlick="setTimeout(function(){simulateClick(document.getElementsByClassName('.switch_personal')[0]) }, 987)">EDIT PERSONAL MERCH</a>
-                        </div>
-
-                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_lease" style="display:none">
-                          
-                          <div class="col-xs-12 col-sm-6">
-                            <h4>LEASED ASSETS</h4>
-                            <div class="table-wrapper">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>Sales Date</th>
-                                    <th>Name</th>
-                                    <th># Units</th>
-                                    <th>Total</th>
-                                    <th>Details</th>
-                                    <th>Status</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {{#each assetLeases}}
-                                    <tr class="fulfill_gift">
-                                      <td class="">{{orderDate}}</td>
-                                      <td class="">{{order.gift.name}}</td>
-                                      <td class="">{{order.totalUnits}}</td>
-                                      <td class="center">${{order.amount}}</td>
-                                      <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
-                                      <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
-                                    </tr>
-                                  {{/each}}
-
-                                  <tr>
-                                    <td colspan="4" style="text-align: right;"><b>Total Amount: ${{leaseTotals}}</b></td>
-                                    <td colspan="2">&nbsp;</td>
-                                  </tr>
-                                  
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                          
-                          <div class="col-xs-12 col-sm-6">
-                            <h4>CURRENT OFFERS</h4>
-                            <div class="table-wrapper">
-                              <table class="table">
-                                <tbody>
-
-                                  {{#each currentContracts}}
-
-                                    <tr class="">
-                                      <td class="">{{offerName}}</td>
-                                      <td class="">{{offer.message}}</td>
-                                      <td class="">{{order.totalUnits}}</td>
-                                      <td class="center"><a href="{{contractLink}}" class="btn">ACCESS CONTRACT</a></td>
-                                    </tr>
-
-                                  {{else}}
-                                    <tr><td>There are no current negotiations.</td></tr>
-                                  {{/each}}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-
-                        </div>
                         
-                        <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_hx" style="display:none">
+                        <!-- <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_hx" style="display:none">
                           {{>receipts}}
-                        </div>
+                        </div> -->
 
                       </div>
                     </div>
@@ -544,4 +504,46 @@
     <!-- Main Wrapper End -->
   </div>
   <script type="text/javascript" src="/js/scripts.min.js"></script>
+</template>
+
+<template name="soldMerch">
+    <h4>SOLD MERCHANDISE</h4>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Sales Date</th>
+            <th>Channel</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Details</th>
+            <th>Fulfilled</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each giftPurchases}}
+            <tr class="fulfill_gift">
+              <td class="">{{orderDate}}</td>
+              <td class="">{{orderChannel}}</td>
+              <td class="">{{order.gift.name}}</td>
+              <td class="">{{order.totalUnits}}</td>
+              <td class="center">${{order.amount}}</td>
+              <td class="center" style="color: cornflowerblue;"><a href="#!"><i class="fa fa-info-circle fa-2x"></i></a></td>
+              <td class="center">{{#if fulfilled}}<i class="fa fa-check fa-2x"></i>{{else}}<i class="fa fa-ban fa-2x"></i>{{/if}}</td>
+            </tr>
+
+          {{/each}}
+
+          <tr>
+            <td colspan="6"><b>${{giftTotals}}</b></td>
+            <td class="center">&nbsp;</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <p>&nbsp;</p>
+    <p><small>To edit campaign merch, please visit EDIT section of your campaign.</small></p>
+    <a class="button" href="/settings" onlick="setTimeout(function(){simulateClick(document.getElementsByClassName('.switch_personal')[0]) }, 987)">EDIT PERSONAL MERCH</a>
 </template>

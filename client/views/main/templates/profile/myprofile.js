@@ -493,13 +493,7 @@ Template.myProfile.events({
 
 
 	    appendPersonalMerchTable(o)
-	    $('#editProjForm')[0].reset()
-	    $('#merchtype').change()
-	 	["XSs", "Ss", "Ms", "Ls", "XLs", "XXLs"].forEach(function(el) {
-	 		var id = '#' + el
-	 		var val = el.substr(0, el.length-1)
-	 		$(id).val(val)
-	 	})
+	    Meteor.call('addPersonalMerch', o)
 
 	},
 	'input #social-title': function() { 

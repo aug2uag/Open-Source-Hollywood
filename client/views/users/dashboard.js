@@ -1,5 +1,3 @@
-
-
 function ConvertToCSV(json) {
   var order = json.order
   var csv = 'Purchaser, Email, Phone, Shipping Name, Shipping Address 1, Shipping Address 2, Order, Purchase ID, Order ID, Total Units, Total Order\n'
