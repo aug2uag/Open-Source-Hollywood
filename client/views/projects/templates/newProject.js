@@ -526,6 +526,13 @@ function showVexWithInput(message, input) {
 }
 
 Template.newProject.events({
+  'click .gotosxn': function(e) {
+    var val = $(e.target).attr('val')
+    var el = val === 'merch' ? 'gotoproductionmerch' : 'gotoproductionneeds'
+    setTimeout(function() {
+      simulateClick(document.getElementsByClassName(el)[0])
+    }, 144)
+  },
   'click #cast_oshx': function(e) {
       if ($(e.target).prop('checked')) {
         $('#cast_pay_amounth').show()

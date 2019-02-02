@@ -418,6 +418,31 @@ function displayRoleTypeDialog(list, options) {
 };
 
 Template.projectView.helpers({
+  iApplied: function() {
+    var myId = Meteor.user()._id
+    var arr = (this.project['roleApplicants']||[]).concat(this.project['crewApplicants']||[])
+    for (var i = arr.length - 1; i >= 0; i--) {
+      var r = arr[i]
+      if (r.user.id===myId) return true;
+    };
+    return false
+  },
+  thingsIApplied: function() {
+    var myId = Meteor.user()._id
+    var arr = (this.project['roleApplicants']||[]).concat(this.project['crewApplicants']||[])
+    var agg = {
+      cast: 0, crew: 0
+    }
+    for (var i = arr.length - 1; i >= 0; i--) {
+      var r = arr[i]
+      if (r.user.id===myId) {
+        if (r.ctx==='cast'||r.ctx==='crew') {
+          agg[r.ctx] += 1
+        };
+      }
+    };
+    return agg
+  },
   numCast: function() {
     return this.project.cast.length
   },

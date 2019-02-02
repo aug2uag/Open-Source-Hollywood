@@ -119,6 +119,10 @@ Template.offerAssetsArchived.helpers({
 })
 
 Template.projectMessage.helpers({
+	zoo: function() { console.log(this) },
+	refundAmount: function() {
+		try { return this.refund[0].amount/100 } catch(e) { return ' - '}
+	},
 	isAssets: function() {
 
 		if (this.isAssets) return true
@@ -134,7 +138,6 @@ Template.projectMessage.helpers({
 		was = this
 	},
 	archivedOffer: function() {
-		console.log(this)
 		// case active asset negotiate
 		try {	
 			if (this.offers[0].accepted||this.offers[0].rejected) return true;
@@ -235,7 +238,7 @@ Template.projectMessage.helpers({
 		return this.project.ownerId === Meteor.user()._id;
 	},
 	userName: function() {
-		return this.user.firstName + ' ' + this.user.lastName;
+		try { return this.user.firstName + ' ' + this.user.lastName; } catch(e) { return '' }
 	},
 	title: function() {
 		return this.title;

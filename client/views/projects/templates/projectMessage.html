@@ -12,24 +12,21 @@
         {{/if}}
           
         {{else}}
+        
+          <div class="row">
+              <div class="col-xs-6 col-sm-12">
+                  {{#if refund}}
+                    <strong>refunded ${{refundAmount}} for {{title}} ({{purpose}})</strong>
+                  {{else}}
+                    {{#if revoked}}
+                    <strong>this offer was revoked</strong>
+                    {{else}}
+                    <strong>this offer no longer exists</strong>
+                    {{/if}}
+                  {{/if}}
+              </div>
+          </div>
           
-
-
-
-
-          <!-- define state -->
-
-
-
-
-
-          <!-- handle display for state -->
-
-
-
-
-
-
         {{/if}}
 
       {{else}}
@@ -57,7 +54,7 @@
                                       <th>role(s)</th>
                                       <th>terms</th>
                                       {{#if ownerInitAgreement}}
-                                      <th id="approveordeclineth">your decision</th>
+                                      <!-- <th id="approveordeclineth">your decision</th> -->
                                       {{/if}}
                                     </tr>
                                   </thead>
@@ -252,12 +249,12 @@
     <td style="text-decoration:{{approveOrDenyTextDecoration}}">{{considerationItself}}</td>
     {{#if myProject}}
       <div class="radio" style="left: 20px;">
-        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}{{index}}" value="accept" checked>Accept</label>
+        <label style="display: none;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}{{index}}" value="accept" checked>Accept</label>
       </div>
       <div class="radio disabled" style="left: 20px;">
-        <label style="display: grid;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}{{index}}" value="decline">Decline</label>
+        <label style="display: none;"><input class="offer_role_decision" val="{{stringyThis}}" type="radio" name="{{optradio}}{{index}}" value="decline">Decline</label>
       </div>
-      {{/if}}
+    {{/if}}
   </tr>
 </template>
 

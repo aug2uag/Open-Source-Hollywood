@@ -469,8 +469,14 @@ Router.route('/transaction/:uid', {
     ];
   },
   data: function() {
+    console.log({_id: this.params.uid, parties: Meteor.user()._id})
     var receipt = Receipts.findOne({_id: this.params.uid, parties: Meteor.user()._id})
     if (!receipt) return;
+    console.log('eval receipt')
+    if (!!receipt.refund||!!receipt.revoked) {
+      console.log('return receipt')
+      return receipt
+    };
     var offer = Offers.findOne({_id: receipt.offer, parties: Meteor.user()._id})
     if (!offer) return;
     var project = Projects.findOne({slug: receipt.slug})

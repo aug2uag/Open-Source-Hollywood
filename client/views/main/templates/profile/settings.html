@@ -604,16 +604,19 @@
                                     <input type="button" name="next" class="next action-button" value="Next"/>
                                 </fieldset>
                                 <fieldset>
-                                    <h2 class="fs-title">Configure Notifications</h2>
-                                    {{#unless needsEmail}}
-                                    <h3 class="fs-subtitle">Optional phone notifications.</h3>
+                                    <h2 class="fs-title">Agree to Terms and Conditions</h2>
 
-                                    {{else}}
-                                    <h3 class="fs-subtitle">Enter your email and phone information.</h3>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="" checked><a href="/terms" target="_blank">I agree to the terms and conditions</a></label>
+                                    </div>
+
+
+                                    {{#if needsEmail}}
+                                    <h3 class="fs-subtitle">Enter your email.</h3>
                                     <input type="text" name="email" placeholder="Email"/>
-                                    {{/unless}}
+                                    {{/if}}
 
-                                    <input type="text" name="phone" placeholder="Phone"/>
+                                    <!-- <input type="text" name="phone" placeholder="Phone"/> -->
                                     <input id="submit" type="submit" name="submit" class="submit action-button" value="Submit"/>
                                 </fieldset>
                             </form>

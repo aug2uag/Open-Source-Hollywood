@@ -163,9 +163,9 @@
                                                         <tbody id="social-table">
                                                             {{#each projSocial}}
                                                                 <tr class="social-val">
-                                                                        <td>{{name}}</td>
-                                                                        <td>{{address}}</td>
-                                                                        <td><button class="deleteRow button special">X</button></td>
+                                                                    <td>{{name}}</td>
+                                                                    <td>{{address}}</td>
+                                                                    <td><button class="deleteRow button special">X</button></td>
                                                                 </tr>
                                                             {{/each}}
                                                         </tbody>
@@ -255,8 +255,6 @@
                                                         <td><button class="deleteRow button special" ctx="crew" val='{{self}}'>X</button></td>
                                                     </tr>
                                                 {{/each}}
-
-
 
                                             </tbody>
                                         </table>
@@ -421,9 +419,9 @@
 
 
                                                 <button id="add-cast" val="casttabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Cast Position</button>
-                                                <div class="t20">
+                                                <!-- <div class="t20">
                                                     <p style="color:green" class="addingstatus nodisplay"><small>added! please remember to save changes at the bottom</small></p>
-                                                </div>
+                                                </div> -->
 
                                             </form>
                                         </section>
@@ -486,9 +484,9 @@
                                                         </div>
                                                     </div>
                                                     <button id="add-needs" val="casttabletoggle" class="btn button disabled special krown-button t60" style="font-size:1.3rem">Add Requested Resource</button>
-                                                    <div class="t20">
+                                                    <!-- <div class="t20">
                                                         <p style="color:green" class="addingstatus nodisplay"><small>added! please remember to save changes at the bottom</small></p>
-                                                    </div>
+                                                    </div> -->
                                                 </form>
                                             </section>
                                         </div>
@@ -646,7 +644,7 @@
                     </div>
                     <div class="row t40">
                         <div class="col-xs-10 col-xs-offset-1 krown-flickr t60">
-                            <a class="update_campaign button" style="width: 100%;">CLICK TO SAVE CHANGES</a>
+                            <a id="update_campaign" class="button" style="width: 100%;">CLICK TO SAVE CHANGES</a>
                         </div>
                     </div>
                 </div>

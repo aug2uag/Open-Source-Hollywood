@@ -179,6 +179,19 @@
                                                     </div>
                                                     <p>&nbsp;</p>
                                                     <div class="rpdata btn-group btn-group-justified" role="group" aria-label="Justified button group"> 
+
+                                                      {{#if iApplied}}
+                                                        <!-- show what role i applied -->
+                                                        <p><small>you've applied for:</small></p>
+                                                        {{#if thingsIApplied.crew}}
+                                                        <p><strong>{{thingsIApplied}} crew positions</strong></p>
+                                                        {{/if}}
+
+                                                        {{#if thingsIApplied.cast}}
+                                                        <p><strong>{{thingsIApplied}} cast positions</strong></p>
+                                                        {{/if}}
+                                                      {{/if}}
+
                                                       {{#unless isArchived}}
                                                         {{#if anyRolesNoAuth}}
                                                             <a href="#" id="join-roles" class="btn btn-default" role="button">APPLY</a> 

@@ -11,7 +11,7 @@ var consideration_icons = {
 }
 
 function statusShowAddedResource() {
-  $('.addingstatus').show()
+  // $('.addingstatus').show()
 }
 
 function validateUrl(value) {
@@ -421,7 +421,7 @@ Template.editProject.events({
     e.preventDefault();
     showVexBudgetForm();
   },
-  'click .update_campaign': function(e) {
+  'click #update_campaign': function(e) {
     e.preventDefault();
     $('.addingstatus').hide()
     var o = returnProjectCreateDetails({slug: currentSlug});
@@ -476,7 +476,7 @@ Template.editProject.events({
     positions.crew.push(o)
     Session.set('crew', positions.crew)
     $('#newCrewForm')[0].reset()
-
+    $('#update_campaign').click()
     // var payIcons = consideration.map(function(c) { return consideration_icons[c] })
     // if (title && description && status) $('#crew-table').append('<tr class="crew-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="crew" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
     // $('.deleteRow').off();
@@ -515,6 +515,7 @@ Template.editProject.events({
     $('.deleteRow').on('click', deleteRow);
 
     $('#newCastForm')[0].reset()
+    $('#update_campaign').click()
     // var payIcons = consideration.map(function(c) { return consideration_icons[c] })
     // if (title && description && status) $('#cast-table').append('<tr class="cast-val"><td>'+title+'</td><td>'+description+'<br><small>eligible for:&nbsp;</small>'+payIcons.join(' ')+'</td><td>'+audition+'</td><td><button class="deleteRow button special" ctx="cast" val=\''+JSON.stringify(o)+'\'>X</button></td></tr>');
     
@@ -540,6 +541,7 @@ Template.editProject.events({
     Session.set('needs', positions.needs)
 
     $('#newNeedsForm')[0].reset()
+    $('#update_campaign').click()
 
     // var cat = , description = ;
     // if (cat.toLowerCase().indexOf('category')>-1) return;
@@ -558,6 +560,7 @@ Template.editProject.events({
     })
     Session.set('social', positions.social)
     $('#newSocialForm')[0].reset()
+    $('#update_campaign').click()
     // if (title && url) $('#social-table').append('<tr class="social-val"><td>'+title+'</td><td>'+url+'</td><td><button class="deleteRow button special">X</button></td></tr>');
     // $('.deleteRow').on('click', deleteRow);
     // $('#social-title').val(''), $('#social-url').val('');

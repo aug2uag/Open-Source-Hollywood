@@ -19,8 +19,18 @@ Template.main_receipts.helpers({
 		return this.amount
 	},
 	formatStatus: function() {
+		if (this.accepted) {
+			if (this.receipt) return 'approved role (debited)';
+			return 'approved role (credited)'
+		};
+
 		if (this.refund) {
-			return 'refund'
+			if (!this.receipt) {
+				if (this.rejected) return 'rejected';
+				return 'revoked';
+			}
+			var m = this.rejected ? 'rejected' : this.revoked ? 'revoked' : ''
+			return ['refunded (', m, ')'].join('')
 		};
 
 		if (this.type==='credit'&&this.purpose==='donation') {
@@ -35,9 +45,11 @@ Template.main_receipts.helpers({
 		return 'charge'
 	},
 	formatLink: function() {
+		if (this.refund||this.accepted) return ''
 		return ['/transaction/',this._id].join('')
 	},
 	formatLinkTitle: function() {
+		if (this.refund||this.accepted) return ''
 		if (this.linkTitle) return this.linkTitle;
 		return 'view details'
 	},
