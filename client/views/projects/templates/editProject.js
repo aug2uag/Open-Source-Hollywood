@@ -268,6 +268,9 @@ function returnProjectCreateDetails(o) {
   var needs = $('.needs-val');
   o.needs = positions.needs||[];
 
+
+  console.log(needs)
+
   var social = $('.social-val');
   o.social = positions.social||[];
 
@@ -535,13 +538,15 @@ Template.editProject.events({
       description: $('#needs-description').val()
     })
 
-    $('.deleteRow').off();
-    $('.deleteRow').on('click', deleteRow);
+    $('.deleteRow').off().on('click', deleteRow);
+
+    
 
     Session.set('needs', positions.needs)
 
     $('#newNeedsForm')[0].reset()
     $('#update_campaign').click()
+
 
     // var cat = , description = ;
     // if (cat.toLowerCase().indexOf('category')>-1) return;
