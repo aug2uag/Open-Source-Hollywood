@@ -347,6 +347,15 @@ Template.dashboard.helpers({
 });
 
 Template.dashboard.events({
+	'click .gotoleaseview': function() {
+		simulateClick(document.getElementById('view_lease_data'))
+	},
+	'click .gotobankconfig': function() {
+		simulateClick(document.getElementById('view_bank_config_data'))
+	},
+	'click .gotosoldmerch': function() {
+		simulateClick(document.getElementById('view_sold_merch'))
+	},
 	'click .showSubDetail': function(e) {
 		console.log(this)
 	},
@@ -522,4 +531,16 @@ Template.dashboard.onRendered(function(){
 	    }
 	  });
 	});
+})
+
+Template.soldMerch.events({
+	'click .gotoleaseview': function() {
+		simulateClick(document.getElementById('view_lease_data'))
+	},
+	'click .gotobankconfig': function() {
+		simulateClick(document.getElementById('view_bank_config_data'))
+	},
+	'click .gotosoldmerch': function() {
+		simulateClick(document.getElementById('view_sold_merch'))
+	},
 })

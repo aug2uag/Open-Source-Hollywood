@@ -190,9 +190,9 @@
 
                         <p><small>Select section:</small></p>
                         <ol class="breadcrumb">
-                          <li><a href="#!" class="dash_show_merchant bold" val="view_tx_merch">Merchandise</a></li>
-                          <li><a href="#!" class="dash_show_merchant" val="view_tx_lease">Leases</a></li>
-                          <li><a href="#!" class="dash_show_merchant" val="view_acct_link">Account Link</a></li>
+                          <li><a href="#!" id="view_sold_merch" class="dash_show_merchant bold" val="view_tx_merch">Merchandise</a></li>
+                          <li><a href="#!" id="view_lease_data" class="dash_show_merchant" val="view_tx_lease">Leases</a></li>
+                          <li><a href="#!" id="view_bank_config_data" class="dash_show_merchant" val="view_acct_link">Account Link</a></li>
                           <!-- <li><a href="#!" class="dash_show_merchant" val="view_tx_hx">Transactions</a></li> -->
                         </ol>
                         <p>&nbsp;</p>
@@ -262,7 +262,11 @@
                               </table>
                             </div>
                           </div>
-
+                          
+                          <div class="col-xs-12">
+                            <a class="button gotosoldmerch" href="#">VIEW SOLD MERCH</a>
+                            <a class="button gotobankconfig" href="#">BANK ACCOUNT CONFIGURATION</a>
+                          </div>
                         </div>
 
                         <div class="krown-column-row clearfix b40 merch_view_opts" id="view_acct_link" style="display:none">
@@ -402,6 +406,8 @@
                             {{else}}
                             {{createAccount}}
                             {{/if}}
+                            <a class="button gotosoldmerch" href="#">VIEW SOLD MERCH</a>
+                            <a class="button gotoleaseview" href="#">VIEW LEASED RESOURCES</a>
                         </div>
                         
                         <!-- <div class="krown-column-row clearfix b40 merch_view_opts" id="view_tx_hx" style="display:none">
@@ -494,7 +500,7 @@
                         </div>
                       </div>
                     </div> -->
-
+                    
                 </div>
             </div>
         </div>
@@ -502,6 +508,7 @@
     </div>
 
     <!-- Main Wrapper End -->
+    
   </div>
   <script type="text/javascript" src="/js/scripts.min.js"></script>
 </template>
@@ -545,5 +552,7 @@
     </div>
     <p>&nbsp;</p>
     <p><small>To edit campaign merch, please visit EDIT section of your campaign.</small></p>
-    <a class="button" href="/settings" onlick="setTimeout(function(){simulateClick(document.getElementsByClassName('.switch_personal')[0]) }, 987)">EDIT PERSONAL MERCH</a>
+    <a class="button" href="/settings" onlick="setTimeout(function(){simulateClick(document.getElementsByClassName('switch_personal')[0]) }, 987)">EDIT PERSONAL MERCH</a>
+    <a class="button gotoleaseview" href="#">VIEW LEASED ASSETS</a>
+    <a class="button gotobankconfig" href="#">BANK ACCOUNT CONFIGURATION</a>
 </template>

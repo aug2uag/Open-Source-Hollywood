@@ -60,6 +60,8 @@ Template.main_receipts.helpers({
 	formatLinkTitle: function() {
 		if (this.refund||this.accepted) return ''
 		if (this.linkTitle) return this.linkTitle;
+		// escape receipts not intended to show details
+		if (this.pending===false) return null
 		return 'view details'
 	},
 })
