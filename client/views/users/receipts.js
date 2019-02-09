@@ -7,6 +7,15 @@ Template.main_receipts.helpers({
 	},
 	formatTitle: function() {
 		var leading = [this.purpose, 'for'].join(' ')
+
+		if (this.slug.indexOf('personal')>-1) {
+			try {
+				return this.order.message.replace(this.name, '')
+			} catch(e) {
+				return 'personal merch purchase'
+			}
+		};
+
 		if (this.purpose==='apply') leading = 'application donation for ';
 
 		if (this.type==='credit'&&this.purpose==='donation') {

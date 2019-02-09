@@ -438,6 +438,7 @@ Template.splashPage.events({
     };
     if (!o.name||!o.email||!o.subject||!o.message) return vex.dialog.alert('please fill out all fields of the contact form to proceed');
     Meteor.call('splashMessage', o);
+    $('#contact_us_form')[0].reset()
     $('#sendmessage').show();
   }
 });
