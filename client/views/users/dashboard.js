@@ -533,6 +533,19 @@ Template.dashboard.onRendered(function(){
 	});
 })
 
+Template.soldMerch.helpers({
+	orderDate: function() {
+		return moment(this.created).format("MMMM D, YYYY")
+	},
+	orderChannel: function() {
+		if (this.slug.indexOf('personal')>-1) {
+			return 'personal merch'
+		};
+
+		return this.purpose
+	}
+})
+
 Template.soldMerch.events({
 	'click .gotoleaseview': function() {
 		simulateClick(document.getElementById('view_lease_data'))
