@@ -3,18 +3,44 @@
     <div class="clearfix wrapper">
 
         <header id="page-title">
-            <h1 class="title">Welcome to Open Source Hollywood!</h1>
-            <h2 class="subtitle">Please make your basic configurations here to continue.</h2></header>
+            <h1 class="title">Your active contracts</h1>
+            <h2 class="subtitle">For sold merch and applications for roles.</h2></header>
 
         <div class="normal-content ">
 
-            <div class="krown-tabs responsive-on clearfix">
-                <div class="contents clearfix" style="width: 100%;">
-                    {{ > applicants }}
-                  </div>
-            </div>
+            {{ > applicantsContracts }}
         </div>
     </div>
   </div>
+
+</template>
+
+
+<template name="applicantsContracts">
+
+  <!-- active negotiations -->
+  <div class="table-responsive" style="overflow: hidden;">
+    <table class="table">
+
+      <tbody>
+
+        
+        {{#each castCrew}}
+          <tr>
+            <td><p class="align-center">{{roleSummary}}</p></td>
+            <td><p class="align-center">{{user.name}}</p></td>
+            <td><small><strong>{{ thisString }}</strong></small></td>
+            <td class="center"><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="btn btn-mini btn-primary">VIEW DETAILS</a></td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="3">No role applicants</td>
+          </tr>
+        {{/each}}
+
+      </tbody>
+    </table>
+  </div>
+
 
 </template>
