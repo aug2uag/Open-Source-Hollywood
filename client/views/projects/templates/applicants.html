@@ -24,18 +24,15 @@
 
       <tbody>
 
-        
-        {{#each castCrew}}
+
+
+        {{#each offers}}
           <tr>
-            <td><p class="align-center">{{roleSummary}}</p></td>
-            <td><p class="align-center">{{user.name}}</p></td>
-            <td><small><strong>{{ thisString }}</strong></small></td>
-            <td class="center"><a style="width:100%" href="/message/project/{{ slug }}/{{ user.id }}" class="btn btn-mini btn-primary">VIEW DETAILS</a></td>
+            <td><p class="align-center">{{offerName}}</p></td>
+            <td><p class="align-center">{{offer.message}}</p></td>
+            <td class="center"><a style="width:100%" href="{{contractLink}}" class="btn btn-mini btn-primary">VIEW DETAILS</a></td>
           </tr>
-          {{else}}
-          <tr>
-            <td colspan="3">No role applicants</td>
-          </tr>
+
         {{/each}}
 
       </tbody>
