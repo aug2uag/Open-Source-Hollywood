@@ -666,9 +666,9 @@ Template.editProject.helpers({
       return false
     };
 
-    if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.phone&&Meteor.user().notification_preferences.phone.verification) {
-      return false
-    };
+    // if (Meteor.user()&&Meteor.user().notification_preferences&&Meteor.user().notification_preferences.phone&&Meteor.user().notification_preferences.phone.verification) {
+    //   return false
+    // };
 
     return true
 

@@ -295,7 +295,7 @@ Template.settings.events({
 					    ],
 					    callback: function (data) {
 					        if (!data) {
-					            console.log('Cancelled')
+					            // console.log('Cancelled')
 					        } else {
 					        	vex.closeAll();
 					        	$('osh_loader').show();
@@ -547,7 +547,7 @@ Template.settings.events({
 		var json = resources[idx]
 		json.idx = idx
 
-		console.log(json)
+		// console.log(json)
 
 		var arr = [
 			'<div id="hid_idx" style="display:none" val="',json.idx,'"></div>',
@@ -722,7 +722,7 @@ Template.settings.events({
 				})
 
 				json.availability.forEach(function(a) {
-					console.log(a)
+					// console.log(a)
 					switch (a) {
 						case 'any':
 							$('#edit-checkbox-need-sched-any').prop('checked', true)
@@ -1174,7 +1174,6 @@ Template.settings.rendered = function () {
 Template.config.events = {
 	'click #submit': function(e) {
 		e.preventDefault();
-		console.log('config')
 		$('#preloader').show()
 		Meteor.call('userConfig', {
 			roles: $('.user_roles:checked').map(function(){return $(this).val()}).get(),
@@ -1201,10 +1200,7 @@ Template.config.events = {
 Template.config.helpers({
 	needsEmail: function() {
         var u = Meteor.user()
-        console.log(new Array(100).join('*'))
-        console.log(u)
         var x = u&&u.notification_preferences&&u.email||false
-        console.log(x)
         return !x
 	}
 })
