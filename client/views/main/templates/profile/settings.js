@@ -1182,7 +1182,7 @@ Template.config.events = {
 			phone: $('#phone').val()
 		}, function(err, res) {
 			$('#preloader').hide()
-			if (err) return vex.dialog(err)
+			if (res===true) return
 			vex.dialog.confirm({
 				message: 'Would you like to update your profile?',
 				callback: function(data) {
@@ -1201,6 +1201,10 @@ Template.config.events = {
 Template.config.helpers({
 	needsEmail: function() {
         var u = Meteor.user()
-        return u&&u.notification_preferences&&u.email||false
+        console.log(new Array(100).join('*'))
+        console.log(u)
+        var x = u&&u.notification_preferences&&u.email||false
+        console.log(x)
+        return !x
 	}
 })
