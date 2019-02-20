@@ -204,3 +204,40 @@ Router.route('/blog/:bid', {
     return b;
   }
 });
+
+
+Router.route('/receipts', {
+  name: 'Receipts',
+  template: 'main_receipts',
+  layoutTemplate: 'StaticLayout',
+  onBeforeAction: function() {
+    var user = Meteor.user();
+    if (!user) {
+      Router.go('Home')
+    };
+    $('meta[name=description]').remove();
+    $('head').append( '<meta name="description" content="The Premiere Platform for Story Development and Production Optimization">' );
+    document.title = 'Open Source Hollywood';
+    this.next();
+  },
+  waitOn: function() {
+    return [
+      Meteor.subscribe('getMe'),
+      Meteor.subscribe('getReceipts'),
+    ];
+  },
+  data: function() {
+    console.log(Meteor.user())
+    var uid = typeof Meteor.user() === 'string' ? Meteor.user() : Meteor.user()&&Meteor.user()._id||null
+    if (uid) {
+      var rs = Receipts.find({
+        user: uid
+      }).fetch()
+      console.log(rs.length)
+      return {
+        receipts: rs,
+        ln: rs.length
+      }
+    }
+  }
+});
