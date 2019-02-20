@@ -17,7 +17,8 @@ Meteor.publish('getReceipt', function(id) {
 Meteor.publish('projReceipts', function(slug) {
     check(slug, String);
     return Receipts.find({
-        slug: slug
+        slug: slug,
+        user: this.userId
     });
 });
 

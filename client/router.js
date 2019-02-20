@@ -207,7 +207,7 @@ Router.route('/blog/:bid', {
 
 
 Router.route('/receipts', {
-  name: 'Receipts',
+  name: 'UserReceipts',
   template: 'main_receipts',
   layoutTemplate: 'StaticLayout',
   onBeforeAction: function() {

@@ -187,7 +187,7 @@ Router.route('/projects/:slug/:uid', {
           return 'not available';
         },
         purchases: function() {
-          var r =  Receipts.find({slug: project.slug}).fetch()
+          var r =  Receipts.find({slug: project.slug, user: Meteor.user()._id}).fetch()
           return r
         },
         isOwner: function () {
