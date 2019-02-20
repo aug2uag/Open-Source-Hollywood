@@ -1207,6 +1207,8 @@ Template.projectView.events({
                 od = JSON.parse(localStorage.getItem('orderTemplate'))
               } catch(e) {}
 
+              if (!od) od = {}
+
               var dialogInput = [
                   '<style>',
                       '.vex-custom-field-wrapper {',

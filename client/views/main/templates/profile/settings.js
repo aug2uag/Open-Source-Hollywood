@@ -1200,7 +1200,7 @@ Template.config.events = {
 Template.config.helpers({
 	needsEmail: function() {
         var u = Meteor.user()
-        var x = u&&u.notification_preferences&&u.email||false
+        var x = u&&u.notification_preferences&&u.notification_preferences.email||false
         return !x
 	}
 })
