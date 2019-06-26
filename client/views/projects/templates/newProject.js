@@ -90,6 +90,7 @@ function returnProjectCreateDetails(o) {
   o.logline = $('#logline').val() || 'eligible for support';
   o.genre = $('#genre').find(":selected").text();
   o.production_company = $('#prodorg').val();
+  o.meetup_details = $('#meetup').val();
   o.author_list = $('#authorlist').val();
   o._gifts = gifts;
   o.website = $('#website').val();
